@@ -1,11 +1,9 @@
-// my first program in C++
-
 #include <iostream>
 using namespace std;
-//if comment previous line, we'll need to 
 
 int main ()
 {
-  cout << "Hello World!\n";
-  return 0;
+    cout << "Hello World! " << endl;     // prints Hello World!
+    cout << "I'm a C++ program" << endl; // prints I'm a C++ program
+    return 0;
 }
