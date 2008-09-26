@@ -24,6 +24,7 @@
 
 #include <QMainWindow>
 #include <QtCore>
+#include <QGraphicsScene>
 
 class QAction;
 class QMenu;
@@ -36,7 +37,6 @@ class worms:public QMainWindow
 public:
       worms();
       ~worms();
-      QSettings *settings;
 
 protected:
 
@@ -58,6 +58,8 @@ private:
       QMenu *helpMenu;
       QAction *exitAct;
       QAction *aboutAct;
+      QSettings *settings;
+      QGraphicsScene *scene;
 };
 
 #endif
