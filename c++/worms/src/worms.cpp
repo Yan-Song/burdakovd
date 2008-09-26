@@ -29,13 +29,16 @@ worms::worms()
       createToolBars();
       createStatusBar();
       settings = new QSettings("kreved.org", "worms");
+      scene = new QGraphicsScene;
+      QGraphicsView view(scene);
+      view.show();
       readSettings();
 }
 
 void worms::about()
 {
       QMessageBox::about(this, tr("About Application"),
-            tr("Hello :)"));
+            QString("This program was built ")+__DATE__+" "+__TIME__);
 }
 
 void worms::createActions()
