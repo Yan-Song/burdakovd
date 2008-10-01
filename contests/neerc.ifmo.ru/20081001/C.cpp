@@ -5,11 +5,11 @@ using namespace std;
 
 int main()
 {
-    int cols[101000], rows[101000], qrow[21000], sqrow[21000], ssrow[21000];
+    int cols[101000], rows[101000], qcol[21000], qrow[21000], sqrow[21000], ssrow[21000];
     int m, n, c, C, maxcol=0, maxrow=0, minimum, maximum;
     
     for(int i=0; i<21000; i++)
-        qrow[i]=sqrow[i]=ssrow[i]=0;
+        qcol[i]=qrow[i]=sqrow[i]=ssrow[i]=0;
     
     cin>>m>>n>>c>>C;
     
