@@ -30,6 +30,15 @@ worms::worms()
       createStatusBar();
       settings = new QSettings("kreved.org", "worms");
       scene = new QGraphicsScene;
+      
+      scene->addEllipse(QRectF(-100.0, -100.0, 100.0, 100.0));
+      scene->setBackgroundBrush(Qt::blue);
+      this->
+ // a gradient background
+ QRadialGradient gradient(0, 0, 10);
+ gradient.setSpread(QGradient::RepeatSpread);
+ scene->setBackgroundBrush(gradient);
+      
       QGraphicsView view(scene);
       view.show();
       readSettings();
