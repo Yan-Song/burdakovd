@@ -3,10 +3,12 @@
 do_ping ()
 {
     echo -n "Ping $1: "
-    (ping -c 1 -W 1 $1 >/dev/null 2>&1 && echo -n "<font color='green'>OK</font>") || echo -n "<font color='red'>Failed</font>"
+    (ping -c 1 -W 2 $1 >/dev/null 2>&1 && echo -n "<font color='green'>OK</font>") || echo -n "<font color='red'>Failed</font>"
     echo "<br/>"
 }
 
+date
+echo "<br/>"
 for host in 10.25.6.1 10.100.10.1 ultra.net ya.ru google.com
     do do_ping $host
 done
