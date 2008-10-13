@@ -9,30 +9,30 @@ backup_root="/backups/backups/rdiff-backup"
 mount -o remount,rw /backups
 
 /usr/bin/rdiff-backup \
-        --exclude '**/Cache*' \
-        --exclude '**/.cache' \
-        --exclude '**/lost+found' \
-        --exclude '**/tmp' \
-        --exclude /backups \
-        --exclude /dev \
-        --exclude /flash \
-        --exclude /media \
-        --exclude /mnt \
-        --exclude /proc \
-        --exclude /sys \
-        --exclude /usr \
-        --include /var/spool/cron/crontabs \
-        --exclude /var \
-        --exclude /home/guest \
-        --exclude /home/mangos \
-        --include '/home/stuff/kreved/World of Warcraft/Interface/AddOns' \
+	--exclude-sockets \
+	--exclude '**/Cache*' \
+	--exclude '**/.cache' \
+	--exclude '**/lost+found' \
+	--exclude '**/tmp' \
+	--exclude '/backups/*' \
+	--exclude '/dev/*' \
+	--exclude '/flash/*' \
+	--exclude '/media/*' \
+	--exclude '/mnt/*' \
+	--exclude '/proc/*' \
+	--exclude '/sys/*' \
+	--exclude '/usr/*' \
+	--include '/var/spool/cron/crontabs' \
+	--exclude '/var/*' \
+	--exclude '/home/guest' \
+	--exclude '/home/mangos' \
+	--include '/home/stuff/kreved/World of Warcraft/Interface/AddOns' \
         --include '/home/stuff/kreved/World of Warcraft/WTF' \
-        --include /home/stuff/kreved/deb \
-        --exclude /home/stuff \
-        --exclude /home/kreved/statmail \
-        --exclude /home/kreved/remote \
-        --exclude /home/kreved/win \
-        $root $backup_root
+	--include '/home/stuff/kreved/deb' \
+	--exclude '/home/stuff' \
+	--exclude '/home/kreved/remote/*' \
+	--exclude '/home/kreved/win/*' \
+	$root $backup_root
 
 mount -o remount,ro /backups
 
