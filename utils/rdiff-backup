@@ -1,7 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 software_list="/etc/software"
 dpkg --get-selections > $software_list
+
+verb=""
+[ -e /etc/rdiff-backup-verbose ] && verb="--terminal-verbosity `cat /etc/rdiff-backup-verbose`"
 
 root="/"
 backup_root="/backups/backups/rdiff-backup"
@@ -9,13 +12,20 @@ backup_root="/backups/backups/rdiff-backup"
 mount -o remount,rw /backups
 
 /usr/bin/rdiff-backup \
+	$verb \
 	--exclude-sockets \
-	--exclude '**/Cache*' \
-	--exclude '**/.cache' \
+	--exclude '**/*Cache*/*' \
+	--exclude '**/*Trash*/*' \
+	--exclude '**/*cache*/*' \
 	--exclude '**/lost+found' \
 	--exclude '**/tmp' \
 	--exclude '/backups/*' \
 	--exclude '/dev/*' \
+	--exclude '/lib/*' \
+	--exclude '/bin/*' \
+	--exclude '/sbin/*' \
+	--include '/boot/grub' \
+	--exclude '/boot/*' \
 	--exclude '/flash/*' \
 	--exclude '/media/*' \
 	--exclude '/mnt/*' \
@@ -24,12 +34,12 @@ mount -o remount,rw /backups
 	--exclude '/usr/*' \
 	--include '/var/spool/cron/crontabs' \
 	--exclude '/var/*' \
-	--exclude '/home/guest' \
-	--exclude '/home/mangos' \
+	--exclude '/home/guest/*' \
+	--exclude '/home/mangos/*' \
 	--include '/home/stuff/kreved/World of Warcraft/Interface/AddOns' \
         --include '/home/stuff/kreved/World of Warcraft/WTF' \
 	--include '/home/stuff/kreved/deb' \
-	--exclude '/home/stuff' \
+	--exclude '/home/stuff/*' \
 	--exclude '/home/kreved/remote/*' \
 	--exclude '/home/kreved/win/*' \
 	$root $backup_root
