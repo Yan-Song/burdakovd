@@ -98,13 +98,12 @@ def main(uid):
     problems = filter(lambda x: not(x.pid in solvedproblems), problems)
     header = u"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
         <html><head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <style type="text/css">
         <!--
         %s
         -->
         </style>
-
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Нерешённые задачи: %s</title>
         </head><body alink="#1a5cc8" link="#1a5cc8" vlink="#1a5cc8">
         <p>%s, нерешённых задач: %d</p>
