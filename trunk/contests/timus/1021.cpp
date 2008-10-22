@@ -4,10 +4,12 @@ using namespace std;
 
 #define N 65536
 
+
 int main()
 {
     int n1, n2, _;
     cin>>n1;
+//     \todo: почему первым способом WA 5?
 //     bool x[N*2];
 //     for(int i=-N; i<N; i++) x[i+N] = false;
 //     for(int i=0; i<n1; i++)
