@@ -17,8 +17,8 @@ class problem:
     def complexity(self):
         """will be used by sort
         чем меньше людей задачу решили, тем она сложнее
-        (возможно можно сюда и percent примутить будет)"""
-        return -self.solvers
+        а также учитываем, что чтарые дольше пытались решить"""
+        return -self.solvers*self.pid/1000
 
 def fetch(url, cachetime):
     """Качает страницу по http, возможно некоторое кэширование результатов в mysql"""
