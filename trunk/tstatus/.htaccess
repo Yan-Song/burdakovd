@@ -1,0 +1,5 @@
+SetHandler mod_python
+PythonHandler mod_python.publisher
+PythonDebug Off
+DirectoryIndex index.py
+

@@ -1,0 +1,6 @@
+__access__ = 0
+
+dbhost = 'localhost'
+dbuser = 'user'
+dbpasswd = 'secret'
+dbname = 'tstatus'
