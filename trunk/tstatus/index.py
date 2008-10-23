@@ -88,7 +88,7 @@ def main(uid):
     # качаем инфу о авторе, кэшируем на пять минут
     html = fetch("http://acm.timus.ru/author.aspx?id=%d" % uid, 300)
     name = re.findall(ur'\<FONT\ SIZE\=\"5\"\>([^\<]+)\<\/FONT\>', html, re.IGNORECASE)[0]
-    p = re.findall(ur'\<NOBR\>\<A[^\>]+\>(\d{4})\<\/A\>\ \<FONT\ SIZE\=\"\-2\"\>(\d+)\/(\d+)\<\/FONT\>\,\<\/NOBR\>', \
+    p = re.findall(ur'\<NOBR\>\<A[^\>]+\>(\d{4})\<\/A\>\ \<FONT\ SIZE\=\"\-2\"\>(\d+)\/(\d+)\<\/FONT\>\,?\<\/NOBR\>', \
         html, re.IGNORECASE)
     solvedproblems = []
     trieslist = {}
