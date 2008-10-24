@@ -114,7 +114,7 @@ def main(uid):
         </style>
         <title>Нерешённые задачи: %s</title>
         </head><body alink="#1a5cc8" link="#1a5cc8" vlink="#1a5cc8">
-        <p>%s, нерешённых задач: %d</p>
+        <p><a href="http://acm.timus.ru/author.aspx?id=%d">%s</a>, нерешённых задач: %d</p>
         <p align="center">
         <TABLE WIDTH="75%%" CLASS="problemset strict">
         <TR><TH WIDTH="40">Неудачные попытки</TH><TH WIDTH="50">ID</TH>
@@ -646,7 +646,7 @@ def main(uid):
                     margin-bottom: 0.3em;
                     border-bottom: dashed 1px Silver;
             }"""
-            , name, name, len(problems))
+            , name, uid, name, len(problems))
     footer = u"""</TABLE></body></html>"""
     return (header + u'\n'.join(
             map(
