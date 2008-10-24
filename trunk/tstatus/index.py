@@ -20,7 +20,7 @@ class problem:
         """will be used by sort
         чем меньше людей задачу решили, тем она сложнее
         а также учитываем, что на решение старых задач было больше времени"""
-        self.c = 1000000*(lastnum+300-self.pid) / (self.solvers+3)
+        self.c = 1000000*(lastnum+100-self.pid) / (self.solvers+3)
 
 def fetch(url, cachetime):
     """Качает страницу по http, возможно некоторое кэширование результатов в mysql"""
