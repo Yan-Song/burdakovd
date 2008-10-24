@@ -3,9 +3,11 @@
 
 import urllib2
 import re
+from math import log
 
 class problem:
     tries = 0
+    c = 0
     def __init__(self, pid, name, percent, solvers):
         self.pid = pid
         self.name = name
@@ -14,11 +16,11 @@ class problem:
     def __repr__(self):
         return (u"<problem instance: {name: %s, percent: %s, solvers: %s}>" % \
             (repr(self.name), self.percent, self.solvers)).encode("utf-8")
-    def complexity(self):
+    def complexity(self, lastnum):
         """will be used by sort
         чем меньше людей задачу решили, тем она сложнее
-        а также учитываем, что чтарые дольше пытались решить"""
-        return -self.solvers*self.pid/1000
+        а также учитываем, что на решение старых задач было больше времени"""
+        self.c = 1000000*(lastnum+300-self.pid) / (self.solvers+3)
 
 def fetch(url, cachetime):
     """Качает страницу по http, возможно некоторое кэширование результатов в mysql"""
@@ -50,17 +52,18 @@ def fetchproblems():
     re_problems = re.compile(r'\<TR\>\<TD\>\<BR\>\</TD\>\<TD\>(\d{4})\</TD\>\<TD\ CLASS\=\"na'+\
         'me\"\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<\/TR\>', re.IGNORECASE)
     for volume in range(1, 8):
-        # кэшируем список задач на час
-        html = fetch("http://acm.timus.ru/problemset.aspx?space=1&page=%d" % volume, 3600)
+        # кэшируем список задач на сутки
+        html = fetch("http://acm.timus.ru/problemset.aspx?space=1&page=%d" % volume, 86400)
         for pid, name, percent, solved in re_problems.findall(html):
             problems.append(problem(int(pid), name, percent, int(solved)))
     return problems
 
 def format(problem, tries):
-    return (u"""<TR><TD>%s</TD><TD>%d</TD><TD CLASS="name">
-        <A HREF="http://acm.timus.ru/problem.aspx?space=1&amp;num=%d">%s</A></TD><TD>
-        <A HREF="http://acm.timus.ru/detail.aspx?space=1&amp;num=%d">%s</A></TD><TD>
-        <A HREF="http://acm.timus.ru/rating.aspx?space=1&amp;num=%d">%s</A></TD></TR>""" %
+    return (u"""<TR><TD>%s</TD><TD>%d</TD>
+        <TD CLASS="name"><A HREF="http://acm.timus.ru/problem.aspx?space=1&amp;num=%d">%s</A></TD>
+        <TD><A HREF="http://acm.timus.ru/detail.aspx?space=1&amp;num=%d">%s</A></TD>
+        <TD><A HREF="http://acm.timus.ru/rating.aspx?space=1&amp;num=%d">%s</A></TD>
+        </TR>""" %
         (u"""\n<img src="http://tmp.kreved.org/failed.png" alt="попытка">"""*tries, problem.pid, problem.pid, problem.name, problem.pid, problem.percent, problem.pid, problem.solvers))
 
 def form():
@@ -84,7 +87,12 @@ def form():
 def main(uid):
     uid = int(uid) # на всякий случай, чтоб исключить любой инклудинг
     problems = fetchproblems()
-    problems.sort(lambda x, y: x.complexity()-y.complexity())
+    lastnum = max([problem.pid for problem in problems])
+    map(lambda x: x.complexity(lastnum), problems)
+    problems.sort(lambda x, y: x.c-y.c)
+    c = [problem.c for problem in problems]
+    minc = min(c)
+    maxc = max(c)
     # качаем инфу о авторе, кэшируем на пять минут
     html = fetch("http://acm.timus.ru/author.aspx?id=%d" % uid, 300)
     name = re.findall(ur'\<FONT\ SIZE\=\"5\"\>([^\<]+)\<\/FONT\>', html, re.IGNORECASE)[0]
@@ -109,7 +117,8 @@ def main(uid):
         <p>%s, нерешённых задач: %d</p>
         <p align="center">
         <TABLE WIDTH="75%%" CLASS="problemset strict">
-        <TR><TH WIDTH="40">Неудачные попытки</TH><TH WIDTH="50">ID</TH><TH>Название</TH><TH WIDTH="100">Зачтено</TH>
+        <TR><TH WIDTH="40">Неудачные попытки</TH><TH WIDTH="50">ID</TH>
+        <TH>Название</TH><TH WIDTH="100">Зачтено</TH>
         <TH WIDTH="100">Авторы</TH></TR>
 
         """ % (
