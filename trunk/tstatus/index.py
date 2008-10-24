@@ -103,6 +103,7 @@ def main(uid):
     for num, solved, tries in p:
         trieslist[int(num)] = int(tries)
         if int(solved)>0: solvedproblems.append(int(num))
+    total = len(problems)
     problems = filter(lambda x: not(x.pid in solvedproblems), problems)
     header = u"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
         <html><head>
@@ -114,7 +115,7 @@ def main(uid):
         </style>
         <title>Нерешённые задачи: %s</title>
         </head><body alink="#1a5cc8" link="#1a5cc8" vlink="#1a5cc8">
-        <p><a href="http://acm.timus.ru/author.aspx?id=%d">%s</a>, нерешённых задач: %d</p>
+        <p><a href="http://acm.timus.ru/author.aspx?id=%d">%s</a>, решено %d из %d</p>
         <p align="center">
         <TABLE WIDTH="75%%" CLASS="problemset strict">
         <TR><TH WIDTH="40">Неудачные попытки</TH><TH WIDTH="50">ID</TH>
@@ -646,7 +647,7 @@ def main(uid):
                     margin-bottom: 0.3em;
                     border-bottom: dashed 1px Silver;
             }"""
-            , name, uid, name, len(problems))
+            , name, uid, name, len(solvedproblems), total)
     footer = u"""</TABLE></body></html>"""
     return (header + u'\n'.join(
             map(
