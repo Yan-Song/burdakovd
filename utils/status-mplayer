@@ -1,0 +1,26 @@
+#!/bin/sh
+
+export PATH=$PATH:/usr/bin:/bin:/home/kreved/bin
+
+sttus=""
+
+while true;
+do
+	oldstatus="${sttus}"
+
+	while [ "$sttus" \= "$oldstatus" ]
+	do
+		sleep 5
+		killall -0 mplayer >/dev/null 2>&1
+
+		if [ $? \= 0 ]
+		then
+			sttus="Смотрю `ps auwx | grep mplayer | grep -v grep | grep -v sed | grep -v defunct | sed 's/.*mplayer\ //'`"
+		else
+			sttus="Фильм не смотрю, наверно занят чем-то важным"
+		fi
+	done
+	
+	gajim-remote change_status "`gajim-remote get_status`" "$sttus"
+
+done
