@@ -43,7 +43,7 @@ case $TERM in
 esac
 
 if [ -d ~/bin ] ; then
-  PATH=~/bin:"${PATH}"
+  PATH=~/bin:"${PATH}:/usr/sbin"
 fi
 
 zmodload -a zsh/stat stat 
