@@ -1,11 +1,12 @@
 #include <iostream>
 #include <string>
-#include <cmath>
 
 using namespace std;
 
 int main()
 {
-    
+    int x;
+    x=(3>>1) & 1;
+    cout<<x<<endl;
     return 0;
 }
