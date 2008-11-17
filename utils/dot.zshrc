@@ -13,13 +13,41 @@ autoload -Uz compinit
 compinit -C
 # End of lines added by compinstall
 
-if [[ $EUID == 0 ]]
-then
-PROMPT=$'%{\e[1;31m%}%n %{\e[1;34m%}%~ #%{\e[0m%} ' # user dir % 
-else 
-PROMPT=$'%{\e[1;32m%}%n %{\e[1;34m%}%~ %#%{\e[0m%} ' # root dir #
-fi
-RPROMPT=$'%{\e[1;34m%}%T%{\e[0m%}' # right prompt with time
+case ${UID} in
+0)
+    PROMPT="%B%{${fg[red]}%}%/#%{${reset_color}%}%b "
+    PROMPT2="%B%{${fg[red]}%}%_#%{${reset_color}%}%b "
+    SPROMPT="%B%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%}%b "
+    [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
+        PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
+    ;;
+*)
+#
+# Color
+#
+DEFAULT=$'%{\e[1;0m%}'
+RESET="%{${reset_color}%}"
+#GREEN=$'%{\e[1;32m%}'
+GREEN="%{${fg[green]}%}"
+BLUE=$'%{\e[1;35m%}'
+RED="%{${fg[red]}%}"
+#
+# Prompt
+#
+setopt prompt_subst
+PROMPT='${RED}${USER}@${HOST} ${GREEN}%~${RESET}
+${GREEN}%(5~,%-2~/.../%2~,%~)% ${RED} $ ${RESET}'
+ 
+ 
+# PROMPT="%{${fg[red]}%}%/%%%{${reset_color}%} "
+# PROMPT2="%{${fg[red]}%}%_%%%{${reset_color}%} "
+# SPROMPT="%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%} "
+# [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] &&
+# PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
+ 
+ 
+    ;;
+esac
 
 alias ls='ls --color=auto'
 alias grep='grep --colour=auto'
@@ -61,7 +89,6 @@ fi
 
 
 
-autoload promptinit
-promptinit
-prompt walters
+export PROMPT=$'%(?..%{\e[41;38m%}%B-%?-%b%{\e[0m%} )%(1j.%{\e[01;33m%}[%j] .)%{\e[01;36m%}%n@%m%{\e[0m%} %{\e[01;32m%}%2~%{\e[0m%} %B%#%b '
+export RPROMPT=$'%{\e[01;31m%}[%!]%{\e[0m%}' # history # on right
 
