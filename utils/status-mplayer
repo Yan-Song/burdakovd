@@ -4,6 +4,8 @@ export PATH=$PATH:/usr/bin:/bin:/home/kreved/bin
 
 sttus=""
 
+sleep 10
+
 while true;
 do
 	oldstatus="${sttus}"
@@ -19,6 +21,7 @@ do
 		else
 			sttus="Фильм не смотрю, наверно занят чем-то важным"
 		fi
+		killall -0 gajim || sttus="$oldstatus"
 	done
 	
 	gajim-remote change_status "`gajim-remote get_status`" "$sttus"

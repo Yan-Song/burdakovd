@@ -42,11 +42,20 @@ case $TERM in
     ;;
 esac
 
-if [ -d ~/bin ] ; then
-  PATH=~/bin:"${PATH}:/usr/sbin"
-fi
+PATH=~/bin:"${PATH}:/usr/sbin"
 
 zmodload -a zsh/stat stat 
 zmodload -a zsh/zpty zpty 
 zmodload -a zsh/zprof zprof 
 zmodload -ap zsh/mapfile mapfile
+
+
+if [ -f /usr/bin/grc ]; then
+  alias ping="grc --colour=auto ping"
+  alias traceroute="grc --colour=auto traceroute"
+  alias make="grc --colour=auto make"
+  alias diff="grc --colour=auto diff"
+  alias cvs="grc --colour=auto cvs"
+  alias netstat="grc --colour=auto netstat"
+fi
+
