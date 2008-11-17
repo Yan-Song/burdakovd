@@ -59,3 +59,9 @@ if [ -f /usr/bin/grc ]; then
   alias netstat="grc --colour=auto netstat"
 fi
 
+
+
+autoload promptinit
+promptinit
+prompt walters
+
