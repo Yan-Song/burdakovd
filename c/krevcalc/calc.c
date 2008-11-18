@@ -2,12 +2,12 @@
 #include <assert.h>
 #include "functions.c"
 #include <string.h>
+#include <math.h>
 
-#define operations "+-*/"
+#define operations "+-*/^"
 #define skobki "()"
 #define digits "0123456789."
 #define maxnumlength 100
-#define OPZ 0
 
 struct node read_node()
 // считать что-нибудь из входного потока
@@ -123,6 +123,7 @@ int priority(char op)
     else if (op=='-') return 1;
     else if (op=='*') return 2;
     else if (op=='/') return 2;
+    else if (op=='^') return 3;
     else assert(0);
 }
 
@@ -132,6 +133,7 @@ double do_operator(char op, double arg1, double arg2)
     else if(op=='+') return arg1+arg2;
     else if(op=='/') return arg1/arg2;
     else if(op=='*') return arg1*arg2;
+    else if(op=='^') return pow(arg1,arg2);
     else assert(0);
 }
 
@@ -170,7 +172,7 @@ void do_opz(stack* s, struct node op)
     else assert(0);
 }
 
-int main(int argc, char** argv)
+int calc(int OPZ)
 // используется алгоритм преобразования из инфиксной нотации, как описано
 // в http://ru.wikipedia.org/wiki/Обратная_польская_запись, но
 // вычисления производятся в процессе преобразования, таким образом, что в стеке ОПЗ хранятся только числа,
@@ -191,7 +193,7 @@ int main(int argc, char** argv)
                     do_opz(&opz, _); // доделываем
                 else
                 {
-                    fprintf(stderr, "В выражении несогласованы скобки\n");
+                    fprintf(stderr, "В выражении несогласованы скобки. (Вероятно не хватает закрывающей скобки)\n");
                     exit(1);
                 }
             }
@@ -223,7 +225,7 @@ int main(int argc, char** argv)
                push(&tmp, c);
            }
            else if(c.typ==3)
-               if(c.op='(') push(&tmp, c);
+               if(c.op=='(') push(&tmp, c);
                else // ')'
                {
                    while((!isEmpty(tmp)) &&  // стек не пуст и...
@@ -231,9 +233,10 @@ int main(int argc, char** argv)
                        do_opz(&opz, pop(&tmp)); // выполняем всё из стека
                    if(isEmpty(tmp)) // если дошли до конца стека и не встретили '('
                    {
-                       fprintf(stderr, "В выражении несогласованы скобки\n");
+                       fprintf(stderr, "В выражении несогласованы скобки. (Вероятно лишняя закрывающая скобка)\n");
                        exit(1);
                    }
+                   //printf("%s", "pop'ed '('\n");
                    pop(&tmp); // иначе выкидываем '('
                }
        }
@@ -257,8 +260,15 @@ int main(int argc, char** argv)
            exit(1);
        }
        printf("%.9lf\n", _.num);
-       return 0;
+       exit(0);
    }
    fprintf(stderr, "Случилось невозможное.\n");
-   return 1;
+   exit(1);
+}
+
+int main(int argc, char* argv[])
+{
+    if((argc>1)&&(strcmp(argv[1], "opz")==0)) calc(1);
+    else calc(0);
+    return 0;
 }
