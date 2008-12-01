@@ -1,7 +1,7 @@
 #include <string.h>
 #include <math.h>
 #define maxfnnamelength 100
-#define function_count 7
+#define function_count 8
 
 #ifndef KREVCALCF
 #define KREVCALCF
@@ -29,6 +29,11 @@ double fact(double x)
     return p;
 }
 
+
+double chsgn(double x)
+{
+	return -x;
+}
 // END LIBRARY
 
 
@@ -40,7 +45,7 @@ struct func library[function_count] = {
     {"tan", &tan},
     {"tg", &tan},
     {"fact", &fact},
-//    {"sin", &sin},
+    {"<operator 'unary minus'>", &chsgn} // virtual function
 };
 
 struct func* find_function(char* name)

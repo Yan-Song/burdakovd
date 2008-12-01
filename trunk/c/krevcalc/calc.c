@@ -179,10 +179,12 @@ int calc(int OPZ)
 // а операции производятся "на месте"
 {
    struct node c;
+   int minusIsUnary=1;
    stack opz=emptyStack();
    stack tmp=emptyStack();
    do
    {
+   	 
        c=read_node();
        //describe(c);
        if(c.typ==-1) // EOF
@@ -212,9 +214,15 @@ int calc(int OPZ)
        }
        else // http://ru.wikipedia.org/wiki/Обратная_польская_запись , Преобразование из инфиксной нотации
        {
+       	  // хаки для работы унарного минуса
+       	  if((c.typ==2)&&(c.op=='-')&&(minusIsUnary>0))
+       	  {
+       	      c.typ=1;
+       	      c.function=find_function("<operator 'unary minus'>");
+       	  }
            if(c.typ==0) push(&opz, c); // число
            else if(c.typ==1) push(&tmp, c); // function
-           else if(c.typ==2)
+           else if(c.typ==2) // оператор
            {
                int prio=priority(c.op);
                while((!isEmpty(tmp)) && ( // стек не пуст и...
@@ -240,6 +248,8 @@ int calc(int OPZ)
                    pop(&tmp); // иначе выкидываем '('
                }
        }
+     if(((c.typ==3)&&(c.op=='('))||(c.typ==1)) minusIsUnary=1;
+     else minusIsUnary=0;
    } while (c.typ>=0);
    if(c.typ==-2)
    {
@@ -270,5 +280,6 @@ int main(int argc, char* argv[])
 {
     if((argc>1)&&(strcmp(argv[1], "opz")==0)) calc(1);
     else calc(0);
-    return 0;
+    fprintf(stderr, "Случилось невозможное.\n");
+    exit(1);
 }
