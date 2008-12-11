@@ -1,0 +1,35 @@
+diff -ru sulci-0.5-alpha-20081114/Makefile sulci-0.5-alpha-20081114-work/Makefile
+--- sulci-0.5-alpha-20081114/Makefile	2008-11-15 21:32:00.000000000 +0200
++++ sulci-0.5-alpha-20081114-work/Makefile	2008-12-11 21:42:23.626477283 +0200
+@@ -1,4 +1,4 @@
+-LIB_PROJECTS =	cryptokit dehtml xml xmlstring xmlstring_netstring getopt \
++LIB_PROJECTS =	dehtml xml xmlstring xmlstring_netstring getopt \
+ 		sqlite sqlite_util scheduler strftime xmpp
+ 
+ all:
+Только в sulci-0.5-alpha-20081114-work: Makefile.global
+Только в sulci-0.5-alpha-20081114-work: site-lib
+diff -ru sulci-0.5-alpha-20081114/sulci/Makefile sulci-0.5-alpha-20081114-work/sulci/Makefile
+--- sulci-0.5-alpha-20081114/sulci/Makefile	2008-11-15 21:32:00.000000000 +0200
++++ sulci-0.5-alpha-20081114-work/sulci/Makefile	2008-12-11 21:42:23.626477283 +0200
+@@ -161,7 +161,7 @@
+ 	$(MAKE) -C $@
+ 
+ SDIR=/tmp/sulci-$(VERSION)
+-LIB_PROJECTS = Makefile.inc xmpp xml xmlstring xmlstring_netstring getopt dehtml cryptokit sqlite sqlite_util scheduler scheduler2 strftime
++LIB_PROJECTS = Makefile.inc xmpp xml xmlstring xmlstring_netstring getopt dehtml sqlite sqlite_util scheduler scheduler2 strftime
+ 
+ tarball::
+ 	rm -rf $(SDIR)
+diff -ru sulci-0.5-alpha-20081114/sulci/tlds/Makefile sulci-0.5-alpha-20081114-work/sulci/tlds/Makefile
+--- sulci-0.5-alpha-20081114/sulci/tlds/Makefile	2008-11-15 21:29:37.000000000 +0200
++++ sulci-0.5-alpha-20081114-work/sulci/tlds/Makefile	2008-12-11 21:46:33.346477093 +0200
+@@ -12,7 +12,7 @@
+ all: nc tldsdb
+ 
+ tldsdb:
+-	rm -rf *.db *.dir *.pat
++	rm -rf *.db *.dir *.pag
+ 	./createtlds tlds
+ 
+ include $(OCAMLMAKEFILE)
