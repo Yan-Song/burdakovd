@@ -2,9 +2,9 @@
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
-setopt appendhistory autocd extendedglob notify
+setopt appendhistory autocd extendedglob notify HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS
 unsetopt beep nomatch
-bindkey -e
+
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/kreved/.zshrc'
@@ -90,8 +90,67 @@ fi
 
 
 export PROMPT=$'%(?..%{\e[41;38m%}%B-%?-%b%{\e[0m%} )%(1j.%{\e[01;33m%}[%j] .)%{\e[01;36m%}%n@%m%{\e[0m%} %{\e[01;32m%}%2~%{\e[0m%} %B%#%b '
-export RPROMPT=$'%{\e[01;31m%}[%!]%{\e[0m%}' # history # on right
+#export RPROMPT=$'%{\e[01;31m%}[%!]%{\e[0m%}'
+export RPROMPT=$'%{\e[1;34m%}%T%{\e[0m%}'
+
 
 export PYTHONSTARTUP=$HOME/bin/pycomplete.py
 
+
+bindkey -e
+
+bindkey ';5D' backward-word # ctrl+left
+bindkey ';5C' forward-word #ctrl+right
+
+
+autoload zkbd
+[[ ! -d ~/.zkbd ]] && mkdir ~/.zkbd
+[[ ! -f ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE} ]] && zkbd && source  ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
+
+
+#setup key accordingly
+[[ -n "${key[Home]}"    ]]  && bindkey  "${key[Home]}"    beginning-of-line
+[[ -n "${key[End]}"     ]]  && bindkey  "${key[End]}"     end-of-line
+[[ -n "${key[Insert]}"  ]]  && bindkey  "${key[Insert]}"  overwrite-mode
+[[ -n "${key[Delete]}"  ]]  && bindkey  "${key[Delete]}"  delete-char
+[[ -n "${key[Up]}"      ]]  && bindkey  "${key[Up]}"      up-line-or-history
+[[ -n "${key[Down]}"    ]]  && bindkey  "${key[Down]}"    down-line-or-history
+[[ -n "${key[Left]}"    ]]  && bindkey  "${key[Left]}"    backward-char
+[[ -n "${key[Right]}"   ]]  && bindkey  "${key[Right]}"   forward-char
+
+
+alias -s {avi,mpeg,mpg,mov,m2v}=mplayer
+alias -s {odt,doc,sxw,rtf}=openoffice.org
+alias -s {ogg,mp3,wav,wma}=mplayer
+alias -s pdf=xpdf
+autoload -U pick-web-browser
+alias -s {html,htm}=pick-web-browser
+zmodload -a zsh/stat stat
+zmodload -a zsh/zpty zpty
+zmodload -a zsh/zprof zprof
+zmodload -ap zsh/mapfile mapfile
+
+zstyle ':completion::default' list-colors '${LS_COLORS}'
+zstyle ':completion:*:default' list-colors 'no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;31:'
+#zstyle ':completion:*' completer complete _list _oldlist _expand _ignored _match _correct _approximate _prefix
+zstyle ':completion:*' insert-unambiguous true
+zstyle ':completion:*' add-space true
+zstyle ':completion:*:processes' command 'ps -xuf'
+zstyle ':completion:*:processes-names' command 'ps xho command'
+zstyle ':completion:*:processes' sort false
+zstyle ':completion:*:cd:*' ignore-parents parent pwd
+zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $((($#PREFIX+$#SUFFIX)/3 )) numeric )'
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*:functions' ignored-patterns '*'
+zstyle ':completion:*' menu select=long-list select=0
+zstyle ':completion:*' old-menu false
+zstyle ':completion:*' original true
+
+
+autoload -U incremental-complete-word
+zle -N incremental-complete-word
+autoload -U insert-files
+zle -N insert-files
+autoload -U predict-on
+zle -N predict-on
 
