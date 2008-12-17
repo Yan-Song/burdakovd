@@ -2,7 +2,7 @@
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
-setopt appendhistory autocd extendedglob notify HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS
+setopt appendhistory autocd extendedglob notify HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS APPEND_HISTORY
 unsetopt beep nomatch
 
 # End of lines configured by zsh-newuser-install
@@ -105,7 +105,8 @@ bindkey ';5C' forward-word #ctrl+right
 
 autoload zkbd
 [[ ! -d ~/.zkbd ]] && mkdir ~/.zkbd
-[[ ! -f ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE} ]] && zkbd && source  ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
+[[ ! -f ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE} ]] && zkbd
+source  ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
 
 
 #setup key accordingly
@@ -151,6 +152,12 @@ autoload -U incremental-complete-word
 zle -N incremental-complete-word
 autoload -U insert-files
 zle -N insert-files
-autoload -U predict-on
-zle -N predict-on
+
+limit stack 8192 # лимит объёма памяти, выделеной под стек.
+                 # помогает от переполнения стека
+
+limit core 0     # Выключаем запись файлов-дампов упавших программ
+
+setopt autocd
+setopt extended_glob
 
