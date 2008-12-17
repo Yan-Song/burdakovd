@@ -2,7 +2,7 @@
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
-setopt appendhistory autocd extendedglob notify HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS APPEND_HISTORY
+setopt appendhistory autocd extendedglob notify HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS
 unsetopt beep nomatch
 
 # End of lines configured by zsh-newuser-install
@@ -158,6 +158,9 @@ limit stack 8192 # лимит объёма памяти, выделеной по
 
 limit core 0     # Выключаем запись файлов-дампов упавших программ
 
-setopt autocd
-setopt extended_glob
+#setopt autocd
+#setopt extended_glob
+
+autoload -U predict-on
+zle -N predict-on
 
