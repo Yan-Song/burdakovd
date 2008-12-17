@@ -106,7 +106,8 @@ bindkey ';5C' forward-word #ctrl+right
 autoload zkbd
 [[ ! -d ~/.zkbd ]] && mkdir ~/.zkbd
 [[ ! -f ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE} ]] && zkbd
-source  ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
+
+source ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
 
 
 #setup key accordingly
@@ -114,8 +115,8 @@ source  ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
 [[ -n "${key[End]}"     ]]  && bindkey  "${key[End]}"     end-of-line
 [[ -n "${key[Insert]}"  ]]  && bindkey  "${key[Insert]}"  overwrite-mode
 [[ -n "${key[Delete]}"  ]]  && bindkey  "${key[Delete]}"  delete-char
-[[ -n "${key[Up]}"      ]]  && bindkey  "${key[Up]}"      up-line-or-history
-[[ -n "${key[Down]}"    ]]  && bindkey  "${key[Down]}"    down-line-or-history
+[[ -n "${key[Up]}"      ]]  && bindkey  "${key[Up]}"      history-beginning-search-backward
+[[ -n "${key[Down]}"    ]]  && bindkey  "${key[Down]}"    history-beginning-search-forward
 [[ -n "${key[Left]}"    ]]  && bindkey  "${key[Left]}"    backward-char
 [[ -n "${key[Right]}"   ]]  && bindkey  "${key[Right]}"   forward-char
 
@@ -152,15 +153,6 @@ autoload -U incremental-complete-word
 zle -N incremental-complete-word
 autoload -U insert-files
 zle -N insert-files
-
-limit stack 8192 # лимит объёма памяти, выделеной под стек.
-                 # помогает от переполнения стека
-
-limit core 0     # Выключаем запись файлов-дампов упавших программ
-
-#setopt autocd
-#setopt extended_glob
-
 autoload -U predict-on
 zle -N predict-on
 
