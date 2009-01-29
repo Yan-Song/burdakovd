@@ -1,5 +1,8 @@
 __access__ = 0
 
+use_mysql = True
+debug = False
+
 dbhost = 'localhost'
 dbuser = 'user'
 dbpasswd = 'secret'

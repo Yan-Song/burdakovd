@@ -4,6 +4,7 @@
 import urllib2
 import re
 from math import log
+import config
 
 class problem:
     tries = 0
@@ -24,37 +25,47 @@ class problem:
 
 def fetch(url, cachetime):
     """Качает страницу по http, возможно некоторое кэширование результатов в mysql"""
-    import MySQLdb
-    import config
-    conn = MySQLdb.connect(host = config.dbhost,
-                           user = config.dbuser,
-                           passwd = config.dbpasswd,
-                           db = config.dbname)
-    c = conn.cursor()
-    c.execute('set NAMES utf8')
-    c.execute('delete from cache where time<UNIX_TIMESTAMP()')
-    c.execute('select data from cache where url=%s', (url, ))
-    page = c.fetchall()
+    if config.debug:
+        print "Fetching <%s>..." % url
+    if config.use_mysql:
+        import MySQLdb
+        conn = MySQLdb.connect(host = config.dbhost,
+                               user = config.dbuser,
+                               passwd = config.dbpasswd,
+                               db = config.dbname)
+        c = conn.cursor()
+        c.execute('set NAMES utf8')
+        c.execute('delete from cache where time<UNIX_TIMESTAMP()')
+        c.execute('select data from cache where url=%s', (url, ))
+        page = c.fetchall()
+    else: page = ()
     if page:
         r = page[0][0].decode('utf-8')
     else:
         response = urllib2.urlopen(url)
         r = response.read().decode("utf-8")
-        c.execute('insert into cache(url, time, data) values(%s, UNIX_TIMESTAMP()+%s, %s)', \
-            (url, cachetime, r.encode("utf-8")))
-    conn.commit()
-    conn.close()
+        if config.use_mysql:
+            c.execute('insert into cache(url, time, data) values(%s, UNIX_TIMESTAMP()+%s, %s)', \
+                (url, cachetime, r.encode("utf-8")))
+    if config.use_mysql:
+        conn.commit()
+        conn.close()
+    if config.debug:
+        print "...done, fetched %d bytes" % len(r)
     return r
 
 def fetchproblems():
     """качает список всех задач с тимуса"""
     problems = []
     re_problems = re.compile(r'\<TR\>\<TD\>\<BR\>\</TD\>\<TD\>(\d{4})\</TD\>\<TD\ CLASS\=\"na'+\
-        'me\"\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<\/TR\>', re.IGNORECASE)
+        'me\"\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\><TD\ CLASS\=\"source\">[^\<]*</TD>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<\/TR\>', re.IGNORECASE)
     for volume in range(1, 8):
         # кэшируем список задач на сутки
         html = fetch("http://acm.timus.ru/problemset.aspx?space=1&page=%d" % volume, 86400)
-        for pid, name, percent, solved in re_problems.findall(html):
+        cp = re_problems.findall(html)
+        if config.debug:
+            print "parsed %d problems" % len(cp)
+        for pid, name, percent, solved in cp:
             problems.append(problem(int(pid), name, percent, int(solved)))
     return problems
 
@@ -64,7 +75,7 @@ def format(problem, tries):
         <TD><A HREF="http://acm.timus.ru/detail.aspx?space=1&amp;num=%d">%s</A></TD>
         <TD><A HREF="http://acm.timus.ru/rating.aspx?space=1&amp;num=%d">%s</A></TD>
         </TR>""" %
-        (u"""\n<img src="http://tmp.kreved.org/failed.png" alt="попытка">"""*tries, problem.pid, problem.pid, problem.name, problem.pid, problem.percent, problem.pid, problem.solvers))
+        (u"""\n<img src="./failed.png" alt="попытка">"""*tries, problem.pid, problem.pid, problem.name, problem.pid, problem.percent, problem.pid, problem.solvers))
 
 def form():
     return """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
