@@ -159,7 +159,7 @@ zle -N predict-on
 export LS_COLORS='no=00;37:fi=00;37:di=01;36:ln=04;36:pi=33:so=01;35:do=01;35:bd=33;01:cd=33;01:or=31;01:su=37:sg=30:tw=30:ow=34:st=37:ex=01;31:'
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS} 
 
-alias nn=ionice -c3 nice -19
+alias nn="ionice -c3 nice -19"
 
 true
 
