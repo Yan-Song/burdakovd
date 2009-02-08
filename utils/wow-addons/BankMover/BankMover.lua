@@ -54,12 +54,13 @@ if GetLocale() == "ruRU" then
             ["Have patience, it takes quite a while to move ALOT of items."] = "Сохраняйте спокойствие, для переноса большого количества предметов понадобится некоторое время",
             ["Both Bank and GuildBank are not available."] = "Недоступен ни банк ни гильдбанк",
             ["Done."] = "Перенос завершен.",
+            ["Get"] = "Берём",
     }
 end
         
 function GBM:OnInitialize()
-    self:RegisterChatCommand("/putall", function() self:PutAll() end)
-    self:RegisterChatCommand("/getall", function() self:GetAll() end)
+	self:RegisterChatCommand("/putall", function() self:PutAll() end)
+	self:RegisterChatCommand("/getall", function() self:GetAll() end)
     self:RegisterChatCommand("/getunique", function() self:GetUnique() end)
 end
 
@@ -75,7 +76,7 @@ function GBM:GetAll()
         self:BankToBags()
         slotLocks = {}
         return
-    end
+	end
     self:Print(L["Bank not available."])
     return
 end
@@ -85,7 +86,7 @@ function GBM:GetUnique()
         self:BankToBagsUnique()
         slotLocks = {}
         return
-    end
+	end
     self:Print(L["Bank not available."])
     return
 end
@@ -168,13 +169,16 @@ end
 
 function GBM:BankToBagsUnique()
     self:Print(L["Have patience, it takes quite a while to move ALOT of items."])
+    local seen = {}
 	for i, fromBagId in ipairs(bankSlots) do
 		if self:IsBankBag(fromBagId) then
 			local numSlots = GetContainerNumSlots(fromBagId)
 			for fromSlotId = 1, numSlots, 1 do
 				local itemLink = GetContainerItemLink(fromBagId, fromSlotId)
-				if (not self:InBags(itemLink)) then
+				if (itemLink and (not self:InBags(itemLink)) and (not seen[self:GetItemName(itemLink)])) then
 					if self:IsMovable(fromBagId, fromSlotId) then
+                        self:Print(L["Get"].." "..itemLink)
+                        seen[self:GetItemName(itemLink)] = true
 						result = self:BankItemMove2Bags(fromBagId, fromSlotId)
 						if result ~= true then
 							self:Print(result)
@@ -185,7 +189,7 @@ function GBM:BankToBagsUnique()
 			end
 		end
 	end
-    self:Print(L["Done."])
+	self:Print(L["Done."])
 end
 
 function GBM:BagItemMove2GuildBank(bag, slot)
@@ -268,20 +272,23 @@ function GBM:IsBankAvailable()
 end
 
 function GBM:InBags(itemLink)
-    if itemLink == nil then return false end
+    if itemLink == nil then self:Print("o_O") end
+    local name = self:GetItemName(itemLink)
     for theBag = NUM_BAG_FRAMES, 0, -1 do
 		if self:IsNormalBag(theBag) then
 			local numSlot = GetContainerNumSlots(theBag)
 			for theSlot = 1, numSlot, 1 do
                 local bagItemLink = GetContainerItemLink(theBag, theSlot)
-                if bagItemLink == itemLink then return true end
+                if bagItemLink then
+                    local name2 = self:GetItemName(bagItemLink)
+                    if name == name2 then return true end
+                end
 			end
 		end
 	end
 	return false
 end
 
-function GBM:FindFreeBagSlot()
 function GBM:FindFreeBagSlot()
 	for theBag = NUM_BAG_FRAMES, 0, -1 do
 		if self:IsNormalBag(theBag) then
@@ -342,4 +349,8 @@ end
 
 function GBM:GetItemSubtype(link)
 	return select(7, GetItemInfo(link))
+end
+
+function GBM:GetItemName(link)
+	return select(1, GetItemInfo(link))
 end
