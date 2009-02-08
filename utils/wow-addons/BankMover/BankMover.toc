@@ -1,0 +1,14 @@
+## Interface: 30000
+
+## Title: Bank Mover
+## Notes: Moves ALL your items bags2bank or bank2bags or bags2guildbank...
+## Version: 1.0
+## Author: burdakovd
+## X-Email: kreved at kreved dot org
+## X-Credits: Most of this code is from GuildBankMover(ulic AT gmail DOT com), I just add some functions I need
+## X-Embeds: Ace2, Gratuity-2.0
+## X-Category: Inventory
+
+embeds.xml
+
+BankMover.lua

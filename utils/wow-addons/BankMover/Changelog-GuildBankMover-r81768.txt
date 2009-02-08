@@ -1,0 +1,13 @@
+[kreved at kreved dot org] 2009-02-02
+added possibility to move bags2bank (not guildbank)
+renamed slash commands to /getall and /putall
+/putall works with both personal and guild bank
+/getall only works with bank
+Russian localization
+------------------------------------------------------------------------
+r81768 | ulic | 2008-09-15 22:57:46 -0400 (Mon, 15 Sep 2008) | 1 line
+Changed paths:
+   M /trunk/GuildBankMover/GuildBankMover.toc
+
+GuildBankMover: Don't know that anyone ever used this except me, but adding my e-mail to the .toc anyway.
+------------------------------------------------------------------------

@@ -3,20 +3,21 @@
 
 import urllib2
 import re
-from math import log
+import time
 import config
 
 class problem:
     tries = 0
     c = 0
-    def __init__(self, pid, name, percent, solvers):
+    def __init__(self, pid, name, source, percent, solvers):
         self.pid = pid
         self.name = name
+        self.source = source
         self.percent = percent
         self.solvers = solvers
     def __repr__(self):
-        return (u"<problem instance: {name: %s, percent: %s, solvers: %s}>" % \
-            (repr(self.name), self.percent, self.solvers)).encode("utf-8")
+        return (u"<problem instance: {name: %s, source: %s, percent: %s, solvers: %s}>" % \
+            (repr(self.name), repr(self.source), self.percent, self.solvers)).encode("utf-8")
     def complexity(self, lastnum):
         """will be used by sort
         чем меньше людей задачу решили, тем она сложнее
@@ -25,29 +26,47 @@ class problem:
 
 def fetch(url, cachetime):
     """Качает страницу по http, возможно некоторое кэширование результатов в mysql"""
+    valid_db = ("mysql", "sqlite3")
     if config.debug:
         print "Fetching <%s>..." % url
-    if config.use_mysql:
-        import MySQLdb
-        conn = MySQLdb.connect(host = config.dbhost,
+    if config.db in valid_db:
+        if config.db == "mysql":
+            import MySQLdb
+            conn = MySQLdb.connect(host = config.dbhost,
                                user = config.dbuser,
                                passwd = config.dbpasswd,
                                db = config.dbname)
-        c = conn.cursor()
-        c.execute('set NAMES utf8')
-        c.execute('delete from cache where time<UNIX_TIMESTAMP()')
-        c.execute('select data from cache where url=%s', (url, ))
+            c = conn.cursor()
+            c.execute('set NAMES utf8')
+            c.execute('delete from cache where time<UNIX_TIMESTAMP()')
+            c.execute('select data from cache where url=%s', (url, ))
+        elif config.db == "sqlite3":
+            from sqlite3.dbapi2 import connect
+            conn = connect(config.dbname)
+            c = conn.cursor()
+            c.execute("SELECT name FROM SQLITE_MASTER WHERE type='table' AND name='cache'")
+            if not c.fetchall():
+                # такой таблички в бд нет, надо создать
+                # типы данных: http://www.sqlite.org/datatype3.html
+                c.execute("CREATE TABLE cache (url text, time integer, data blob)")
+                c.execute("CREATE UNIQUE INDEX url_key ON cache(url)")
+            c.execute('delete from cache where time<?', (time.time(), ))
+            c.execute('select data from cache where url=?', (url, ))
         page = c.fetchall()
     else: page = ()
     if page:
-        r = page[0][0].decode('utf-8')
+        r = page[0][0]
+        if type(r) == str: r=r.decode('utf-8')
     else:
         response = urllib2.urlopen(url)
         r = response.read().decode("utf-8")
-        if config.use_mysql:
+        if config.db == "mysql":
             c.execute('insert into cache(url, time, data) values(%s, UNIX_TIMESTAMP()+%s, %s)', \
                 (url, cachetime, r.encode("utf-8")))
-    if config.use_mysql:
+        elif config.db == "sqlite3":
+            c.execute('insert into cache(url, time, data) values(?, ?, ?)', \
+                (url, time.time()+cachetime, r))
+    if config.db in valid_db:
         conn.commit()
         conn.close()
     if config.debug:
@@ -58,24 +77,27 @@ def fetchproblems():
     """качает список всех задач с тимуса"""
     problems = []
     re_problems = re.compile(r'\<TR\>\<TD\>\<BR\>\</TD\>\<TD\>(\d{4})\</TD\>\<TD\ CLASS\=\"na'+\
-        'me\"\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\><TD\ CLASS\=\"source\">[^\<]*</TD>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<\/TR\>', re.IGNORECASE)
+        'me\"\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\><TD\ CLASS\=\"source\">([^\<]*)</TD>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<\/TR\>', re.IGNORECASE)
     for volume in range(1, 8):
         # кэшируем список задач на сутки
-        html = fetch("http://acm.timus.ru/problemset.aspx?space=1&page=%d" % volume, 86400)
+        html = fetch("http://acm.timus.ru/problemset.aspx?space=1&page=%d&locale=ru" % volume, 86400)
         cp = re_problems.findall(html)
         if config.debug:
             print "parsed %d problems" % len(cp)
-        for pid, name, percent, solved in cp:
-            problems.append(problem(int(pid), name, percent, int(solved)))
+        for pid, name, source, percent, solved in cp:
+            problems.append(problem(int(pid), name, source, percent, int(solved)))
     return problems
 
 def format(problem, tries):
     return (u"""<TR><TD>%s</TD><TD>%d</TD>
         <TD CLASS="name"><A HREF="http://acm.timus.ru/problem.aspx?space=1&amp;num=%d">%s</A></TD>
+        <TD CLASS="source">%s</TD>
         <TD><A HREF="http://acm.timus.ru/detail.aspx?space=1&amp;num=%d">%s</A></TD>
         <TD><A HREF="http://acm.timus.ru/rating.aspx?space=1&amp;num=%d">%s</A></TD>
         </TR>""" %
-        (u"""\n<img src="./failed.png" alt="попытка">"""*tries, problem.pid, problem.pid, problem.name, problem.pid, problem.percent, problem.pid, problem.solvers))
+        (u"""\n<img src="./failed.png" alt="попытка">"""*tries, problem.pid, \
+        problem.pid, problem.name, problem.source, problem.pid, \
+        problem.percent, problem.pid, problem.solvers))
 
 def form():
     return """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -105,8 +127,11 @@ def main(uid):
     minc = min(c)
     maxc = max(c)
     # качаем инфу о авторе, кэшируем на пять минут
-    html = fetch("http://acm.timus.ru/author.aspx?id=%d" % uid, 300)
+    html = fetch("http://acm.timus.ru/author.aspx?id=%d&locale=ru" % uid, 300)
     name = re.findall(ur'\<FONT\ SIZE\=\"5\"\>([^\<]+)\<\/FONT\>', html, re.IGNORECASE)[0]
+    place = int(re.findall(
+        ur'\<TD\ CLASS\=\"name\"\>Место\<\/TD\>\<TD\ CLASS\=\"value\"\>(\d+)\<\/TD\>', \
+        html, re.IGNORECASE)[0])
     p = re.findall(ur'\<NOBR\>\<A[^\>]+\>(\d{4})\<\/A\>\ \<FONT\ SIZE\=\"\-2\"\>(\d+)\/(\d+)\<\/FONT\>\,?\<\/NOBR\>', \
         html, re.IGNORECASE)
     solvedproblems = []
@@ -126,11 +151,11 @@ def main(uid):
         </style>
         <title>Нерешённые задачи: %s</title>
         </head><body alink="#1a5cc8" link="#1a5cc8" vlink="#1a5cc8">
-        <p><a href="http://acm.timus.ru/author.aspx?id=%d">%s</a>, решено %d из %d</p>
+        <p><a href="http://acm.timus.ru/author.aspx?id=%d">%s</a>, решено %d из %d задач, место: %d.</p>
         <p align="center">
         <TABLE WIDTH="75%%" CLASS="problemset strict">
         <TR><TH WIDTH="40">Неудачные попытки</TH><TH WIDTH="50">ID</TH>
-        <TH>Название</TH><TH WIDTH="100">Зачтено</TH>
+        <TH>Название</TH><TH>Источник</TH><TH WIDTH="100">Зачтено</TH>
         <TH WIDTH="100">Авторы</TH></TR>
 
         """ % (
@@ -658,7 +683,7 @@ def main(uid):
                     margin-bottom: 0.3em;
                     border-bottom: dashed 1px Silver;
             }"""
-            , name, uid, name, len(solvedproblems), total)
+            , name, uid, name, len(solvedproblems), total, place)
     footer = u"""</TABLE></body></html>"""
     return (header + u'\n'.join(
             map(
