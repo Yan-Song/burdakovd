@@ -4,6 +4,8 @@
 #include <stack>
 #include <queue>
 #include <deque>
+#include <vector>
+#pragma comment(linker, "/STACK:16777216")
 
 using namespace std;
 

@@ -5,3 +5,5 @@ CREATE TABLE IF NOT EXISTS `cache` (
   PRIMARY KEY  (`url`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+/* дамп нужен только для myslq,
+в sqlite таблица будет создана скриптом, вручную создавать не нужно */
