@@ -95,7 +95,7 @@ def format(problem, tries):
         <TD><A HREF="http://acm.timus.ru/detail.aspx?space=1&amp;num=%d">%s</A></TD>
         <TD><A HREF="http://acm.timus.ru/rating.aspx?space=1&amp;num=%d">%s</A></TD>
         </TR>""" %
-        (u"""\n<img src="./failed.png" alt="попытка">"""*tries, problem.pid, \
+        ((u"""\n<img src="%s/failed.png" alt="попытка">""" % config.static_url)*tries, problem.pid, \
         problem.pid, problem.name, problem.source, problem.pid, \
         problem.percent, problem.pid, problem.solvers))
 

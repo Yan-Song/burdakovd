@@ -7,3 +7,5 @@ dbhost = 'localhost'
 dbuser = 'user'
 dbpasswd = 'secret'
 dbname = 'tstatus' # for sqlite3 here will be name of file
+
+static_url = '/tstatus-static'
