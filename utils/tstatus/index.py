@@ -107,7 +107,7 @@ def form():
         </head>
         <body alink="#1a5cc8" link="#1a5cc8" vlink="#1a5cc8">
         <p>Зайдите на Тимусе в инфо о себе, посмотрите свой системный id (НЕ JUDGE_ID), и введите его в форму</p>
-        <p><img src="http://tmp.kreved.org/addressbar.png" alt="скриншот">
+        <p><img src="%s/scr.png" alt="скриншот">
         
 
         <p>
@@ -115,7 +115,7 @@ def form():
         <INPUT NAME="uid" SIZE="15" VALUE="62871"> <INPUT TYPE="SUBMIT" VALUE="го"></FORM>
        
         </body></html>
-        """
+        """ % config.static_url;
 
 def main(uid):
     uid = int(uid) # на всякий случай, чтоб исключить любой инклудинг
