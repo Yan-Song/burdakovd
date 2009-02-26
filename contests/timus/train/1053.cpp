@@ -21,9 +21,26 @@ using namespace std;
 typedef long long i64;
 typedef vector<int> VI;
 
+int gcd(int a, int b)
+{
+    return a==0?b:gcd(b%a, a);
+}
 
 int main()
 {
-    
+    /* ответом будет gcd этих чисел
+    для одного числа это верно,
+    при выкидывании одного из равных чисел gcd не меняется,
+    при вычитании меньшего из большего тоже не меняется
+    */
+    int n, ans=0;
+    cin>>n;
+    fo(i, 0, n)
+    {
+        int _;
+        cin>>_;
+        ans = gcd(ans, _);
+    }
+    cout<<ans<<endl;
     return 0;
 }

@@ -1,0 +1,42 @@
+#!/bin/sh
+
+program=./run
+tests=""
+tlimit="2"
+
+[ $# -gt 0 ] && program=$1
+shift
+tests="$*"
+
+echo "Testing ${program} on ${tests}"
+
+tmpout="/tmp/checker.tmpout"
+
+for i in $tests; do
+	test=`basename $i .in`
+	eta=${test}.out
+	if [ -e $eta ]; then
+		echo -n "Test $test: "
+		timelimit -s 14 -q -t ${tlimit} -T 1 ${program} <${test}.in >${tmpout}
+		ecode=$?
+		if [ $ecode -eq 0 ]; then
+			diff -bB ${tmpout} ${eta} >/dev/null && echo "OK" || echo WA
+		else
+			if [ $ecode -gt 127 ]; then
+				ecode=$((ecode-128))
+				if [ $ecode -eq 14 ]; then
+					echo TLE
+				else
+					if [ $ecode -eq 11 ]; then
+						echo "SEGFAULT"
+					else echo "Terminated with signal $ecode"
+					fi
+				fi
+			else
+				echo "Error, exitcode=$ecode"
+			fi
+		fi
+	else 
+		echo "${eta} not found"
+	fi
+done

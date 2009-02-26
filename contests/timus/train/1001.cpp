@@ -16,5 +16,7 @@ int main()
         printf("%.4f\n", q.top());
         q.pop();
     }
+    //priority_queue<int> qf;
+    //vector<int> tty;
     return 0;
 }

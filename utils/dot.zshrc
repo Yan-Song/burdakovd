@@ -160,5 +160,7 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 alias nn="ionice -c3 nice -19"
 
+alias gdb="gdb -q"
+
 true
 
