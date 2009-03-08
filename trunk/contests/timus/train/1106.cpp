@@ -13,8 +13,9 @@
 
 #define mset(block,value) memset(block,value,sizeof(block))
 #define fo(i,begin,end) for(int i=begin; i<end; i++)
-#define foreach(i,x) for(int i=0; i<x.size(); i++)
-#define showv(v) foreach(i,v) cout<<v[i]<<" "; cout<<endl
+#define forsz(i,start,x) fo(i,start,x.size())
+#define foreach(i,x) forsz(i,0,x)
+#define showv(v) foreach(i,v) cout<<(i?" ":"")<<v[i]; cout<<endl
 #define ALL(v) v.begin(), v.end()
 
 using namespace std;
@@ -22,6 +23,7 @@ using namespace std;
 typedef long long i64;
 typedef vector<int> VI;
 
+#define UNDEFINED 0
 
 int main()
 {
@@ -61,7 +63,84 @@ int main()
 
     в конце, если все вершины определились, и выполнены оба инварианта
     то разбиение удовлетворяет заданию
+
+    ///////////////////////////////
+
+    тут ещё и какая-то муть при вводе,
+    то есть что-то типа того, что если в вводе указано что первый друг второго,
+    а обратное не указано, то оно всё равно подразумевается
     */
-    
+    int n;
+    cin>>n;
+    vector< vector<int> > f(n);
+    vector<bool> happy(n,false);
+    vector<int> left(n,0);
+    vector<int> left2(n,0);
+    vector<int> group(n,UNDEFINED);
+    vector< vector<bool> > A(n, vector<bool>(n, false));
+    foreach(i,A)
+    {
+        while(true)
+        {
+            int _;
+            cin>>_;
+            if(_==0) break;
+            A[i][_-1]=A[_-1][i]=true;
+        }
+    }
+    foreach(i,A)
+        foreach(j,A[i])
+            if(A[i][j])
+            {
+                f[i].push_back(j);
+                ++left[i];
+            }
+    foreach(i,f)
+    {
+        if(f[i].empty())
+        {
+            cout<<0<<endl;
+            return 0; // есть изолированный человек
+        }
+    }
+    vector<int> ans;
+    foreach(i,f)
+    {
+        group[i]=1;
+        // проверяем [1]
+        foreach(j,f[i])
+            if(!happy[f[i][j]]&&group[f[i][j]]==1&&left[f[i][j]]==1)
+            {
+                group[i]=2;
+                break;
+            }
+        if(left[i]==0&&group[i]==1)
+        {
+            group[i]=2;
+            foreach(j,f[i])
+                if(group[f[i][j]]==2)
+                {
+                    group[i]=1;
+                    break;
+                }
+        }
+        foreach(j,f[i])
+        {
+            --left[f[i][j]];
+            if(group[f[i][j]]&&group[f[i][j]]!=group[i])
+            {
+                happy[f[i][j]]=true;
+                happy[i]=true;
+            }
+        }
+        if(group[i]==1)
+            ans.push_back(i);
+    }
+    foreach(i, happy) if(!happy[i]) throw i;
+    foreach(i, left) if(left[i]) throw i;
+    cout<<ans.size()<<endl;
+    foreach(i,ans)
+        cout<<(i?" ":"")<<ans[i]+1;
+    cout<<endl;
     return 0;
 }
