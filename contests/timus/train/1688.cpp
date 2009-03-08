@@ -25,6 +25,20 @@ typedef long long i64;
 
 int main()
 {
-    
+    i64 n, m;
+    cin>>n>>m;
+    n*=3;
+    fo(i,0,m)
+    {
+        int _;
+        cin>>_;
+        n-=_;
+        if(n<0)
+        {
+            cout<<"Free after "<<(i+1)<<" times."<<endl;
+            return 0;
+        }
+    }
+    cout<<"Team.GOV!"<<endl;
     return 0;
 }
