@@ -80,11 +80,14 @@ zmodload -ap zsh/mapfile mapfile
 
 if [ -f /usr/bin/grc ]; then
   alias ping="grc --colour=auto ping"
-  alias traceroute="grc --colour=auto traceroute"
+  #alias traceroute="grc --colour=auto traceroute"
   alias make="grc --colour=auto make"
   alias diff="grc --colour=auto diff"
   alias cvs="grc --colour=auto cvs"
   alias netstat="grc --colour=auto netstat"
+  alias cat="grc cat"
+  alias tail="grc tail"
+  alias head="grc head"
 fi
 
 
@@ -162,5 +165,7 @@ alias nn="ionice -c3 nice -19"
 
 alias gdb="gdb -q"
 
-true
+alias bluenet="sudo ifup utel"
+alias bluestop="sudo ifdown utel"
 
+true

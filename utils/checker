@@ -2,13 +2,13 @@
 
 program=./run
 tests=""
-tlimit="2"
+tlimit="1"
 
 [ $# -gt 0 ] && program=$1
 shift
 tests="$*"
 
-echo "Testing ${program} on ${tests}"
+echo "Testing ${program} on $# tests"
 
 tmpout="/tmp/checker.tmpout"
 
