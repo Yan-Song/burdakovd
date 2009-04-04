@@ -59,7 +59,7 @@ struct NPM
         int g=v.first, oldg=u.first;
         if(oldg==find(0).first)
         {
-            un(y,x,delta);
+            un(y,x,-delta);
             return;
         }
         p[oldg].first=g; // optimize
@@ -89,12 +89,19 @@ int main()
         if(px.first==py.first)
             if(d != px.second-py.second)
             {
-                cout<<"Impossible after "<<(i+1)<< "statements"<<endl;
+                cout<<"Impossible after "<<(i+1)<< " statements"<<endl;
                 return 0;
             }
+            else ;
         else
         {
             q.un(x,y,d);
+//             fo(i,0,n)
+//             {
+//                 q.find(i);
+//                 cout<<q.p[i].first<<" "<<q.p[i].second<<endl;
+//             }
+            //cout<<" ffffff"<<endl;
             int g=q.find(x).first;
             pair<int,int> mmm=q.mm[g];
             int dm=mmm.second-mmm.first;
@@ -107,17 +114,24 @@ int main()
                 )
               )
             {
-                cout<<"Impossible after "<<(i+1)<< "statements"<<endl;
+                cout<<"Impossible after "<<(i+1)<< " statements"<<endl;
                 return 0;
             }
         }
     }
+
+//     fo(i,0,n)
+//     {
+//         q.find(i);
+//         cout<<q.p[i].first<<" "<<q.p[i].second<<endl;
+//     }
     
     cout<<"Possible"<<endl;
     fo(i,0,n)
     {
         //cerr<<i<<endl;
         int sal=q.find(i).second-q.mm[q.find(i).first].first;
+        //int sal=q.find(i).second;
         cout<<sal<<endl;
     }
     
