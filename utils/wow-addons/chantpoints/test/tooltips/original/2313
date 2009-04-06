@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('2313', 7, {
+	name_ruru: 'Накладки из жесткой кожи',
+	quality: 1,
+	icon: 'INV_Misc_ArmorKit_15',
+	tooltip_ruru: '<table><tr><td><b class="q1">Накладки из жесткой кожи</b><br />Требуется уровень: 5</td></tr></table><table><tr><td><span class="q2">Использование: Увеличивает параметр брони предмета одежды, носимого на теле, ногах, руках или ступнях, на 16.</span></td></tr></table>'
+});

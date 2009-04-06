@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('42500', 7, {
+	name_ruru: 'Титановый шип для щита',
+	quality: 2,
+	icon: 'INV_Titanium_Shield_Spike',
+	tooltip_ruru: '<table><tr><td><b class="q2">Титановый шип для щита</b><br />Требуется уровень: 70</td></tr></table><table><tr><td><span class="q2">Использование: Оснащение щита титановым шипом, наносящим 45 to 67 ед. урона при каждом блоке.</span></td></tr></table>'
+});

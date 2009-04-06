@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('18169', 7, {
+	name_ruru: 'Пламенная мантия Рассвета',
+	quality: 2,
+	icon: 'Spell_Fire_FlameShock',
+	tooltip_ruru: '<table><tr><td><b class="q2">Пламенная мантия Рассвета</b><br /><!--bo-->Становится персональным при получении</td></tr></table><table><tr><td><span class="q2">Использование: Наполнение наплечников силой, увеличивающей сопротивление огню на 5 ед.</span></td></tr></table>'
+});

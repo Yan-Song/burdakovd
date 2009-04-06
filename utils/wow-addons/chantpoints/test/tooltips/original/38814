@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38814', 7, {
+	name_ruru: 'Свиток чар для оружия: истребитель элементалей',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для оружия: истребитель элементалей</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на оружие ближнего боя чар, увеличивающих наносимый элементалям урон на 6 ед.</span></td></tr></table>'
+});

@@ -9,7 +9,6 @@ using namespace std;
 
 int main()
 {
-	Table test("testdb", "testtable");
-		
+    cout<<"Nothing yet"<<endl;
 	return 0;
 }

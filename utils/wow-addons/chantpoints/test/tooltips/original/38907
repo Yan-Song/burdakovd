@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38907', 7, {
+	name_ruru: 'Свиток чар для щита: сопротивление',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для щита: сопротивление</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на щит чар, повышающих сопротивление всем школам магии на 5. Требуется предмет для персонажей не ниже 35 уровня.</span></td></tr></table>'
+});

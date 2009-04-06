@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38975', 7, {
+	name_ruru: 'Свиток чар для нагрудника - устойчивость II',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для нагрудника - устойчивость II</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на нагрудник чар, повышающих рейтинг устойчивости на 20. Требуется предмет для персонажей не ниже 60 уровня.</span></td></tr></table>'
+});

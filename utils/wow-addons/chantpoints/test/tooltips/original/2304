@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('2304', 7, {
+	name_ruru: 'Накладки из тонкой кожи',
+	quality: 1,
+	icon: 'INV_Misc_ArmorKit_17',
+	tooltip_ruru: '<table><tr><td><b class="q1">Накладки из тонкой кожи</b></td></tr></table><table><tr><td><span class="q2">Использование: Увеличивает параметр брони предмета одежды, носимого на теле, ногах, руках или ступнях, на 8.</span></td></tr></table>'
+});

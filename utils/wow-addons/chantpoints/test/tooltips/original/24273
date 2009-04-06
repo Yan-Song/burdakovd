@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('24273', 7, {
+	name_ruru: 'Таинственная чародейская нить',
+	quality: 3,
+	icon: 'Spell_Nature_AstralRecal',
+	tooltip_ruru: '<table><tr><td><b class="q3">Таинственная чародейская нить</b><br />Требуется уровень: 60</td></tr></table><table><tr><td><span class="q2">Использование: Вышивка чародейской нитью на штанах, увеличивающая силу заклинаний на 25 и выносливость на 15.</span></td></tr></table>'
+});

@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('10548', 7, {
+	name_ruru: 'Снайперский прицел',
+	quality: 1,
+	icon: 'INV_Misc_Spyglass_02',
+	tooltip_ruru: '<table><tr><td><b class="q1">Снайперский прицел</b><br />Требуется уровень: 40</td></tr></table><table><tr><td><span class="q2">Использование: Оснащение лука или огнестрельного оружия прицелом, позволяющим повысить наносимый урон на 7 ед.</span></td></tr></table>'
+});

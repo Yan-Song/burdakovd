@@ -17,15 +17,16 @@ private:
 	static string decode(const string&);
 	static string vencode(const vector<string>&);
 	static vector<string> vdecode(const string&);
-    vector<vector<Field> > rows;
     void filenames();
 public:
+    vector<vector<Field> > rows;
 	Table(string _path, string tablename); // загрузить таблицу в память
 	
 	// создать новую таблицу
     Table(string _path, string tablename, vector<string> _fields, vector<string> _fieldtypes);
 	
     void save(); // save to file
+    void removeIt(); // remove all files of this table
 };
 
 class Database
@@ -35,10 +36,11 @@ private:
     string path;
 public:
     Database(const string& _path);
-    vector<string> listTable();
-    Table& createTable(string tablename, vector<string> _fields, vector<string> _fieldtypes);
+    Table meta();
+    vector<string> listTables();
+    Table createTable(string tablename, vector<string> _fields, vector<string> _fieldtypes);
     void deleteTable(string tablename);
-    
+    ~Database();
 };
 
 #endif

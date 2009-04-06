@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('41604', 7, {
+	name_ruru: 'Сапфировая чародейская нить',
+	quality: 4,
+	icon: 'Spell_Nature_AstralRecalGroup',
+	tooltip_ruru: '<table><tr><td><b class="q4">Сапфировая чародейская нить</b><br />Требуется уровень: 70</td></tr></table><table><tr><td><span class="q2">Использование: Вышивка чародейской нитью на штанах, увеличивающая силу заклинаний на 50 и выносливость на 30.</span></td></tr></table>'
+});

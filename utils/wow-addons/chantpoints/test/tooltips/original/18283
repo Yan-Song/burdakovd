@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('18283', 7, {
+	name_ruru: 'Прицел "Бизникс" 247x128',
+	quality: 3,
+	icon: 'INV_Misc_Spyglass_02',
+	tooltip_ruru: '<table><tr><td><b class="q3">Прицел "Бизникс" 247x128</b><br />Требуется уровень: 50</td></tr></table><table><tr><td><span class="q2">Использование: Оснащение лука или огнестрельного оружия прицелом, повышающим рейтинг меткости дальнего боя на 30 ед.</span></td></tr></table>'
+});

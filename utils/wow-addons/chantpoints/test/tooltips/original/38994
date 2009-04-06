@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38994', 7, {
+	name_ruru: '[Scroll of Enchant Weapon - Exceptional Healing]',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<b class="q1">[Scroll of Enchant Weapon - Exceptional Healing]</b>'
+});

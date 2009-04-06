@@ -10,6 +10,8 @@ class Field
 public:
     string type, data;
     Field(const string& t, const string& v);
+    // show
+    string dump();
 };
 
 

@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('19971', 7, {
+	name_ruru: 'Сверхпрочная этерниевая леска',
+	quality: 2,
+	icon: 'INV_Fabric_Mageweave_02',
+	tooltip_ruru: '<table><tr><td><b class="q2">Сверхпрочная этерниевая леска</b><br /><!--bo-->Становится персональным при получении<br />Требуется: Рыбная ловля (150)</td></tr></table><table><tr><td><span class="q2">Использование: Замена лески на вашей удочке высокопрочной леской из этерния.</span></td></tr></table>'
+});

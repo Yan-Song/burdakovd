@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38979', 7, {
+	name_ruru: 'Свиток чар для перчаток - сила заклинаний II',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для перчаток - сила заклинаний II</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на перчатки чар, повышающих силу заклинаний на 28. Требуется предмет для персонажей не ниже 60 уровня.</span></td></tr></table>'
+});

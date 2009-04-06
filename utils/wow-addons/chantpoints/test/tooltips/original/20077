@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('20077', 7, {
+	name_ruru: 'Перстень могущества Зандалара',
+	quality: 3,
+	icon: 'INV_Misc_ArmorKit_08',
+	tooltip_ruru: '<table><tr><td><b class="q3">Перстень могущества Зандалара</b><br /><!--bo-->Становится персональным при получении</td></tr></table><table><tr><td><span class="q2">Использование: Наполнение наплечников силой, увеличивающей силу атаки на 30 ед.</span></td></tr></table>'
+});

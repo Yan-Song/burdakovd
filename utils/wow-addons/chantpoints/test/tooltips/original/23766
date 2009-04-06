@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('23766', 7, {
+	name_ruru: 'Стабилизированный этерниевый прицел',
+	quality: 3,
+	icon: 'INV_Misc_Spyglass_02',
+	tooltip_ruru: '<table><tr><td><b class="q3">Стабилизированный этерниевый прицел</b><br />Требуется уровень: 60</td></tr></table><table><tr><td><span class="q2">Использование: Оснащение лука или огнестрельного оружия прицелом, повышающим рейтинг критического урона на 28 ед.</span></td></tr></table>'
+});
