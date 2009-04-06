@@ -4,6 +4,7 @@
 #include "table.hpp"
 #include "exceptions.hpp"
 #include <fstream>
+#include <cstdio>
 
 vector<string> split(const string& s, const char d)
 {
@@ -127,6 +128,77 @@ void Table::save()
     fdata.close();
 }
 
+void Table::removeIt()
+{
+    filenames();
+    remove(filename.c_str());
+    remove(meta.c_str());
+}
 
+Database::Database(const string& _path): path(_path)
+{
+
+};
+
+Table Database::meta()
+{
+    try
+    {
+        return Table(path, "meta");
+    }
+    catch(TableNotFound)
+    {
+        vector<string> f, tf;
+        f.push_back("tablename");
+        tf.push_back("string");
+        return Table(path, "meta", f, tf);
+    }
+}
+
+Database::~Database()
+{
+    //
+}
+
+vector<string> Database::listTables()
+{
+    Table m=meta();
+    vector<string> ans;
+    foreach(i,m.rows)
+        ans.push_back(m.rows[i][0].data);
+    return ans;
+}
+
+Table Database::createTable(string tablename, vector<string> _fields, vector<string> _fieldtypes)
+{
+    vector<string> lst=listTables();
+    foreach(i,lst)
+        if(lst[i]==tablename)
+            throw TableAlreadyExists();
+    if("meta"==tablename) throw TableAlreadyExists();
+
+    Table m=meta();
+    vector<Field> row;
+    row.push_back(Field("string", tablename));
+    m.rows.push_back(row);
+    m.save();
+    Table q(path, tablename,_fields, _fieldtypes);
+    q.save();
+    return q;
+};
+
+void Database::deleteTable(string tablename)
+{
+    Table m=meta();
+    foreach(i,m.rows)
+        if(m.rows[i][0].data==tablename)
+        {
+            m.rows.erase(m.rows.begin()+i,m.rows.begin()+i+1);
+            m.save();
+            Table(path,tablename).removeIt();
+            return;
+        }
+    throw TableNotFound();
+};
 
 #endif

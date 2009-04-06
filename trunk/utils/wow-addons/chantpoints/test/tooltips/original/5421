@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('5421', 7, {
+	name_ruru: 'Чары яркого пламени',
+	quality: 1,
+	icon: 'INV_Jewelry_Talisman_01',
+	tooltip_ruru: '<table><tr><td><b class="q1">Чары яркого пламени</b><br /><!--bo-->Становится персональным при получении</td></tr></table><table><tr><td><span class="q2">Использование: Наложение на оружие чар, увеличивающих до 15% вероятность нанесения 9 to 13 ед. урона от огня противникам в радиусе 3 м.</span></td></tr></table>'
+});

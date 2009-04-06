@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('6042', 7, {
+	name_ruru: 'Железный шип для щита',
+	quality: 1,
+	icon: 'INV_Misc_ArmorKit_01',
+	tooltip_ruru: '<table><tr><td><b class="q1">Железный шип для щита</b></td></tr></table><table><tr><td><span class="q2">Использование: Оснащение щита железным умбоном, позволяющим наносить урон при каждом блокировании щитом.</span></td></tr></table>'
+});

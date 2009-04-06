@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38886', 7, {
+	name_ruru: 'Свиток чар для перчаток - энергия Тьмы',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для перчаток - энергия Тьмы</b></td></tr></table><table><tr><td><span class="q2">Использование: Улучшение перчаток, увеличивающее силу заклинаний темной магии на 20.</span></td></tr></table>'
+});

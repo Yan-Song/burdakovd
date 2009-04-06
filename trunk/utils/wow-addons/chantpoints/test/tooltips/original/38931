@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38931', 7, {
+	name_ruru: 'Свиток чар для перчаток - взрыв I',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для перчаток - взрыв I</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на перчатки чар, повышающих рейтинг критического удара на 10. Требуется предмет для персонажей не ниже 35 уровня.</span></td></tr></table>'
+});

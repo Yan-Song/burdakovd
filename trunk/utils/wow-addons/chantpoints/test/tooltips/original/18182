@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('18182', 7, {
+	name_ruru: 'Многоцветная драгоценность Рассвета',
+	quality: 2,
+	icon: 'INV_Misc_Gem_Variety_02',
+	tooltip_ruru: '<table><tr><td><b class="q2">Многоцветная драгоценность Рассвета</b><br /><!--bo-->Становится персональным при получении</td></tr></table><table><tr><td><span class="q2">Использование: Наполнение наплечников силой, увеличивающей сопротивление всем видам магии на 5 ед.</span></td></tr></table>'
+});

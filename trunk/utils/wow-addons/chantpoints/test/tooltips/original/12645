@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('12645', 7, {
+	name_ruru: 'Ториевый шип для щита',
+	quality: 2,
+	icon: 'INV_Misc_ArmorKit_20',
+	tooltip_ruru: '<table><tr><td><b class="q2">Ториевый шип для щита</b></td></tr></table><table><tr><td><span class="q2">Использование: Оснащение щита ториевым умбоном, позволяющим наносить урон при каждом блокировании щитом.</span></td></tr></table>'
+});

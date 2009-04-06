@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('20078', 7, {
+	name_ruru: 'Перстень безмятежности Зандалара',
+	quality: 3,
+	icon: 'Spell_Holy_PowerWordShield',
+	tooltip_ruru: '<table><tr><td><b class="q3">Перстень безмятежности Зандалара</b><br /><!--bo-->Становится персональным при получении</td></tr></table><table><tr><td><span class="q2">Использование: Улучшение наплечников, повышающее силу заклинаний на 18.</span></td></tr></table>'
+});

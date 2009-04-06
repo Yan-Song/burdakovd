@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38904', 7, {
+	name_ruru: 'Свиток чар для щита: прочный щит',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для щита: прочный щит</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на щит чар, повышающих показатель блокирования на 18 ед. Требуется предмет для персонажей не ниже 35 уровня.</span></td></tr></table>'
+});

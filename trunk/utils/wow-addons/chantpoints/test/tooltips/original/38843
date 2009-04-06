@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38843', 7, {
+	name_ruru: '[Scroll of Enchant Shield - Frost Resistance]',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">[Scroll of Enchant Shield - Frost Resistance]</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на обувь чар, повышающих сопротивление магии льда на 8.</span></td></tr></table>'
+});

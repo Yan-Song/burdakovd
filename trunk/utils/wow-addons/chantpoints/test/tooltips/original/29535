@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('29535', 7, {
+	name_ruru: 'Накладки для поножей из чешуи кобры',
+	quality: 4,
+	icon: 'INV_Misc_ArmorKit_25',
+	tooltip_ruru: '<table><tr><td><b class="q4">Накладки для поножей из чешуи кобры</b><br />Требуется уровень: 60</td></tr></table><table><tr><td><span class="q2">Использование: Укрепление поножей броней из кожи кобры Пустоты увеличивает силу атаки на 50 и рейтинг критического удара на 12.</span></td></tr></table>'
+});

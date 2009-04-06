@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38954', 7, {
+	name_ruru: 'Свиток чар для щита - защита',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для щита - защита</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на щит чар, повышающих рейтинг защиты на 20. Требуется предмет для персонажей не ниже 60 уровня.</span></td></tr></table>'
+});

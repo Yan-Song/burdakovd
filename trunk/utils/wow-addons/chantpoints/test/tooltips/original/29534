@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('29534', 7, {
+	name_ruru: 'Накладки для поножей из шкуры копытня',
+	quality: 3,
+	icon: 'INV_Misc_ArmorKit_23',
+	tooltip_ruru: '<table><tr><td><b class="q3">Накладки для поножей из шкуры копытня</b><br />Требуется уровень: 60</td></tr></table><table><tr><td><span class="q2">Использование: Укрепление поножей броней из кожи шерсторога увеличивает выносливость на 30 и ловкость на 10.</span></td></tr></table>'
+});

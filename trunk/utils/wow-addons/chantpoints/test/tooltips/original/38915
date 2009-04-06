@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38915', 7, {
+	name_ruru: '[Scroll of Enchant Cloak - Major Resistance]',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">[Scroll of Enchant Cloak - Major Resistance]</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на плащ чар, повышающих сопротивление всех видов на 7. Требуется предмет для персонажей не ниже 35 уровня.</span></td></tr></table>'
+});

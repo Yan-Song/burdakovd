@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38938', 7, {
+	name_ruru: 'Свиток чар для наручей - штурм I',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для наручей - штурм I</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на наручи чар, повышающих силу атаки на 24 ед. Требуется предмет для персонажей не ниже 35 уровня.</span></td></tr></table>'
+});

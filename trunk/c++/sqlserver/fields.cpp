@@ -9,5 +9,9 @@
 
 Field::Field(const string& t, const string& v): type(t), data(v) {};
 
+string Field::dump()
+{
+    return data;
+}
 
 #endif

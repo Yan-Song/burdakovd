@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38838', 7, {
+	name_ruru: 'Свиток чар для оружия - огненное оружие',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для оружия - огненное оружие</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на оружие ближнего боя чар, увеличивающих наносимый урон большинства атак на 40 ед. урона от огня.</span></td></tr></table>'
+});

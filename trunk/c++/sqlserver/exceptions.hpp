@@ -8,13 +8,15 @@ public:
 	{
 		return "Data files are not valid.";
 	}
-	CorruptedData() {};
+	CorruptedData() {}; 
 };
 
 class UnknownField: public exception {};
 
-class TableNotFound: public CorruptedData {};
-class TableDataNotFound: public CorruptedData {};
+class TableNotFound {};
+class TableDataNotFound {};
+
+class TableAlreadyExists {};
 
 class FileError {};
 

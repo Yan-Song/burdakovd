@@ -1,0 +1,6 @@
+$WowheadPower.registerItem('38885', 7, {
+	name_ruru: 'Свиток чар для перчаток: угроза',
+	quality: 1,
+	icon: 'INV_Scroll_03',
+	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для перчаток: угроза</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на перчатки чар, на 2% повышающих создаваемую при физических и магических атаках угрозу.</span></td></tr></table>'
+});
