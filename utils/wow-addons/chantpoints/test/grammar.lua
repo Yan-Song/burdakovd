@@ -24,6 +24,13 @@ matches if p repeats between Min and Max times (greed)
 nil == inf
 ]]
 
+--[[
+p:Catch() - добавить в таблицу результатов фрагмент текста, соответствующий p
+]]
+
+--[[
+p:Table() - собрать все результаты, выброшенные из p в одну таблицу
+]]
 
 ------------------- Operations:
 --[[
@@ -35,23 +42,27 @@ x+"somestring" is the same as x+Grammar:Exact("somestring")
 x*y matches if xy matches
 ]]
 
+--[[
+x / function, вызвать function(z1,z2,...) для где z1,z2... - результаты, выброшенные из x
+и положить значения возвращаемые функцией в результаты
+]]
+
+local private = { mt={} }
 Grammar = {}
 
 ---------------------------------------------------------------------------
 -- local functions
 
-local private = {}
-
-local function debugPrint(s)
+function private.debugPrint(s)
     print("DEBUG: "..s)
 end
 
-local function pass(s, first, last, x)
+function private.pass(s, first, last, x)
     assert(#x==1)
     return x[1]
 end
 
-local function concat(s, first, last, x)
+function private.concat(s, first, last, x)
     local z = {}
     for j, y in ipairs(x) do
         for i, q in ipairs(y) do
@@ -61,40 +72,38 @@ local function concat(s, first, last, x)
     return z
 end
 
-local mt = {
-
-}
-
-local function Symbol(b)
+function private.Symbol(b)
     local t = {}
     t.Repeat = private.Repeat
     t.Catch = private.Catch
     t.Table = private.Table
-    
 
     t.rules = {}
-    t.builder = b or pass;
+    t.builder = b or private.pass;
     
-    setmetatable(t, mt)
+    setmetatable(t, private.mt)
 
     return t
 end
 
 --------------------------------------
 
-function mt.__add(a,b)
-    
+function private.mt.__add(a,b)
+    local a = Grammar:Exact(a)
+    local b = Grammar:Exact(b)
     return Grammar:Set({a, b})
 end
 
-function mt.__mul(a,b)
-    local t = Symbol(concat)
+function private.mt.__mul(a,b)
+    local a = Grammar:Exact(a)
+    local b = Grammar:Exact(b)
+    local t = private.Symbol(private.concat)
     table.insert(t.rules, {a,b})
     return t
 end
 
 function Grammar:Set(s)
-    local t = Symbol()
+    local t = private.Symbol()
     if type(s)=="table" then
         for i, sym in pairs(s) do
             table.insert(t.rules, {sym})
@@ -111,13 +120,17 @@ function Grammar:Set(s)
 end
 
 function Grammar:Exact(s)
-    local t = Symbol()
-    tmp = {}
-    for i = 1, s:len() do
-        table.insert(tmp, {s:sub(i,i)})
+    if type(s)=="string" then
+        local t = private.Symbol()
+        local tmp = {}
+        for i = 1, s:len() do
+            table.insert(tmp, {s:sub(i,i)})
+        end
+        table.insert(t.rules, tmp)
+        return t
+    else
+        return s
     end
-    table.insert(t.rules, tmp)
-    return t
 end
 
 function Grammar:Range(s)
@@ -132,7 +145,7 @@ end
 function private.Repeat(p, Min, Max)
     local Repeat = private.Repeat
     if Max==nil and (Min==nil or Min<=0) then -- p*
-        local t=Symbol()
+        local t=private.Symbol()
         table.insert(t.rules,{t,p}) -- t -> t p
         table.insert(t.rules,{Grammar.Epsilon}) -- t -> Eps
         return t
@@ -159,16 +172,39 @@ function private.Repeat(p, Min, Max)
     end
 end
 
-Grammar.Epsilon = Symbol()
+function private.CatchBuilder(s, first, last, x)
+    assert(#x==1)
+    table.insert(x[1],s:sub(first,last))
+    return x[1]
+end
+
+function private.Catch(p)
+    local t = Symbol(private.CatchBuilder)
+    table.insert(t.rules, {p})
+    return t
+end
+
+function private.TableBuilder(s, first, last, x)
+    assert(#x==1)
+    return x
+end
+
+function private.Table(p)
+    local t = Symbol(private.TableBuilder)
+    table.insert(t.rules, {p})
+    return t
+end
+
+Grammar.Epsilon = private.Symbol()
 table.insert(Grammar.Epsilon.rules, {})
 
-Grammar.Dead = Symbol()
+Grammar.Dead = private.Symbol()
+
+
 
 ----------------------------------
 ----------- testing --------------
 ----------------------------------
 
-
-local digit = Symbol()
+local digit = Grammar:Range("09")
 local number = digit:Repeat(1,nil)
-
