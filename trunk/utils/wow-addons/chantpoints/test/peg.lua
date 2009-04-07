@@ -17,7 +17,7 @@ peg.Fake() - возвращает нерабочий узел, который п
 p:define(q) - p <- q
 это может быть нужно для каких-нибудь рекурсивных правил, типа: A <- "x"A / eps
     c = peg.terminal("x")
-    a = Fake()
+    a = peg.Fake()
     a:define(c*a + peg.epsilon)
 peg.dot - any single character
 peg.epsilon - "empty"
@@ -31,7 +31,9 @@ patt^z is the same as peg.rep(patt,z)
 peg.NOT(patt) - not predicate
 peg.lookahead(patt) = peg.NOT(peg.NOT(x))
 -patt is equivalent to peg.NOT(patt)
-
+peg.P(string) - matches whole string
+peg.P(number) - any number characters
+peg.P(boolean) - constant pattern
 
 patt:C() - Creates a simple capture, which captures the substring of the
     subject that matches patt. The captured value is a string.
@@ -68,6 +70,7 @@ private.methods.C =
         end
         return tmp
     end
+peg.C = private.methods.C
 
 private.methods.define =
     function(p, q)
@@ -209,26 +212,45 @@ private.mt.__unm = peg.NOT
 
 private.lookahead = function(p) return peg.NOT(peg.NOT(p)) end
 
+peg.sub =
+    function(p,q)
+        return (-q)*p
+    end
+private.mt.__sub = private.magic(peg.sub)
+
 peg.P =
     function(z)
         if type(z)=="boolean" then
-            local tmp = Fake()
+            local tmp = peg.Fake()
             if z then tmp.match = function(s,p) return p, NoCapture end
             else tmp.match = function(...) return nil end
             end
         end
+        if type(z)=="number" then
+            return peg.dot^z
+        end
+        if type(z)=="string" then
+            local s = peg.terminal(string.char(z:byte(1)))
+            for i=2, #z do
+                s = s * peg.terminal(string.char(z:byte(i)))
+            end
+            return s
+        end
+        if type(z)=="table" then return z end
         print("Can't do peg.P(",z,")")
     end
+
+
 -- тесты
 
 local text = "ttttest"
 print("text: "..text)
-local pattern = ((peg.terminal("t")*(-peg.terminal("e")))^{0,nil}):C()
+local pattern = peg.C((peg.P("t")-"test")^{0,nil}*"test")
+--local pattern = peg.C((peg.P("t")-"test")^{0,nil})
 local position, generator = pattern.match(text, 1)
 if position then
     print("matched "..(position-1).." characters")
     local tree = generator()
-    print("tree: ", tree)
     for x,y in ipairs(tree) do
         print("Capture #"..x..":")
         for i,j in pairs(y) do
