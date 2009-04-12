@@ -1,3 +1,5 @@
+TEST=1
+
 all: ${PROBLEM}
 
 ${PROBLEM}: ${PROBLEM}.cpp
@@ -16,3 +18,6 @@ clean:
 run: ${PROBLEM}
 	./${PROBLEM}
 
+
+test: ${PROBLEM}
+	./${PROBLEM} <${PROBLEM}-${TEST}.in
