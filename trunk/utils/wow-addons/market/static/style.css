@@ -14,6 +14,21 @@ form
 	padding:0;
 }
 
+div.bought
+{
+    color: yellow;
+}
+
+div.sold
+{
+    color: #1050ff;
+}
+
+div.failed
+{
+    color: red;
+}
+
 img,iframe
 {
 	border:0;
@@ -639,9 +654,33 @@ a#language-changer
 	border:1px solid #282828;
 }
 
+a.more {
+    color: #aaaaaa;
+}
+
 #morelink
 {
 	padding:3px 0 3px 8px;
+}
+
+div.gwrapper {
+    width: 540px;
+    height: 300px;
+    padding: 0.5em;
+    background-color: white;
+    margin: 1em;
+}
+
+div.graph {
+    width: 100%;
+    height: 100%;
+    /*display: none;*/
+}
+
+a.util {
+    color: #aaaaaa;
+    padding: 1em;
+    display: none;
 }
 
 #sidebar
@@ -2094,6 +2133,7 @@ a.moneyitem:hover,a.moneysocketmeta:hover,a.moneysocketred:hover,a.moneysocketye
 {
 	border:3px solid #404040;
 	clear:both;
+    margin-top: 1em;
 }
 
 .listview-void
@@ -2105,6 +2145,8 @@ a.moneyitem:hover,a.moneysocketmeta:hover,a.moneysocketred:hover,a.moneysocketye
 {
 	background-color:#404040;
 	color:#ccc;
+    overflow: auto;
+    width: 100%;
 }
 
 .listview-band-top
@@ -2192,6 +2234,8 @@ a.moneyitem:hover,a.moneysocketmeta:hover,a.moneysocketred:hover,a.moneysocketye
 {
 	float:right;
 	padding-right:1px;
+    padding-top: 1px;
+    padding-bottom: 1px;
 	margin-left:36px;
 }
 
@@ -2288,7 +2332,7 @@ a.moneyitem:hover,a.moneysocketmeta:hover,a.moneysocketred:hover,a.moneysocketye
 	overflow:hidden;
 }
 
-.listview-mode-default tbody a
+.listview-mode-default tbody a, a.nodeco
 {
 	text-decoration:none;
 }
