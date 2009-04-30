@@ -438,7 +438,8 @@ for realm in realms:
     # do market (not character) specific processing
     for fac in markets.get(realm, {}).keys():
         mname = "%s-%s" % (realm, fac)
-        market = markets[realm][f]
+        print mname
+        market = markets[realm][fac]
         # for flot
         tf = lambda t: \
             (
@@ -450,7 +451,7 @@ for realm in realms:
         jsw = group_weeks(market, tf)
         jsm = group_months(market, tf)
         
-        preambule = h("%s - %s" % (realm, f)) + \
+        preambule = h("%s - %s" % (realm, fac)) + \
         div(u"""На этом сервере мы торгуем %d видами товаров,
         на текущий момент прибыль на аукционе составляет %s<br/>
         Всего потрачено на покупки %s, на депозиты %s, получено с продаж %s""" % \
@@ -531,7 +532,7 @@ for realm in realms:
         )
 
         s = preambule + script + table(head + body)
-        write(mname, "%s - %s" % (realm, f), s)
+        write(mname, "%s - %s" % (realm, fac), s)
         #print market
         for (ids, _) in sorts:
             # item specific pages
@@ -549,7 +550,7 @@ for realm in realms:
                 filter(lambda z: z.category=="failedAuctions", market[ids])))
             tried = soldcount + failedcount
             
-            preambule = h("%s - %s: %s" % (realm, f, itemlink(ids))) + \
+            preambule = h("%s - %s: %s" % (realm, fac, itemlink(ids))) + \
             div(
             u"""Всего куплено %s таких предметов (в среднем по %s),
             продано %s (в среднем по %s)<br/>
@@ -671,7 +672,7 @@ for realm in realms:
             
             s = preambule + script + "<table>%s%s</table>" % (head, body)
             
-            write(iname, "%s - %s: %s" % (realm, f, itemname(ids)), s)
+            write(iname, "%s - %s: %s" % (realm, fac, itemname(ids)), s)
 
 
 index_data = h(u"Данные от BeanCounter (последнее обновление: %s)" % \
