@@ -1,6 +1,10 @@
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
 
+#include <string>
+
+using namespace std;
+
 class CorruptedData: public exception
 {
 public:
@@ -8,16 +12,32 @@ public:
 	{
 		return "Data files are not valid.";
 	}
-	CorruptedData() {}; 
+	CorruptedData() {};
 };
 
 class UnknownField: public exception {};
 
-class TableNotFound {};
-class TableDataNotFound {};
+class TableNotFound: public exception {};
+class TableDataNotFound: public exception {};
 
-class TableAlreadyExists {};
+class TableAlreadyExists: public exception {};
 
-class FileError {};
+class FileError: public exception {};
+
+class TokenizeError//: public exception //\\todo
+{
+    const char* wh;
+public:
+    TokenizeError(const char* s): wh(s) {};
+    virtual const char* what() const throw()
+    {
+        return wh;
+    }
+};
+
+class SocketError: public exception {};
+class BindError: public SocketError {};
+class ListenError: public SocketError {};
+class AcceptError: public SocketError {};
 
 #endif
