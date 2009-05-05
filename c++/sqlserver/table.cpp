@@ -138,7 +138,7 @@ void Table::removeIt()
 Database::Database(const string& _path): path(_path)
 {
 
-};
+}
 
 Table Database::meta()
 {
@@ -185,7 +185,7 @@ Table Database::createTable(string tablename, vector<string> _fields, vector<str
     Table q(path, tablename,_fields, _fieldtypes);
     q.save();
     return q;
-};
+}
 
 void Database::deleteTable(string tablename)
 {
@@ -199,6 +199,6 @@ void Database::deleteTable(string tablename)
             return;
         }
     throw TableNotFound();
-};
+}
 
 #endif
