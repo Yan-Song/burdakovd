@@ -14,4 +14,22 @@ string Field::dump()
     return data;
 }
 
+string Field::show()
+{
+    if(type=="STRING")
+    {
+        return data;
+    }
+    else if(type=="NUM")
+    {
+        stringstream s(data);
+        double v;
+        s>>v;
+        stringstream ans;
+        ans<<v; // \todo: манипуляторы
+        return ans.str();
+    }
+    else
+        throw InternalError();
+}
 #endif

@@ -12,6 +12,7 @@ public:
     Field(const string& t, const string& v);
     // show
     string dump();
+    string show();
 };
 
 

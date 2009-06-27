@@ -9,14 +9,20 @@ import time
 
 htmldir = "html"
 dbversion = "2.09"
-transactionsperpage = 1000
-topprofitlimit = 400
+transactionsperpage = 500
+topprofitlimit = 5000
+onmainpagecountlimit = 200
+
+
+def prn(s):
+    if type(s) is unicode: print s.encode("utf-8")
+    else: print s
 
 def write(fn, title, body):
     if type(title)==type(u""): title = title.encode("utf8")
     if type(body)==type(u""): body = body.encode("utf8")
     fname = os.path.join(htmldir, fn+".html")
-    print u"Создаю %s" % fname
+    prn (u"Создаю %s" % fname)
     f = file(fname, "w")
     text = u"""<html>
     <head>
@@ -438,15 +444,24 @@ for realm in realms:
     # do market (not character) specific processing
     for fac in markets.get(realm, {}).keys():
         mname = "%s-%s" % (realm, fac)
-        print mname
+        prn( mname)
         market = markets[realm][fac]
         # for flot
         tf = lambda t: \
             (
                 #0.0001*t.profit(),
-                0.0001*check_category([t], "completedAuctions"),
-                0.0001*(-check_category([t], "completedBids/Buyouts")\
-                -check_category([t], "failedAuctions")),
+                0.0001*check_category([t], "completedAuctions"), # сумма продаж
+
+                0.0001*(-check_category([t], "completedBids/Buyouts") \
+                -check_category([t], "failedAuctions")), # сумма покупок и фэйлов
+
+                1 if t.category=="completedAuctions" else 0, # кол-во продаж
+                
+                1 if t.category=="completedBids/Buyouts" else 0, # кол-во покупок
+
+                1, # кол-во всех транзакций
+
+                0.0001*t.profit(), # общая прибыль
             )
         jsw = group_weeks(market, tf)
         jsm = group_months(market, tf)
@@ -463,8 +478,20 @@ for realm in realms:
             ), "text") + \
             u"<table><thead><tr><th>По неделям</th><th>По месяцам</th></tr></thead><tbody>" + \
             tr(
+                td(div(div("", "graph", "placeholderglobalw1"), "gwrapper")) + \
+                td(div(div("", "graph", "placeholderglobalm1"), "gwrapper"))
+            ) + \
+            tr(
+                td(div(div("", "graph", "placeholderglobalw3"), "gwrapper")) + \
+                td(div(div("", "graph", "placeholderglobalm3"), "gwrapper"))
+            ) + \
+            tr(
                 td(div(div("", "graph", "placeholderglobalw"), "gwrapper")) + \
                 td(div(div("", "graph", "placeholderglobalm"), "gwrapper"))
+            ) + \
+            tr(
+                td(div(div("", "graph", "placeholderglobalw2"), "gwrapper")) + \
+                td(div(div("", "graph", "placeholderglobalm2"), "gwrapper"))
             ) + "</tbody></table>"
         
         script = u"""
@@ -483,13 +510,42 @@ for realm in realms:
                     tickFormatter: goldformatter,
                 };
                 
-                drawGraph("#placeholderglobalw", [ [0,{label: "Приход", color: "rgb(0, 200, 0)"}],
-                [1,{label: "Расход", color: "rgb(255, 100, 100)"}] ], gdata.globalw,
+                drawGraph("#placeholderglobalw", [ [0,{label: "Получено с продаж", color: "rgb(0, 200, 0)"}],
+                [1,{label: "Затрачено на покупки и депозиты", color: "rgb(255, 100, 100)"}] ], gdata.globalw,
                 {xaxis: xx, yaxis: yy, lines: {show: true}, points: {show: true}});
                 
-                drawGraph("#placeholderglobalm", [ [0,{label: "Приход", color: "rgb(0, 200, 0)"}],
-                [1,{label: "Расход", color: "rgb(255, 100, 100)"}] ], gdata.globalm,
+                drawGraph("#placeholderglobalm", [ [0,{label: "Получено с продаж", color: "rgb(0, 200, 0)"}],
+                [1,{label: "Затрачено на покупки и депозиты", color: "rgb(255, 100, 100)"}] ], gdata.globalm,
                 {xaxis: xx, yaxis: yy, lines: {show: true}, points: {show: true}});
+
+
+                drawGraph("#placeholderglobalw1", [ [5,{label: "Прибыль", color: "rgb(0, 200, 0)"}]
+                ], gdata.globalw,
+                {xaxis: xx, yaxis: yy, lines: {show: true}, points: {show: true}});
+                
+                drawGraph("#placeholderglobalm1", [ [5,{label: "Прибыль", color: "rgb(0, 200, 0)"}],
+                 ], gdata.globalm,
+                {xaxis: xx, yaxis: yy, lines: {show: true}, points: {show: true}});
+
+
+                drawGraph("#placeholderglobalw2", [ [2,{label: "Количество продаж", color: "rgb(0, 200, 0)"}],
+                [3,{label: "Количество покупок", color: "rgb(255, 100, 100)"}] ], gdata.globalw,
+                {xaxis: xx, lines: {show: true}, points: {show: true}});
+                
+                drawGraph("#placeholderglobalm2", [ [2,{label: "Количество продаж", color: "rgb(0, 200, 0)"}],
+                [3,{label: "Количество покупок", color: "rgb(255, 100, 100)"}] ], gdata.globalm,
+                {xaxis: xx, lines: {show: true}, points: {show: true}});
+
+
+                drawGraph("#placeholderglobalw3", [ [4,{label: "Активность", color: "rgb(0, 200, 0)"}]
+                ], gdata.globalw,
+                {xaxis: xx, lines: {show: true}, points: {show: true}});
+                
+                drawGraph("#placeholderglobalm3", [ [4,{label: "Активность", color: "rgb(0, 200, 0)"}],
+                 ], gdata.globalm,
+                {xaxis: xx, lines: {show: true}, points: {show: true}});
+
+
             }
             );
             //]]>
@@ -503,6 +559,7 @@ for realm in realms:
         sorts = map(lambda (item, log): (item, -lostbuy(log)-gainedsells(log)), market.items())
         sorts.sort(key=lambda q: q[1])
         sorts = sorts[:topprofitlimit]
+        ssorts = sorts[:onmainpagecountlimit]
 
         body = tbody(
         "\n".join(
@@ -526,7 +583,7 @@ for realm in realms:
                             gold(profit(market[ids]))
                         )
                         ),
-                    sorts
+                    ssorts
                 )
             )
         )

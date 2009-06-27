@@ -2,7 +2,7 @@
 
 program=./run
 tests=""
-tlimit="1"
+tlimit="5"
 
 [ $# -gt 0 ] && program=$1
 shift

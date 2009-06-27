@@ -15,23 +15,25 @@ public:
 	CorruptedData() {};
 };
 
-class UnknownField: public exception {};
+class QueryError: public exception {};
 
-class TableNotFound: public exception {};
-class TableDataNotFound: public exception {};
+class UnknownField: public QueryError {};
 
-class TableAlreadyExists: public exception {};
+class TableNotFound: public QueryError {};
+class TableDataNotFound: public QueryError {};
 
-class FileError: public exception {};
+class TableAlreadyExists: public QueryError {};
 
-class TokenizeError//: public exception //\\todo
+class FileError: public QueryError {};
+
+class TokenizeError
 {
-    const char* wh;
+    string wh;
 public:
-    TokenizeError(const char* s): wh(s) {};
+    TokenizeError(string s): wh(s) {};
     virtual const char* what() const throw()
     {
-        return wh;
+        return wh.c_str();
     }
 };
 
@@ -39,5 +41,20 @@ class SocketError: public exception {};
 class BindError: public SocketError {};
 class ListenError: public SocketError {};
 class AcceptError: public SocketError {};
+
+class GrammarError
+{
+    string wh;
+public:
+    GrammarError(string s): wh(s) {};
+    virtual const char* what() const throw()
+    {
+        return wh.c_str();
+    }
+};
+
+class InternalError: public exception {};
+
+class UnknownOperator: public InternalError {};
 
 #endif

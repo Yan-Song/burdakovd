@@ -1,7 +1,9 @@
 #include "socket.hpp"
 #include "exceptions.hpp"
+#include "macro.hpp"
 #include <cassert>
 #include <string>
+#include <iostream>
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -38,16 +40,34 @@ Socket Listener::Accept()
 
 string Socket::Read()
 {
-    char cc[11000];
-    int r = read(sock, cc, 10000);
-    if(r==-1) throw SocketError();
-    if(r==0) throw SocketError();
-    return string(cc);
+    while(buffer.find('\n')==string::npos)
+    // пока в буфере нет целой строки
+    // читаем из сокета
+    {
+        char cc[11000];
+        int r = recv(sock, cc, 10000, 0);
+        if(r==-1) throw SocketError();
+        if(r==0) throw SocketError();
+        /*debug(r);
+        fo(i, 0, r)
+            debug(int((unsigned char)cc[i]));*/
+        cc[r] = 0; // конец строки
+        buffer += string(cc);
+    }
+    // есть строка, вытаскиваем из буфера и возвращаем
+    int br = buffer.find('\n');
+    string line = buffer.substr(0, br);
+    buffer = buffer.substr(br+1, string::npos);
+    //debug(line);
+    //debug(buffer);
+    //vdebug(line);
+    return line;
 }
 
 void Socket::Write(string text)
 {
-    if(write(sock, text.c_str(), text.size())!=text.size()) throw SocketError();
+    //debug(text);
+    if(send(sock, text.c_str(), text.size(), 0)!=text.size()) throw SocketError();
 }
 
 void Socket::Close()

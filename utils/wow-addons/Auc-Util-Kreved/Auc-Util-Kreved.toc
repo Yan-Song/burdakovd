@@ -1,0 +1,9 @@
+## Title: Auc:Util:Kreved
+## Interface: 30100
+## Dependancies: Auc-Advanced
+## OptionalDependencies: Auc-Util-Appraiser
+##
+## Version: 3.0.3.1
+## SavedVariables: Kreved
+Kreved.lua
+
