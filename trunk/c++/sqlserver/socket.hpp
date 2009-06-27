@@ -8,9 +8,10 @@ using namespace std;
 class Socket
 {
     int sock;
+    string buffer;
 public:
-    Socket(int s): sock(s) {};
-    string Read();
+    Socket(int s): sock(s), buffer("") {};
+    string Read(); // возвращает строку, до \n
     void Write(string);
     void Close();
 };

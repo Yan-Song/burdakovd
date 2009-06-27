@@ -11,14 +11,14 @@ class Table
 // заботится о хранении таблиц (на диске, в памяти, etc.)
 {
 private:
-	string path,table,filename,meta;
-	vector<string> fields, fieldtypes;
+	string path, table, filename, meta;
 	static string encode(const string&);
 	static string decode(const string&);
 	static string vencode(const vector<string>&);
 	static vector<string> vdecode(const string&);
     void filenames();
 public:
+    vector<string> fields, fieldtypes;
     vector<vector<Field> > rows;
 	Table(string _path, string tablename); // загрузить таблицу в память
 	

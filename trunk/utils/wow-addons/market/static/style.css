@@ -285,19 +285,19 @@ h1
 .alliance-icon
 {
 	padding-left:12px;
-	background:url(http://static.wowhead.com/images/alliance-icon.gif) left center no-repeat;
+	background:url(../static/alliance-icon.gif) left center no-repeat;
 }
 
 .alliance2-icon
 {
 	padding-left:18px;
-	background:url(http://static.wowhead.com/images/alliance-icon.gif) 4px center no-repeat;
+	background:url(../static/alliance-icon.gif) 4px center no-repeat;
 }
 
 .horde-icon
 {
 	padding-left:18px;
-	background:url(http://static.wowhead.com/images/horde-icon.gif) left center no-repeat;
+	background:url(../static/horde-icon.gif) left center no-repeat;
 }
 
 .ffapvp-icon
@@ -1330,19 +1330,19 @@ a.moneyitem:hover,a.moneysocketmeta:hover,a.moneysocketred:hover,a.moneysocketye
 .moneygold
 {
 	padding-right:15px;
-	background-image:url(http://static.wowhead.com/images/money_gold.gif);
+	background-image:url(../static/money_gold.gif);
 }
 
 .moneysilver
 {
 	padding-right:15px;
-	background-image:url(http://static.wowhead.com/images/money_silver.gif);
+	background-image:url(../static/money_silver.gif);
 }
 
 .moneycopper
 {
 	padding-right:15px;
-	background-image:url(http://static.wowhead.com/images/money_copper.gif);
+	background-image:url(../static/money_copper.gif);
 }
 
 .moneyalliance
@@ -3098,14 +3098,14 @@ div.live-search-icon div
 
 div.live-search-icon-quest-alliance
 {
-	background-image:url(http://static.wowhead.com/images/alliance-icon.gif);
+	background-image:url(../static/alliance-icon.gif);
 	background-position:9px 5px;
 	background-repeat:no-repeat;
 }
 
 div.live-search-icon-quest-horde
 {
-	background-image:url(http://static.wowhead.com/images/horde-icon.gif);
+	background-image:url(../static/horde-icon.gif);
 	background-position:6px 5px;
 	background-repeat:no-repeat;
 }

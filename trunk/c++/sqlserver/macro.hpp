@@ -1,6 +1,12 @@
 #ifndef MACRO_H
 #define MACRO_H
 
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
 #define mset(block,value) memset(block,value,sizeof(block))
 #define fo(i,begin,end) for(int i=begin; i<end; i++)
 #define fosz(i,s,x) for(int i=s; i<x.size(); i++)
@@ -10,5 +16,7 @@
 #define vdebug(x) foreach(i,x) cerr<<(#x)<<"["<<i<<"] = "<<x[i]<<endl
 #define showv(v) foreach(i,v) cout<<v[i]<<" "; cout<<endl
 #define ALL(v) v.begin(), v.end()
+typedef vector<int> vi;
+typedef vector<string> vs;
 
 #endif

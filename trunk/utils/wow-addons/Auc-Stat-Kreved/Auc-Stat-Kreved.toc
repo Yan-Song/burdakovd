@@ -1,0 +1,13 @@
+## Title: Auc:Stat:Kreved
+## Notes: Показывает по какой цене стоит покупать эту вещь с целью перепродажи, учитывая шанс продажи и deposit cost
+##
+## Interface: 30100
+## LoadOnDemand: 0
+## Disabled: 0
+## Dependencies: Auc-Advanced, BeanCounter
+## SavedVariables: AucAdvancedStatKrevedData
+##
+## Version: 0.1
+##
+
+StatKreved.lua

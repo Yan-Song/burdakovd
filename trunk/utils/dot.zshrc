@@ -124,7 +124,7 @@ source ~/.zkbd/$TERM-${DISPLAY:-$VENDOR-$OSTYPE}
 [[ -n "${key[Right]}"   ]]  && bindkey  "${key[Right]}"   forward-char
 
 
-alias -s {avi,mpeg,mpg,mov,m2v}=mplayer
+alias -s {avi,mpeg,mpg,mov,m2v}=-cache 65536 -cache-min 98 -quiet
 alias -s {odt,doc,sxw,rtf}=openoffice.org
 alias -s {ogg,mp3,wav,wma}=mplayer
 alias -s pdf=xpdf

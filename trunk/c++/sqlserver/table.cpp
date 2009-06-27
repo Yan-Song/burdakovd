@@ -5,6 +5,7 @@
 #include "exceptions.hpp"
 #include <fstream>
 #include <cstdio>
+#include <cassert>
 
 vector<string> split(const string& s, const char d)
 {
@@ -25,8 +26,11 @@ string Table::encode(const string& s)
 	string ans(s.size()*2,'?');
 	for(int i=0; i<s.size(); i++)
 	{
-		ans[2*i] = 'A' + (s[i]/16);
-		ans[2*i+1] = 'A' + (s[i]%16);
+        //debug((unsigned char)s[i]);
+        unsigned char c = s[i];
+        if (c<0 || c>256) throw CorruptedData();
+		ans[2*i] = 'A' + (c/16);
+		ans[2*i+1] = 'A' + (c%16);
 	};
 	return ans;
 }
@@ -70,7 +74,7 @@ Table::Table(string _path, string tablename): path(_path), table(tablename)
     filenames();
 	
 	// read metadata
-	ifstream fmeta(meta.c_str(),ios::in);
+	ifstream fmeta(meta.c_str(), ios::in);
 	if(!fmeta)
 		throw TableNotFound();
 	string sfields, sfieldtypes;
@@ -110,7 +114,7 @@ void Table::save()
     ofstream fmeta(meta.c_str(),ios::out);
     if(!fmeta)
         throw FileError();
-    string sfields=vencode(fields),sfieldtypes=vencode(fieldtypes);
+    string sfields=vencode(fields), sfieldtypes=vencode(fieldtypes);
     fmeta<<sfields<<endl<<sfieldtypes<<endl;
     fmeta.close();
     
@@ -150,7 +154,7 @@ Table Database::meta()
     {
         vector<string> f, tf;
         f.push_back("tablename");
-        tf.push_back("string");
+        tf.push_back("STRING");
         return Table(path, "meta", f, tf);
     }
 }
@@ -179,7 +183,7 @@ Table Database::createTable(string tablename, vector<string> _fields, vector<str
 
     Table m=meta();
     vector<Field> row;
-    row.push_back(Field("string", tablename));
+    row.push_back(Field("STRING", tablename));
     m.rows.push_back(row);
     m.save();
     Table q(path, tablename,_fields, _fieldtypes);
@@ -195,7 +199,7 @@ void Database::deleteTable(string tablename)
         {
             m.rows.erase(m.rows.begin()+i,m.rows.begin()+i+1);
             m.save();
-            Table(path,tablename).removeIt();
+            Table(path, tablename).removeIt();
             return;
         }
     throw TableNotFound();
