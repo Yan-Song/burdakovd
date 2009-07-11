@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('6041', 7, {
-	name_ruru: 'Стальная цепь для оружия',
-	quality: 1,
-	icon: 'Spell_Frost_ChainsOfIce',
-	tooltip_ruru: '<table><tr><td><b class="q1">Стальная цепь для оружия</b></td></tr></table><table><tr><td><span class="q2">Использование: Оснащение оружия цепью, позволяющей снизить продолжительность действия эффекта разоружения на 50%. Не суммируется с другими подобными эффектами.</span></td></tr></table>'
-});

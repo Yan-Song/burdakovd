@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('38888', 7, {
-	name_ruru: '[Scroll of Enchant Gloves - Fire Power]',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">[Scroll of Enchant Gloves - Fire Power]</b></td></tr></table><table><tr><td><span class="q2">Использование: Улучшение перчаток, увеличивающее силу заклинаний магии огня на 20.</span></td></tr></table>'
-});

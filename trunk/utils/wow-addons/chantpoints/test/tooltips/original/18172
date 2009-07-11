@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('18172', 7, {
-	name_ruru: 'Природная мантия Рассвета',
-	quality: 2,
-	icon: 'Spell_Nature_ProtectionformNature',
-	tooltip_ruru: '<table><tr><td><b class="q2">Природная мантия Рассвета</b><br /><!--bo-->Становится персональным при получении</td></tr></table><table><tr><td><span class="q2">Использование: Наполнение наплечников силой, увеличивающей сопротивление силам природы на 5 ед.</span></td></tr></table>'
-});

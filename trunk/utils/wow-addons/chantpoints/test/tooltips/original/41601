@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('41601', 7, {
-	name_ruru: 'Сияющая чародейская нить',
-	quality: 3,
-	icon: 'Spell_Nature_AstralRecal',
-	tooltip_ruru: '<table><tr><td><b class="q3">Сияющая чародейская нить</b><br />Требуется уровень: 70</td></tr></table><table><tr><td><span class="q2">Использование: Вышивка чародейской нитью на штанах, увеличивающая силу заклинаний на 35 и дух на 12.</span></td></tr></table>'
-});

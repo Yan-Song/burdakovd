@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('34207', 7, {
-	name_ruru: 'Упрочнения для перчаток',
-	quality: 2,
-	icon: 'INV_Misc_ArmorKit_08',
-	tooltip_ruru: '<table><tr><td><b class="q2">Упрочнения для перчаток</b><br />Требуется уровень: 60</td></tr></table><table><tr><td><span class="q2">Использование: Усиление брони пары перчаток на 240 ед. Предмет должен быть не ниже 60 уровня.</span></td></tr></table>'
-});

@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('29536', 7, {
-	name_ruru: 'Накладки для поножей из кожи копытня',
-	quality: 4,
-	icon: 'INV_Misc_ArmorKit_25',
-	tooltip_ruru: '<table><tr><td><b class="q4">Накладки для поножей из кожи копытня</b><br />Требуется уровень: 60</td></tr></table><table><tr><td><span class="q2">Использование: Укрепление поножей накладками из кожи копытня увеличивает выносливоcть на 40 и ловкость на 12.</span></td></tr></table>'
-});

@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('7969', 7, {
-	name_ruru: 'Мифриловые шпоры',
-	quality: 2,
-	icon: 'Ability_Rogue_Sprint',
-	tooltip_ruru: '<table><tr><td><b class="q2">Мифриловые шпоры</b></td></tr></table><table><tr><td><span class="q2">Использование: Оснащение обуви шпорами, позволяющими повысить скорость передвижения верхом на 4%.</span></td></tr></table>'
-});

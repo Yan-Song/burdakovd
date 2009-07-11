@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('44936', 7, {
-	name_ruru: 'Титановая обшивка',
-	quality: 3,
-	icon: 'INV_Shield_19',
-	tooltip_ruru: '<table><tr><td><b class="q3">Титановая обшивка</b><br />Требуется уровень: 70</td></tr></table><table><tr><td><span class="q2">Использование: Обшивка щита титановыми пластинами, увеличивающая показатель блокирования на 40.</span></td></tr></table>'
-});

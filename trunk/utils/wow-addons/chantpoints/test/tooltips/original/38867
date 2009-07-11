@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('38867', 7, {
-	name_ruru: 'Свиток чар для нагрудника - мана VI',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для нагрудника - мана VI</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на нагрудник чар, повышающих максимальный запас маны на 100 ед.</span></td></tr></table>'
-});

@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('23545', 7, {
-	name_ruru: 'Сила Плети',
-	quality: 4,
-	icon: 'Spell_Shadow_DarkRitual',
-	tooltip_ruru: '<table><tr><td><b class="q4">Сила Плети</b><br /><!--bo-->Становится персональным при получении<br />Требуется уровень: 60</td></tr></table><table><tr><td><span class="q2">Использование: Наполнение наплечников энергией, повышающей силу заклинаний на 15 и рейтинг критического эффекта 14 ед.</span></td></tr></table>'
-});

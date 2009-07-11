@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('38969', 7, {
-	name_ruru: 'Свиток чар для плаща: сопротивление огню IV',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для плаща: сопротивление огню IV</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на плащ чар, повышающих сопротивление огню на 20. Требуется предмет для персонажей не ниже 60 уровня.</span></td></tr></table>'
-});

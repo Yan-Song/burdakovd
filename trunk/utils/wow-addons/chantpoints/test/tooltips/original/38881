@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('38881', 7, {
-	name_ruru: '[Scroll of Enchant Bracer - Mana Regeneration]',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">[Scroll of Enchant Bracer - Mana Regeneration]</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на наручи чар, восполняющих 4 ед. маны раз в 5 секунд.</span></td></tr></table>'
-});

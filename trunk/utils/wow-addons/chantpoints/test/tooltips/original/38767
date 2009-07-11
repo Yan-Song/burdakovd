@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('38767', 7, {
-	name_ruru: 'Свиток чар для нагрудника - поглощение I',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для нагрудника - поглощение I</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на нагрудник чар, увеличивающих до 2% вероятность поглощения 10 ед. урона при получении удара.</span></td></tr></table>'
-});

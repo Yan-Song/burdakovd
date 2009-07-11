@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('7967', 7, {
-	name_ruru: 'Мифриловый шип для щита',
-	quality: 2,
-	icon: 'INV_Misc_ArmorKit_02',
-	tooltip_ruru: '<table><tr><td><b class="q2">Мифриловый шип для щита</b></td></tr></table><table><tr><td><span class="q2">Использование: Оснащение щита мифриловым умбоном, позволяющим наносить урон при каждом блокировании щитом.</span></td></tr></table>'
-});

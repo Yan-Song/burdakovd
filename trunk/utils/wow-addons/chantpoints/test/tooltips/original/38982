@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('38982', 7, {
-	name_ruru: '[Scroll of Enchant Cloak - Superior Arcane Resistance]',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">[Scroll of Enchant Cloak - Superior Arcane Resistance]</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на плащ чар, повышающих сопротивление тайной магии на 20. Требуется предмет для персонажей не ниже 60 уровня.</span></td></tr></table>'
-});

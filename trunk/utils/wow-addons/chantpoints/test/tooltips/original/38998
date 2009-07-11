@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('38998', 7, {
-	name_ruru: '[Scroll of Enchant Weapon - Deathfrost]',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">[Scroll of Enchant Weapon - Deathfrost]</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на оружие чар, дающих шанс нанести дополнительный урон от магии льда и замедлить цель при попадании в ближнем бою и нанесении урона залинанием. Требуется предмет для персонажей не ниже 60 уровня.<br /><br />Эффект замедления не срабатывает против целей уровня 73 и выше.</span></td></tr></table>'
-});

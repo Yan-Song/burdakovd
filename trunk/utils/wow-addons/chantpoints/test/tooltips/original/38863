@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('38863', 7, {
-	name_ruru: 'Свиток чар для обуви - ловкость IV',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для обуви - ловкость IV</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на обувь чар, повышающих ловкость на 7.</span></td></tr></table>'
-});

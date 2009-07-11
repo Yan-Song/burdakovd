@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('24276', 7, {
-	name_ruru: 'Золотая чародейская нить',
-	quality: 4,
-	icon: 'Spell_Holy_Restoration',
-	tooltip_ruru: '<table><tr><td><b class="q4">Золотая чародейская нить</b><br />Требуется уровень: 60</td></tr></table><table><tr><td><span class="q2">Использование: Вышивка чародейской нитью на штанах, увеличивающая силу заклинаний на 35 и выносливость на 20.</span></td></tr></table>'
-});
