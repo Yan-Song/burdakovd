@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('4406', 7, {
-	name_ruru: 'Обычный прицел',
-	quality: 1,
-	icon: 'INV_Misc_Spyglass_02',
-	tooltip_ruru: '<table><tr><td><b class="q1">Обычный прицел</b><br />Требуется уровень: 10</td></tr></table><table><tr><td><span class="q2">Использование: Оснащение лука или огнестрельного оружия прицелом, позволяющим повысить наносимый урон на 2 ед.</span></td></tr></table>'
-});

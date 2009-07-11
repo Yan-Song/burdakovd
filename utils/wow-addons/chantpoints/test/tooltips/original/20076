@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('20076', 7, {
-	name_ruru: 'Магический перстень Зандалара',
-	quality: 3,
-	icon: 'INV_Jewelry_Ring_46',
-	tooltip_ruru: '<table><tr><td><b class="q3">Магический перстень Зандалара</b><br /><!--bo-->Становится персональным при получении</td></tr></table><table><tr><td><span class="q2">Использование: Улучшение наплечников, повышающее силу заклинаний на 18.</span></td></tr></table>'
-});

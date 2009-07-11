@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('6043', 7, {
-	name_ruru: 'Железный противовес',
-	quality: 1,
-	icon: 'INV_Misc_Orb_01',
-	tooltip_ruru: '<table><tr><td><b class="q1">Железный противовес</b></td></tr></table><table><tr><td><span class="q2">Использование: Оснащение двуручного оружия противовесом, повышающим рейтинг скорости на 20 ед.</span></td></tr></table>'
-});

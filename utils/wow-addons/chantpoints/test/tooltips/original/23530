@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('23530', 7, {
-	name_ruru: 'Шип для щита из оскверненной стали',
-	quality: 2,
-	icon: 'INV_Misc_ArmorKit_27',
-	tooltip_ruru: '<table><tr><td><b class="q2">Шип для щита из оскверненной стали</b></td></tr></table><table><tr><td><span class="q2">Использование: Оснащение щита умбоном из оскверненной стали, позволяющим наносить 26-38 ед. урона при каждом блокировании щитом.</span></td></tr></table>'
-});

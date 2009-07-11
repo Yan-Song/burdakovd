@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('38933', 7, {
-	name_ruru: 'Свиток чар для перчаток - сила III',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для перчаток - сила III</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на перчатки чар, повышающих силу на 15 ед. Требуется предмет для персонажей не ниже 35 уровня.</span></td></tr></table>'
-});

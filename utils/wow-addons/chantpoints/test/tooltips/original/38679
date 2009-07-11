@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('38679', 7, {
-	name_ruru: 'Свиток чар для наручей - здоровье',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для наручей - здоровье</b></td></tr></table><table><tr><td><span class="q2">Использование: Обучение наложению на наручи чар, повышающих максимальный запас здоровья на 5 ед.</span></td></tr></table>'
-});

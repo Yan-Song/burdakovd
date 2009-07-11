@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('23549', 7, {
-	name_ruru: 'Стойкость Плети',
-	quality: 4,
-	icon: 'Spell_Shadow_AntiShadow',
-	tooltip_ruru: '<table><tr><td><b class="q4">Стойкость Плети</b><br /><!--bo-->Становится персональным при получении<br />Требуется уровень: 60</td></tr></table><table><tr><td><span class="q2">Использование: Наполнение наплечников силой, повышающей выносливость на 16 ед. и усиливающей броню на 100 ед.</span></td></tr></table>'
-});

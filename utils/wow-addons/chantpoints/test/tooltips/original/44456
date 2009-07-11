@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('44456', 7, {
-	name_ruru: 'Свиток чар для плаща - скорость',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для плаща - скорость</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на плащ чар, повышающих рейтинг скорости на 15. Требуется предмет для персонажей не ниже 60 уровня.</span></td></tr></table>'
-});

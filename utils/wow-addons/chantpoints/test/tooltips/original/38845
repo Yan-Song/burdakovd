@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('38845', 7, {
-	name_ruru: 'Свиток чар для двуручного оружия - импульс IV',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для двуручного оружия - импульс IV</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на двуручное оружие ближнего боя чар, увеличивающих наносимый урон на 7 ед.</span></td></tr></table>'
-});

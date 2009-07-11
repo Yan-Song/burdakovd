@@ -1,6 +1,0 @@
-$WowheadPower.registerItem('38870', 7, {
-	name_ruru: 'Свиток чар для оружия: удар V',
-	quality: 1,
-	icon: 'INV_Scroll_03',
-	tooltip_ruru: '<table><tr><td><b class="q1">Свиток чар для оружия: удар V</b></td></tr></table><table><tr><td><span class="q2">Использование: Наложение на оружие ближнего боя чар, увеличивающих наносимый урон на 5 ед.</span></td></tr></table>'
-});
