@@ -82,7 +82,7 @@ function lib.GetPrice(hyperlink, serverKey)
 	else
 		avgRelistings = 3 -- для совсем незнакомого товара
 	end
-	local deposit = GetDepositCost(hyperlink, 48, nil, 1) -- 48h
+	local deposit = GetDepositCost(hyperlink, 48, nil, 1) or 0 -- 48h
 
 	local sig = AucAdvanced.API.GetSigFromLink(hyperlink)
 	if sig==nil then debugPrint("sig==nil for hyperlink=="..hyperlink) end
