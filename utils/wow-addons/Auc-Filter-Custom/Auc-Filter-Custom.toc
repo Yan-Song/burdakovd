@@ -1,0 +1,8 @@
+## Title: Auc:Filter:Custom
+## Interface: 30100
+## Dependancies: Auc-Advanced
+## OptionalDependencies: Auc-Util-Appraiser
+##
+## Version: 3.0.3.1
+## SavedVariables: Custom
+Custom.lua
