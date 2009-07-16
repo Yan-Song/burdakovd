@@ -1,9 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import sys, os
+sys.path.append(".")
 from BeanCounterDB import data
-import os
+
 import time
+
 
 #### some html helpers
 
@@ -30,11 +33,11 @@ def write(fn, title, body):
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>%s</title>
     
-    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <link rel="stylesheet" href="../static/style.css" type="text/css"/>
     
     <!-- flot -->
-    <script src="jquery-1.3.2.min.js" language="javascript" type="text/javascript"></script>
-    <script src="jquery.flot.pack.js" language="javascript" type="text/javascript"></script>
+    <script src="../static/jquery-1.3.2.min.js" language="javascript" type="text/javascript"></script>
+    <script src="../static/flot/jquery.flot.pack.js" language="javascript" type="text/javascript"></script>
     <!--[if IE]>
     <script language="javascript" type="text/javascript" src="../static/flot/excanvas.pack.js"></script>
     <![endif]-->
@@ -44,7 +47,7 @@ def write(fn, title, body):
     <script src="http://ru.wowhead.com/widgets/power.js" type="text/javascript"></script>
     <!-- /WoWHead MouseOver-Tooltip -->
 
-    <script language="javascript" type="text/javascript" src="main.js"></script>
+    <script language="javascript" type="text/javascript" src="../static/main.js"></script>
     
     </head>
     <body>
