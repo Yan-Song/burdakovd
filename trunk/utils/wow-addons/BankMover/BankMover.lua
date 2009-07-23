@@ -146,6 +146,22 @@ function GBM:BagsToBank()
     self:Print(L["Done."])
 end
 
+-- gets a list of (bag, item) and moves them to bank
+function GBM:SomeItemsToBank(t)
+	for i, v in ipairs(t) do
+		bag, slot = v[1], v[2]
+		local link = GetContainerItemLink(bag, slot)
+		if link then
+			result = self:BagItemMove2Bank(bag, slot)
+			if result ~= true then
+				self:Print(result)
+				return
+			end
+		end
+	end
+	slotLocks = {}
+end
+
 function GBM:BankToBags()
 	for i, fromBagId in ipairs(bankSlots) do
 		if self:IsBankBag(fromBagId) then
@@ -287,6 +303,22 @@ function GBM:InBags(itemLink)
 		end
 	end
 	return false
+end
+
+function GBM:InBagsItemCount()
+	local ans = 0
+    for theBag = NUM_BAG_FRAMES, 0, -1 do
+		if self:IsNormalBag(theBag) then
+			local numSlot = GetContainerNumSlots(theBag)
+			for theSlot = 1, numSlot, 1 do
+                local _, cnt = GetContainerItemInfo(theBag, theSlot)
+                if cnt then
+                    ans = ans + cnt
+                end
+			end
+		end
+	end
+	return ans
 end
 
 function GBM:FindFreeBagSlot()
