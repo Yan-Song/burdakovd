@@ -91,13 +91,6 @@ function private.HookAH()
     
     private.button:SetScript("OnUpdate", private.OnUpdate)
     
-	private.button:SetScript("OnEnter", function()
-			GameTooltip:SetOwner(private.button.control, "ANCHOR_TOPRIGHT")
-			GameTooltip:SetText("Эту кнопку пришлось добавить из-за особенностей хитровыебанного lua&&blizzard, нажимать на неё не нужно")
-		end)
-	private.button:SetScript("OnLeave", function()
-			GameTooltip:Hide()
-		end)
 end
 
 function lib.Processor(callbackType, ...)
