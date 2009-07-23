@@ -12,6 +12,8 @@ namespace Nakamar
     public partial class MainForm : Form
     {
         private bool BotEnabled = false;
+
+
         public MainForm()
         {
             InitializeComponent();
@@ -27,7 +29,7 @@ namespace Nakamar
             SaveSettings();
         }
         
-        private void SaveSettingTimer_Tick(object sender, EventArgs e)
+        private void SaveSettings(object sender, EventArgs e)
         {
             SaveSettings();
         }
@@ -45,6 +47,9 @@ namespace Nakamar
             Log("Программа запущена");
         }
 
+        /// <summary>
+        /// обновляет доступность кнопок включения и выключения бота
+        /// </summary>
         private void UpdateBotStateGUI()
         {
             EnableBotButton.Enabled = !BotEnabled;
@@ -52,7 +57,7 @@ namespace Nakamar
             BotStateLabel.Text = BotEnabled ? "Бот включён" : "Бот выключен";
         }
 
-        private void EnableBotButton_Click(object sender, EventArgs e)
+        private void EnableBot(object sender, EventArgs e)
         {
             EnableBot();
         }
@@ -63,7 +68,7 @@ namespace Nakamar
             throw new NotImplementedException();
         }
 
-        private void DisableBotButton_Click(object sender, EventArgs e)
+        private void DisableBot(object sender, EventArgs e)
         {
             DisableBot();
         }
@@ -73,7 +78,7 @@ namespace Nakamar
             throw new NotImplementedException();
         }
 
-        private void ClearLogButton_Click(object sender, EventArgs e)
+        private void ClearLog(object sender, EventArgs e)
         {
             LogBox.Items.Clear();
         }
