@@ -1,0 +1,10 @@
+## Title: Auc:Util:Nakamar
+## Interface: 30100
+## Dependancies: Auc-Advanced, BankMover, Postal
+##
+## Version: 3.0.3.1
+## Author: burdakovd
+## X-Email: kreved at kreved dot org
+## SavedVariables: Nakamar
+Nakamar.lua
+
