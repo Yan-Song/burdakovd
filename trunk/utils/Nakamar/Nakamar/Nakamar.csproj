@@ -83,6 +83,12 @@
     </Compile>
     <Compile Include="Settings.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BlackMagic\BlackMagic.csproj">
+      <Project>{79FD54B0-DEAB-459F-83B9-F1CED68D288B}</Project>
+      <Name>BlackMagic</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
