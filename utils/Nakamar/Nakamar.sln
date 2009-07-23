@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CB6350A-6C70-4736-AB2A-E1774AB11AA5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nakamar", "Nakamar\Nakamar.csproj", "{55CC75A6-9C4A-4D62-99B1-DC84FF4A82FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackMagic", "BlackMagic\BlackMagic.csproj", "{79FD54B0-DEAB-459F-83B9-F1CED68D288B}"
@@ -30,10 +28,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{55CC75A6-9C4A-4D62-99B1-DC84FF4A82FC} = {9CB6350A-6C70-4736-AB2A-E1774AB11AA5}
-		{4C938210-4D82-48A1-9A0C-7432C3426073} = {9CB6350A-6C70-4736-AB2A-E1774AB11AA5}
-		{79FD54B0-DEAB-459F-83B9-F1CED68D288B} = {9CB6350A-6C70-4736-AB2A-E1774AB11AA5}
 	EndGlobalSection
 EndGlobal
