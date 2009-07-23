@@ -55,7 +55,7 @@
             this.EnableBotButton.TabIndex = 0;
             this.EnableBotButton.Text = "Включить";
             this.EnableBotButton.UseVisualStyleBackColor = true;
-            this.EnableBotButton.Click += new System.EventHandler(this.EnableBot);
+            this.EnableBotButton.Click += new System.EventHandler(this.EnableBotByUser);
             // 
             // BotStateLabel
             // 
