@@ -27,6 +27,9 @@
 
 --local libType, libName = "Filter", "Custom"
 
+local print = print
+
+
 local lib, parent, private = AucSearchUI.NewFilter("CustomFilter")
 if not lib then return end
 local get,set,default,Const = AucSearchUI.GetSearchLocals()
@@ -45,7 +48,8 @@ function lib:MakeGuiConfig(gui)
     gui:AddHelp(id, "Инфо",
 		"Инфо",
 		"Этот фильтр отбрасывает итемы, для которых:\
-        sold+purchased<10stacks - чтобы быть уверенным, что мы знаем всё об этом предмете")
+        sold+purchased<10 - чтобы быть уверенным, что мы знаем всё об этом предмете\
+		а также если market >= 2*simple или market*simple==0")
 
 	gui:AddControl(id, "Header",     0,      "Custom(Kreved) Filter Criteria")
 	
@@ -95,8 +99,20 @@ function lib.Filter(item, searcher)
 	
 	postedStack = postedStack or 1
 	
+	local simple = AucAdvanced.Modules.Stat.Simple.GetPriceArray(link).price or 0
+	local market = AucAdvanced.API.GetMarketValue(link) or 0
 	
-    if (sold+purchased<10*postedStack) then return true end
+	if market*simple == 0 then return true end
+	--if AucAdvanced.Modules.Util.Nakamar and AucAdvanced.Modules.Util.Nakamar.Private and AucAdvanced.Modules.Util.Nakamar.print
+	--then 
+	--	print = AucAdvanced.Modules.Util.Nakamar.print
+	--end
+	if market >= 2*simple then
+		--print(string.format("market price >= 2 * simple price for %s", link))
+		return true
+	end
+	
+    if (sold+purchased<10) then return true end
     
     
     
