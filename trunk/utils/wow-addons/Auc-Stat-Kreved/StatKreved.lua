@@ -75,9 +75,9 @@ function lib.GetPrice(hyperlink, serverKey)
 	local avgRelistings
 	if seen>0 then
 		if successfulAuctions>0 then
-			avgRelistings = 1.0 * failedAuctions / successfulAuctions
+			avgRelistings = 1.0 * (failedAuctions+3) / (successfulAuctions+1)
 		else 
-			avgRelistings = failedAuctions * 2 -- типа ещё столько же придётся пытаться сколько уже пытались
+			avgRelistings = failedAuctions * 2 + 3
 		end
 	else
 		avgRelistings = 3 -- для совсем незнакомого товара
