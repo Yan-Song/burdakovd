@@ -45,7 +45,7 @@
             // SaveSettingsTimer
             // 
             this.SaveSettingsTimer.Interval = 60000;
-            this.SaveSettingsTimer.Tick += new System.EventHandler(this.SaveSettingTimer_Tick);
+            this.SaveSettingsTimer.Tick += new System.EventHandler(this.SaveSettings);
             // 
             // EnableBotButton
             // 
@@ -55,7 +55,7 @@
             this.EnableBotButton.TabIndex = 0;
             this.EnableBotButton.Text = "Включить";
             this.EnableBotButton.UseVisualStyleBackColor = true;
-            this.EnableBotButton.Click += new System.EventHandler(this.EnableBotButton_Click);
+            this.EnableBotButton.Click += new System.EventHandler(this.EnableBot);
             // 
             // BotStateLabel
             // 
@@ -74,7 +74,7 @@
             this.DisableBotButton.TabIndex = 2;
             this.DisableBotButton.Text = "Выключить";
             this.DisableBotButton.UseVisualStyleBackColor = true;
-            this.DisableBotButton.Click += new System.EventHandler(this.DisableBotButton_Click);
+            this.DisableBotButton.Click += new System.EventHandler(this.DisableBot);
             // 
             // AutoEnable
             // 
@@ -140,7 +140,7 @@
             this.ClearLogButton.TabIndex = 1;
             this.ClearLogButton.Text = "Очистить";
             this.ClearLogButton.UseVisualStyleBackColor = true;
-            this.ClearLogButton.Click += new System.EventHandler(this.ClearLogButton_Click);
+            this.ClearLogButton.Click += new System.EventHandler(this.ClearLog);
             // 
             // MainForm
             // 
