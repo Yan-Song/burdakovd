@@ -22,16 +22,27 @@ uint ObjectManagerOffset = WoW.ReadUInt(FindPattern(Patterns.ObjectManagerOffset
 uint pObjectManager = WoW.ReadUInt(pClientConnection + ObjectManagerOffset);
 */
 
-namespace Nakamar
+namespace WoWMemory
 {
+
     class WoWMemory
     {
-        BlackMagic WoW;
+        private BlackMagic WoW;
 
         public WoWMemory(int id)
         {
             WoW = new BlackMagic(id);
 
         }
+
+        private uint FindPattern(Pattern pattern)
+        {
+            uint ans = WoW.FindPattern(pattern.PatternString, pattern.Mask);
+            if (ans == (uint)WoW.MainModule.BaseAddress) throw new ApplicationException("Pattern not found");
+            return ans + pattern.Offset;
+        }
+        
+        
+
     }
 }

@@ -22,7 +22,7 @@ namespace Nakamar
                 BotStateLabel.Text = value ? "Бот включён" : "Бот выключен";
             }
         }
-        private WoWMemory WoW;
+        private WoWMemory.WoWMemory WoW;
         uint Works = 0;
 
         void LogToFileFunction(string text)
@@ -134,17 +134,10 @@ namespace Nakamar
 
             int WoWId = WoWProcesses()[0];
 
-            WoW = new WoWMemory(WoWId);                
+            WoW = new WoWMemory.WoWMemory(WoWId);                
             BotEnabled = true;
 
             Logger.Log("Бот включён, WoW process id: " + WoWId);
-        }
-
-        private uint FindPattern(Pattern pattern)
-        {
-            uint ans = WoW.FindPattern(pattern.PatternString, pattern.Mask);
-            if (ans == (uint)WoW.MainModule.BaseAddress) throw new ApplicationException("Pattern not found");
-            return ans + pattern.Offset;
         }
 
         private void DisableBot(object sender, EventArgs e)
