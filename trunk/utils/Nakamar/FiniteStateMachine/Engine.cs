@@ -17,9 +17,9 @@ namespace FiniteStateMachine
     public class Engine
     {
         private Thread _workerThread;
-        private WoWMemory.WoWMemory Memory;
+        private WoWMemoryManager.MemoryManager Memory;
 
-        public Engine(WoWMemory.WoWMemory memory)
+        public Engine(WoWMemoryManager.MemoryManager memory)
         {
             
             States = new List<State>();

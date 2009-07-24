@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackMagic", "BlackMagic\Bl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackMagicTest", "BlackMagicTest\BlackMagicTest.csproj", "{4C938210-4D82-48A1-9A0C-7432C3426073}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoWMemory", "WoWMemory\WoWMemory.csproj", "{6E806492-5FFE-4C3C-BF20-22277FAED955}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMemory", "WoWMemory\WMemory.csproj", "{6E806492-5FFE-4C3C-BF20-22277FAED955}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiniteStateMachine", "FiniteStateMachine\FiniteStateMachine.csproj", "{78DF6A81-A7AC-44DF-8F8F-278E0D119903}"
 EndProject
