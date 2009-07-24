@@ -1,20 +1,24 @@
-﻿using System;
+﻿// 
+// Copyright © ApocDev 2009 <apoc@apocdev.com>
+//
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace FiniteStateMachine
 {
-    /// <summary>
-    /// http://www.mmowned.com/forums/c/232703-bot-developers-simple-but-effective-fsm-your-bots.html
-    /// </summary>
     public abstract class State : IComparable<State>, IComparer<State>
     {
         public abstract int Priority { get; }
 
         public abstract bool NeedToRun { get; }
 
-        public abstract void Run();
+        /// <summary>
+        /// Determines the frequency (Frame count) between each attempt
+        /// to check, and run, this state.
+        /// </summary>
+        public virtual int Frequency { get { return 1; } }
+
+        #region IComparable<State> Members
 
         public int CompareTo(State other)
         {
@@ -24,9 +28,17 @@ namespace FiniteStateMachine
             return -Priority.CompareTo(other.Priority);
         }
 
+        #endregion
+
+        #region IComparer<State> Members
+
         public int Compare(State x, State y)
         {
             return -x.Priority.CompareTo(y.Priority);
         }
+
+        #endregion
+
+        public abstract void Run();
     }
 }

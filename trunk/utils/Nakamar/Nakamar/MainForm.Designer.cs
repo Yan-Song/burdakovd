@@ -41,12 +41,16 @@
             this.LogBox = new System.Windows.Forms.ListBox();
             this.ClearLogButton = new System.Windows.Forms.Button();
             this.Tooltip = new System.Windows.Forms.ToolTip(this.components);
-            this.WPSLabel = new System.Windows.Forms.Label();
-            this.Work = new System.Windows.Forms.Timer(this.components);
-            this.WPSTimer = new System.Windows.Forms.Timer(this.components);
-            this.WoWChecker = new System.Windows.Forms.Timer(this.components);
+            this.FPSLabel = new System.Windows.Forms.Label();
+            this.NeededFPSSelector = new System.Windows.Forms.NumericUpDown();
+            this.FPSTimer = new System.Windows.Forms.Timer(this.components);
+            this.WoWEnabler = new System.Windows.Forms.Timer(this.components);
             this.LogDirectoryBrowser = new System.Windows.Forms.FolderBrowserDialog();
+            this.NeededFPSLabel = new System.Windows.Forms.Label();
+            this.CurrentFPSValue = new System.Windows.Forms.Label();
+            this.RestartButton = new System.Windows.Forms.Button();
             this.LogGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NeededFPSSelector)).BeginInit();
             this.SuspendLayout();
             // 
             // SaveSettingsTimer
@@ -178,46 +182,95 @@
             this.ClearLogButton.UseVisualStyleBackColor = true;
             this.ClearLogButton.Click += new System.EventHandler(this.ClearLog);
             // 
-            // WPSLabel
+            // FPSLabel
             // 
-            this.WPSLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.WPSLabel.AutoSize = true;
-            this.WPSLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.WPSLabel.Location = new System.Drawing.Point(505, 9);
-            this.WPSLabel.Name = "WPSLabel";
-            this.WPSLabel.Size = new System.Drawing.Size(50, 13);
-            this.WPSLabel.TabIndex = 5;
-            this.WPSLabel.Text = "WPS: ?";
-            this.Tooltip.SetToolTip(this.WPSLabel, "\"Works per second\"\r\nСтолько раз в секунду выполняется основной цикл бота.");
+            this.FPSLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.FPSLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.FPSLabel.Location = new System.Drawing.Point(416, 30);
+            this.FPSLabel.Name = "FPSLabel";
+            this.FPSLabel.Size = new System.Drawing.Size(78, 20);
+            this.FPSLabel.TabIndex = 5;
+            this.FPSLabel.Text = "Текущий FPS:";
+            this.FPSLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Tooltip.SetToolTip(this.FPSLabel, "\"Frames per second\"\r\nСтолько раз в секунду выполняется основной цикл бота.");
             // 
-            // Work
+            // NeededFPSSelector
             // 
-            this.Work.Interval = 50;
-            this.Work.Tick += new System.EventHandler(this.DoWork);
+            this.NeededFPSSelector.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.NeededFPSSelector.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::Nakamar.Properties.Settings.Default, "NeededFPS", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.NeededFPSSelector.Location = new System.Drawing.Point(500, 7);
+            this.NeededFPSSelector.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.NeededFPSSelector.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.NeededFPSSelector.Name = "NeededFPSSelector";
+            this.NeededFPSSelector.Size = new System.Drawing.Size(55, 20);
+            this.NeededFPSSelector.TabIndex = 8;
+            this.Tooltip.SetToolTip(this.NeededFPSSelector, "Изменения подействуют после перезапуска бота");
+            this.NeededFPSSelector.Value = global::Nakamar.Properties.Settings.Default.NeededFPS;
             // 
-            // WPSTimer
+            // FPSTimer
             // 
-            this.WPSTimer.Enabled = true;
-            this.WPSTimer.Interval = 1000;
-            this.WPSTimer.Tag = "";
-            this.WPSTimer.Tick += new System.EventHandler(this.WPSTick);
+            this.FPSTimer.Enabled = true;
+            this.FPSTimer.Interval = 1000;
+            this.FPSTimer.Tag = "";
+            this.FPSTimer.Tick += new System.EventHandler(this.FPSTick);
             // 
-            // WoWChecker
+            // WoWEnabler
             // 
-            this.WoWChecker.Interval = 1000;
-            this.WoWChecker.Tick += new System.EventHandler(this.CheckWoW);
+            this.WoWEnabler.Interval = 1000;
+            this.WoWEnabler.Tick += new System.EventHandler(this.EnableBotIfNeeded);
             // 
             // LogDirectoryBrowser
             // 
             this.LogDirectoryBrowser.Description = "Выберите директорию для сохранения логов";
             this.LogDirectoryBrowser.SelectedPath = global::Nakamar.Properties.Settings.Default.LogDirectory;
             // 
+            // NeededFPSLabel
+            // 
+            this.NeededFPSLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.NeededFPSLabel.AutoSize = true;
+            this.NeededFPSLabel.Location = new System.Drawing.Point(404, 9);
+            this.NeededFPSLabel.Name = "NeededFPSLabel";
+            this.NeededFPSLabel.Size = new System.Drawing.Size(90, 13);
+            this.NeededFPSLabel.TabIndex = 7;
+            this.NeededFPSLabel.Text = "Желаемый FPS:";
+            // 
+            // CurrentFPSValue
+            // 
+            this.CurrentFPSValue.Location = new System.Drawing.Point(500, 30);
+            this.CurrentFPSValue.Name = "CurrentFPSValue";
+            this.CurrentFPSValue.Size = new System.Drawing.Size(37, 20);
+            this.CurrentFPSValue.TabIndex = 9;
+            this.CurrentFPSValue.Text = "?";
+            this.CurrentFPSValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // RestartButton
+            // 
+            this.RestartButton.Location = new System.Drawing.Point(177, 25);
+            this.RestartButton.Name = "RestartButton";
+            this.RestartButton.Size = new System.Drawing.Size(95, 23);
+            this.RestartButton.TabIndex = 10;
+            this.RestartButton.Text = "Перезапустить";
+            this.RestartButton.UseVisualStyleBackColor = true;
+            this.RestartButton.Click += new System.EventHandler(this.RestartBot);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(567, 344);
-            this.Controls.Add(this.WPSLabel);
+            this.Controls.Add(this.RestartButton);
+            this.Controls.Add(this.CurrentFPSValue);
+            this.Controls.Add(this.NeededFPSSelector);
+            this.Controls.Add(this.NeededFPSLabel);
+            this.Controls.Add(this.FPSLabel);
             this.Controls.Add(this.LogGroupBox);
             this.Controls.Add(this.AutoEnable);
             this.Controls.Add(this.DisableBotButton);
@@ -231,6 +284,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.LogGroupBox.ResumeLayout(false);
             this.LogGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NeededFPSSelector)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -248,13 +302,16 @@
         private System.Windows.Forms.Button ClearLogButton;
         private System.Windows.Forms.ToolTip Tooltip;
         private System.Windows.Forms.CheckBox AutoScrollCheckBox;
-        private System.Windows.Forms.Timer Work;
-        private System.Windows.Forms.Label WPSLabel;
-        private System.Windows.Forms.Timer WPSTimer;
-        private System.Windows.Forms.Timer WoWChecker;
+        private System.Windows.Forms.Label FPSLabel;
+        private System.Windows.Forms.Timer FPSTimer;
+        private System.Windows.Forms.Timer WoWEnabler;
         private System.Windows.Forms.CheckBox LogToFile;
         private System.Windows.Forms.Button ChangeLogDirectoryButton;
         private System.Windows.Forms.FolderBrowserDialog LogDirectoryBrowser;
+        private System.Windows.Forms.Label NeededFPSLabel;
+        private System.Windows.Forms.NumericUpDown NeededFPSSelector;
+        private System.Windows.Forms.Label CurrentFPSValue;
+        private System.Windows.Forms.Button RestartButton;
     }
 }
 

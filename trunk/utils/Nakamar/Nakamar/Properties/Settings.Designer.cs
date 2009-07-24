@@ -98,5 +98,17 @@ namespace Nakamar.Properties {
                 this["LogDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public decimal NeededFPS {
+            get {
+                return ((decimal)(this["NeededFPS"]));
+            }
+            set {
+                this["NeededFPS"] = value;
+            }
+        }
     }
 }
