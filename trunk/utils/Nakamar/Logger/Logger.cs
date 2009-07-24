@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Nakamar
+namespace Util
 {
-    static class Logger
+    public static class Logger
     {
         public delegate void LogFunction(string message);
 

@@ -43,7 +43,7 @@
             this.Tooltip = new System.Windows.Forms.ToolTip(this.components);
             this.FPSLabel = new System.Windows.Forms.Label();
             this.NeededFPSSelector = new System.Windows.Forms.NumericUpDown();
-            this.FPSTimer = new System.Windows.Forms.Timer(this.components);
+            this.MonitorTimer = new System.Windows.Forms.Timer(this.components);
             this.WoWEnabler = new System.Windows.Forms.Timer(this.components);
             this.LogDirectoryBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.NeededFPSLabel = new System.Windows.Forms.Label();
@@ -215,12 +215,12 @@
             this.Tooltip.SetToolTip(this.NeededFPSSelector, "Изменения подействуют после перезапуска бота");
             this.NeededFPSSelector.Value = global::Nakamar.Properties.Settings.Default.NeededFPS;
             // 
-            // FPSTimer
+            // MonitorTimer
             // 
-            this.FPSTimer.Enabled = true;
-            this.FPSTimer.Interval = 1000;
-            this.FPSTimer.Tag = "";
-            this.FPSTimer.Tick += new System.EventHandler(this.FPSTick);
+            this.MonitorTimer.Enabled = true;
+            this.MonitorTimer.Interval = 1000;
+            this.MonitorTimer.Tag = "";
+            this.MonitorTimer.Tick += new System.EventHandler(this.Monitor);
             // 
             // WoWEnabler
             // 
@@ -303,7 +303,7 @@
         private System.Windows.Forms.ToolTip Tooltip;
         private System.Windows.Forms.CheckBox AutoScrollCheckBox;
         private System.Windows.Forms.Label FPSLabel;
-        private System.Windows.Forms.Timer FPSTimer;
+        private System.Windows.Forms.Timer MonitorTimer;
         private System.Windows.Forms.Timer WoWEnabler;
         private System.Windows.Forms.CheckBox LogToFile;
         private System.Windows.Forms.Button ChangeLogDirectoryButton;
