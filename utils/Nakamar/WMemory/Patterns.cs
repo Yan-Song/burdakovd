@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace WoWMemory
+namespace WoWMemoryManager
 {
     /// <summary>
     /// структура хранения паттерна, которым можно будет пользоваться в SearchPattern

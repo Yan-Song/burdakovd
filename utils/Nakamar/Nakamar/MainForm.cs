@@ -26,7 +26,7 @@ namespace Nakamar
                 BotStateLabel.Text = value ? "Бот включён" : "Бот выключен";
             }
         }
-        private WoWMemory.WoWMemory WoW;
+        private WoWMemoryManager.MemoryManager WoW;
         private Engine FSM;
         private ulong PreviousFrameCount;
 
@@ -140,7 +140,7 @@ namespace Nakamar
 
             int WoWId = WoWProcesses()[0];
 
-            WoW = new WoWMemory.WoWMemory(WoWId);
+            WoW = new WoWMemoryManager.MemoryManager(WoWId);
             FSM = new Engine(WoW);
             // todo: load modules
             FSM.StartEngine((int)Settings.Default.NeededFPS);

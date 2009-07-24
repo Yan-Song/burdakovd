@@ -22,14 +22,14 @@ uint ObjectManagerOffset = WoW.ReadUInt(FindPattern(Patterns.ObjectManagerOffset
 uint pObjectManager = WoW.ReadUInt(pClientConnection + ObjectManagerOffset);
 */
 
-namespace WoWMemory
+namespace WoWMemoryManager
 {
 
-    public class WoWMemory
+    public class MemoryManager
     {
         private BlackMagic WoW;
 
-        public WoWMemory(int id)
+        public MemoryManager(int id)
         {
             WoW = new BlackMagic(id);
 
