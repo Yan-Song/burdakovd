@@ -150,7 +150,8 @@ namespace Nakamar
 
             int WoWId = WoWProcesses()[0];
 
-            WoW = new WoWMemoryManager.MemoryManager(WoWId);
+            WoW = new WoWMemoryManager.MemoryManager(WoWId,
+                Settings.Default.FindPatternCache.Clone() as System.Collections.Hashtable);
 
             FSM = new Engine(WoW);
 
@@ -176,6 +177,7 @@ namespace Nakamar
 
             FSM.StopEngine();
             FSM = null;
+            Settings.Default.FindPatternCache = WoW.Cache;
             WoW = null;
             BotEnabled = false;
 

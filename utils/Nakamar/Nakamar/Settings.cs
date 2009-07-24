@@ -7,7 +7,22 @@
     //  Событие SettingsLoaded возникает после загрузки значений параметров.
     //  Событие SettingsSaving возникает перед сохранением значений параметров.
     internal sealed partial class Settings {
-        
+
+        [global::System.Configuration.SettingsSerializeAs(System.Configuration.SettingsSerializeAs.Binary)]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public global::System.Collections.Hashtable FindPatternCache
+        {
+            get
+            {
+                return ((global::System.Collections.Hashtable)(this["FindPatternCache"]));
+            }
+            set
+            {
+                this["FindPatternCache"] = value;
+            }
+        }
+
         public Settings() {
             // // Для добавления обработчиков событий для сохранения и изменения параметров раскомментируйте приведенные ниже строки:
             //
