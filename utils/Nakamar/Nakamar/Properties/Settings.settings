@@ -3,13 +3,22 @@
   <Profiles />
   <Settings>
     <Setting Name="MainWindowLocation" Type="System.Drawing.Point" Scope="User">
-      <Value Profile="(Default)">0, 0</Value>
+      <Value Profile="(Default)">100, 100</Value>
     </Setting>
-    <Setting Name="AutoEnable" Type="System.Boolean" Scope="User">
+    <Setting Name="AutoEnable" Description="автоматически включать бота если запущен WoW" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="AutoScroll" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CallUpgrade" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SaveLogs" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="LogDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

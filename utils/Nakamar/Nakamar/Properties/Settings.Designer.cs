@@ -25,7 +25,7 @@ namespace Nakamar.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
         public global::System.Drawing.Point MainWindowLocation {
             get {
                 return ((global::System.Drawing.Point)(this["MainWindowLocation"]));
@@ -35,7 +35,11 @@ namespace Nakamar.Properties {
             }
         }
         
+        /// <summary>
+        /// автоматически включать бота если запущен WoW
+        /// </summary>
         [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsDescriptionAttribute("автоматически включать бота если запущен WoW")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool AutoEnable {
@@ -56,6 +60,42 @@ namespace Nakamar.Properties {
             }
             set {
                 this["AutoScroll"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CallUpgrade {
+            get {
+                return ((bool)(this["CallUpgrade"]));
+            }
+            set {
+                this["CallUpgrade"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SaveLogs {
+            get {
+                return ((bool)(this["SaveLogs"]));
+            }
+            set {
+                this["SaveLogs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LogDirectory {
+            get {
+                return ((string)(this["LogDirectory"]));
+            }
+            set {
+                this["LogDirectory"] = value;
             }
         }
     }
