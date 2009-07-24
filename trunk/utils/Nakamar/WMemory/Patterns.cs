@@ -17,6 +17,7 @@ namespace WoWMemoryManager
         /// <param name="mask"></param>
         public Pattern(string pattern, string mask, uint offset)
         {
+            if (pattern.Length != mask.Length * 3 - 1) throw new System.ArgumentException("несовпадение длин паттерна и маски");
             PatternString = pattern;
             Mask = mask;
             Offset = offset;
