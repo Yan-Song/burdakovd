@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Nakamar
+namespace WoWMemory
 {
     /// <summary>
     /// структура хранения паттерна, которым можно будет пользоваться в SearchPattern
