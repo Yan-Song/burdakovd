@@ -7,37 +7,41 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Nakamar.Properties;
+using FiniteStateMachine;
 
 namespace Nakamar
 {
     public partial class MainForm : Form
     {
+        private bool _botenabled;
         private bool BotEnabled
         {
-            get { return Work.Enabled; }
+            get { return _botenabled; }
             set
             {
-                DisableBotButton.Enabled = Work.Enabled = value;
+                RestartButton.Enabled = DisableBotButton.Enabled = _botenabled = value;
                 EnableBotButton.Enabled = !value;
                 BotStateLabel.Text = value ? "Бот включён" : "Бот выключен";
             }
         }
         private WoWMemory.WoWMemory WoW;
-        uint Works = 0;
+        private Engine FSM;
+        private ulong PreviousFrameCount;
 
         void LogToFileFunction(string text)
         {
-            if (Properties.Settings.Default.SaveLogs)
+            if (Settings.Default.SaveLogs)
             {
-                if (Properties.Settings.Default.LogDirectory == "")
+                if (Settings.Default.LogDirectory == "")
                 {
-                    Properties.Settings.Default.SaveLogs = false;
+                    Settings.Default.SaveLogs = false;
                     Logger.LogError("Не выбрана директория для логов");
                 }
                 else
                 {
-                    System.IO.Directory.CreateDirectory(Properties.Settings.Default.LogDirectory);
-                    string filename = Properties.Settings.Default.LogDirectory + System.IO.Path.DirectorySeparatorChar +
+                    System.IO.Directory.CreateDirectory(Settings.Default.LogDirectory);
+                    string filename = Settings.Default.LogDirectory + System.IO.Path.DirectorySeparatorChar +
                         DateTime.Now.ToShortDateString() + ".log";
                     System.IO.StreamWriter writer = new System.IO.StreamWriter(filename, true);
                     writer.WriteLine("[PID: " + System.Diagnostics.Process.GetCurrentProcess().Id + "] " + text);
@@ -53,6 +57,7 @@ namespace Nakamar
         {
             InitializeComponent();
             BotEnabled = false;
+            WoWEnabler.Enabled = Settings.Default.AutoEnable; 
         }
 
         /// <summary>
@@ -69,7 +74,7 @@ namespace Nakamar
                     LogBox.TopIndex = LogBox.Items.Count - 1;
             };
 
-            if (Properties.Settings.Default.CallUpgrade)
+            if (Settings.Default.CallUpgrade)
                 UpgradeSettings();
 
             Logger.RawLog += LogToFileFunction;
@@ -87,7 +92,7 @@ namespace Nakamar
 
         private void SaveSettings()
         {
-            Properties.Settings.Default.Save();
+            Settings.Default.Save();
         }      
         
         private void SaveSettings(object sender, EventArgs e)
@@ -97,8 +102,8 @@ namespace Nakamar
 
         private void UpgradeSettings()
         {
-            Properties.Settings.Default.Upgrade();
-            Properties.Settings.Default.CallUpgrade = false;
+            Settings.Default.Upgrade();
+            Settings.Default.CallUpgrade = false;
             SaveSettings(); 
             Logger.Log("Настройки программы перенесены из предыдущей версии.");
         }
@@ -134,7 +139,10 @@ namespace Nakamar
 
             int WoWId = WoWProcesses()[0];
 
-            WoW = new WoWMemory.WoWMemory(WoWId);                
+            WoW = new WoWMemory.WoWMemory(WoWId);
+            FSM = new Engine();
+            // todo: load modules
+            FSM.StartEngine((int)Settings.Default.NeededFPS);
             BotEnabled = true;
 
             Logger.Log("Бот включён, WoW process id: " + WoWId);
@@ -149,6 +157,8 @@ namespace Nakamar
         {
             if (!BotEnabled) return;
 
+            FSM.StopEngine();
+            FSM = null;
             WoW = null;
             BotEnabled = false;
 
@@ -172,27 +182,28 @@ namespace Nakamar
             return ps!=null && ps.Length == 1;
         }
 
-        private void DoWork(object sender, EventArgs e)
+        private void Monitor(object sender, EventArgs e)
         {
-            DoWork();
-        }
-
-        private void DoWork()
-        {
-            ++Works;
-            if (!IsOneWoWRunning())
+            if (!(FSM.Running && IsOneWoWRunning()))
                 DisableBot();
-            // здесь смотреть состояние WoW (запускается, экран входа, выбор персонажа, загрузка мира, мир)   
-            // и делать сооств. действия
         }
 
-        private void WPSTick(object sender, EventArgs e)
+        private void FPSTick(object sender, EventArgs e)
         {
-            WPSLabel.Text = "WPS: " + Works;
-            Works = 0;
+            if (FSM != null)
+            {
+                CurrentFPSValue.Text = (FSM.FrameCount - PreviousFrameCount).ToString();
+                PreviousFrameCount = FSM.FrameCount;
+            }
+            else
+            {
+                CurrentFPSValue.Text = "?";
+                PreviousFrameCount = 0;
+            }
+
         }
 
-        private void CheckWoW(object sender, EventArgs e)
+        private void EnableBotIfNeeded(object sender, EventArgs e)
         {
             if (!BotEnabled && IsOneWoWRunning())
                 EnableBot();
@@ -203,14 +214,20 @@ namespace Nakamar
             DialogResult result = LogDirectoryBrowser.ShowDialog();
             if (result == DialogResult.OK)
             {
-                Properties.Settings.Default.LogDirectory = LogDirectoryBrowser.SelectedPath;
-                Logger.Log("Директория логов изменена на " + Properties.Settings.Default.LogDirectory);
+                Settings.Default.LogDirectory = LogDirectoryBrowser.SelectedPath;
+                Logger.Log("Директория логов изменена на " + Settings.Default.LogDirectory);
             }
         }
 
         private void AutoEnable_CheckedChanged(object sender, EventArgs e)
         {
-            WoWChecker.Enabled = (sender as CheckBox).Checked; 
+            WoWEnabler.Enabled = (sender as CheckBox).Checked; 
+        }
+
+        private void RestartBot(object sender, EventArgs e)
+        {
+            DisableBot();
+            EnableBot();
         }
 
     }
