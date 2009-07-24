@@ -157,6 +157,7 @@ namespace Nakamar
             // load modules
             Logger.Log("Загружаю состояния из " + Settings.Default.StatesPath);
             FSM.LoadStates(Settings.Default.StatesPath);
+            FSM.States.Sort();
 
             FSM.StartEngine((int)Settings.Default.NeededFPS);
             BotEnabled = true;
