@@ -23,5 +23,11 @@
     <Setting Name="NeededFPS" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
+    <Setting Name="StatesPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">NakamarStates.dll</Value>
+    </Setting>
+    <Setting Name="MainWindowState" Type="System.Windows.Forms.FormWindowState" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

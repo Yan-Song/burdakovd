@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -17,6 +16,9 @@ namespace FiniteStateMachine
     public class Engine
     {
         private Thread _workerThread;
+
+        public Type LastState;
+        
         private WoWMemoryManager.MemoryManager Memory;
 
         public Engine(WoWMemoryManager.MemoryManager memory)
@@ -47,6 +49,7 @@ namespace FiniteStateMachine
                     if (state.NeedToRun)
                     {
                         state.Run();
+                        LastState = state.GetType();
                         // Break out of the iteration,
                         // as we found a state that has run.
                         // We don't want to run any more states
@@ -101,14 +104,26 @@ namespace FiniteStateMachine
                 // Nothing to do.
                 return;
             }
-            if (_workerThread.IsAlive)
-            {
-                _workerThread.Abort();
-            }
-            // Clear out the thread object.
-            _workerThread = null;
+
             // Make sure we let everyone know, we're not running anymore!
             Running = false;
+
+            // ждём пока поток увидит что Running == false и завершится
+            if (_workerThread.IsAlive)
+                _workerThread.Join(1000);
+
+            if (_workerThread.IsAlive)
+            {
+                Logger.Log("Рабочий поток FSM не завершился в течение одной секунды, убиваю");
+                _workerThread.Abort();
+                _workerThread.Join(); // ждём его завершения
+                Logger.Log("Рабочий поток FSM убит");
+            }
+            
+            // Clear out the thread object.
+            _workerThread = null;
+            
+            
         }
 
         public void LoadState(State state)

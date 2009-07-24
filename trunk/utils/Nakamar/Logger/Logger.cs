@@ -21,5 +21,7 @@ namespace Util
             Log("Ошибка: " + message);
         };
 
+
+
     }
 }
