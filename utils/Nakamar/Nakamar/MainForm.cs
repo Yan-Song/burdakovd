@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using Nakamar.Properties;
 using FiniteStateMachine;
+using Util; // for Logger
 
 namespace Nakamar
 {
@@ -140,7 +141,7 @@ namespace Nakamar
             int WoWId = WoWProcesses()[0];
 
             WoW = new WoWMemory.WoWMemory(WoWId);
-            FSM = new Engine();
+            FSM = new Engine(WoW);
             // todo: load modules
             FSM.StartEngine((int)Settings.Default.NeededFPS);
             BotEnabled = true;
@@ -184,12 +185,11 @@ namespace Nakamar
 
         private void Monitor(object sender, EventArgs e)
         {
-            if (!(FSM.Running && IsOneWoWRunning()))
+            // stop bot if something goes wrong
+            if (BotEnabled && !(FSM.Running && IsOneWoWRunning()))
                 DisableBot();
-        }
 
-        private void FPSTick(object sender, EventArgs e)
-        {
+            // update fps value
             if (FSM != null)
             {
                 CurrentFPSValue.Text = (FSM.FrameCount - PreviousFrameCount).ToString();
@@ -200,7 +200,6 @@ namespace Nakamar
                 CurrentFPSValue.Text = "?";
                 PreviousFrameCount = 0;
             }
-
         }
 
         private void EnableBotIfNeeded(object sender, EventArgs e)

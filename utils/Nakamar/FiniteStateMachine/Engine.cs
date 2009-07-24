@@ -1,7 +1,8 @@
 ﻿// 
 // Copyright © ApocDev 2009 <apoc@apocdev.com>
-// 
-// modified 
+//
+ 
+// modified by burdakovd 2009 <kreved at kreved dot org>
 
 using System;
 using System.Collections.Generic;
@@ -9,17 +10,20 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
-using Nakamar;
+using Util;
 
 namespace FiniteStateMachine
 {
     public class Engine
     {
         private Thread _workerThread;
+        private WoWMemory.WoWMemory Memory;
 
-        public Engine()
+        public Engine(WoWMemory.WoWMemory memory)
         {
+            
             States = new List<State>();
+            Memory = memory;
 
             // Remember: We implemented the IComparer, and IComparable
             // interfaces on the State class!
@@ -107,6 +111,56 @@ namespace FiniteStateMachine
             Running = false;
         }
 
-        //public void 
+        public void LoadState(State state)
+        {
+            if (!States.Contains(state))
+            {
+                States.Add(state);
+                States.Sort();
+            }
+        }
+
+        public void LoadStates(string assemblyPath)
+        {
+            // Make sure we actually have a path to work with.
+            if (string.IsNullOrEmpty(assemblyPath))
+            {
+                return;
+            }
+
+            // Make sure the file exists.
+            if (!File.Exists(assemblyPath))
+            {
+                return;
+            }
+            try
+            {
+                // Load the assembly, and get the types contained
+                // within it.
+                Assembly asm = Assembly.LoadFrom(assemblyPath);
+                Type[] types = asm.GetTypes();
+
+                foreach (Type type in types)
+                {
+                    // Here's some fairly simple stuff.
+                    if (type.IsClass && type.IsSubclassOf(typeof(State)))
+                    {
+                        // Create the State using the Activator class.
+                        var tempState = (State)Activator.CreateInstance(type, new object[] {this, Memory});
+                        // Make sure we're not using two of the same state.
+                        // (That would be bad!)
+                        if (!States.Contains(tempState))
+                        {
+                            States.Add(tempState);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Feel free to change this to some other logging method.
+                Logger.LogError(ex.Message);
+            }
+        }
     }
 }
