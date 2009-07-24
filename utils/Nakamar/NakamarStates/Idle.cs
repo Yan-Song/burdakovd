@@ -30,12 +30,5 @@ namespace NakamarStates
             return;
         }
 
-        public override int Frequency
-        {
-            get
-            {
-                return 1;
-            }
-        }
     }
 }
