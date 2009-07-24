@@ -97,7 +97,7 @@
       <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
       <Name>Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WoWMemory\WMemory.csproj">
+    <ProjectReference Include="..\WMemory\WMemory.csproj">
       <Project>{6E806492-5FFE-4C3C-BF20-22277FAED955}</Project>
       <Name>WMemory</Name>
     </ProjectReference>
