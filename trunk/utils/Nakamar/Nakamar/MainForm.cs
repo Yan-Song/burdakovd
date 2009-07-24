@@ -12,40 +12,47 @@ namespace Nakamar
 {
     public partial class MainForm : Form
     {
-        private bool BotEnabled = false;
-        IntPtr WoWHandle;
+        private bool BotEnabled
+        {
+            get { return Work.Enabled; }
+            set
+            {
+                DisableBotButton.Enabled = Work.Enabled = value;
+                EnableBotButton.Enabled = !value;
+                BotStateLabel.Text = value ? "Бот включён" : "Бот выключен";
+            }
+        }
+        private WoWMemory WoW;
+        uint Works = 0;
 
+        void LogToFileFunction(string text)
+        {
+            if (Properties.Settings.Default.SaveLogs)
+            {
+                if (Properties.Settings.Default.LogDirectory == "")
+                {
+                    Properties.Settings.Default.SaveLogs = false;
+                    Logger.LogError("Не выбрана директория для логов");
+                }
+                else
+                {
+                    System.IO.Directory.CreateDirectory(Properties.Settings.Default.LogDirectory);
+                    string filename = Properties.Settings.Default.LogDirectory + System.IO.Path.DirectorySeparatorChar +
+                        DateTime.Now.ToShortDateString() + ".log";
+                    System.IO.StreamWriter writer = new System.IO.StreamWriter(filename, true);
+                    writer.WriteLine("[PID: " + System.Diagnostics.Process.GetCurrentProcess().Id + "] " + text);
+                    writer.Close();
+                }
+            }
+        }
 
+        /// <summary>
+        /// инициализация гуя
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
-        }
-
-        private void SaveSettings()
-        {
-            Properties.Settings.Default.Save();
-        }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            SaveSettings();
-        }
-        
-        private void SaveSettings(object sender, EventArgs e)
-        {
-            SaveSettings();
-        }
-
-        private void Log(string text)
-        {
-            LogBox.Items.Add("[" + DateTime.Now.ToLongTimeString() + "] " + text);
-            if(AutoScrollCheckBox.Checked)
-                LogBox.TopIndex = LogBox.Items.Count - 1;
-        }
-
-        private void LogError(string text)
-        {
-            Log("Ошибка: "+text);
+            BotEnabled = false;
         }
 
         /// <summary>
@@ -55,19 +62,54 @@ namespace Nakamar
         /// <param name="e"></param>
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Process.EnterDebugMode();
-            UpdateBotStateGUI();
-            Log("Программа запущена");
+            Logger.RawLog = delegate(string text)
+            {
+                LogBox.Items.Add(text);
+                if (AutoScrollCheckBox.Checked)
+                    LogBox.TopIndex = LogBox.Items.Count - 1;
+            };
+
+            if (Properties.Settings.Default.CallUpgrade)
+                UpgradeSettings();
+
+            Logger.RawLog += LogToFileFunction;
+            
+            Logger.Log("Программа запущена");
+            
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DisableBot();
+            Logger.Log("Программа завершает свою работу");
+            SaveSettings();
+        }
+
+        private void SaveSettings()
+        {
+            Properties.Settings.Default.Save();
+        }      
+        
+        private void SaveSettings(object sender, EventArgs e)
+        {
+            SaveSettings();
+        }
+
+        private void UpgradeSettings()
+        {
+            Properties.Settings.Default.Upgrade();
+            Properties.Settings.Default.CallUpgrade = false;
+            SaveSettings(); 
+            Logger.Log("Настройки программы перенесены из предыдущей версии.");
         }
 
         /// <summary>
-        /// обновляет доступность кнопок включения и выключения бота
+        /// показывает MessageBox с заданным текстом и иконкой ошибки
         /// </summary>
-        private void UpdateBotStateGUI()
+        /// <param name="text"></param>
+        private void ShowError(string text)
         {
-            EnableBotButton.Enabled = !BotEnabled;
-            DisableBotButton.Enabled = BotEnabled;
-            BotStateLabel.Text = BotEnabled ? "Бот включён" : "Бот выключен";
+            MessageBox.Show(text, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void EnableBotByUser(object sender, EventArgs e)
@@ -83,21 +125,26 @@ namespace Nakamar
             }
         }
 
-        /// <summary>
-        /// показывает MessageBox с заданным текстом и иконкой ошибки
-        /// </summary>
-        /// <param name="text"></param>
-        private void ShowError(string text)
-        {
-            MessageBox.Show(text, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
         private void EnableBot()
         {
-            if (BotEnabled) throw new ApplicationException("Бот уже включён");
-            WoWHandle = WoWProcessHandle();
-            Log("найден процесс WoW, handle="+WoWHandle);
-            //throw new NotImplementedException();
+            if (BotEnabled) return;
+
+            if (!IsOneWoWRunning())
+                throw new ApplicationException("Должен быть запущен один процесс World of Warcraft");
+
+            int WoWId = WoWProcesses()[0];
+
+            WoW = new WoWMemory(WoWId);                
+            BotEnabled = true;
+
+            Logger.Log("Бот включён, WoW process id: " + WoWId);
+        }
+
+        private uint FindPattern(Pattern pattern)
+        {
+            uint ans = WoW.FindPattern(pattern.PatternString, pattern.Mask);
+            if (ans == (uint)WoW.MainModule.BaseAddress) throw new ApplicationException("Pattern not found");
+            return ans + pattern.Offset;
         }
 
         private void DisableBot(object sender, EventArgs e)
@@ -107,7 +154,13 @@ namespace Nakamar
 
         private void DisableBot()
         {
-            throw new NotImplementedException();
+            if (!BotEnabled) return;
+
+            WoW = null;
+            BotEnabled = false;
+
+            Logger.Log("Бот остановлен");
+
         }
 
         private void ClearLog(object sender, EventArgs e)
@@ -115,12 +168,57 @@ namespace Nakamar
             LogBox.Items.Clear();
         }
 
-        private IntPtr WoWProcessHandle()
+        private int[] WoWProcesses()
         {
-            Process[] wows = Process.GetProcessesByName("wow");
-            if (wows.Length == 0) throw new ApplicationException("процесс WoW не найден");
-            if (wows.Length > 1) throw new ApplicationException("найдено более одного процесса WoW");
-            return wows[0].Handle;
+            return Magic.SProcess.GetProcessesFromWindowTitle("World of Warcraft");
         }
+
+        private bool IsOneWoWRunning()
+        {
+            int[] ps = WoWProcesses();
+            return ps!=null && ps.Length == 1;
+        }
+
+        private void DoWork(object sender, EventArgs e)
+        {
+            DoWork();
+        }
+
+        private void DoWork()
+        {
+            ++Works;
+            if (!IsOneWoWRunning())
+                DisableBot();
+            // здесь смотреть состояние WoW (запускается, экран входа, выбор персонажа, загрузка мира, мир)   
+            // и делать сооств. действия
+        }
+
+        private void WPSTick(object sender, EventArgs e)
+        {
+            WPSLabel.Text = "WPS: " + Works;
+            Works = 0;
+        }
+
+        private void CheckWoW(object sender, EventArgs e)
+        {
+            if (!BotEnabled && IsOneWoWRunning())
+                EnableBot();
+        }
+
+        private void SelectLogDirectory(object sender, EventArgs e)
+        {
+            DialogResult result = LogDirectoryBrowser.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                Properties.Settings.Default.LogDirectory = LogDirectoryBrowser.SelectedPath;
+                Logger.Log("Директория логов изменена на " + Properties.Settings.Default.LogDirectory);
+            }
+        }
+
+        private void AutoEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            WoWChecker.Enabled = (sender as CheckBox).Checked; 
+        }
+
     }
 }
