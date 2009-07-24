@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Windows.Forms;
-using Nakamar.Properties;
 using FiniteStateMachine;
+using Nakamar.Properties;
 using Util; // for Logger
 
 namespace Nakamar
@@ -23,14 +17,14 @@ namespace Nakamar
             {
                 RestartButton.Enabled = DisableBotButton.Enabled = _botenabled = value;
                 EnableBotButton.Enabled = !value;
-                BotStateLabel.Text = value ? "Бот включён" : "Бот выключен";
+                ManageGroupBox.Text = value ? "Бот включён" : "Бот выключен";
             }
         }
         private WoWMemoryManager.MemoryManager WoW;
         private Engine FSM;
         private ulong PreviousFrameCount;
 
-        void LogToFileFunction(string text)
+        private void LogToFileFunction(string text)
         {
             if (Settings.Default.SaveLogs)
             {
@@ -51,6 +45,13 @@ namespace Nakamar
             }
         }
 
+        private void LogToListBoxFunction(string text)
+        {
+            LogBox.Items.Add(text);
+            if (AutoScrollCheckBox.Checked)
+                LogBox.TopIndex = LogBox.Items.Count - 1;
+        }
+
         /// <summary>
         /// инициализация гуя
         /// </summary>
@@ -58,8 +59,9 @@ namespace Nakamar
         {
             InitializeComponent();
             BotEnabled = false;
-            WoWEnabler.Enabled = Settings.Default.AutoEnable; 
         }
+
+
 
         /// <summary>
         /// некоторая инициализация
@@ -68,17 +70,24 @@ namespace Nakamar
         /// <param name="e"></param>
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Logger.RawLog = delegate(string text)
-            {
-                LogBox.Items.Add(text);
-                if (AutoScrollCheckBox.Checked)
-                    LogBox.TopIndex = LogBox.Items.Count - 1;
-            };
-
             if (Settings.Default.CallUpgrade)
+            {
+                Logger.RawLog = LogToListBoxFunction;
                 UpgradeSettings();
+            }
 
-            Logger.RawLog += LogToFileFunction;
+            // а теперь если RawLog Вызовут из другого потока
+
+            Logger.LogFunction tmp = 
+                new Logger.LogFunction(LogToFileFunction) + new Logger.LogFunction(LogToListBoxFunction);
+            
+            Logger.RawLog = delegate(string message)
+            {
+                if (InvokeRequired)
+                    BeginInvoke(tmp, new object[] {message});
+                else
+                    tmp(message);
+            };
             
             Logger.Log("Программа запущена");
             
@@ -106,6 +115,7 @@ namespace Nakamar
             Settings.Default.Upgrade();
             Settings.Default.CallUpgrade = false;
             SaveSettings(); 
+            // Logger-ом пользоваться ещё нельзя
             Logger.Log("Настройки программы перенесены из предыдущей версии.");
         }
 
@@ -141,12 +151,17 @@ namespace Nakamar
             int WoWId = WoWProcesses()[0];
 
             WoW = new WoWMemoryManager.MemoryManager(WoWId);
+
             FSM = new Engine(WoW);
-            // todo: load modules
+
+            // load modules
+            Logger.Log("Загружаю состояния из " + Settings.Default.StatesPath);
+            FSM.LoadStates(Settings.Default.StatesPath);
+
             FSM.StartEngine((int)Settings.Default.NeededFPS);
             BotEnabled = true;
 
-            Logger.Log("Бот включён, WoW process id: " + WoWId);
+            Logger.Log("Бот включён, WoW process id: " + WoWId + ", загружено состояний: " + FSM.States.Count);
         }
 
         private void DisableBot(object sender, EventArgs e)
@@ -189,27 +204,28 @@ namespace Nakamar
             if (BotEnabled && !(FSM.Running && IsOneWoWRunning()))
                 DisableBot();
 
+            // start if needed
+            if (!BotEnabled && Settings.Default.AutoEnable && IsOneWoWRunning())
+                EnableBot();
+
             // update fps value
             if (FSM != null)
             {
                 CurrentFPSValue.Text = (FSM.FrameCount - PreviousFrameCount).ToString();
+                LastStateValue.Text = (FSM.LastState==null) ? "запускается" : FSM.LastState.Name;
                 PreviousFrameCount = FSM.FrameCount;
             }
             else
             {
                 CurrentFPSValue.Text = "?";
+                LastStateValue.Text = "не работает";
                 PreviousFrameCount = 0;
             }
         }
 
-        private void EnableBotIfNeeded(object sender, EventArgs e)
-        {
-            if (!BotEnabled && IsOneWoWRunning())
-                EnableBot();
-        }
-
         private void SelectLogDirectory(object sender, EventArgs e)
         {
+            LogDirectoryBrowser.SelectedPath = Settings.Default.LogDirectory;
             DialogResult result = LogDirectoryBrowser.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -218,15 +234,20 @@ namespace Nakamar
             }
         }
 
-        private void AutoEnable_CheckedChanged(object sender, EventArgs e)
-        {
-            WoWEnabler.Enabled = (sender as CheckBox).Checked; 
-        }
-
         private void RestartBot(object sender, EventArgs e)
         {
             DisableBot();
             EnableBot();
+        }
+
+        private void SelectStatesPath(object sender, EventArgs e)
+        {
+            StatesPathBrowser.FileName = Settings.Default.StatesPath;
+            if (StatesPathBrowser.ShowDialog() == DialogResult.OK)
+            {
+                Logger.Log("Путь к библиотеке состояний обновлён. Изменения подействуют после перезапуска бота.");
+                Settings.Default.StatesPath = StatesPathBrowser.FileName;
+            }
         }
 
     }

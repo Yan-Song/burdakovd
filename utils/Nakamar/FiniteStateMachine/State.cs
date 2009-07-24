@@ -3,11 +3,23 @@
 //
 using System;
 using System.Collections.Generic;
+using WoWMemoryManager;
 
 namespace FiniteStateMachine
 {
     public abstract class State : IComparable<State>, IComparer<State>
     {
+        protected Engine Machine;
+        protected MemoryManager Memory;
+
+        protected State() { }
+
+        protected State(object machine, object memory)
+        {
+            Machine = machine as Engine;
+            Memory = memory as MemoryManager;
+        }
+
         public abstract int Priority { get; }
 
         public abstract bool NeedToRun { get; }
