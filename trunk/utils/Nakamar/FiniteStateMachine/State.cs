@@ -1,9 +1,15 @@
 ﻿// 
 // Copyright © ApocDev 2009 <apoc@apocdev.com>
 //
+// modfied, burdakovd 2009, <kreved at kreved dot org>
+
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using WoWMemoryManager;
+using Util;
 
 namespace FiniteStateMachine
 {
@@ -12,12 +18,22 @@ namespace FiniteStateMachine
         protected Engine Machine;
         protected MemoryManager Memory;
 
+        public virtual void Configure()
+        {
+            System.Windows.Forms.MessageBox.Show("для этого модуля настроек нет");
+        }
+
         protected State() { }
 
         protected State(object machine, object memory)
         {
             Machine = machine as Engine;
             Memory = memory as MemoryManager;
+        }
+
+        protected void Log(string message)
+        {
+            Logger.Log("["+this.GetType()+"] "+message);
         }
 
         public abstract int Priority { get; }

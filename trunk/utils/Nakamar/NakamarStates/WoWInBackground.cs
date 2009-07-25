@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using FiniteStateMachine;
 using WoWMemoryManager;
-using Util;
 
 
 namespace NakamarStates

@@ -5,6 +5,7 @@ using FiniteStateMachine;
 using Nakamar.Properties;
 using Util; // for Logger
 
+
 namespace Nakamar
 {
     public partial class MainForm : Form
@@ -15,7 +16,7 @@ namespace Nakamar
             get { return _botenabled; }
             set
             {
-                RestartButton.Enabled = DisableBotButton.Enabled = _botenabled = value;
+                StatesSettingsGroup.Enabled = RestartButton.Enabled = DisableBotButton.Enabled = _botenabled = value;
                 EnableBotButton.Enabled = !value;
                 ManageGroupBox.Text = value ? "Бот включён" : "Бот выключен";
             }
@@ -143,7 +144,7 @@ namespace Nakamar
         private void EnableBot()
         {
             if (BotEnabled) return;
-
+            
             Logger.ClearValues();
 
             if (!IsOneWoWRunning())
@@ -160,6 +161,11 @@ namespace Nakamar
             Logger.Log("Загружаю состояния из " + Settings.Default.StatesPath);
             FSM.LoadStates(Settings.Default.StatesPath);
             FSM.States.Sort();
+
+            // update gui list
+            StatesList.Items.Clear();
+            foreach(State state in FSM.States)
+                StatesList.Items.Add(state.GetType().FullName);
 
             FSM.StartEngine((int)Settings.Default.NeededFPS);
             BotEnabled = true;
@@ -254,6 +260,23 @@ namespace Nakamar
             {
                 Logger.Log("Путь к библиотеке состояний обновлён. Изменения подействуют после перезапуска бота.");
                 Settings.Default.StatesPath = StatesPathBrowser.FileName;
+            }
+        }
+
+        private void ChangeStateSettings(object sender, EventArgs e)
+        {
+            int index = StatesList.SelectedIndex;
+            if (index == -1)
+                ShowError("нужно выбрать состояние из списка прежде чем нажимать кнопку настройки");
+            else
+            {
+                string name = StatesList.Items[index] as string;
+                foreach(State state in FSM.States)
+                    if (state.GetType().FullName == name)
+                    {
+                        state.Configure();
+                        break;
+                    }
             }
         }
 
