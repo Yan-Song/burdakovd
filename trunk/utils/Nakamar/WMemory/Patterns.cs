@@ -41,5 +41,12 @@ namespace WoWMemoryManager
         public static Pattern ObjectManagerOffset = 
             new Pattern("64 8B 15 00 00 00 00 8B 34 00 8B 0D 00 00 00 00 89 81 00 00 00 00 8B 15", "xxx????xx?xx????xx????xx", 18);
 
+        /// <summary>
+        /// returns an String with "login" for Login Screen and "charselect" for Charselect Screen.
+        /// On entering World its "charselect"
+        /// http://www.mmowned.com/forums/wow-memory-editing/241997-3-1-3-some-static-address-found.html
+        /// </summary>
+        public static uint GameState = 0x012A75C0;
+
     }
 }

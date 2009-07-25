@@ -169,6 +169,7 @@ namespace FiniteStateMachine
                         // (That would be bad!)
                         if (!States.Contains(tempState))
                         {
+                            //Logger.Log("loading "+tempState.GetType().Name);
                             States.Add(tempState);
                         }
                     }

@@ -22,18 +22,13 @@ namespace NakamarStates
             get { return 50000; }
         }
 
-        private void Watch(string name, Getter f)
-        {
-            Logger.Watch(name, f(name));
-        }
-
         public override bool NeedToRun
         {
             get
             {
                 if (Enabled)
                 {
-                    Watch("LOGIN_STATE", delegate(string key) { return Memory.BM.ReadUInt(0x012A75C0).ToString(); });
+                    Logger.Watch("CurrentGameState", Memory.CurrentGameState().ToString());
                 }
                 return false;
             }

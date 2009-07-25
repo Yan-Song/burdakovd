@@ -26,29 +26,28 @@ uint pObjectManager = WoW.ReadUInt(pClientConnection + ObjectManagerOffset);
 
 namespace WoWMemoryManager
 {
+    public enum GameState { Login, Character, World };
 
     public class MemoryManager
     {
         public BlackMagic BM;
-        private uint ppClientConnection;
-        private uint ObjectManagerOffset;
+        
         public uint pClientConnection
         {
-            get
-            {
-                return BM.ReadUInt(ppClientConnection);
-            }
+            get { return BM.ReadUInt(BM.ReadUInt(FindPattern(Patterns.ClientConnection))); }
         }
-        public Hashtable Cache;
-        
 
+        public uint pObjectManager
+        {
+            get { return BM.ReadUInt(pClientConnection + BM.ReadUInt(FindPattern(Patterns.ObjectManagerOffset))); }
+        }
+
+        public Hashtable Cache;
+       
         public MemoryManager(int id, Hashtable cache)
         {
             BM = new BlackMagic(id);
             Cache = cache;
-                     
-            ppClientConnection = BM.ReadUInt(FindPattern(Patterns.ClientConnection));
-            ObjectManagerOffset = BM.ReadUInt(FindPattern(Patterns.ObjectManagerOffset));
         }
 
         private bool CheckPattern(Pattern pattern, uint cached)
@@ -94,6 +93,25 @@ namespace WoWMemoryManager
             Cache[key] = ans + pattern.Offset;
             Logger.Log("найден новый оффсет FindPattern(" + key + ") == " + ((uint)Cache[key]).ToString("X"));
             return (uint)Cache[key];
+        }
+
+        private uint FindPattern(uint pattern)
+        {
+            return pattern;
+        }
+
+        public GameState CurrentGameState()
+        {
+            string state = BM.ReadASCIIString(Patterns.GameState, 100);
+            if (state == "login")
+                return GameState.Login;
+            else if (state == "charselect")
+                if (pObjectManager == 0)
+                    return GameState.Character;
+                else
+                    return GameState.World;
+            else
+                throw new Exception();
         }
 
         /// <summary>

@@ -23,6 +23,7 @@ namespace Nakamar
         private WoWMemoryManager.MemoryManager WoW;
         private Engine FSM;
         private ulong PreviousFrameCount;
+        private DateTime lastDisabled = new DateTime(0);
 
         private void LogToFileFunction(string text)
         {
@@ -61,8 +62,6 @@ namespace Nakamar
             BotEnabled = false;
         }
 
-
-
         /// <summary>
         /// некоторая инициализация
         /// </summary>
@@ -93,7 +92,7 @@ namespace Nakamar
             
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             DisableBot();
             Logger.Log("Программа завершает свою работу");
@@ -145,6 +144,8 @@ namespace Nakamar
         {
             if (BotEnabled) return;
 
+            Logger.ClearValues();
+
             if (!IsOneWoWRunning())
                 throw new ApplicationException("Должен быть запущен один процесс World of Warcraft");
 
@@ -180,7 +181,7 @@ namespace Nakamar
             Settings.Default.FindPatternCache = WoW.Cache;
             WoW = null;
             BotEnabled = false;
-
+            lastDisabled = DateTime.Now;
             Logger.Log("Бот остановлен");
 
         }
@@ -208,7 +209,7 @@ namespace Nakamar
                 DisableBot();
 
             // start if needed
-            if (!BotEnabled && Settings.Default.AutoEnable && IsOneWoWRunning())
+            if (!BotEnabled && Settings.Default.AutoEnable && IsOneWoWRunning() && (DateTime.Now-lastDisabled).Ticks>100000000)
                 EnableBot();
 
             // update fps value
