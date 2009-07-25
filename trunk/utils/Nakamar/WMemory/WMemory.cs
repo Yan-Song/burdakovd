@@ -29,14 +29,14 @@ namespace WoWMemoryManager
 
     public class MemoryManager
     {
-        private BlackMagic WoW;
+        public BlackMagic BM;
         private uint ppClientConnection;
         private uint ObjectManagerOffset;
         public uint pClientConnection
         {
             get
             {
-                return WoW.ReadUInt(ppClientConnection);
+                return BM.ReadUInt(ppClientConnection);
             }
         }
         public Hashtable Cache;
@@ -44,11 +44,11 @@ namespace WoWMemoryManager
 
         public MemoryManager(int id, Hashtable cache)
         {
-            WoW = new BlackMagic(id);
+            BM = new BlackMagic(id);
             Cache = cache;
                      
-            ppClientConnection = WoW.ReadUInt(FindPattern(Patterns.ClientConnection));
-            ObjectManagerOffset = WoW.ReadUInt(FindPattern(Patterns.ObjectManagerOffset));
+            ppClientConnection = BM.ReadUInt(FindPattern(Patterns.ClientConnection));
+            ObjectManagerOffset = BM.ReadUInt(FindPattern(Patterns.ObjectManagerOffset));
         }
 
         private bool CheckPattern(Pattern pattern, uint cached)
@@ -65,7 +65,7 @@ namespace WoWMemoryManager
                 // вообще говоря если данные верны то паттерн будет находиться по адресу
                 // cached - pattern.Offset, но при ошибке WoW.FindPattern() вернёт dwStart
                 // так что делать dwStart == cached - pattern.Offset нельзя, уменьшаем на 1
-                uint answer = WoW.FindPattern(cached - pattern.Offset - 1, pattern.PatternString.Length + 1, bPattern, pattern.Mask);
+                uint answer = BM.FindPattern(cached - pattern.Offset - 1, pattern.PatternString.Length + 1, bPattern, pattern.Mask);
                 return cached == answer + pattern.Offset;
             }
             catch (Exception)
@@ -88,8 +88,8 @@ namespace WoWMemoryManager
                     Cache.Remove(key);
                 }
             }
-            uint ans = WoW.FindPattern(pattern.PatternString, pattern.Mask);
-            if (ans == (uint)WoW.MainModule.BaseAddress) throw new ApplicationException("Pattern not found");
+            uint ans = BM.FindPattern(pattern.PatternString, pattern.Mask);
+            if (ans == (uint)BM.MainModule.BaseAddress) throw new ApplicationException("Pattern not found");
 
             Cache[key] = ans + pattern.Offset;
             Logger.Log("найден новый оффсет FindPattern(" + key + ") == " + ((uint)Cache[key]).ToString("X"));
@@ -108,7 +108,7 @@ namespace WoWMemoryManager
         /// <returns></returns>
         public bool IsWoWForeground()
         {
-            return Process.GetProcessById(WoW.ProcessId).MainWindowHandle == GetForegroundWindow();
+            return Process.GetProcessById(BM.ProcessId).MainWindowHandle == GetForegroundWindow();
         }
 
     }

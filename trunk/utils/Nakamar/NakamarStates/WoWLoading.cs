@@ -27,7 +27,7 @@ namespace NakamarStates
             {
                 // надежда что за 20 секунд WoW запустится=)
                 return DateTime.Now.Ticks - ClientConnectionLoadedTime < 200000000 //20s
-                    || Memory.pClientConnection == 0;
+                    || Memory.pClientConnection == 0 || ClientConnectionLoadedTime == 0;
                     
             }
 
@@ -46,6 +46,8 @@ namespace NakamarStates
             else
                 if (!wasLoaded)
                 {
+                    if (ClientConnectionLoadedTime == 0)
+                        ClientConnectionLoadedTime = DateTime.Now.Ticks;
                     wasLoaded = true;
                     Logger.Log("[WoWLoading] pClientConnection инициализирован, предположительно в течение " + 
                         "ближайших 20 сек WoW загрузится полностью");
