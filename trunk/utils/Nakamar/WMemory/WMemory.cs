@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using Util;
-using Magic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using Magic;
+using Util;
 
 /*
 // вычисляем оффсеты
@@ -31,7 +33,10 @@ namespace WoWMemoryManager
     public class MemoryManager
     {
         public BlackMagic BM;
-        
+        public Hashtable Cache;
+
+        #region Properties
+
         public uint pClientConnection
         {
             get { return BM.ReadUInt(BM.ReadUInt(FindPattern(Patterns.ClientConnection))); }
@@ -40,16 +45,17 @@ namespace WoWMemoryManager
         public uint pObjectManager
         {
             get { return BM.ReadUInt(pClientConnection + BM.ReadUInt(FindPattern(Patterns.ObjectManagerOffset))); }
-        }
+        } 
 
-        public Hashtable Cache;
-       
+        #endregion
+
         public MemoryManager(int id, Hashtable cache)
         {
             BM = new BlackMagic(id);
             Cache = cache;
         }
 
+        #region Pattern Methods
         private bool CheckPattern(Pattern pattern, uint cached)
         {
 
@@ -98,6 +104,46 @@ namespace WoWMemoryManager
         private uint FindPattern(uint pattern)
         {
             return pattern;
+        } 
+        #endregion
+
+        #region DllImport
+
+        /// <summary>
+        /// The GetForegroundWindow function returns a handle to the foreground window.
+        /// </summary>
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        /// <summary>
+        /// If the function fails, the return value is zero. To get extended error information, call GetLastError.
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <param name="Msg"></param>
+        /// <param name="wParam"></param>
+        /// <param name="lParam"></param>
+        /// <returns></returns>
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool PostMessage(HandleRef hWnd, uint Msg, IntPtr wParam,
+           IntPtr lParam);
+
+        #endregion
+
+        void PostMessageSafe(HandleRef hWnd, uint msg, IntPtr wParam, IntPtr lParam)
+        {
+            bool returnValue = PostMessage(hWnd, msg, wParam, lParam);
+            if (!returnValue)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
+
+        /// <summary>
+        /// возвращает тру если окно WoW сейчас активировано
+        /// </summary>
+        /// <returns></returns>
+        public bool IsWoWForeground()
+        {
+            return Process.GetProcessById(BM.ProcessId).MainWindowHandle == GetForegroundWindow();
         }
 
         public GameState CurrentGameState()
@@ -114,25 +160,25 @@ namespace WoWMemoryManager
                 throw new Exception();
         }
 
-        /// <summary>
-        /// The GetForegroundWindow function returns a handle to the foreground window.
-        /// </summary>
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
+        #region SendKeys
 
-        /// <summary>
-        /// возвращает тру если окно WoW сейчас активировано
-        /// </summary>
-        /// <returns></returns>
-        public bool IsWoWForeground()
+        public void SendKeys(Keys k)
         {
-            return Process.GetProcessById(BM.ProcessId).MainWindowHandle == GetForegroundWindow();
+            if (!IsWoWForeground()) return;
+            throw new NotImplementedException();
         }
-
 
         public void SendKeys(string p)
         {
+            if (!IsWoWForeground()) return;
             throw new NotImplementedException();
+        }
+
+        #endregion
+
+        public void WaitForInputIdle()
+        {
+            Process.GetProcessById(BM.ProcessId).WaitForInputIdle();
         }
     }
 }

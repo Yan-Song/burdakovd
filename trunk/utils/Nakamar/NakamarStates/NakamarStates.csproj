@@ -65,7 +65,7 @@
     <Compile Include="Relogger\ReLogger.cs" />
     <Compile Include="Watcher.cs" />
     <Compile Include="WoWInBackground.cs" />
-    <Compile Include="WoWLoading.cs" />
+    <Compile Include="StartStopManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BlackMagic\BlackMagic.csproj">

@@ -99,34 +99,35 @@ namespace FiniteStateMachine
 
         public void StopEngine()
         {
-            if (!Running && _workerThread==null)
+            lock (this)
             {
-                // Nothing to do.
-                return;
-            }
+                if (!Running && _workerThread == null)
+                {
+                    // Nothing to do.
+                    return;
+                }
 
-            // Make sure we let everyone know, we're not running anymore!
-            Running = false;
+                // Make sure we let everyone know, we're not running anymore!
+                Running = false;
 
-            if (Thread.CurrentThread.ManagedThreadId == _workerThread.ManagedThreadId)
-                return; // don't wait ourselves, Running = false is enough
+                if (Thread.CurrentThread.ManagedThreadId == _workerThread.ManagedThreadId)
+                    return; // don't wait ourselves, Running = false is enough
 
-            // ждём пока поток увидит что Running == false и завершится
-            if (_workerThread.IsAlive)
-                _workerThread.Join(1000);
+                // ждём пока поток увидит что Running == false и завершится
+                if (_workerThread.IsAlive)
+                    _workerThread.Join(5000);
 
-            if (_workerThread.IsAlive)
-            {
-                Logger.Log("Рабочий поток FSM не завершился в течение одной секунды, убиваю");
-                _workerThread.Abort();
-                _workerThread.Join(); // ждём его завершения
-                Logger.Log("Рабочий поток FSM убит");
-            }
-            
-            // Clear out the thread object.
-            _workerThread = null;
-            
-            
+                if (_workerThread.IsAlive)
+                {
+                    Logger.Log("Рабочий поток FSM не завершился в течение одной секунды, убиваю");
+                    _workerThread.Abort();
+                    _workerThread.Join(); // ждём его завершения
+                    Logger.Log("Рабочий поток FSM убит");
+                }
+
+                // Clear out the thread object.
+                _workerThread = null;
+            }        
         }
 
         public void LoadState(State state)
