@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Magic;
 using Util;
+using Magic;
+using System.Diagnostics;
 
 /*
 // вычисляем оффсеты
@@ -94,8 +95,21 @@ namespace WoWMemoryManager
             Logger.Log("найден новый оффсет FindPattern(" + key + ") == " + ((uint)Cache[key]).ToString("X"));
             return (uint)Cache[key];
         }
-        
-        
+
+        /// <summary>
+        /// The GetForegroundWindow function returns a handle to the foreground window.
+        /// </summary>
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        /// <summary>
+        /// возвращает тру если окно WoW сейчас активировано
+        /// </summary>
+        /// <returns></returns>
+        public bool IsWoWForeground()
+        {
+            return Process.GetProcessById(WoW.ProcessId).MainWindowHandle == GetForegroundWindow();
+        }
 
     }
 }

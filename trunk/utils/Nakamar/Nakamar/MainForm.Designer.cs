@@ -50,9 +50,8 @@
             this.DisableBotButton = new System.Windows.Forms.Button();
             this.EnableBotButton = new System.Windows.Forms.Button();
             this.StatusGroupBox = new System.Windows.Forms.GroupBox();
-            this.StatesPathBrowser = new System.Windows.Forms.OpenFileDialog();
-            this.LastStateLabel = new System.Windows.Forms.Label();
             this.LastStateValue = new System.Windows.Forms.Label();
+            this.StatesPathBrowser = new System.Windows.Forms.OpenFileDialog();
             this.LogGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NeededFPSSelector)).BeginInit();
             this.ManageGroupBox.SuspendLayout();
@@ -279,7 +278,6 @@
             // StatusGroupBox
             // 
             this.StatusGroupBox.Controls.Add(this.LastStateValue);
-            this.StatusGroupBox.Controls.Add(this.LastStateLabel);
             this.StatusGroupBox.Controls.Add(this.SelectStatesDirectoryButton);
             this.StatusGroupBox.Controls.Add(this.NeededFPSSelector);
             this.StatusGroupBox.Controls.Add(this.FPSLabel);
@@ -292,29 +290,20 @@
             this.StatusGroupBox.TabStop = false;
             this.StatusGroupBox.Text = "Опции";
             // 
+            // LastStateValue
+            // 
+            this.LastStateValue.AutoSize = true;
+            this.LastStateValue.Location = new System.Drawing.Point(17, 75);
+            this.LastStateValue.Name = "LastStateValue";
+            this.LastStateValue.Size = new System.Drawing.Size(0, 13);
+            this.LastStateValue.TabIndex = 16;
+            // 
             // StatesPathBrowser
             // 
             this.StatesPathBrowser.DefaultExt = "dll";
             this.StatesPathBrowser.FileName = global::Nakamar.Properties.Settings.Default.StatesPath;
             this.StatesPathBrowser.Filter = "Библиотеки (*.dll)|*.dll|Все файлы|*.*";
             this.StatesPathBrowser.Title = "Выбор библиотеки состояний";
-            // 
-            // LastStateLabel
-            // 
-            this.LastStateLabel.AutoSize = true;
-            this.LastStateLabel.Location = new System.Drawing.Point(6, 71);
-            this.LastStateLabel.Name = "LastStateLabel";
-            this.LastStateLabel.Size = new System.Drawing.Size(64, 13);
-            this.LastStateLabel.TabIndex = 15;
-            this.LastStateLabel.Text = "Состояние:";
-            // 
-            // LastStateValue
-            // 
-            this.LastStateValue.AutoSize = true;
-            this.LastStateValue.Location = new System.Drawing.Point(76, 71);
-            this.LastStateValue.Name = "LastStateValue";
-            this.LastStateValue.Size = new System.Drawing.Size(0, 13);
-            this.LastStateValue.TabIndex = 16;
             // 
             // MainForm
             // 
@@ -366,7 +355,6 @@
         private System.Windows.Forms.Button SelectStatesDirectoryButton;
         private System.Windows.Forms.OpenFileDialog StatesPathBrowser;
         private System.Windows.Forms.Label LastStateValue;
-        private System.Windows.Forms.Label LastStateLabel;
     }
 }
 
