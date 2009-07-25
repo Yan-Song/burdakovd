@@ -215,6 +215,8 @@ namespace Nakamar
             if (FSM != null)
             {
                 CurrentFPSValue.Text = (FSM.FrameCount - PreviousFrameCount).ToString();
+                Tooltip.SetToolTip(LastStateValue, FSM.LastState==null ? "" :
+                    FSM.LastState.Module + Environment.NewLine + FSM.LastState.AssemblyQualifiedName);
                 LastStateValue.Text = (FSM.LastState==null) ? "запускается" : FSM.LastState.Name;
                 PreviousFrameCount = FSM.FrameCount;
             }
@@ -222,6 +224,7 @@ namespace Nakamar
             {
                 CurrentFPSValue.Text = "?";
                 LastStateValue.Text = "не работает";
+                Tooltip.SetToolTip(LastStateValue, "конечный автомат сейчас не запущен");
                 PreviousFrameCount = 0;
             }
         }

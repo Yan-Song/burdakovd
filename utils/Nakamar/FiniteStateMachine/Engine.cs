@@ -99,7 +99,7 @@ namespace FiniteStateMachine
 
         public void StopEngine()
         {
-            if (!Running)
+            if (!Running && _workerThread==null)
             {
                 // Nothing to do.
                 return;
@@ -107,6 +107,9 @@ namespace FiniteStateMachine
 
             // Make sure we let everyone know, we're not running anymore!
             Running = false;
+
+            if (Thread.CurrentThread.ManagedThreadId == _workerThread.ManagedThreadId)
+                return; // don't wait ourselves, Running = false is enough
 
             // ждём пока поток увидит что Running == false и завершится
             if (_workerThread.IsAlive)
