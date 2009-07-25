@@ -3,7 +3,8 @@ using System.IO;
 using System.Windows.Forms;
 using FiniteStateMachine;
 using Nakamar.Properties;
-using Util; // for Logger
+using Util;
+using System.Diagnostics; // for Logger
 
 
 namespace Nakamar
@@ -274,7 +275,10 @@ namespace Nakamar
                 foreach(State state in FSM.States)
                     if (state.GetType().FullName == name)
                     {
-                        state.Configure();
+                        lock (state)
+                        {
+                            state.Configure();
+                        }
                         break;
                     }
             }
