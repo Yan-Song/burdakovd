@@ -14,7 +14,11 @@ namespace NakamarStates
         private long ClientConnectionLoadedTime = 0;
         private bool wasLoaded = false;
 
-        public WoWLoading(object machine, object memory) : base(machine, memory) { }
+        public WoWLoading(object machine, object memory) : base(machine, memory)
+        {
+            Logger.Log(wasLoaded.ToString());
+            Logger.Log(ClientConnectionLoadedTime.ToString());
+        }
 
         public override int Priority
         {

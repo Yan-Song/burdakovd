@@ -31,10 +31,21 @@ namespace Util
         /// <returns></returns>
         public static void Watch(string key, string value)
         {
-            if (!CurrentValues.ContainsKey(key) || CurrentValues[key] != value)
+            lock(CurrentValues)
             {
-                CurrentValues[key] = value;
-                Logger.Log(key + " = " + value);
+                if (!CurrentValues.ContainsKey(key) || CurrentValues[key] != value)
+                {
+                    CurrentValues[key] = value;
+                    Logger.Log(key + " = " + value);
+                }
+            }
+        }
+
+        public static void ClearValues()
+        {
+            lock (CurrentValues)
+            {
+                CurrentValues.Clear();
             }
         }
     }
