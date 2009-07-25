@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using FiniteStateMachine;
 using WoWMemoryManager;
-using Util;
 
 
 namespace NakamarStates
@@ -14,11 +13,7 @@ namespace NakamarStates
         private long ClientConnectionLoadedTime = 0;
         private bool wasLoaded = false;
 
-        public WoWLoading(object machine, object memory) : base(machine, memory)
-        {
-            Logger.Log(wasLoaded.ToString());
-            Logger.Log(ClientConnectionLoadedTime.ToString());
-        }
+        public WoWLoading(object machine, object memory) : base(machine, memory) { }
 
         public override int Priority
         {
@@ -42,7 +37,7 @@ namespace NakamarStates
             if (Memory.pClientConnection == 0)
                 if (wasLoaded)
                 {
-                    Logger.Log("[WoWLoading] pClientConnection обнулён, похоже WoW закрывается, отключаю бота");
+                    Log("pClientConnection обнулён, похоже WoW закрывается, отключаю бота");
                     Machine.StopEngine();
                 }
                 else
@@ -53,7 +48,7 @@ namespace NakamarStates
                     if (ClientConnectionLoadedTime == 0)
                         ClientConnectionLoadedTime = DateTime.Now.Ticks;
                     wasLoaded = true;
-                    Logger.Log("[WoWLoading] pClientConnection инициализирован, предположительно в течение " + 
+                    Log("pClientConnection инициализирован, предположительно в течение " + 
                         "ближайших 20 сек WoW загрузится полностью");
                 }
         }

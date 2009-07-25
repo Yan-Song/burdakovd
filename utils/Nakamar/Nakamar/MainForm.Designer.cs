@@ -52,10 +52,14 @@
             this.StatusGroupBox = new System.Windows.Forms.GroupBox();
             this.LastStateValue = new System.Windows.Forms.Label();
             this.StatesPathBrowser = new System.Windows.Forms.OpenFileDialog();
+            this.StatesSettingsGroup = new System.Windows.Forms.GroupBox();
+            this.StatesList = new System.Windows.Forms.ListBox();
+            this.StateSettings = new System.Windows.Forms.Button();
             this.LogGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NeededFPSSelector)).BeginInit();
             this.ManageGroupBox.SuspendLayout();
             this.StatusGroupBox.SuspendLayout();
+            this.StatesSettingsGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // SaveSettingsTimer
@@ -305,11 +309,48 @@
             this.StatesPathBrowser.Filter = "Библиотеки (*.dll)|*.dll|Все файлы|*.*";
             this.StatesPathBrowser.Title = "Выбор библиотеки состояний";
             // 
+            // StatesSettingsGroup
+            // 
+            this.StatesSettingsGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.StatesSettingsGroup.Controls.Add(this.StateSettings);
+            this.StatesSettingsGroup.Controls.Add(this.StatesList);
+            this.StatesSettingsGroup.Location = new System.Drawing.Point(306, 12);
+            this.StatesSettingsGroup.Name = "StatesSettingsGroup";
+            this.StatesSettingsGroup.Size = new System.Drawing.Size(249, 133);
+            this.StatesSettingsGroup.TabIndex = 14;
+            this.StatesSettingsGroup.TabStop = false;
+            this.StatesSettingsGroup.Text = "Настройки состояний";
+            // 
+            // StatesList
+            // 
+            this.StatesList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.StatesList.FormattingEnabled = true;
+            this.StatesList.IntegralHeight = false;
+            this.StatesList.Location = new System.Drawing.Point(6, 19);
+            this.StatesList.Name = "StatesList";
+            this.StatesList.Size = new System.Drawing.Size(147, 108);
+            this.StatesList.Sorted = true;
+            this.StatesList.TabIndex = 0;
+            // 
+            // StateSettings
+            // 
+            this.StateSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.StateSettings.Location = new System.Drawing.Point(159, 19);
+            this.StateSettings.Name = "StateSettings";
+            this.StateSettings.Size = new System.Drawing.Size(84, 25);
+            this.StateSettings.TabIndex = 1;
+            this.StateSettings.Text = "Настроить...";
+            this.StateSettings.UseVisualStyleBackColor = true;
+            this.StateSettings.Click += new System.EventHandler(this.ChangeStateSettings);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(567, 440);
+            this.Controls.Add(this.StatesSettingsGroup);
             this.Controls.Add(this.StatusGroupBox);
             this.Controls.Add(this.ManageGroupBox);
             this.Controls.Add(this.LogGroupBox);
@@ -326,6 +367,7 @@
             this.ManageGroupBox.PerformLayout();
             this.StatusGroupBox.ResumeLayout(false);
             this.StatusGroupBox.PerformLayout();
+            this.StatesSettingsGroup.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -355,6 +397,9 @@
         private System.Windows.Forms.Button SelectStatesDirectoryButton;
         private System.Windows.Forms.OpenFileDialog StatesPathBrowser;
         private System.Windows.Forms.Label LastStateValue;
+        private System.Windows.Forms.GroupBox StatesSettingsGroup;
+        private System.Windows.Forms.Button StateSettings;
+        private System.Windows.Forms.ListBox StatesList;
     }
 }
 

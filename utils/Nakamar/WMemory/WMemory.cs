@@ -129,5 +129,10 @@ namespace WoWMemoryManager
             return Process.GetProcessById(BM.ProcessId).MainWindowHandle == GetForegroundWindow();
         }
 
+
+        public void SendKeys(string p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
