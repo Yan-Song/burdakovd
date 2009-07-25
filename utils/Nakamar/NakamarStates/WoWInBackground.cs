@@ -15,7 +15,7 @@ namespace NakamarStates
 
         public override int Priority
         {
-            get { return 1010000; }
+            get { return 10000; }
         }
 
         public override bool NeedToRun

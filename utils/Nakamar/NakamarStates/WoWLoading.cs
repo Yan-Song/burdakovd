@@ -47,7 +47,8 @@ namespace NakamarStates
                 if (!wasLoaded)
                 {
                     wasLoaded = true;
-                    Logger.Log("[WoWLoading] pClientConnection инициализирован, предположительно в течение ближайших 20 сек WoW загрузится полностью");
+                    Logger.Log("[WoWLoading] pClientConnection инициализирован, предположительно в течение " + 
+                        "ближайших 20 сек WoW загрузится полностью");
                 }
         }
     }
