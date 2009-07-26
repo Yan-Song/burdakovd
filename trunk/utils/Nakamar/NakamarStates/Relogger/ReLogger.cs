@@ -6,25 +6,32 @@ using System.Windows.Forms;
 using FiniteStateMachine;
 using NakamarStates.Properties;
 using WoWMemoryManager;
+using System.Windows.Input;
+using System.Threading;
 
 namespace NakamarStates
 {
     public class ReLogger : State
     {
-        private bool EnteredPasword = false;
+        private bool PasswordEntered = false;
         private bool LoggedIn = false;
-        private bool SelectedCharacter = false;
+        private bool CharacterSelected = false;
         private bool EnteredTheWorld = false;
+        private bool RealmWizardMessagePrinted = false;
 
         public ReLogger(object machine, object memory) : base(machine, memory) { }
 
         public override void Configure()
         {
-            Relogger.PasswordDialog f = new Relogger.PasswordDialog();
-            if (f.ShowDialog() == DialogResult.OK)
+            lock (Settings.Default)
             {
-                Settings.Default.Password = f.PasswordBox.Text;
-                Log("Пароль изменён");
+                Relogger.PasswordDialog f = new Relogger.PasswordDialog();
+                if (f.ShowDialog() == DialogResult.OK)
+                {
+                    Settings.Default.Password = f.PasswordBox.Text;
+                    Log("Пароль изменён");
+                }
+                Settings.Default.Save();
             }
         }
 
@@ -51,52 +58,63 @@ namespace NakamarStates
             {
                 if (LoggedIn)
                 {
-                    Log("Дисконнект");
+                    Log("Дисконнект. Закрываю WoW.");
                     Machine.StopEngine();
+                    Memory.StopWoW();
                 }
-                else if (!EnteredPasword)
+                else if (!PasswordEntered)
                     EnterPassword();
-                else
-                    Memory.WaitForInputIdle(); // ждать пока не залогинится
+            }
+            else if (state == GameState.RealmWizard)
+            {
+                LoggedIn = true;
+                if (!RealmWizardMessagePrinted)
+                {
+                    Log("Необходимо выбрать мир, сам я этого сделать не могу");
+                    RealmWizardMessagePrinted = true;
+                }
             }
             else if (state == GameState.Character)
             {
                 LoggedIn = true;
                 if (EnteredTheWorld)
                 {
-                    Log("Выкинуло из мира");
+                    Log("Выкинуло из мира. Закрываю WoW.");
                     Machine.StopEngine();
+                    Memory.StopWoW();
                 }
-                else if (!SelectedCharacter)
+                else if (!CharacterSelected)
                 {
                     Log("Авторизация прйдена");
                     SelectCharacter();
                 }
-                else
-                    Memory.WaitForInputIdle(); // ждать пока не зайдёт в мир
             }
             else if (state == GameState.World)
             {
-                Log("Вошёл в игровой мир");
+                Log("Вхожу в игровой мир");
+                LoggedIn = true;
                 EnteredTheWorld = true;
             }
         }
 
         private void SelectCharacter()
         {
-            // Memory.SendKeys(Enter);
-            throw new NotImplementedException();
+            Thread.Sleep(2000); // загрузка списка персонажей
+            Memory.KB.PressKey(Key.Enter);
+            CharacterSelected = true;
         }
 
         private void EnterPassword()
         {
-            lock (this) // Settings may be changed from main thread
+            Memory.WaitForInputIdle();
+            Log("Ввожу пароль");
+            lock (Settings.Default) // Settings may be changed from main thread
             {
-                Memory.SendKeys(Settings.Default.Password);
+                Memory.KB.SendText(Settings.Default.Password);
             }
-            // Memory.SendKeys(Enter);
-            throw new NotImplementedException();
+            Thread.Sleep(500); // на всякий случай
+            Memory.KB.PressKey(Key.Enter);
+            PasswordEntered = true;
         }
-
     }
 }

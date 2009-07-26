@@ -28,7 +28,7 @@ namespace NakamarStates
             {
                 if (Enabled)
                 {
-                    Logger.Watch("CurrentGameState", Memory.CurrentGameState().ToString());
+                    //Logger.Watch("CurrentGameState", Memory.CurrentGameState().ToString());
                 }
                 return false;
             }

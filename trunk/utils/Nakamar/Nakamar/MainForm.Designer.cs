@@ -53,8 +53,8 @@
             this.LastStateValue = new System.Windows.Forms.Label();
             this.StatesPathBrowser = new System.Windows.Forms.OpenFileDialog();
             this.StatesSettingsGroup = new System.Windows.Forms.GroupBox();
-            this.StatesList = new System.Windows.Forms.ListBox();
             this.StateSettings = new System.Windows.Forms.Button();
+            this.StatesList = new System.Windows.Forms.ListBox();
             this.LogGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NeededFPSSelector)).BeginInit();
             this.ManageGroupBox.SuspendLayout();
@@ -322,6 +322,17 @@
             this.StatesSettingsGroup.TabStop = false;
             this.StatesSettingsGroup.Text = "Настройки состояний";
             // 
+            // StateSettings
+            // 
+            this.StateSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.StateSettings.Location = new System.Drawing.Point(159, 19);
+            this.StateSettings.Name = "StateSettings";
+            this.StateSettings.Size = new System.Drawing.Size(84, 25);
+            this.StateSettings.TabIndex = 1;
+            this.StateSettings.Text = "Настроить...";
+            this.StateSettings.UseVisualStyleBackColor = true;
+            this.StateSettings.Click += new System.EventHandler(this.ChangeStateSettings);
+            // 
             // StatesList
             // 
             this.StatesList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -333,17 +344,6 @@
             this.StatesList.Size = new System.Drawing.Size(147, 108);
             this.StatesList.Sorted = true;
             this.StatesList.TabIndex = 0;
-            // 
-            // StateSettings
-            // 
-            this.StateSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.StateSettings.Location = new System.Drawing.Point(159, 19);
-            this.StateSettings.Name = "StateSettings";
-            this.StateSettings.Size = new System.Drawing.Size(84, 25);
-            this.StateSettings.TabIndex = 1;
-            this.StateSettings.Text = "Настроить...";
-            this.StateSettings.UseVisualStyleBackColor = true;
-            this.StateSettings.Click += new System.EventHandler(this.ChangeStateSettings);
             // 
             // MainForm
             // 
@@ -359,7 +359,7 @@
             this.Name = "MainForm";
             this.Text = "Программа =)";
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.LogGroupBox.ResumeLayout(false);
             this.LogGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NeededFPSSelector)).EndInit();

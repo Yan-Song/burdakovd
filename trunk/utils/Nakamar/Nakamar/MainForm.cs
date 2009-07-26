@@ -94,7 +94,7 @@ namespace Nakamar
             
         }
 
-        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             DisableBot();
             Logger.Log("Программа завершает свою работу");
@@ -279,7 +279,6 @@ namespace Nakamar
                         {
                             state.Configure();
                         }
-                        break;
                     }
             }
         }

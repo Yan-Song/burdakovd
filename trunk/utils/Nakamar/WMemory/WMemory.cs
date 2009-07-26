@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
+using System.Threading;
+using System.Windows.Input;
 using Magic;
 using Util;
 
@@ -28,12 +30,13 @@ uint pObjectManager = WoW.ReadUInt(pClientConnection + ObjectManagerOffset);
 
 namespace WoWMemoryManager
 {
-    public enum GameState { Login, Character, World };
+    public enum GameState { None, Login, RealmWizard, Character, World };
 
     public class MemoryManager
     {
         public BlackMagic BM;
         public Hashtable Cache;
+        public KeyBoard KB;
 
         #region Properties
 
@@ -45,7 +48,12 @@ namespace WoWMemoryManager
         public uint pObjectManager
         {
             get { return BM.ReadUInt(pClientConnection + BM.ReadUInt(FindPattern(Patterns.ObjectManagerOffset))); }
-        } 
+        }
+
+        public IntPtr WoWWindow
+        {
+            get { return Process.GetProcessById(BM.ProcessId).MainWindowHandle; }
+        }
 
         #endregion
 
@@ -53,6 +61,7 @@ namespace WoWMemoryManager
         {
             BM = new BlackMagic(id);
             Cache = cache;
+            KB = new KeyBoard(WoWWindow);
         }
 
         #region Pattern Methods
@@ -115,27 +124,7 @@ namespace WoWMemoryManager
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
 
-        /// <summary>
-        /// If the function fails, the return value is zero. To get extended error information, call GetLastError.
-        /// </summary>
-        /// <param name="hWnd"></param>
-        /// <param name="Msg"></param>
-        /// <param name="wParam"></param>
-        /// <param name="lParam"></param>
-        /// <returns></returns>
-        [return: MarshalAs(UnmanagedType.Bool)]
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool PostMessage(HandleRef hWnd, uint Msg, IntPtr wParam,
-           IntPtr lParam);
-
         #endregion
-
-        void PostMessageSafe(HandleRef hWnd, uint msg, IntPtr wParam, IntPtr lParam)
-        {
-            bool returnValue = PostMessage(hWnd, msg, wParam, lParam);
-            if (!returnValue)
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-        }
 
         /// <summary>
         /// возвращает тру если окно WoW сейчас активировано
@@ -143,7 +132,7 @@ namespace WoWMemoryManager
         /// <returns></returns>
         public bool IsWoWForeground()
         {
-            return Process.GetProcessById(BM.ProcessId).MainWindowHandle == GetForegroundWindow();
+            return WoWWindow == GetForegroundWindow();
         }
 
         public GameState CurrentGameState()
@@ -151,34 +140,33 @@ namespace WoWMemoryManager
             string state = BM.ReadASCIIString(Patterns.GameState, 100);
             if (state == "login")
                 return GameState.Login;
+
+            else if (state == "realmwizard")
+                return GameState.RealmWizard;
+
             else if (state == "charselect")
                 if (pObjectManager == 0)
                     return GameState.Character;
                 else
                     return GameState.World;
+
+            else if (state == "")
+                return GameState.None;
+
             else
-                throw new Exception();
+                throw new Exception(state);
         }
-
-        #region SendKeys
-
-        public void SendKeys(Keys k)
-        {
-            if (!IsWoWForeground()) return;
-            throw new NotImplementedException();
-        }
-
-        public void SendKeys(string p)
-        {
-            if (!IsWoWForeground()) return;
-            throw new NotImplementedException();
-        }
-
-        #endregion
 
         public void WaitForInputIdle()
         {
             Process.GetProcessById(BM.ProcessId).WaitForInputIdle();
+        }
+
+        public void StopWoW()
+        {
+            Process wow = Process.GetProcessById(BM.ProcessId);
+            wow.CloseMainWindow();
+            wow.WaitForExit();
         }
     }
 }
