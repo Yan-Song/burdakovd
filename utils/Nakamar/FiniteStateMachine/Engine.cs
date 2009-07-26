@@ -15,6 +15,8 @@ namespace FiniteStateMachine
 {
     public class Engine
     {
+        private static int WaitWorkerForTerminate = 10; // seconds
+
         private Thread _workerThread;
 
         public Type LastState;
@@ -115,11 +117,11 @@ namespace FiniteStateMachine
 
                 // ждём пока поток увидит что Running == false и завершится
                 if (_workerThread.IsAlive)
-                    _workerThread.Join(5000);
+                    _workerThread.Join(WaitWorkerForTerminate * 1000);
 
                 if (_workerThread.IsAlive)
                 {
-                    Logger.Log("Рабочий поток FSM не завершился в течение одной секунды, убиваю");
+                    Logger.Log("Рабочий поток FSM не завершился в течение " + WaitWorkerForTerminate + " секунд, убиваю");
                     _workerThread.Abort();
                     _workerThread.Join(); // ждём его завершения
                     Logger.Log("Рабочий поток FSM убит");

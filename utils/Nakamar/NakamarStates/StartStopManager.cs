@@ -5,6 +5,7 @@ using System.Text;
 using FiniteStateMachine;
 using WoWMemoryManager;
 using System.Diagnostics;
+using System.Threading;
 
 
 namespace NakamarStates
@@ -35,6 +36,7 @@ namespace NakamarStates
             if (!wasLoaded)
             {
                 Memory.WaitForInputIdle();
+                Thread.Sleep(5000); // WaitForInputIdle() что-то рановато возвращается =(
                 wasLoaded = true;
                 Log("WoW полностью загрузился, можно приступать к работе");
             }
@@ -43,6 +45,7 @@ namespace NakamarStates
             {
                 Log("pClientConnection обнулён, похоже WoW закрывается, отключаю бота");
                 Machine.StopEngine();
+                Memory.StopWoW();
             }
         }
     }
