@@ -38,6 +38,16 @@ namespace WoWMemoryManager
         public Hashtable Cache;
         public KeyBoard KB;
 
+        private void Log(string message)
+        {
+            Logger.Log(this.GetType().Name, message);
+        }
+
+        private void LogError(string message)
+        {
+            Logger.LogError(this.GetType().Name, message);
+        }
+
         #region Properties
 
         public uint pClientConnection
@@ -98,7 +108,7 @@ namespace WoWMemoryManager
                     return cached;
                 else
                 {
-                    Logger.Log("кэшированный оффсет FindPattern(" + key + ") == " + cached.ToString("X") + " устарел, ищем заново");
+                    Log("кэшированный оффсет FindPattern(" + key + ") == " + cached.ToString("X") + " устарел, ищем заново");
                     Cache.Remove(key);
                 }
             }
@@ -106,7 +116,7 @@ namespace WoWMemoryManager
             if (ans == (uint)BM.MainModule.BaseAddress) throw new ApplicationException("Pattern not found");
 
             Cache[key] = ans + pattern.Offset;
-            Logger.Log("найден новый оффсет FindPattern(" + key + ") == " + ((uint)Cache[key]).ToString("X"));
+            Log("найден новый оффсет FindPattern(" + key + ") == " + ((uint)Cache[key]).ToString("X"));
             return (uint)Cache[key];
         }
 

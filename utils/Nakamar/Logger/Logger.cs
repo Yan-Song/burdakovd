@@ -13,15 +13,15 @@ namespace Util
 
         public static LogFunction RawLog = new LogFunction(System.Console.WriteLine);
 
-        public static LogFunction Log = delegate(string message)
+        public static void Log(string prefix, string message)
         {
-            RawLog("[" + DateTime.Now.ToLongTimeString() + "] " + message);
-        };
+            RawLog("[" + DateTime.Now.ToLongTimeString() + "] [" + prefix + "] " + message);
+        }
 
-        public static LogFunction LogError = delegate(string message)
+        public static void LogError(string prefix, string message)
         {
-            Log("Ошибка: " + message);
-        };
+            Log(prefix, "Ошибка: " + message);
+        }
 
         /// <summary>
         /// функция записывает в лог изменения value, относительно предыдущего с тем же key
@@ -29,14 +29,14 @@ namespace Util
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static void Watch(string key, string value)
+        public static void Watch(string prefix, string key, string value)
         {
             lock(CurrentValues)
             {
                 if (!CurrentValues.ContainsKey(key) || CurrentValues[key] != value)
                 {
                     CurrentValues[key] = value;
-                    Logger.Log(key + " = " + value);
+                    Log(prefix, key + " = " + value);
                 }
             }
         }
