@@ -60,18 +60,13 @@ namespace WoWMemoryManager
             get { return BM.ReadUInt(pClientConnection + BM.ReadUInt(FindPattern(Patterns.ObjectManagerOffset))); }
         }
 
-        public IntPtr WoWWindow
-        {
-            get { return Process.GetProcessById(BM.ProcessId).MainWindowHandle; }
-        }
-
         #endregion
 
         public MemoryManager(int id, Hashtable cache)
         {
             BM = new BlackMagic(id);
             Cache = cache;
-            KB = new KeyBoard(WoWWindow);
+            KB = new KeyBoard(BM.WindowHandle);
         }
 
         #region Pattern Methods
@@ -142,7 +137,7 @@ namespace WoWMemoryManager
         /// <returns></returns>
         public bool IsWoWForeground()
         {
-            return WoWWindow == GetForegroundWindow();
+            return BM.WindowHandle == GetForegroundWindow();
         }
 
         public GameState CurrentGameState()
