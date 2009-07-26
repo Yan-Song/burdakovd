@@ -17,15 +17,22 @@ namespace Nakamar
             get { return _botenabled; }
             set
             {
-                StatesSettingsGroup.Enabled = RestartButton.Enabled = DisableBotButton.Enabled = _botenabled = value;
+                StatesList.Enabled = StateSettings.Enabled = RestartButton.Enabled = 
+                    DisableBotButton.Enabled = _botenabled = value;
+
                 EnableBotButton.Enabled = !value;
-                ManageGroupBox.Text = value ? "Бот включён" : "Бот выключен";
+                Text = value ? "Running" : "Not running";
             }
         }
         private WoWMemoryManager.MemoryManager WoW;
         private Engine FSM;
         private ulong PreviousFrameCount;
         private DateTime lastDisabled = new DateTime(0);
+
+        private void Log(string message)
+        {
+            Logger.Log("Main",  message);
+        }
 
         private void LogToFileFunction(string text)
         {
@@ -34,7 +41,7 @@ namespace Nakamar
                 if (Settings.Default.LogDirectory == "")
                 {
                     Settings.Default.SaveLogs = false;
-                    Logger.LogError("Не выбрана директория для логов");
+                    Logger.LogError("Main", "Не выбрана директория для логов");
                 }
                 else
                 {
@@ -90,14 +97,14 @@ namespace Nakamar
                     tmp(message);
             };
             
-            Logger.Log("Программа запущена");
+            Log("Программа запущена");
             
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             DisableBot();
-            Logger.Log("Программа завершает свою работу");
+            Log("Программа завершает свою работу");
             SaveSettings();
         }
 
@@ -117,7 +124,7 @@ namespace Nakamar
             Settings.Default.CallUpgrade = false;
             SaveSettings(); 
             // Logger-ом пользоваться ещё нельзя
-            Logger.Log("Настройки программы перенесены из предыдущей версии.");
+            Log("Настройки программы перенесены из предыдущей версии.");
         }
 
         /// <summary>
@@ -159,7 +166,7 @@ namespace Nakamar
             FSM = new Engine(WoW);
 
             // load modules
-            Logger.Log("Загружаю состояния из " + Settings.Default.StatesPath);
+            Log("Загружаю состояния из " + Settings.Default.StatesPath);
             FSM.LoadStates(Settings.Default.StatesPath);
             FSM.States.Sort();
 
@@ -171,7 +178,7 @@ namespace Nakamar
             FSM.StartEngine((int)Settings.Default.NeededFPS);
             BotEnabled = true;
 
-            Logger.Log("Бот включён, WoW process id: " + WoWId + ", загружено состояний: " + FSM.States.Count);
+            Log("Бот включён, WoW process id: " + WoWId + ", загружено состояний: " + FSM.States.Count);
         }
 
         private void DisableBot(object sender, EventArgs e)
@@ -189,7 +196,7 @@ namespace Nakamar
             WoW = null;
             BotEnabled = false;
             lastDisabled = DateTime.Now;
-            Logger.Log("Бот остановлен");
+            Log("Бот остановлен");
 
         }
 
@@ -222,17 +229,18 @@ namespace Nakamar
             // update fps value
             if (FSM != null)
             {
-                CurrentFPSValue.Text = (FSM.FrameCount - PreviousFrameCount).ToString();
-                Tooltip.SetToolTip(LastStateValue, FSM.LastState==null ? "" :
-                    FSM.LastState.Module + Environment.NewLine + FSM.LastState.AssemblyQualifiedName);
+                CurrentFPSValue.Visible = true;
+                CurrentFPSValue.Text = "FPS: "+(FSM.FrameCount - PreviousFrameCount);
+                LastStateValue.ToolTipText = FSM.LastState==null ? "" :
+                    FSM.LastState.Module + Environment.NewLine + FSM.LastState.AssemblyQualifiedName;
                 LastStateValue.Text = (FSM.LastState==null) ? "запускается" : FSM.LastState.Name;
                 PreviousFrameCount = FSM.FrameCount;
             }
             else
             {
-                CurrentFPSValue.Text = "?";
+                CurrentFPSValue.Visible = false;
                 LastStateValue.Text = "не работает";
-                Tooltip.SetToolTip(LastStateValue, "конечный автомат сейчас не запущен");
+                LastStateValue.ToolTipText = "конечный автомат сейчас не запущен";
                 PreviousFrameCount = 0;
             }
         }
@@ -244,7 +252,7 @@ namespace Nakamar
             if (result == DialogResult.OK)
             {
                 Settings.Default.LogDirectory = LogDirectoryBrowser.SelectedPath;
-                Logger.Log("Директория логов изменена на " + Settings.Default.LogDirectory);
+                Log("Директория логов изменена на " + Settings.Default.LogDirectory);
             }
         }
 
@@ -259,12 +267,12 @@ namespace Nakamar
             StatesPathBrowser.FileName = Settings.Default.StatesPath;
             if (StatesPathBrowser.ShowDialog() == DialogResult.OK)
             {
-                Logger.Log("Путь к библиотеке состояний обновлён. Изменения подействуют после перезапуска бота.");
+                Log("Путь к библиотеке состояний обновлён. Изменения подействуют после перезапуска бота.");
                 Settings.Default.StatesPath = StatesPathBrowser.FileName;
             }
         }
 
-        private void ChangeStateSettings(object sender, EventArgs e)
+        private void ConfigureState(object sender, EventArgs e)
         {
             int index = StatesList.SelectedIndex;
             if (index == -1)
@@ -283,5 +291,14 @@ namespace Nakamar
             }
         }
 
+        private void DoTransparency(object sender, EventArgs e)
+        {
+            Opacity = (double)Settings.Default.Opacity / 100;
+        }
+       
+        private void RemoveTransparency(object sender, EventArgs e)
+        {
+            Opacity = 1;
+        }
     }
 }

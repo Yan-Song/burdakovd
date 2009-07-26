@@ -121,10 +121,10 @@ namespace FiniteStateMachine
 
                 if (_workerThread.IsAlive)
                 {
-                    Logger.Log("Рабочий поток FSM не завершился в течение " + WaitWorkerForTerminate + " секунд, убиваю");
+                    Logger.Log("FSM", "Рабочий поток не завершился в течение " + WaitWorkerForTerminate + " секунд, убиваю");
                     _workerThread.Abort();
                     _workerThread.Join(); // ждём его завершения
-                    Logger.Log("Рабочий поток FSM убит");
+                    Logger.Log("FSM", "Рабочий поток убит");
                 }
 
                 // Clear out the thread object.
@@ -181,7 +181,7 @@ namespace FiniteStateMachine
             catch (Exception ex)
             {
                 // Feel free to change this to some other logging method.
-                Logger.LogError(ex.Message);
+                Logger.LogError("FSM", ex.Message);
             }
         }
     }

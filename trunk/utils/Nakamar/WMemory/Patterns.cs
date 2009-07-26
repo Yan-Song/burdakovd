@@ -44,6 +44,8 @@ namespace WoWMemoryManager
         /// <summary>
         /// returns an String with "login" for Login Screen and "charselect" for Charselect Screen.
         /// On entering World its "charselect"
+        /// it also can be "" while WoW is starting
+        /// and "realmwizard", when you choose a realm
         /// http://www.mmowned.com/forums/wow-memory-editing/241997-3-1-3-some-static-address-found.html
         /// </summary>
         public static uint GameState = 0x012A75C0;

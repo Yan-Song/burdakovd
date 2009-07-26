@@ -33,7 +33,7 @@ namespace FiniteStateMachine
 
         protected void Log(string message)
         {
-            Logger.Log("["+this.GetType()+"] "+message);
+            Logger.Log(this.GetType().Name, message);
         }
 
         public abstract int Priority { get; }
