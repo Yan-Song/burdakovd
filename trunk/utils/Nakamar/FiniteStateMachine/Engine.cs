@@ -10,6 +10,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using Util;
+using System.Text.RegularExpressions;
 
 namespace FiniteStateMachine
 {
@@ -35,7 +36,8 @@ namespace FiniteStateMachine
         }
 
         public List<State> States { get; private set; }
-        public bool Running { get; private set; }
+        public bool Running { get; set; }
+        public bool DoNotRestart { get; private set; }
         public ulong FrameCount { get; private set; }
 
         public virtual void Pulse()
@@ -87,6 +89,13 @@ namespace FiniteStateMachine
                     // Sleep for a 'frame'
                     Thread.Sleep((int)sleepTime);
                 }
+            }
+            catch (Exception e)
+            {
+                DoNotRestart = true;
+                Logger.LogError("FSM", "Необработанное исключение в рабочем потоке");
+                foreach(string line in Regex.Split(e.ToString(), Environment.NewLine))
+                    Logger.Log("FSM", " "+line);
             }
             finally
             {
