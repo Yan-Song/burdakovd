@@ -16,7 +16,10 @@ namespace FiniteStateMachine
 {
     public class Engine
     {
-        private static int WaitWorkerForTerminate = 10; // seconds
+        /// <summary>
+        /// сколько секунд ждать добровольного завершения worker
+        /// </summary>
+        private static int WaitWorkerForTerminate = 10;
 
         private Thread _workerThread;
 
