@@ -4,7 +4,8 @@ using System.Windows.Forms;
 using FiniteStateMachine;
 using Nakamar.Properties;
 using Util;
-using System.Diagnostics; // for Logger
+using System.Diagnostics;
+using System.Drawing; // for Logger
 
 
 namespace Nakamar
@@ -96,7 +97,7 @@ namespace Nakamar
                 else
                     tmp(message);
             };
-            
+
             Log("Программа запущена");
             
         }
@@ -205,11 +206,6 @@ namespace Nakamar
 
         }
 
-        private void ClearLog(object sender, EventArgs e)
-        {
-            LogBox.Items.Clear();
-        }
-
         private int[] WoWProcesses()
         {
             return Magic.SProcess.GetProcessesFromWindowTitle("World of Warcraft");
@@ -298,14 +294,36 @@ namespace Nakamar
             }
         }
 
-        private void DoTransparency(object sender, EventArgs e)
+        private void OnDeactivated(object sender, EventArgs e)
         {
             Opacity = (double)Settings.Default.Opacity / 100;
+            if (TransparentLogBox.Checked)
+                LogBox.BackColor = Color.FromArgb(0xff, 0xfd, 0xfe);
+            if(Settings.Default.HideButtons)
+            {
+                ManagementPanel.Hide();
+            }
         }
        
-        private void RemoveTransparency(object sender, EventArgs e)
+        private void OnActivated(object sender, EventArgs e)
         {
             Opacity = 1;
+            LogBox.BackColor = Color.FromName("Window");
+            ManagementPanel.Show();
+        }
+
+        private void LogFont_Click(object sender, EventArgs e)
+        {
+            if (LogBoxFontDialog.ShowDialog() == DialogResult.OK)
+            {
+                Settings.Default.LogBoxFont = LogBoxFontDialog.Font;
+                Settings.Default.LogBoxColor = LogBoxFontDialog.Color;
+            }
+        }
+
+        private void TransparentLogBox_CheckedChanged(object sender, EventArgs e)
+        {
+            OnActivated(null, null);
         }
     }
 }
