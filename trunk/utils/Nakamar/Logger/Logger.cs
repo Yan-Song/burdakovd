@@ -29,8 +29,10 @@ namespace Util
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static void Watch(string prefix, string key, string value)
+        public static void Watch(string prefix, string key, object ovalue)
         {
+            string value = ovalue == null ? "null" : ovalue.ToString();
+
             lock(CurrentValues)
             {
                 if (!CurrentValues.ContainsKey(key) || CurrentValues[key] != value)
