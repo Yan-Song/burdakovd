@@ -191,6 +191,11 @@ namespace Nakamar
             if (!BotEnabled) return;
 
             FSM.StopEngine();
+            if (FSM.DoNotRestart && Settings.Default.AutoEnable)
+            {
+                Log("Автозапуск отключён");
+                Settings.Default.AutoEnable = false;
+            }
             FSM = null;
             Settings.Default.FindPatternCache = WoW.Cache;
             WoW = null;
@@ -285,7 +290,9 @@ namespace Nakamar
                     {
                         lock (state)
                         {
+                            TopMost = false; // чтобы окно конфигурации не было ниже главного
                             state.Configure();
+                            TopMost = true;
                         }
                     }
             }
