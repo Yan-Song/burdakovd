@@ -182,5 +182,53 @@ namespace Nakamar.Properties {
                 this["TransparentOnlyInBackground"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TransparentLogBox {
+            get {
+                return ((bool)(this["TransparentLogBox"]));
+            }
+            set {
+                this["TransparentLogBox"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Microsoft Sans Serif, 8.25pt")]
+        public global::System.Drawing.Font LogBoxFont {
+            get {
+                return ((global::System.Drawing.Font)(this["LogBoxFont"]));
+            }
+            set {
+                this["LogBoxFont"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HideButtons {
+            get {
+                return ((bool)(this["HideButtons"]));
+            }
+            set {
+                this["HideButtons"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("WindowText")]
+        public global::System.Drawing.Color LogBoxColor {
+            get {
+                return ((global::System.Drawing.Color)(this["LogBoxColor"]));
+            }
+            set {
+                this["LogBoxColor"] = value;
+            }
+        }
     }
 }
