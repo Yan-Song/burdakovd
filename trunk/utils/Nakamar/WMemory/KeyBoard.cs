@@ -13,70 +13,28 @@ namespace WoWMemoryManager
 {
     public class KeyBoard
     {
-        #region DllImport
-
-        /// <summary>
-        /// If the function fails, the return value is zero. To get extended error information, call GetLastError.
-        /// </summary>
-        /// <param name="hWnd"></param>
-        /// <param name="Msg"></param>
-        /// <param name="wParam"></param>
-        /// <param name="lParam"></param>
-        /// <returns></returns>
-        [return: MarshalAs(UnmanagedType.Bool)]
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        static extern bool PostMessage(IntPtr hWnd, UInt32 Msg, UInt32 wParam,
-           UInt32 lParam);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        static extern short VkKeyScan(char ch);
-
-        [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string className, IntPtr windowTitle);
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport("user32.dll", EntryPoint = "FindWindow", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindowByCaption(IntPtr ZeroOnly, string lpWindowName);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        static extern uint MapVirtualKey(uint uCode, uint uMapType);
-
-        #endregion
-
         /// <summary>
         /// тут могут быть проблемы если окно не просто на заднем плане, а ещё и свёрнуто,
         /// то эта функция его не разворачивает, а активирует прямо свёрнутое, после чего оно ведёт себя странно
         /// </summary>
         public void CheckForeground()
         {
-            if (GetForegroundWindow() != window)
+            if (Extern.GetForegroundWindow() != window)
             {
-                SetForegroundWindow(window);
+                Extern.SetForegroundWindow(window);
             }
         }
 
         private void PostMessageSafe(UInt32 msg, UInt32 wParam, UInt32 lParam)
         {
-            bool returnValue = PostMessage(window, msg, wParam, lParam);
+            bool returnValue = Extern.PostMessage(window, msg, wParam, lParam);
             if (!returnValue)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
         }
 
         private uint ScanCode(int k)
         {
-            uint code = MapVirtualKey((uint)k, MAPVK_VK_TO_VSC);
+            uint code = Extern.MapVirtualKey((uint)k, MAPVK_VK_TO_VSC);
             Debug.Assert(code < 256);
             return code;
         }
