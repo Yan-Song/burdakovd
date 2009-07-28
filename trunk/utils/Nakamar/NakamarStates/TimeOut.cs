@@ -27,7 +27,7 @@ namespace NakamarStates
             get
             {
                 return (DateTime.Now - StartTime).TotalMinutes > WaitMinutes &&
-                        Memory.LastMessage == null;
+                        Memory.GetAddonMessage() == null;
             }
         }
 
@@ -43,7 +43,7 @@ namespace NakamarStates
                 Log("  Не удалось выбрать realm и получить список персонажей");
             else if (g == GameState.Character)
                 Log("  Не удалось войти в игровой мир");
-            else if (g == GameState.World && Memory.LastMessage == null)
+            else if (g == GameState.World && Memory.GetAddonMessage() == null)
             {
                 Log("  Не удалось связаться с аддоном");
                 Machine.DoNotRestart = true;
