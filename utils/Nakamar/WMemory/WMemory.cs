@@ -37,13 +37,9 @@ namespace WoWMemoryManager
         public BlackMagic BM;
         public Hashtable Cache;
         public KeyBoard KB;
-        public Hashtable DynamicCache;
+        private Hashtable DynamicCache;
         private static double[] signature = {901791, 349667, 371721, 139443, 213674};
-        public AddonMessage LastMessage
-        {
-            get;
-            private set;
-        }
+        private AddonMessage LastMessage;
 
         private void Log(string message)
         {
@@ -192,7 +188,7 @@ namespace WoWMemoryManager
             wow.WaitForExit();
         }
 
-        public uint CachedDoublePattern(double[] pattern)
+        private uint CachedDoublePattern(double[] pattern)
         {
             if (DynamicCache.Contains(pattern))
                 if (CheckDoublePattern((uint)DynamicCache[pattern], pattern))
@@ -212,7 +208,7 @@ namespace WoWMemoryManager
         /// также учитывает что значения гарантировано находятся по адресу кратному 8
         /// http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html
         /// </summary>
-        public uint FindDoublePattern(double[] pattern)
+        private uint FindDoublePattern(double[] pattern)
         {
             uint cached = CachedDoublePattern(pattern);
             if (cached != 0)
@@ -243,7 +239,7 @@ namespace WoWMemoryManager
             return 0;
         }
 
-        public uint FindDoublePattern(uint start, uint readBytes, double[] pattern)
+        private uint FindDoublePattern(uint start, uint readBytes, double[] pattern)
         {
             uint readDoubles = readBytes / 8;
 
@@ -268,7 +264,7 @@ namespace WoWMemoryManager
             return 0;
         }
 
-        public bool CheckDoublePattern(uint start, double[] pattern)
+        private bool CheckDoublePattern(uint start, double[] pattern)
         {
             return FindDoublePattern(start, (uint)pattern.Length * 16, pattern)==start;
         }
@@ -305,12 +301,12 @@ namespace WoWMemoryManager
             return result;
         }
 
-        public uint min(uint x, uint y)
+        private uint min(uint x, uint y)
         {
             return x < y ? x : y;
         }
 
-        public string GetRawAddonMessage(double[] signature)
+        private string GetRawAddonMessage(double[] signature)
         {
             uint p = CachedDoublePattern(signature);
             if (p == 0) return null;
@@ -323,10 +319,11 @@ namespace WoWMemoryManager
         public class AddonMessage
         {
             public int id;
-            public string text;
+            public string command;
+            public string[] arguments;
             public override string ToString()
             {
-                return "[AddonMessage #" + id + "]: " + text;
+                return "[AddonMessage #" + id + "]: " + command + "(" + string.Join(", ", arguments) + ")";
             }
         }
 
@@ -337,7 +334,10 @@ namespace WoWMemoryManager
             string[] ss = text.Split('|');
             AddonMessage result = new AddonMessage();
             result.id = int.Parse(ss[0]);
-            result.text = ss[1];
+            string[] tt = ss[1].Split(';');
+            result.arguments = new string[tt.Length-1];
+            Array.Copy(tt, 1, result.arguments, 0, tt.Length-1);
+            result.command = tt[0];
             return LastMessage = result;
         }
 
