@@ -44,8 +44,8 @@ namespace NakamarStates
             else if (Memory.pClientConnection == 0)
             {
                 Log("pClientConnection обнулён, похоже WoW закрывается, отключаю бота");
-                Machine.StopEngine();
                 Memory.StopWoW();
+                Machine.StopEngineByWorker();
             }
         }
     }

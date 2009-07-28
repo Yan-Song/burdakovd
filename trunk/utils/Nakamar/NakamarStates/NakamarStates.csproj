@@ -67,6 +67,7 @@
       <DependentUpon>PasswordDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Relogger\ReLogger.cs" />
+    <Compile Include="TimeOut.cs" />
     <Compile Include="Watcher.cs" />
     <Compile Include="StartStopManager.cs" />
   </ItemGroup>
