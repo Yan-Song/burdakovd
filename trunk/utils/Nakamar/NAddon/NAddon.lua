@@ -19,4 +19,4 @@ function NSendMessage(text)
 	data[6] = tostring(msgcount).."|"..text
 end
 
-NSendMessage("natroih")
+NSendMessage("nop")
