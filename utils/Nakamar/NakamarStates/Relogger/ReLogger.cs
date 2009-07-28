@@ -47,7 +47,7 @@ namespace NakamarStates
         {
             get
             {
-                return !EnteredTheWorld || Memory.CurrentGameState() != GameState.World;
+                return (!EnteredTheWorld || Memory.CurrentGameState() != GameState.World) && Memory.IsWoWForeground();
             }
         }
 
@@ -100,21 +100,25 @@ namespace NakamarStates
         private void SelectCharacter()
         {
             Thread.Sleep(5000); // загрузка списка персонажей
-            Memory.KB.PressKey(Key.Enter);
+            Log("Выбор персонажа, нажимаю Enter");
+            Memory.KB.PressKey(Key.Enter, true);
             CharacterSelected = true;
+            Log("Жду загрузки игрового мира");
+            Memory.WaitForInputIdle();
         }
 
         private void EnterPassword()
         {
-            Memory.WaitForInputIdle();
+
             Log("Ввожу пароль");
             lock (Settings.Default) // Settings may be changed from main thread
             {
-                Memory.KB.SendText(Settings.Default.Password);
+                Memory.KB.SendText(Settings.Default.Password, true);
             }
             Thread.Sleep(500); // на всякий случай
-            Memory.KB.PressKey(Key.Enter);
+            Memory.KB.PressKey(Key.Enter, true);
             PasswordEntered = true;
+            Log("Пароль введён, жду авторизации");
         }
     }
 }

@@ -167,7 +167,16 @@ namespace WoWMemoryManager
 
         public void WaitForInputIdle()
         {
+            // такая штука тоже часто срабатывает раньше времени
             Process.GetProcessById(BM.ProcessId).WaitForInputIdle();
+            TimeSpan responseTime;
+            do
+            {
+                DateTime before = DateTime.Now;
+                KB.PressKey(Key.LeftCtrl, true);
+                responseTime = DateTime.Now - before;
+            }
+            while (responseTime.TotalSeconds > 1);
         }
 
         public void StopWoW()
