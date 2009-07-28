@@ -107,6 +107,7 @@ namespace Nakamar
             DisableBot();
             Log("Программа завершает свою работу");
             SaveSettings();
+            Log("Настройки сохранены");
         }
 
         private void SaveSettings()
@@ -232,9 +233,9 @@ namespace Nakamar
             {
                 CurrentFPSValue.Visible = true;
                 CurrentFPSValue.Text = "FPS: "+(FSM.FrameCount - PreviousFrameCount);
-                LastStateValue.ToolTipText = FSM.LastState==null ? "" :
-                    FSM.LastState.Module + Environment.NewLine + FSM.LastState.AssemblyQualifiedName;
-                LastStateValue.Text = (FSM.LastState==null) ? "запускается" : FSM.LastState.Name;
+                LastStateValue.ToolTipText = FSM.CurrentState==null ? "" :
+                    FSM.CurrentState.Module + Environment.NewLine + FSM.CurrentState.AssemblyQualifiedName;
+                LastStateValue.Text = (FSM.CurrentState==null) ? "запускается" : FSM.CurrentState.Name;
                 PreviousFrameCount = FSM.FrameCount;
             }
             else

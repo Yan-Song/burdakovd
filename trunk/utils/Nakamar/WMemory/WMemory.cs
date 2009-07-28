@@ -37,6 +37,8 @@ namespace WoWMemoryManager
         public BlackMagic BM;
         public Hashtable Cache;
         public KeyBoard KB;
+        public Hashtable DynamicCache;
+        private static double[] signature = {901791, 349667, 371721, 139443, 213674};
 
         private void Log(string message)
         {
@@ -66,6 +68,7 @@ namespace WoWMemoryManager
         {
             BM = new BlackMagic(id);
             Cache = cache;
+            DynamicCache = new Hashtable();
             KB = new KeyBoard(BM.WindowHandle);
         }
 
@@ -173,5 +176,161 @@ namespace WoWMemoryManager
             wow.CloseMainWindow();
             wow.WaitForExit();
         }
+
+        public uint CachedDoublePattern(double[] pattern)
+        {
+            if (DynamicCache.Contains(pattern))
+                if (CheckDoublePattern((uint)DynamicCache[pattern], pattern))
+                    return (uint)DynamicCache[pattern];
+                else
+                {
+                    DynamicCache.Remove(pattern);
+                    Log("Сигнатура аддона потеряна");
+                }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// ищет последовательность double в памяти, учитывая что они располагаются не подряд,
+        /// а с промежутком в 8 байт на служебную информацию lua
+        /// также учитывает что значения гарантировано находятся по адресу кратному 8
+        /// http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html
+        /// </summary>
+        public uint FindDoublePattern(double[] pattern)
+        {
+            uint cached = CachedDoublePattern(pattern);
+            if (cached != 0)
+                return cached;
+
+            DateTime startTime = DateTime.Now;
+
+            uint bufferSize = 1<<26;
+
+            foreach(MEMORY_BASIC_INFORMATION m in Extern.EnumerateMemoryRanges(BM.ProcessHandle).Reverse())
+
+                if (m.State == MemoryState.MEM_COMMIT &&
+                    m.lType == MemoryType.MEM_PRIVATE &&
+                    m.Protect == (uint)ProtectStatus.READWRITE)
+
+                    for (uint start = m.BaseAddress; start < m.BaseAddress + m.RegionSize; start += bufferSize)
+                    {
+                        uint readBytes = min(bufferSize, m.BaseAddress + m.RegionSize - start);
+                        uint pos = FindDoublePattern(start, readBytes, pattern);
+                        if (pos != 0)
+                        {
+                            Log("Сигнатура аддона найдена по адресу " +
+                                pos.ToString("X") + " за " + (DateTime.Now-startTime).TotalSeconds + " сек.");
+                            DynamicCache[pattern] = pos;
+                            return pos;
+                        }
+                    }
+            return 0;
+        }
+
+        public uint FindDoublePattern(uint start, uint readBytes, double[] pattern)
+        {
+            uint readDoubles = readBytes / 8;
+
+            double[] buffer = ReadDoubles(start, readDoubles);
+
+            if (buffer == null) return 0;
+
+            int finish = (int)readDoubles - pattern.Length;
+
+
+            for (int i = 0; i < finish; ++i)
+            {
+                bool ok = true;
+
+                for (int j = 0, p = i; ok && j < pattern.Length; ++j, p += 2)
+                    if (pattern[j] != buffer[p])
+                        ok = false;
+
+                if (ok)
+                    return start + (uint)i * 8;
+            }
+            return 0;
+        }
+
+        public bool CheckDoublePattern(uint start, double[] pattern)
+        {
+            return FindDoublePattern(start, (uint)pattern.Length * 16, pattern)==start;
+        }
+
+        private double[] ReadDoubles(uint start, uint readDoubles)
+        {
+            uint readBytes = readDoubles * 8;
+            double[] result = new double[readDoubles];
+            IntPtr lpBuffer = IntPtr.Zero;
+
+            if(sizeof(byte) * 8 != sizeof(double))
+                throw new Exception("o_O");
+            
+            try
+			{
+                lpBuffer = Marshal.AllocHGlobal((int)readBytes);
+
+                uint iBytesRead = (uint)SMemory.ReadRawMemory(BM.ProcessHandle, start, lpBuffer, (int)readBytes);
+                
+                if (iBytesRead != readBytes)
+                    throw new Exception("ReadProcessMemory error in ReadDoubles");
+		
+                Marshal.Copy(lpBuffer, result, 0, result.Length);
+			}
+			catch
+			{
+				return null;
+			}
+			finally
+			{
+				if (lpBuffer != IntPtr.Zero)
+					Marshal.FreeHGlobal(lpBuffer);
+			}
+            return result;
+        }
+
+        public uint min(uint x, uint y)
+        {
+            return x < y ? x : y;
+        }
+
+        public string GetRawAddonMessage(double[] signature)
+        {
+            uint p = CachedDoublePattern(signature);
+            if (p == 0) return null;
+            p = BM.ReadUInt(p + 16 * (uint)signature.Length);
+            // http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html#post717199
+            string text = BM.ReadASCIIString(p+0x14, BM.ReadInt(p+0x10));
+            return text;
+        }
+
+        public class AddonMessage
+        {
+            public int id;
+            public string text;
+            public override string ToString()
+            {
+                return "[AddonMessage #" + id + "]: " + text;
+            }
+        }
+
+        public AddonMessage GetAddonMessage()
+        {
+            string text = GetRawAddonMessage(signature);
+            if (text == null) return null;
+            string[] ss = text.Split('|');
+            AddonMessage result = new AddonMessage();
+            result.id = int.Parse(ss[0]);
+            result.text = ss[1];
+            return result;
+        }
+
+        public AddonMessage RescanAddonMessage()
+        {
+            FindDoublePattern(signature);
+            return GetAddonMessage();
+        }
+
     }
 }

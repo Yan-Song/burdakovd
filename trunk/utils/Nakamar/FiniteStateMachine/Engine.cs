@@ -19,11 +19,11 @@ namespace FiniteStateMachine
         /// <summary>
         /// сколько секунд ждать добровольного завершения worker
         /// </summary>
-        private static int WaitWorkerForTerminate = 10;
+        private static int WaitWorkerForTerminate = 30;
 
         private Thread _workerThread;
 
-        public Type LastState;
+        public Type CurrentState;
         
         private WoWMemoryManager.MemoryManager Memory;
 
@@ -55,8 +55,9 @@ namespace FiniteStateMachine
                 {
                     if (state.NeedToRun)
                     {
+                        CurrentState = state.GetType();
                         state.Run();
-                        LastState = state.GetType();
+                        
                         // Break out of the iteration,
                         // as we found a state that has run.
                         // We don't want to run any more states
@@ -96,9 +97,9 @@ namespace FiniteStateMachine
             catch (Exception e)
             {
                 DoNotRestart = true;
-                Logger.LogError("FSM", "Необработанное исключение в рабочем потоке");
+                Logger.LogError("FSM-worker", "Необработанное исключение в рабочем потоке");
                 foreach(string line in Regex.Split(e.ToString(), Environment.NewLine))
-                    Logger.Log("FSM", " "+line);
+                    Logger.Log("FSM-worker", " "+line);
             }
             finally
             {
