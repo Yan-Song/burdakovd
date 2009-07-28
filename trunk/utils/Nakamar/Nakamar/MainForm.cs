@@ -92,10 +92,7 @@ namespace Nakamar
             
             Logger.RawLog = delegate(string message)
             {
-                if (InvokeRequired)
-                    BeginInvoke(tmp, new object[] {message});
-                else
-                    tmp(message);
+                BeginInvoke(tmp, new object[] {message});
             };
 
             Log("Программа запущена");

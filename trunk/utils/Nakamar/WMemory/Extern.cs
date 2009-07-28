@@ -99,6 +99,9 @@ namespace WoWMemoryManager
         public static extern bool PostMessage(IntPtr hWnd, UInt32 Msg, UInt32 wParam,
            UInt32 lParam);
 
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, UInt32 wParam, UInt32 lParam);
+
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern short VkKeyScan(char ch);
 
@@ -128,7 +131,7 @@ namespace WoWMemoryManager
         public static extern void GetSystemInfo(out SYSTEM_INFO lpSystemInfo);
 
         [DllImport("kernel32.dll")]
-        static extern uint VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress,
+        public static extern uint VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress,
            out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
 
         #endregion

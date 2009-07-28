@@ -25,11 +25,16 @@ namespace WoWMemoryManager
             }
         }
 
-        private void PostMessageSafe(UInt32 msg, UInt32 wParam, UInt32 lParam)
+        private void PostOrSendMessageSafe(UInt32 msg, UInt32 wParam, UInt32 lParam, bool wait)
         {
-            bool returnValue = Extern.PostMessage(window, msg, wParam, lParam);
-            if (!returnValue)
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+            if (wait)
+                Extern.SendMessage(window, msg, wParam, lParam);
+            else
+            {
+                bool returnValue = Extern.PostMessage(window, msg, wParam, lParam);
+                if (!returnValue)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
         }
 
         private uint ScanCode(int k)
@@ -74,57 +79,57 @@ namespace WoWMemoryManager
         
         #region SendKeys
 
-        public void KeyDown(int virtualKeyCode)
+        public void KeyDown(int virtualKeyCode, bool wait)
         {
             if (PressedKeys.Contains(virtualKeyCode)) return;
-            PostMessageSafe(WM_KEYDOWN, (uint)virtualKeyCode, KeyDown_lParam + (ScanCode(virtualKeyCode)<<ScanCodeOffset));
+            PostOrSendMessageSafe(WM_KEYDOWN, (uint)virtualKeyCode, KeyDown_lParam + (ScanCode(virtualKeyCode)<<ScanCodeOffset), wait);
             PressedKeys.Add(virtualKeyCode);
         }
 
-        public void KeyDown(Key key)
+        public void KeyDown(Key key, bool wait)
         {
-            KeyDown(KeyInterop.VirtualKeyFromKey(key));
+            KeyDown(KeyInterop.VirtualKeyFromKey(key), wait);
         }
 
-        public void KeyUp(int virtualKeyCode)
+        public void KeyUp(int virtualKeyCode, bool wait)
         {
             if (!PressedKeys.Contains(virtualKeyCode)) return;
             PressedKeys.Remove(virtualKeyCode);
-            PostMessageSafe(WM_KEYUP, (uint)virtualKeyCode, KeyUp_lParam + (ScanCode(virtualKeyCode) << ScanCodeOffset));
+            PostOrSendMessageSafe(WM_KEYUP, (uint)virtualKeyCode, KeyUp_lParam + (ScanCode(virtualKeyCode) << ScanCodeOffset), wait);
         }
 
-        public void KeyUp(Key key)
+        public void KeyUp(Key key, bool wait)
         {
-            KeyUp(KeyInterop.VirtualKeyFromKey(key));
+            KeyUp(KeyInterop.VirtualKeyFromKey(key), wait);
         }
 
         /// <summary>
         /// KeyDown and KeyUp
         /// </summary>
         /// <param name="k"></param>
-        public void PressKey(Key key)
+        public void PressKey(Key key, bool wait)
         {
-            PressKey(KeyInterop.VirtualKeyFromKey(key));
+            PressKey(KeyInterop.VirtualKeyFromKey(key), wait);
         }
 
-        public void PressKey(int virtualKeyCode)
+        public void PressKey(int virtualKeyCode, bool wait)
         {
-            KeyDown(virtualKeyCode);
+            KeyDown(virtualKeyCode, wait);
             Thread.Sleep(rnd.Next(20, 40));
-            KeyUp(virtualKeyCode);
+            KeyUp(virtualKeyCode, wait);
         }
 
-        public void SendText(char c)
+        public void SendText(char c, bool wait)
         {
-            PostMessageSafe(WM_CHAR, (uint)c, Char_lParam);
+            PostOrSendMessageSafe(WM_CHAR, (uint)c, Char_lParam, wait);
         }
 
-        public void SendText(string text)
+        public void SendText(string text, bool wait)
         {
             foreach (char c in text)
             {
-                Thread.Sleep(rnd.Next(50, 100));
-                SendText(c);
+                Thread.Sleep(rnd.Next(100, 200));
+                SendText(c, wait);
             }
         }
 

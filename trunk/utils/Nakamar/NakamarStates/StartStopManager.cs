@@ -6,6 +6,7 @@ using FiniteStateMachine;
 using WoWMemoryManager;
 using System.Diagnostics;
 using System.Threading;
+using System.Windows.Input;
 
 
 namespace NakamarStates
@@ -35,8 +36,7 @@ namespace NakamarStates
             // ждать пока WoW не запустится
             if (!wasLoaded)
             {
-                Memory.WaitForInputIdle();
-                Thread.Sleep(5000); // WaitForInputIdle() что-то рановато возвращается =(
+                Memory.WaitForInputIdle();              
                 wasLoaded = true;
                 Log("WoW полностью загрузился, можно приступать к работе");
             }
