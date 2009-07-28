@@ -132,10 +132,34 @@
   <metadata name="StatesPathBrowser.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>507, 18</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="StartWoWButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAzRJREFUOE91k31M
+        FHQYx3/35kGCHeLlvaKncHjgiQfcwXkgiIdy0SBBnQUiFLkVLGGp2MSUNpLZpiXaFLijBpuNDDWYhWyU
+        4BZ/lFs5GRCQKDA00K1dzsXq0zXXi06//z3P9v08z/Y8X4l4THKFgg0OjdjoVIsV5gVCIpOLkfEH4mLf
+        lOi6ckvMzc1JHvf8WyevWsw3x5MYbU2m91Qm3b7tdDcX0d+Sw81zmfSdTMNp1fBEQJZdy5A3Fd+eJA7u
+        f4tzHT0MDE0zMHybC51fU3NgL5/sS2HYl0H2GuOjkOilar47GpjcEsFXrVlcOPMh/UOTTN+9z+27v/Ht
+        4AQdn52gqy2f8fMxXG90YTaG/QdpqEzCW+GgbV8Y1AfRW/8ad/x+/Peuc2/mB8Zm/fR5X4e2ED4/osFb
+        buPETutDgPG5UHprnGxMtbGn0MKDasH4MRcjE2P88vNRpm81Mjw5w42WdP5sFbxdFkf22nguVyeiD5+P
+        8Nj0tL9pQ6U1kuaOZ7ZaykSdmub2s0z++BI3fyrnTOdZZts1+DuUZG5LZ6FxGRcrbXhsOkSRawkfFcYi
+        D9diWOfmWtV8fvUqqaot4caXVka77OyqKeL+pRAGm1RE5G4lSGfCtyOG4tQIxGaHAV9pHCH6CFRpOXSW
+        LeSPTh0NDeuZOq1muimc46c80BPB+d2LUb1QQqhhCacLLOQlGhCrl4bRvT+RZVFGZM5cakut/N62nMmx
+        rdypewb/+xKmhl4M9KI4WGxD5srHtNzIpb02rIZnEcFBcnoOJ1CeF4mISiGv0MPMewoYXcmVsnn07xRw
+        VcdsnZKcLesQJgdvbIqk653VBCsVDy9RkKFn0LuWFfEW9HYn35cEAB/Po7E0hg82R8NJwdVX5WitCZjj
+        orlWb2d7ZmD9fySVSDn2ShxfVKWQlR7J5WIFIztk1B3O591DmxgokNEbgD7vNvNpuYPaLWakUumj36iQ
+        yah0x9JcaGO3S0+eRUeGO4mMDQ5yo7RUJGtpenkVFe4YFHL5k/MQ2IhYnZqi5JXscidwKHsNBzxOKtbH
+        s80ejUWz6G/jU83/DxmhwUpM4SpMi8JYEBz0VONfbmzITqVnKN8AAAAASUVORK5CYII=
+</value>
+  </data>
   <metadata name="StatusBar.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>153, 36</value>
+    <value>146, 54</value>
   </metadata>
   <metadata name="LogBoxFontDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 55</value>
+  </metadata>
+  <metadata name="WoWPathBrowser.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>245, 54</value>
   </metadata>
 </root>

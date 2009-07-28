@@ -125,18 +125,6 @@ namespace Nakamar.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
-        public global::System.Windows.Forms.FormWindowState MainWindowState {
-            get {
-                return ((global::System.Windows.Forms.FormWindowState)(this["MainWindowState"]));
-            }
-            set {
-                this["MainWindowState"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool TopMost {
             get {
@@ -144,42 +132,6 @@ namespace Nakamar.Properties {
             }
             set {
                 this["TopMost"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
-        public int Opacity {
-            get {
-                return ((int)(this["Opacity"]));
-            }
-            set {
-                this["Opacity"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public double WindowOpacity {
-            get {
-                return ((double)(this["WindowOpacity"]));
-            }
-            set {
-                this["WindowOpacity"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool TransparentOnlyInBackground {
-            get {
-                return ((bool)(this["TransparentOnlyInBackground"]));
-            }
-            set {
-                this["TransparentOnlyInBackground"] = value;
             }
         }
         
@@ -228,6 +180,42 @@ namespace Nakamar.Properties {
             }
             set {
                 this["LogBoxColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool WoWAutoStart {
+            get {
+                return ((bool)(this["WoWAutoStart"]));
+            }
+            set {
+                this["WoWAutoStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Wow.exe")]
+        public string WoWPath {
+            get {
+                return ((string)(this["WoWPath"]));
+            }
+            set {
+                this["WoWPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int Opacity {
+            get {
+                return ((int)(this["Opacity"]));
+            }
+            set {
+                this["Opacity"] = value;
             }
         }
     }
