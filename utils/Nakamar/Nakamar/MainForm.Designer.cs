@@ -173,7 +173,7 @@
             this.StatesSettingsGroup.Controls.Add(this.StatesList);
             this.StatesSettingsGroup.Location = new System.Drawing.Point(6, 150);
             this.StatesSettingsGroup.Name = "StatesSettingsGroup";
-            this.StatesSettingsGroup.Size = new System.Drawing.Size(447, 245);
+            this.StatesSettingsGroup.Size = new System.Drawing.Size(725, 245);
             this.StatesSettingsGroup.TabIndex = 14;
             this.StatesSettingsGroup.TabStop = false;
             this.StatesSettingsGroup.Text = "Настройки состояний";
@@ -187,7 +187,7 @@
             this.StatesList.IntegralHeight = false;
             this.StatesList.Location = new System.Drawing.Point(6, 19);
             this.StatesList.Name = "StatesList";
-            this.StatesList.Size = new System.Drawing.Size(435, 191);
+            this.StatesList.Size = new System.Drawing.Size(713, 191);
             this.StatesList.Sorted = true;
             this.StatesList.TabIndex = 0;
             // 
@@ -237,7 +237,7 @@
             this.Tabs.Location = new System.Drawing.Point(0, 0);
             this.Tabs.Name = "Tabs";
             this.Tabs.SelectedIndex = 0;
-            this.Tabs.Size = new System.Drawing.Size(467, 427);
+            this.Tabs.Size = new System.Drawing.Size(745, 427);
             this.Tabs.TabIndex = 18;
             // 
             // ManagementPage
@@ -248,7 +248,7 @@
             this.ManagementPage.Location = new System.Drawing.Point(4, 22);
             this.ManagementPage.Name = "ManagementPage";
             this.ManagementPage.Padding = new System.Windows.Forms.Padding(3);
-            this.ManagementPage.Size = new System.Drawing.Size(459, 401);
+            this.ManagementPage.Size = new System.Drawing.Size(737, 401);
             this.ManagementPage.TabIndex = 0;
             this.ManagementPage.Text = "Управление";
             // 
@@ -265,12 +265,11 @@
             this.LogBox.Location = new System.Drawing.Point(3, 55);
             this.LogBox.Name = "LogBox";
             this.LogBox.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.LogBox.Size = new System.Drawing.Size(453, 343);
+            this.LogBox.Size = new System.Drawing.Size(731, 343);
             this.LogBox.TabIndex = 7;
             // 
             // ManagementPanel
             // 
-            this.ManagementPanel.AutoSize = true;
             this.ManagementPanel.Controls.Add(this.HideManagementButtons);
             this.ManagementPanel.Controls.Add(this.RestartButton);
             this.ManagementPanel.Controls.Add(this.DisableBotButton);
@@ -279,7 +278,7 @@
             this.ManagementPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.ManagementPanel.Location = new System.Drawing.Point(3, 3);
             this.ManagementPanel.Name = "ManagementPanel";
-            this.ManagementPanel.Size = new System.Drawing.Size(453, 52);
+            this.ManagementPanel.Size = new System.Drawing.Size(731, 52);
             this.ManagementPanel.TabIndex = 5;
             // 
             // HideManagementButtons
@@ -340,14 +339,13 @@
             this.SettingsPage.Location = new System.Drawing.Point(4, 22);
             this.SettingsPage.Name = "SettingsPage";
             this.SettingsPage.Padding = new System.Windows.Forms.Padding(3);
-            this.SettingsPage.Size = new System.Drawing.Size(459, 401);
+            this.SettingsPage.Size = new System.Drawing.Size(737, 401);
             this.SettingsPage.TabIndex = 1;
             this.SettingsPage.Text = "Настройки";
             this.SettingsPage.UseVisualStyleBackColor = true;
             // 
             // AutoScrollCheckBox
             // 
-            this.AutoScrollCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.AutoScrollCheckBox.AutoSize = true;
             this.AutoScrollCheckBox.Checked = global::Nakamar.Properties.Settings.Default.AutoScroll;
             this.AutoScrollCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -361,6 +359,8 @@
             // 
             // LogFont
             // 
+            this.LogFont.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.LogFont.ForeColor = System.Drawing.SystemColors.WindowText;
             this.LogFont.Location = new System.Drawing.Point(6, 65);
             this.LogFont.Name = "LogFont";
             this.LogFont.Size = new System.Drawing.Size(75, 23);
@@ -414,7 +414,7 @@
             this.StatusBar.Location = new System.Drawing.Point(0, 430);
             this.StatusBar.Name = "StatusBar";
             this.StatusBar.ShowItemToolTips = true;
-            this.StatusBar.Size = new System.Drawing.Size(467, 22);
+            this.StatusBar.Size = new System.Drawing.Size(745, 22);
             this.StatusBar.TabIndex = 23;
             // 
             // LastStateValue
@@ -447,6 +447,8 @@
             // 
             // LogBoxFontDialog
             // 
+            this.LogBoxFontDialog.Color = global::Nakamar.Properties.Settings.Default.LogBoxColor;
+            this.LogBoxFontDialog.Font = global::Nakamar.Properties.Settings.Default.LogBoxFont;
             this.LogBoxFontDialog.FontMustExist = true;
             this.LogBoxFontDialog.ShowColor = true;
             // 
@@ -454,7 +456,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(467, 452);
+            this.ClientSize = new System.Drawing.Size(745, 452);
             this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.Tabs);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::Nakamar.Properties.Settings.Default, "MainWindowLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -473,7 +475,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.OpacityTrackBar)).EndInit();
             this.Tabs.ResumeLayout(false);
             this.ManagementPage.ResumeLayout(false);
-            this.ManagementPage.PerformLayout();
             this.ManagementPanel.ResumeLayout(false);
             this.ManagementPanel.PerformLayout();
             this.SettingsPage.ResumeLayout(false);

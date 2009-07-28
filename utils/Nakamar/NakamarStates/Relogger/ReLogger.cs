@@ -85,7 +85,7 @@ namespace NakamarStates
                 }
                 else if (!CharacterSelected)
                 {
-                    Log("Авторизация прйдена");
+                    Log("Авторизация пройдена");
                     SelectCharacter();
                 }
             }
@@ -99,7 +99,7 @@ namespace NakamarStates
 
         private void SelectCharacter()
         {
-            Thread.Sleep(2000); // загрузка списка персонажей
+            Thread.Sleep(5000); // загрузка списка персонажей
             Memory.KB.PressKey(Key.Enter);
             CharacterSelected = true;
         }
