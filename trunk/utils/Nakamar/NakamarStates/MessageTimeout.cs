@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FiniteStateMachine;
+using WoWMemoryManager;
 
 namespace NakamarStates
 {
@@ -21,12 +22,15 @@ namespace NakamarStates
         {
             get
             {
+                if (Memory.CurrentGameState() != GameState.World)
+                    return false;
+
                 if (Memory.GetAddonMessage() != null)
                 {
                     int id = Memory.GetAddonMessage().id;
                     if (id != LastMessageId)
                     {
-                        LastMessageId = Memory.GetAddonMessage().id;
+                        LastMessageId = id;
                         LastMessageTime = DateTime.Now;
                     }
                 }
