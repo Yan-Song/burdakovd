@@ -59,8 +59,8 @@ namespace NakamarStates
                 if (LoggedIn)
                 {
                     Log("Дисконнект. Закрываю WoW.");
-                    Machine.StopEngine();
                     Memory.StopWoW();
+                    Machine.StopEngineByWorker();
                 }
                 else if (!PasswordEntered)
                     EnterPassword();
@@ -80,8 +80,8 @@ namespace NakamarStates
                 if (EnteredTheWorld)
                 {
                     Log("Выкинуло из мира. Закрываю WoW.");
-                    Machine.StopEngine();
                     Memory.StopWoW();
+                    Machine.StopEngineByWorker();
                 }
                 else if (!CharacterSelected)
                 {
@@ -105,6 +105,7 @@ namespace NakamarStates
             CharacterSelected = true;
             Log("Жду загрузки игрового мира");
             Memory.WaitForInputIdle();
+            Thread.Sleep(5000);
         }
 
         private void EnterPassword()

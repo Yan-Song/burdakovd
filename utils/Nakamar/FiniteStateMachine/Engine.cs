@@ -40,7 +40,7 @@ namespace FiniteStateMachine
 
         public List<State> States { get; private set; }
         public bool Running { get; set; }
-        public bool DoNotRestart { get; private set; }
+        public bool DoNotRestart { get; set; }
         public ulong FrameCount { get; private set; }
 
         public virtual void Pulse()
@@ -112,37 +112,42 @@ namespace FiniteStateMachine
             }
         }
 
+        /// <summary>
+        /// call only by worker thread
+        /// </summary>
+        public void StopEngineByWorker()
+        {
+            Running = false;
+        }
+
+        /// <summary>
+        /// call only from main thread
+        /// </summary>
         public void StopEngine()
         {
-            lock (this)
+            if (!Running && _workerThread == null)
             {
-                if (!Running && _workerThread == null)
-                {
-                    // Nothing to do.
-                    return;
-                }
+                // Nothing to do.
+                return;
+            }
 
-                // Make sure we let everyone know, we're not running anymore!
-                Running = false;
+            // Make sure we let everyone know, we're not running anymore!
+            Running = false;
 
-                if (Thread.CurrentThread.ManagedThreadId == _workerThread.ManagedThreadId)
-                    return; // don't wait ourselves, Running = false is enough
+            // ждём пока поток увидит что Running == false и завершится
+            if (_workerThread.IsAlive)
+                _workerThread.Join(WaitWorkerForTerminate * 1000);
 
-                // ждём пока поток увидит что Running == false и завершится
-                if (_workerThread.IsAlive)
-                    _workerThread.Join(WaitWorkerForTerminate * 1000);
+            if (_workerThread.IsAlive)
+            {
+                Logger.Log("FSM", "Рабочий поток не завершился в течение " + WaitWorkerForTerminate + " секунд, убиваю");
+                _workerThread.Abort();
+                _workerThread.Join(); // ждём его завершения
+                Logger.Log("FSM", "Рабочий поток убит");
+            }
 
-                if (_workerThread.IsAlive)
-                {
-                    Logger.Log("FSM", "Рабочий поток не завершился в течение " + WaitWorkerForTerminate + " секунд, убиваю");
-                    _workerThread.Abort();
-                    _workerThread.Join(); // ждём его завершения
-                    Logger.Log("FSM", "Рабочий поток убит");
-                }
-
-                // Clear out the thread object.
-                _workerThread = null;
-            }        
+            // Clear out the thread object.
+            _workerThread = null;    
         }
 
         public void LoadState(State state)

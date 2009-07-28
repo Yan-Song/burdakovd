@@ -39,6 +39,11 @@ namespace WoWMemoryManager
         public KeyBoard KB;
         public Hashtable DynamicCache;
         private static double[] signature = {901791, 349667, 371721, 139443, 213674};
+        public AddonMessage LastMessage
+        {
+            get;
+            private set;
+        }
 
         private void Log(string message)
         {
@@ -70,6 +75,7 @@ namespace WoWMemoryManager
             Cache = cache;
             DynamicCache = new Hashtable();
             KB = new KeyBoard(BM.WindowHandle);
+            LastMessage = null;
         }
 
         #region Pattern Methods
@@ -332,7 +338,7 @@ namespace WoWMemoryManager
             AddonMessage result = new AddonMessage();
             result.id = int.Parse(ss[0]);
             result.text = ss[1];
-            return result;
+            return LastMessage = result;
         }
 
         public AddonMessage RescanAddonMessage()
