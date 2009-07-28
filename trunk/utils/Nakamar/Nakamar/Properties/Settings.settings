@@ -26,20 +26,8 @@
     <Setting Name="StatesPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">NakamarStates.dll</Value>
     </Setting>
-    <Setting Name="MainWindowState" Type="System.Windows.Forms.FormWindowState" Scope="User">
-      <Value Profile="(Default)">Normal</Value>
-    </Setting>
     <Setting Name="TopMost" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="Opacity" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">100</Value>
-    </Setting>
-    <Setting Name="WindowOpacity" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
-    <Setting Name="TransparentOnlyInBackground" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="TransparentLogBox" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -52,6 +40,15 @@
     </Setting>
     <Setting Name="LogBoxColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">WindowText</Value>
+    </Setting>
+    <Setting Name="WoWAutoStart" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="WoWPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Wow.exe</Value>
+    </Setting>
+    <Setting Name="Opacity" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
     </Setting>
   </Settings>
 </SettingsFile>

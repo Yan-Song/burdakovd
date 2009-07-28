@@ -5,7 +5,8 @@ using FiniteStateMachine;
 using Nakamar.Properties;
 using Util;
 using System.Diagnostics;
-using System.Drawing; // for Logger
+using System.Drawing;
+using System.Collections.Generic; // for Logger
 
 
 namespace Nakamar
@@ -29,6 +30,7 @@ namespace Nakamar
         private Engine FSM;
         private ulong PreviousFrameCount;
         private DateTime lastDisabled = new DateTime(0);
+        private DateTime lastStartedWoW = new DateTime(0);
 
         private void Log(string message)
         {
@@ -96,6 +98,7 @@ namespace Nakamar
             };
 
             Log("Программа запущена");
+            Monitor(sender, e);
             
         }
 
@@ -190,10 +193,11 @@ namespace Nakamar
             if (!BotEnabled) return;
 
             FSM.StopEngine();
-            if (FSM.DoNotRestart && Settings.Default.AutoEnable)
+            if (FSM.DoNotRestart && (Settings.Default.AutoEnable || Settings.Default.WoWAutoStart))
             {
-                Log("Автозапуск отключён");
+                Log("Автозапуск WoW и бота отключён");
                 Settings.Default.AutoEnable = false;
+                Settings.Default.WoWAutoStart = false;
             }
             FSM = null;
             Settings.Default.FindPatternCache = WoW.Cache;
@@ -204,19 +208,29 @@ namespace Nakamar
 
         }
 
-        private int[] WoWProcesses()
+        private List<int> WoWProcesses()
         {
-            return Magic.SProcess.GetProcessesFromWindowTitle("World of Warcraft");
+            List<int> ans = new List<int>();
+            foreach (Process p in Process.GetProcessesByName("wow"))
+                if (p.MainWindowTitle == "World of Warcraft")
+                    ans.Add(p.Id);
+
+            return ans;
         }
 
         private bool IsOneWoWRunning()
         {
-            int[] ps = WoWProcesses();
-            return ps!=null && ps.Length == 1;
+            return WoWProcesses().Count == 1;
         }
 
         private void Monitor(object sender, EventArgs e)
         {
+            // run WoW if needed
+            if (Settings.Default.WoWAutoStart && !IsWoWRunning())
+                StartWoW(sender, e);
+
+            StartWoWButton.Enabled = !IsWoWRunning();
+
             // stop bot if something goes wrong
             if (BotEnabled && !(FSM.Running && IsOneWoWRunning()))
                 DisableBot();
@@ -242,6 +256,11 @@ namespace Nakamar
                 LastStateValue.ToolTipText = "конечный автомат сейчас не запущен";
                 PreviousFrameCount = 0;
             }
+        }
+
+        private bool IsWoWRunning()
+        {
+            return WoWProcesses().Count != 0;
         }
 
         private void SelectLogDirectory(object sender, EventArgs e)
@@ -322,6 +341,28 @@ namespace Nakamar
         private void TransparentLogBox_CheckedChanged(object sender, EventArgs e)
         {
             OnActivated(null, null);
+        }
+
+        private void WoWPath_Click(object sender, EventArgs e)
+        {
+            WoWPathBrowser.FileName = Settings.Default.WoWPath;
+            if (WoWPathBrowser.ShowDialog() == DialogResult.OK)
+                Settings.Default.WoWPath = WoWPathBrowser.FileName;           
+        }
+
+        private void StartWoW(object sender, EventArgs e)
+        {
+            if (File.Exists(Settings.Default.WoWPath))
+                if (Settings.Default.WoWPath.EndsWith("Wow.exe"))
+                {
+                    Log("Запускаю " + Settings.Default.WoWPath);
+                    Process.Start(Settings.Default.WoWPath).WaitForInputIdle();
+                    Log("WoW запущен");
+                }
+                else
+                    Log("нужен файл Wow.exe");
+            else
+                Log("Файл Wow.exe не найден");
         }
     }
 }

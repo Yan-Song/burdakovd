@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.SaveSettingsTimer = new System.Windows.Forms.Timer(this.components);
             this.Tooltip = new System.Windows.Forms.ToolTip(this.components);
             this.NeededFPSSelector = new System.Windows.Forms.NumericUpDown();
@@ -53,6 +54,8 @@
             this.DisableBotButton = new System.Windows.Forms.Button();
             this.EnableBotButton = new System.Windows.Forms.Button();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.WoWAutoStart = new System.Windows.Forms.CheckBox();
+            this.WoWPath = new System.Windows.Forms.Button();
             this.AutoScrollCheckBox = new System.Windows.Forms.CheckBox();
             this.LogFont = new System.Windows.Forms.Button();
             this.TransparentLogBox = new System.Windows.Forms.CheckBox();
@@ -63,6 +66,8 @@
             this.CurrentFPSValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.LogBoxFontDialog = new System.Windows.Forms.FontDialog();
+            this.WoWPathBrowser = new System.Windows.Forms.OpenFileDialog();
+            this.StartWoWButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.NeededFPSSelector)).BeginInit();
             this.StatesSettingsGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OpacityTrackBar)).BeginInit();
@@ -101,7 +106,7 @@
             // SelectStatesDirectoryButton
             // 
             this.SelectStatesDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.SelectStatesDirectoryButton.Location = new System.Drawing.Point(6, 216);
+            this.SelectStatesDirectoryButton.Location = new System.Drawing.Point(6, 191);
             this.SelectStatesDirectoryButton.Name = "SelectStatesDirectoryButton";
             this.SelectStatesDirectoryButton.Size = new System.Drawing.Size(84, 23);
             this.SelectStatesDirectoryButton.TabIndex = 14;
@@ -113,7 +118,7 @@
             // StateSettings
             // 
             this.StateSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.StateSettings.Location = new System.Drawing.Point(96, 215);
+            this.StateSettings.Location = new System.Drawing.Point(96, 190);
             this.StateSettings.Name = "StateSettings";
             this.StateSettings.Size = new System.Drawing.Size(84, 25);
             this.StateSettings.TabIndex = 1;
@@ -171,9 +176,9 @@
             this.StatesSettingsGroup.Controls.Add(this.StateSettings);
             this.StatesSettingsGroup.Controls.Add(this.SelectStatesDirectoryButton);
             this.StatesSettingsGroup.Controls.Add(this.StatesList);
-            this.StatesSettingsGroup.Location = new System.Drawing.Point(6, 150);
+            this.StatesSettingsGroup.Location = new System.Drawing.Point(6, 175);
             this.StatesSettingsGroup.Name = "StatesSettingsGroup";
-            this.StatesSettingsGroup.Size = new System.Drawing.Size(725, 245);
+            this.StatesSettingsGroup.Size = new System.Drawing.Size(725, 220);
             this.StatesSettingsGroup.TabIndex = 14;
             this.StatesSettingsGroup.TabStop = false;
             this.StatesSettingsGroup.Text = "Настройки состояний";
@@ -187,7 +192,7 @@
             this.StatesList.IntegralHeight = false;
             this.StatesList.Location = new System.Drawing.Point(6, 19);
             this.StatesList.Name = "StatesList";
-            this.StatesList.Size = new System.Drawing.Size(713, 191);
+            this.StatesList.Size = new System.Drawing.Size(713, 166);
             this.StatesList.Sorted = true;
             this.StatesList.TabIndex = 0;
             // 
@@ -270,6 +275,7 @@
             // 
             // ManagementPanel
             // 
+            this.ManagementPanel.Controls.Add(this.StartWoWButton);
             this.ManagementPanel.Controls.Add(this.HideManagementButtons);
             this.ManagementPanel.Controls.Add(this.RestartButton);
             this.ManagementPanel.Controls.Add(this.DisableBotButton);
@@ -325,6 +331,8 @@
             // 
             // SettingsPage
             // 
+            this.SettingsPage.Controls.Add(this.WoWAutoStart);
+            this.SettingsPage.Controls.Add(this.WoWPath);
             this.SettingsPage.Controls.Add(this.AutoScrollCheckBox);
             this.SettingsPage.Controls.Add(this.LogFont);
             this.SettingsPage.Controls.Add(this.TransparentLogBox);
@@ -343,6 +351,28 @@
             this.SettingsPage.TabIndex = 1;
             this.SettingsPage.Text = "Настройки";
             this.SettingsPage.UseVisualStyleBackColor = true;
+            // 
+            // WoWAutoStart
+            // 
+            this.WoWAutoStart.AutoSize = true;
+            this.WoWAutoStart.Checked = global::Nakamar.Properties.Settings.Default.WoWAutoStart;
+            this.WoWAutoStart.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::Nakamar.Properties.Settings.Default, "WoWAutoStart", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.WoWAutoStart.Location = new System.Drawing.Point(32, 149);
+            this.WoWAutoStart.Name = "WoWAutoStart";
+            this.WoWAutoStart.Size = new System.Drawing.Size(116, 17);
+            this.WoWAutoStart.TabIndex = 24;
+            this.WoWAutoStart.Text = "Автозапуск WoW";
+            this.WoWAutoStart.UseVisualStyleBackColor = true;
+            // 
+            // WoWPath
+            // 
+            this.WoWPath.Location = new System.Drawing.Point(6, 149);
+            this.WoWPath.Name = "WoWPath";
+            this.WoWPath.Size = new System.Drawing.Size(20, 20);
+            this.WoWPath.TabIndex = 23;
+            this.WoWPath.Text = "…";
+            this.WoWPath.UseVisualStyleBackColor = true;
+            this.WoWPath.Click += new System.EventHandler(this.WoWPath_Click);
             // 
             // AutoScrollCheckBox
             // 
@@ -420,7 +450,7 @@
             // LastStateValue
             // 
             this.LastStateValue.Name = "LastStateValue";
-            this.LastStateValue.Size = new System.Drawing.Size(427, 17);
+            this.LastStateValue.Size = new System.Drawing.Size(705, 17);
             this.LastStateValue.Spring = true;
             this.LastStateValue.Text = "state";
             this.LastStateValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -451,6 +481,23 @@
             this.LogBoxFontDialog.Font = global::Nakamar.Properties.Settings.Default.LogBoxFont;
             this.LogBoxFontDialog.FontMustExist = true;
             this.LogBoxFontDialog.ShowColor = true;
+            // 
+            // WoWPathBrowser
+            // 
+            this.WoWPathBrowser.FileName = "Wow.exe";
+            this.WoWPathBrowser.Filter = "Программы (*.exe)|*.exe";
+            this.WoWPathBrowser.ReadOnlyChecked = true;
+            // 
+            // StartWoWButton
+            // 
+            this.StartWoWButton.Image = ((System.Drawing.Image)(resources.GetObject("StartWoWButton.Image")));
+            this.StartWoWButton.Location = new System.Drawing.Point(197, 3);
+            this.StartWoWButton.Name = "StartWoWButton";
+            this.StartWoWButton.Size = new System.Drawing.Size(25, 23);
+            this.StartWoWButton.TabIndex = 22;
+            this.StartWoWButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.StartWoWButton.UseVisualStyleBackColor = true;
+            this.StartWoWButton.Click += new System.EventHandler(this.StartWoW);
             // 
             // MainForm
             // 
@@ -522,6 +569,10 @@
         private System.Windows.Forms.Button EnableBotButton;
         private System.Windows.Forms.CheckBox AutoEnable;
         private System.Windows.Forms.ListBox LogBox;
+        private System.Windows.Forms.Button WoWPath;
+        private System.Windows.Forms.CheckBox WoWAutoStart;
+        private System.Windows.Forms.OpenFileDialog WoWPathBrowser;
+        private System.Windows.Forms.Button StartWoWButton;
     }
 }
 
