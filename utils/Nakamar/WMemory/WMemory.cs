@@ -333,7 +333,7 @@ namespace WoWMemoryManager
         public AddonMessage GetAddonMessage()
         {
             string text = GetRawAddonMessage(signature);
-            if (text == null) return null;
+            if (text == null) return LastMessage;
             string[] ss = text.Split('|');
             AddonMessage result = new AddonMessage();
             result.id = int.Parse(ss[0]);
