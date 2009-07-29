@@ -42,14 +42,21 @@ namespace NakamarStates
         {
             if (point.Name == null)
             {
-                int n = 1;
-                do
-                {
-                    point.Name = "WayPoint" + n++;
-                }
-                while (this.ContainsKey(point.Name));
+                point.Name = NewName();
             }
             this[point.Name] = point;
+        }
+
+        public string NewName()
+        {
+            string name;
+            int n = 1;
+            do
+            {
+                name = "WayPoint" + n++;
+            }
+            while (this.ContainsKey(name));
+            return name;
         }
     }
 }

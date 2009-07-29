@@ -9,7 +9,7 @@ namespace NakamarStates
 {
     public class MessageTimeout : State
     {
-        DateTime LastMessageTime;
+        DateTime LastMessageTime = DateTime.Now;
         int LastMessageId = -1;
         const int WaitMinutes = 5;
 
@@ -24,7 +24,10 @@ namespace NakamarStates
         {
             get
             {
-                if (Memory.CurrentGameState() != GameState.World)
+#warning remove this line
+                return false; //while debugging
+
+                if (Memory.CurrentGameState != GameState.World)
                     return false;
 
                 if (Memory.GetAddonMessage() != null)

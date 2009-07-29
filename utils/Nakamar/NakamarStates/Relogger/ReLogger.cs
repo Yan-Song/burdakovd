@@ -47,13 +47,13 @@ namespace NakamarStates
         {
             get
             {
-                return (!EnteredTheWorld || Memory.CurrentGameState() != GameState.World) && Memory.IsWoWForeground();
+                return (!EnteredTheWorld || Memory.CurrentGameState != GameState.World) && Memory.IsWoWForeground();
             }
         }
 
         public override void Run()
         {
-            GameState state = Memory.CurrentGameState();
+            GameState state = Memory.CurrentGameState;
             if (state == GameState.Login)
             {
                 if (LoggedIn)

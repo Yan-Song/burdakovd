@@ -24,8 +24,8 @@ namespace NakamarStates
         {
             get
             {
-                return DateTime.Now > nextScan && Memory.CurrentGameState()==GameState.World &&
-                    Memory.GetAddonMessage() == null;
+                return DateTime.Now > nextScan && Memory.CurrentGameState==GameState.World &&
+                    Memory.GetAddonMessage(false) == null;
             }
         }
 

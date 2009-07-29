@@ -6,6 +6,7 @@ using FiniteStateMachine;
 using NakamarStates.Properties;
 using System.IO;
 using System.Windows.Forms;
+using WoWMemoryManager;
 
 namespace NakamarStates
 {
@@ -89,7 +90,7 @@ namespace NakamarStates
         }
 
         /// <summary>
-        /// less than Relogger, and more than MessageScanner
+        /// less than Relogger, but more than MessageScanner
         /// </summary>
         public override int Priority
         {
@@ -100,14 +101,109 @@ namespace NakamarStates
         {
             get
             {
-                return
-                    (Memory.NewAddonMessage() && Memory.GetAddonMessage().command == "waypoint")
-                    ||
-                    (Destination != null);
+                if (Destination != null)
+                    return true; // need to move
+                if (!Memory.NewAddonMessage())
+                    return false; // nothing to process
+                string command = Memory.GetAddonMessage().command;
+                return command == "waypoint" || command == "goto" || command == "break";
             }
         }
 
         public override void Run()
+        {
+            AddonMessage m = Memory.GetAddonMessage();
+
+            if (Memory.NewAddonMessage())
+            {
+                if (m.command == "goto")
+                {
+                    SetDestination(m);
+                    Memory.ProcessAddonMessage(m.id);
+                }
+                else if (m.command == "break" && Destination != null)
+                {
+                    Destination = null;
+                    Log("Отменяю движение");
+                    Memory.KB.KeyUpAll();
+                    // do not ProcessAddonMessage(), because other states need to break too
+                }
+                else if (m.command == "waypoint")
+                {
+                    ManageWayPoints(m);
+                }
+            }
+            else if (Destination != null)
+            {
+                Navigate();
+            }
+            else
+                throw new Exception("o_O");
+
+        }
+
+        private void ManageWayPoints(AddonMessage m)
+        {
+            string command = m.arguments[0];
+            if (command == "add")
+                AddWayPoint(m);
+            else if (command == "remove" || command == "delete")
+                RemoveWayPoint(m);
+            else if (command == "rename")
+                RenameWayPoint(m);
+            else
+                throw new NotImplementedException(command);
+        }
+
+        private void RenameWayPoint(AddonMessage m)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void RemoveWayPoint(AddonMessage m)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AddWayPoint(AddonMessage m)
+        {
+            WayPointType type = (WayPointType)Enum.Parse(typeof(WayPointType), m.arguments[1], true);
+            string name;
+            if (m.arguments.Length == 2)
+                name = WayPoints.NewName();
+            else
+                name = m.arguments[2];
+            if (type == WayPointType.Simple)
+                AddSimpleWayPoint(name);
+            else if (type == WayPointType.NPC)
+                AddNPCWayPoint(name);
+            else if (type == WayPointType.Mailbox)
+                AddMailboxWayPoint(name);
+            else
+                throw new NotImplementedException();
+        }
+
+        private void AddMailboxWayPoint(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AddNPCWayPoint(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AddSimpleWayPoint(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Navigate()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SetDestination(AddonMessage addonMessage)
         {
             throw new NotImplementedException();
         }
