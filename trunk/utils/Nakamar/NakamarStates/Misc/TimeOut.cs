@@ -33,7 +33,7 @@ namespace NakamarStates
 
         public override void Run()
         {
-            GameState g = Memory.CurrentGameState();
+            GameState g = Memory.CurrentGameState;
 
             Log("Прошло " + WaitMinutes +
                 " минут с момента запуска бота, но до сих пор не удалось получить ни одного сообщения от аддона");

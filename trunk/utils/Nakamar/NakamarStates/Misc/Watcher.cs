@@ -5,6 +5,8 @@ using System.Text;
 using FiniteStateMachine;
 using WoWMemoryManager;
 using Util;
+using WoWMemoryManager.WoWObject;
+using System.Collections;
 
 
 namespace NakamarStates
@@ -31,6 +33,18 @@ namespace NakamarStates
                     //Logger.Watch("CurrentGameState", Memory.CurrentGameState());
                     //Logger.Watch("Watcher", "CurrentState", Machine.CurrentState);
                     Logger.Watch("Watcher", "GetAddonMessage()", Memory.GetAddonMessage());
+                    //Logger.Watch("Watcher", Memory.ObjectManager.Objects.
+
+                    if (Memory.CurrentGameState == GameState.World)
+                    {
+                        //Logger.Watch("Watcher", "Objects.count", Memory.ObjectManager.Objects.Count());
+                        //Logger.Watch("Watcher", "Players.count", Memory.ObjectManager.Players.Count());
+                        //Logger.Watch("Watcher", "NPC.count", Memory.ObjectManager.NPC.Count());
+
+                        //foreach (NpcObject npc in Memory.ObjectManager.NPC)
+                        //    Logger.Watch("Watcher", "GUID:" + npc.Guid.ToString("X"), npc.ToString());
+                    }
+
                 }
                 return false;
             }

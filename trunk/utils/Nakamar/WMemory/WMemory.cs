@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows.Input;
 using Magic;
 using Util;
+using WoWMemoryManager.WoWObject;
 
 /*
 // вычисляем оффсеты
@@ -32,6 +33,17 @@ namespace WoWMemoryManager
 {
     public enum GameState { None, Login, RealmWizard, Character, World };
 
+    public class AddonMessage
+    {
+        public int id;
+        public string command;
+        public string[] arguments;
+        public override string ToString()
+        {
+            return "[AddonMessage #" + id + "]: " + command + "(" + string.Join(", ", arguments) + ")";
+        }
+    }
+
     public class MemoryManager
     {
         public BlackMagic BM;
@@ -41,6 +53,14 @@ namespace WoWMemoryManager
         private static double[] signature = {901791, 349667, 371721, 139443, 213674};
         private AddonMessage LastMessage;
         private int LastProcessedMessage = -1;
+
+        public ObjectManager ObjectManager
+        {
+            get
+            {
+                return new ObjectManager(BM, pObjectManager);
+            }
+        }
 
         private void Log(string message)
         {
@@ -146,26 +166,29 @@ namespace WoWMemoryManager
             return BM.WindowHandle == GetForegroundWindow();
         }
 
-        public GameState CurrentGameState()
+        public GameState CurrentGameState
         {
-            string state = BM.ReadASCIIString(Patterns.GameState, 100);
-            if (state == "login")
-                return GameState.Login;
+            get
+            {
+                string state = BM.ReadASCIIString(Patterns.GameState, 100);
+                if (state == "login")
+                    return GameState.Login;
 
-            else if (state == "realmwizard")
-                return GameState.RealmWizard;
+                else if (state == "realmwizard")
+                    return GameState.RealmWizard;
 
-            else if (state == "charselect")
-                if (pObjectManager == 0)
-                    return GameState.Character;
+                else if (state == "charselect")
+                    if (pObjectManager == 0)
+                        return GameState.Character;
+                    else
+                        return GameState.World;
+
+                else if (state == "")
+                    return GameState.None;
+
                 else
-                    return GameState.World;
-
-            else if (state == "")
-                return GameState.None;
-
-            else
-                throw new Exception(state);
+                    throw new Exception(state);
+            }
         }
 
         public void WaitForInputIdle()
@@ -317,21 +340,19 @@ namespace WoWMemoryManager
             return text;
         }
 
-        public class AddonMessage
-        {
-            public int id;
-            public string command;
-            public string[] arguments;
-            public override string ToString()
-            {
-                return "[AddonMessage #" + id + "]: " + command + "(" + string.Join(", ", arguments) + ")";
-            }
-        }
-
         public AddonMessage GetAddonMessage()
         {
+            return GetAddonMessage(true);
+        }
+
+        /// <summary>
+        /// id|command;arg1;arg2;...
+        /// </summary>
+        /// <returns></returns>
+        public AddonMessage GetAddonMessage(bool lastIfPatternFailed)
+        {
             string text = GetRawAddonMessage(signature);
-            if (text == null) return LastMessage;
+            if (text == null) return lastIfPatternFailed ? LastMessage : null;
             string[] ss = text.Split('|');
             AddonMessage result = new AddonMessage();
             result.id = int.Parse(ss[0]);
@@ -345,7 +366,7 @@ namespace WoWMemoryManager
         public AddonMessage RescanAddonMessage()
         {
             FindDoublePattern(signature);
-            return GetAddonMessage();
+            return GetAddonMessage(false);
         }
 
         public bool NewAddonMessage()
@@ -353,10 +374,11 @@ namespace WoWMemoryManager
             return GetAddonMessage()!=null && GetAddonMessage().id > LastProcessedMessage;
         }
 
-        public void ProcessAddonMessage()
+        public void ProcessAddonMessage(int id)
         {
-            LastProcessedMessage = GetAddonMessage().id;
+            LastProcessedMessage = id;
         }
+        
 
     }
 }

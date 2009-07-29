@@ -133,6 +133,12 @@ namespace WoWMemoryManager
             }
         }
 
+        public void KeyUpAll()
+        {
+            foreach(int key in PressedKeys)
+                KeyUp(key, false);
+        }
+
         #endregion
     }
 }
