@@ -34,5 +34,17 @@ namespace NakamarStates.Properties {
                 this["Password"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("WayPoints.xml")]
+        public string WayPointsPath {
+            get {
+                return ((string)(this["WayPointsPath"]));
+            }
+            set {
+                this["WayPointsPath"] = value;
+            }
+        }
     }
 }

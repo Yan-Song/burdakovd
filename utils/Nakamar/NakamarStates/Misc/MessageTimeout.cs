@@ -7,11 +7,13 @@ using WoWMemoryManager;
 
 namespace NakamarStates
 {
-    class MessageTimeout : State
+    public class MessageTimeout : State
     {
         DateTime LastMessageTime;
         int LastMessageId = -1;
         const int WaitMinutes = 5;
+
+        public MessageTimeout(object machine, object memory) : base(machine, memory) { }
 
         public override int Priority
         {
