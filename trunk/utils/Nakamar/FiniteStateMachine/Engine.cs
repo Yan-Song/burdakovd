@@ -19,7 +19,7 @@ namespace FiniteStateMachine
         /// <summary>
         /// сколько секунд ждать добровольного завершения worker
         /// </summary>
-        private static int WaitWorkerForTerminate = 30;
+        private static int WaitWorkerForTerminate = 3;
 
         private Thread _workerThread;
 
@@ -77,7 +77,7 @@ namespace FiniteStateMachine
 
             // Leave it as a background thread. This CAN trail off
             // as the program exits, without any issues really.
-            _workerThread = new Thread(Run) { IsBackground = true };
+            _workerThread = new Thread(Run) { IsBackground = true, Name = "FSM-worker" };
             _workerThread.Start(sleepTime);
         }
 
@@ -140,14 +140,19 @@ namespace FiniteStateMachine
 
             if (_workerThread.IsAlive)
             {
-                Logger.Log("FSM", "Рабочий поток не завершился в течение " + WaitWorkerForTerminate + " секунд, убиваю");
+                Logger.LogError("FSM", "Рабочий поток не завершился в течение " + WaitWorkerForTerminate + " секунд, убиваю");
                 _workerThread.Abort();
-                _workerThread.Join(); // ждём его завершения
-                Logger.Log("FSM", "Рабочий поток убит");
+                if (_workerThread.Join(1000))
+                    Logger.Log("FSM", "Рабочий поток убит");
+                else
+                    throw new Exception("Не удалось убить поток. Крайне рекомендуется перезапустить программу");
             }
 
+            foreach (State state in States)
+                state.Stop();
+
             // Clear out the thread object.
-            _workerThread = null;    
+            _workerThread = null;
         }
 
         public void LoadState(State state)
@@ -181,24 +186,34 @@ namespace FiniteStateMachine
 
                 foreach (Type type in types)
                 {
-                    // Here's some fairly simple stuff.
-                    if (type.IsClass && type.IsSubclassOf(typeof(State)))
+                    try
                     {
-                        // Create the State using the Activator class.
-                        var tempState = (State)Activator.CreateInstance(type, new object[] {this, Memory});
-                        // Make sure we're not using two of the same state.
-                        // (That would be bad!)
-                        if (!States.Contains(tempState))
+                        // Here's some fairly simple stuff.
+                        if (type.IsClass && type.IsSubclassOf(typeof(State)))
                         {
-                            //Logger.Log("loading "+tempState.GetType().Name);
-                            States.Add(tempState);
+                            // Create the State using the Activator class.
+                            var tempState = (State)Activator.CreateInstance(type, new object[] { this, Memory });
+                            // Make sure we're not using two of the same state.
+                            // (That would be bad!)
+                            if (!States.Contains(tempState))
+                            {
+                                //Logger.Log("loading "+tempState.GetType().Name);
+                                States.Add(tempState);
+                            }
                         }
+                    }
+                    catch (TargetInvocationException t)
+                    {
+                        Logger.LogError("FSM: " + type.Name, t.InnerException.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError("FSM: " + type.Name, ex.Message);
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Feel free to change this to some other logging method.
                 Logger.LogError("FSM", ex.Message);
             }
         }

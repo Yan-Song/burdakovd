@@ -40,6 +40,7 @@ namespace WoWMemoryManager
         private Hashtable DynamicCache;
         private static double[] signature = {901791, 349667, 371721, 139443, 213674};
         private AddonMessage LastMessage;
+        private int LastProcessedMessage = -1;
 
         private void Log(string message)
         {
@@ -345,6 +346,16 @@ namespace WoWMemoryManager
         {
             FindDoublePattern(signature);
             return GetAddonMessage();
+        }
+
+        public bool NewAddonMessage()
+        {
+            return GetAddonMessage()!=null && GetAddonMessage().id > LastProcessedMessage;
+        }
+
+        public void ProcessAddonMessage()
+        {
+            LastProcessedMessage = GetAddonMessage().id;
         }
 
     }

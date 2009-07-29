@@ -10,7 +10,7 @@ namespace NakamarStates
     /// <summary>
     /// Это состояние обладает наименьшим приоритетом
     /// </summary>
-    public class Idle: State
+    public class Idle : State
     {
         public Idle(object machine, object memory) : base(machine, memory) { }
 

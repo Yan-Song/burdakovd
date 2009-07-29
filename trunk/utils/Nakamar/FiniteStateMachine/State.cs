@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using WoWMemoryManager;
 using Util;
+using System.Windows.Forms;
 
 namespace FiniteStateMachine
 {
@@ -20,7 +21,8 @@ namespace FiniteStateMachine
 
         public virtual void Configure()
         {
-            System.Windows.Forms.MessageBox.Show("для этого модуля настроек нет");
+            System.Windows.Forms.MessageBox.Show("Для этого модуля настроек нет",
+                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         protected State() { }
@@ -36,6 +38,11 @@ namespace FiniteStateMachine
             Logger.Log(this.GetType().Name, message);
         }
 
+        protected void LogError(string message)
+        {
+            Logger.LogError(this.GetType().Name, message);
+        }
+
         public abstract int Priority { get; }
 
         public abstract bool NeedToRun { get; }
@@ -45,6 +52,8 @@ namespace FiniteStateMachine
         /// to check, and run, this state.
         /// </summary>
         public virtual int Frequency { get { return 1; } }
+
+        public virtual void Stop() { }
 
         #region IComparable<State> Members
 

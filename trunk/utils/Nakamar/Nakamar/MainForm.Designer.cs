@@ -49,6 +49,7 @@
             this.ManagementPage = new System.Windows.Forms.TabPage();
             this.LogBox = new System.Windows.Forms.ListBox();
             this.ManagementPanel = new System.Windows.Forms.Panel();
+            this.StartWoWButton = new System.Windows.Forms.Button();
             this.HideManagementButtons = new System.Windows.Forms.CheckBox();
             this.RestartButton = new System.Windows.Forms.Button();
             this.DisableBotButton = new System.Windows.Forms.Button();
@@ -67,7 +68,6 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.LogBoxFontDialog = new System.Windows.Forms.FontDialog();
             this.WoWPathBrowser = new System.Windows.Forms.OpenFileDialog();
-            this.StartWoWButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.NeededFPSSelector)).BeginInit();
             this.StatesSettingsGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OpacityTrackBar)).BeginInit();
@@ -195,6 +195,7 @@
             this.StatesList.Size = new System.Drawing.Size(713, 166);
             this.StatesList.Sorted = true;
             this.StatesList.TabIndex = 0;
+            this.StatesList.DoubleClick += new System.EventHandler(this.ConfigureState);
             // 
             // TopMostCheckBox
             // 
@@ -286,6 +287,17 @@
             this.ManagementPanel.Name = "ManagementPanel";
             this.ManagementPanel.Size = new System.Drawing.Size(731, 52);
             this.ManagementPanel.TabIndex = 5;
+            // 
+            // StartWoWButton
+            // 
+            this.StartWoWButton.Image = ((System.Drawing.Image)(resources.GetObject("StartWoWButton.Image")));
+            this.StartWoWButton.Location = new System.Drawing.Point(197, 3);
+            this.StartWoWButton.Name = "StartWoWButton";
+            this.StartWoWButton.Size = new System.Drawing.Size(25, 23);
+            this.StartWoWButton.TabIndex = 22;
+            this.StartWoWButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.StartWoWButton.UseVisualStyleBackColor = true;
+            this.StartWoWButton.Click += new System.EventHandler(this.StartWoW);
             // 
             // HideManagementButtons
             // 
@@ -484,20 +496,10 @@
             // 
             // WoWPathBrowser
             // 
+            this.WoWPathBrowser.DefaultExt = "exe";
             this.WoWPathBrowser.FileName = "Wow.exe";
             this.WoWPathBrowser.Filter = "Программы (*.exe)|*.exe";
             this.WoWPathBrowser.ReadOnlyChecked = true;
-            // 
-            // StartWoWButton
-            // 
-            this.StartWoWButton.Image = ((System.Drawing.Image)(resources.GetObject("StartWoWButton.Image")));
-            this.StartWoWButton.Location = new System.Drawing.Point(197, 3);
-            this.StartWoWButton.Name = "StartWoWButton";
-            this.StartWoWButton.Size = new System.Drawing.Size(25, 23);
-            this.StartWoWButton.TabIndex = 22;
-            this.StartWoWButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.StartWoWButton.UseVisualStyleBackColor = true;
-            this.StartWoWButton.Click += new System.EventHandler(this.StartWoW);
             // 
             // MainForm
             // 

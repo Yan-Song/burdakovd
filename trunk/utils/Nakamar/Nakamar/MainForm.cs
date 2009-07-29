@@ -94,7 +94,10 @@ namespace Nakamar
             
             Logger.RawLog = delegate(string message)
             {
-                BeginInvoke(tmp, new object[] {message});
+                if (InvokeRequired)
+                    BeginInvoke(tmp, new object[] { message });
+                else
+                    tmp(message);
             };
 
             Log("Программа запущена");
@@ -173,9 +176,11 @@ namespace Nakamar
             FSM.States.Sort();
 
             // update gui list
+            StatesList.BeginUpdate();
             StatesList.Items.Clear();
             foreach(State state in FSM.States)
                 StatesList.Items.Add(state.GetType().FullName);
+            StatesList.EndUpdate();
 
             FSM.StartEngine((int)Settings.Default.NeededFPS);
             BotEnabled = true;
@@ -205,7 +210,6 @@ namespace Nakamar
             BotEnabled = false;
             lastDisabled = DateTime.Now;
             Log("Бот остановлен");
-
         }
 
         private List<int> WoWProcesses()
@@ -356,8 +360,12 @@ namespace Nakamar
                 if (Settings.Default.WoWPath.EndsWith("Wow.exe"))
                 {
                     Log("Запускаю " + Settings.Default.WoWPath);
+                    StartWoWButton.Enabled = false;
+                    this.Cursor = Cursors.WaitCursor;
+                    this.Refresh();
                     Process.Start(Settings.Default.WoWPath).WaitForInputIdle();
                     Log("WoW запущен");
+                    this.Cursor = Cursors.Default;
                 }
                 else
                     Log("нужен файл Wow.exe");
