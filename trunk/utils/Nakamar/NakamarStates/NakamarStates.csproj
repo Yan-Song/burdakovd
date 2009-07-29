@@ -73,7 +73,7 @@
     <Compile Include="Misc\TimeOut.cs" />
     <Compile Include="Misc\Watcher.cs" />
     <Compile Include="Misc\StartStopManager.cs" />
-    <Compile Include="Navigation\WayPoint.cs" />
+    <Compile Include="Navigation\Waypoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BlackMagic\BlackMagic.csproj">
