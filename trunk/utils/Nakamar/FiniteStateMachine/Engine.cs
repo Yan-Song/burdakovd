@@ -19,7 +19,7 @@ namespace FiniteStateMachine
         /// <summary>
         /// сколько секунд ждать добровольного завершения worker
         /// </summary>
-        private static int WaitWorkerForTerminate = 3;
+        private static int WaitWorkerForTerminate = 30;
 
         private Thread _workerThread;
 

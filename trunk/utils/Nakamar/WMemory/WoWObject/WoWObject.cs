@@ -5,6 +5,8 @@ using System.Text;
 using Magic;
 
 // most of code from here: http://www.mmowned.com/forums/wow-memory-editing/208754-guide-kind-how-i-handle-objects.html
+// name offsets http://www.mmowned.com/forums/wow-memory-editing/231374-3-1-1-reading-unit-names.html
+// some offsets there: http://www.mmowned.com/forums/wow-memory-editing/237345-3-1-3-info-dump.html
 
 namespace WoWMemoryManager.WoWObject
 {
@@ -21,19 +23,22 @@ namespace WoWMemoryManager.WoWObject
 
     public class WoWObject
     {
-        protected const uint GuidOffset = 0x30,
-            TypeOffset = 0x14,
+        protected const uint GuidOffset = 0x30, // works for 3.1.3
+            TypeOffset = 0x14, // works for 3.1.3
             DescriptorFieldsOffset = 0x8,
-            XPositionOffset = 0x7D0,
-            YPositionOffset = 0x7D4,
-            ZPositionOffset = 0x7D8,
-            RotationOffset = 0x7DC;
+            XPositionOffset = 0x798, // works for 3.1.3
+            YPositionOffset = 0x79c, // works for 3.1.3
+            ZPositionOffset = 0x7a0, // works for 3.1.3
+            RotationOffset = 0x7a8; // works for 3.1.3
 
+        protected const uint // offsets in object descriptor table
+            descObjectFieldGuid = 0x0;
+            
         protected BlackMagic Reader;
 
         public override string ToString()
         {
-            return "WoW Object at 0x" + BaseAddress.ToString("X") + " GUID: 0x" + Guid.ToString("X");
+            return "WoW Object with GUID: 0x" + Guid.ToString("X");
         }
 
         public WoWObject(BlackMagic reader, uint baseAddress)
@@ -84,18 +89,23 @@ namespace WoWMemoryManager.WoWObject
     }
 
 
-    public class CreatureObject : WoWObject
+    public abstract class CreatureObject : WoWObject
     {
         protected const uint //LevelOffset = 0x35 * 4,
             //CurrentHealthOffset = 0x17 * 4,
             //MaxHealthOffset = 0x1F * 4,
             //CurrentManaOffset = 0x18 * 4,
             //MaxManaOffset = 0x20 * 4,
-            TargetGuidOffset = 0x12 * 4;
+            descTargetGuidOffset = 0x12 * 4;
 
         public CreatureObject(BlackMagic reader, uint baseAddress)
             : base(reader, baseAddress)
         { }
+
+        public abstract string Name
+        {
+            get;
+        }
 
         /*public float Pitch
         {
@@ -104,7 +114,7 @@ namespace WoWMemoryManager.WoWObject
 
         public ulong TargetGuid
         {
-            get { return Reader.ReadUInt64(DescriptorFields + TargetGuidOffset); }
+            get { return Reader.ReadUInt64(DescriptorFields + descTargetGuidOffset); }
         }
 
         /*public int Level
@@ -153,9 +163,13 @@ namespace WoWMemoryManager.WoWObject
             : base(reader, baseAddress)
         { }
 
-        public string Name
+        protected const uint
+            NameOffset1 = 0x968,
+            NameOffset2 = 0x54;
+
+        public override string Name
         {
-            get { return Reader.ReadASCIIString(Reader.ReadUInt(Reader.ReadUInt(BaseAddress + 0x9B0) + 0x3C), 1000); }
+            get { return Reader.ReadUTF8String(Reader.ReadUInt(Reader.ReadUInt(BaseAddress + 0x968) + 0x54), 1000); }
         }
 
         /*public ulong AttackingGuid
@@ -172,13 +186,56 @@ namespace WoWMemoryManager.WoWObject
 
     public class PlayerObject : CreatureObject
     {
-        protected const uint CurrentRageOffset = 0x19 * 4,
-            CurrentEnergyOffset = 0x1B * 4,
-            MaxEnergyOffset = 0x23 * 4;
+        /*protected const uint descCurrentRageOffset = 0x19 * 4,
+            descCurrentEnergyOffset = 0x1B * 4,
+            descMaxEnergyOffset = 0x23 * 4;*/
 
         public PlayerObject(BlackMagic reader, uint baseAddress)
             : base(reader, baseAddress)
         { }
+
+        /// <summary>
+        /// Deep magic copied from BHTool
+        /// </summary>
+        public override string Name
+        {
+            get
+            {
+                uint ptr_NameStore = 0x113ED00 + 8;
+                uint off_NameMask = 0x024;
+                uint off_NameBase = 0x01c;
+                uint off_NameString = 0x020;
+
+                ulong offset;
+                uint base_;
+
+                ulong current, mask, shortGUID, testGUID;
+                ulong guid = this.Guid;
+
+                mask = Reader.ReadUInt(ptr_NameStore + off_NameMask);
+                base_ = Reader.ReadUInt(ptr_NameStore + off_NameBase);
+
+                shortGUID = guid & 0xffffffff;
+                if (mask == 0xFFFFFFFF) return "";
+                offset = (12 * (mask & shortGUID));
+
+                current = Reader.ReadUInt((uint)(base_ + offset + 8));
+                offset = Reader.ReadUInt((uint)(base_ + offset));
+
+                if ((current & 0x1) == 0x1) { return ""; }
+
+                testGUID = Reader.ReadUInt((uint)(current));
+
+                while (testGUID != shortGUID)
+                {
+                    current = Reader.ReadUInt((uint)(current + offset + 4));
+
+                    if ((current & 0x1) == 0x1) { return ""; }
+                    testGUID = Reader.ReadUInt((uint)(current));
+                }
+                return Reader.ReadUTF8String((uint)current + off_NameString, 1000);
+            }
+        }
 
         /*public int CurrentRage
         {
@@ -208,47 +265,42 @@ namespace WoWMemoryManager.WoWObject
 
     public class GameObject : WoWObject
     {
-        protected const uint gameObject_XPosition = 0x10 * 4,
-            gameObject_YPosition = 0x11 * 4,
-            gameObject_ZPosition = 0x12 * 4,
+        protected const uint descGameObject_XPosition = 0x10 * 4,
+            descGameObject_YPosition = 0x11 * 4,
+            descGameObject_ZPosition = 0x12 * 4,
             displayId = 0x8 * 4;
 
         public GameObject(BlackMagic reader, uint baseAddress)
             : base(reader, baseAddress)
         { }
 
-        public override string ToString()
-        {
-            return "Name: " + Name + " X: " + XPosition.ToString() + " Y: " + YPosition.ToString() + " Z: " + ZPosition.ToString();
-        }
-
         public string Name
         {
             get
             {
-                return Reader.ReadASCIIString(Reader.ReadUInt(BaseAddress + 0x1f4) + 0x078, 1000);
+                return Reader.ReadUTF8String(Reader.ReadUInt(BaseAddress + 0x1a4) + 0x88, 1000);
             }
         }
 
         public override float XPosition
         {
-            get { return Reader.ReadFloat(DescriptorFields + gameObject_XPosition); }
+            get { return Reader.ReadFloat(DescriptorFields + descGameObject_XPosition); }
         }
 
         public override float YPosition
         {
-            get { return Reader.ReadFloat(DescriptorFields + gameObject_YPosition); }
+            get { return Reader.ReadFloat(DescriptorFields + descGameObject_YPosition); }
         }
 
         public override float ZPosition
         {
-            get { return Reader.ReadFloat(DescriptorFields + gameObject_ZPosition); }
+            get { return Reader.ReadFloat(DescriptorFields + descGameObject_ZPosition); }
         }
 
-        /*public int DisplayId
+        public int DisplayId
         {
             get { return Reader.ReadInt(DescriptorFields + displayId); }
-        }*/
+        }
     }
 
 
