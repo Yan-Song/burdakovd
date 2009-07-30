@@ -8,5 +8,8 @@
     <Setting Name="WayPointsPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">WayPoints.xml</Value>
     </Setting>
+    <Setting Name="EnableMessageTimeout" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

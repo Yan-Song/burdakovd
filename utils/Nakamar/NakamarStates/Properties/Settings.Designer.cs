@@ -46,5 +46,17 @@ namespace NakamarStates.Properties {
                 this["WayPointsPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableMessageTimeout {
+            get {
+                return ((bool)(this["EnableMessageTimeout"]));
+            }
+            set {
+                this["EnableMessageTimeout"] = value;
+            }
+        }
     }
 }
