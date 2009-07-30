@@ -23,16 +23,14 @@ namespace NakamarStates
 
         public override void Configure()
         {
-            lock (Settings.Default)
+            Relogger.PasswordDialog f = new Relogger.PasswordDialog();
+            if (f.ShowDialog() == DialogResult.OK)
             {
-                Relogger.PasswordDialog f = new Relogger.PasswordDialog();
-                if (f.ShowDialog() == DialogResult.OK)
-                {
-                    Settings.Default.Password = f.PasswordBox.Text;
-                    Log("Пароль изменён");
-                }
-                Settings.Default.Save();
+                Settings.Default.Password = f.PasswordBox.Text;
+                Log("Пароль изменён");
             }
+            Settings.Default.Save();
+
         }
 
         /// <summary>
@@ -112,10 +110,7 @@ namespace NakamarStates
         {
 
             Log("Ввожу пароль");
-            lock (Settings.Default) // Settings may be changed from main thread
-            {
-                Memory.KB.SendText(Settings.Default.Password, true);
-            }
+            Memory.KB.SendText(Settings.Default.Password, true);
             Thread.Sleep(500); // на всякий случай
             Memory.KB.PressKey(Key.Enter, true);
             PasswordEntered = true;

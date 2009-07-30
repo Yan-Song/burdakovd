@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NakamarStates.Properties {
+namespace FiniteStateMachine.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,25 +25,12 @@ namespace NakamarStates.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Password {
+        public global::System.Collections.Specialized.StringCollection DisabledStates {
             get {
-                return ((string)(this["Password"]));
+                return ((global::System.Collections.Specialized.StringCollection)(this["DisabledStates"]));
             }
             set {
-                this["Password"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("WayPoints.xml")]
-        public string WayPointsPath {
-            get {
-                return ((string)(this["WayPointsPath"]));
-            }
-            set {
-                this["WayPointsPath"] = value;
+                this["DisabledStates"] = value;
             }
         }
     }

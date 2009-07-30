@@ -11,6 +11,8 @@ using System.Reflection;
 using System.Threading;
 using Util;
 using System.Text.RegularExpressions;
+using System.Collections.Specialized;
+using FiniteStateMachine.Properties;
 
 namespace FiniteStateMachine
 {
@@ -29,40 +31,65 @@ namespace FiniteStateMachine
 
         public Engine(WoWMemoryManager.MemoryManager memory)
         {
-            
+            if (Settings.Default.DisabledStates == null)
+                Settings.Default.DisabledStates = new StringCollection();
+
+            DisabledStates = Settings.Default.DisabledStates;
+
             States = new List<State>();
             Memory = memory;
-
-            // Remember: We implemented the IComparer, and IComparable
-            // interfaces on the State class!
-            States.Sort();
         }
 
         public List<State> States { get; private set; }
         public bool Running { get; set; }
         public bool DoNotRestart { get; set; }
         public ulong FrameCount { get; private set; }
+        public StringCollection DisabledStates;
+
+        /// <summary>
+        /// Для блокировки FSM. Используется в Pulse() а также при любых обращениях 
+        /// основного потока к FSM (кроме http://msdn.microsoft.com/en-us/library/aa691278(VS.71).aspx )
+        /// состояния lock делать не должны, так как они вызываются из уже залоченной Pulse()
+        /// 
+        /// в StartEngine() блокировка не нужна, так как второго потока ещё нет
+        /// 
+        /// в StopEngine() тоже не нужна, так как все операции с States идут после уничтожения второго потока
+        /// 
+        /// перед вызовом ConfigureState() из главного потока блокировка непременно нужна
+        /// </summary>
+        readonly public Object Locker = new Object();
+
+        /// <summary>
+        /// для статистики
+        /// </summary>
+        readonly public Object Stats = new Object();
 
         public virtual void Pulse()
         {
-            FrameCount++;
-
-            // This starts at the highest priority state,
-            // and iterates its way to the lowest priority.
-            foreach (State state in States)
+            lock (Locker)
             {
-                if ((int)FrameCount % state.Frequency == 0)
+                lock(Stats)
+                    FrameCount++;
+
+                // This starts at the highest priority state,
+                // and iterates its way to the lowest priority.
+                foreach (State state in States)
                 {
-                    if (state.NeedToRun)
+                    if ((int)FrameCount % state.Frequency == 0)
                     {
-                        CurrentState = state.GetType();
-                        state.Run();
-                        
-                        // Break out of the iteration,
-                        // as we found a state that has run.
-                        // We don't want to run any more states
-                        // this time around.
-                        break;
+                        if (state.NeedToRun)
+                        {
+                            lock(Stats)
+                                CurrentState = state.GetType();
+
+                            state.Run();
+
+                            // Break out of the iteration,
+                            // as we found a state that has run.
+                            // We don't want to run any more states
+                            // this time around.
+                            break;
+                        }
                     }
                 }
             }
@@ -125,14 +152,14 @@ namespace FiniteStateMachine
         /// </summary>
         public void StopEngine()
         {
-            if (!Running && _workerThread == null)
+            if (_workerThread == null) // _workerThread используется только из основного потока
             {
                 // Nothing to do.
                 return;
             }
 
             // Make sure we let everyone know, we're not running anymore!
-            Running = false;
+            Running = false; // атомарно
 
             // ждём пока поток увидит что Running == false и завершится
             if (_workerThread.IsAlive)
@@ -142,17 +169,33 @@ namespace FiniteStateMachine
             {
                 Logger.LogError("FSM", "Рабочий поток не завершился в течение " + WaitWorkerForTerminate + " секунд, убиваю");
                 _workerThread.Abort();
+
                 if (_workerThread.Join(1000))
                     Logger.Log("FSM", "Рабочий поток убит");
                 else
                     throw new Exception("Не удалось убить поток. Крайне рекомендуется перезапустить программу");
             }
 
+            // здесь остался только основной поток, так что можно делать всё что угодно
             foreach (State state in States)
-                state.Stop();
-
+            {
+                try
+                {
+                    state.Stop();
+                }
+                catch(Exception e)
+                {
+                    Logger.LogError("FSM-stop", e.Message);
+                }
+            }
             // Clear out the thread object.
             _workerThread = null;
+            SaveSettings();
+        }
+
+        public void SaveSettings()
+        {
+            Settings.Default.Save();
         }
 
         public void LoadState(State state)
@@ -189,7 +232,7 @@ namespace FiniteStateMachine
                     try
                     {
                         // Here's some fairly simple stuff.
-                        if (type.IsClass && type.IsSubclassOf(typeof(State)))
+                        if (type.IsClass && type.IsSubclassOf(typeof(State)) && !DisabledStates.Contains(type.ToString()))
                         {
                             // Create the State using the Activator class.
                             var tempState = (State)Activator.CreateInstance(type, new object[] { this, Memory });

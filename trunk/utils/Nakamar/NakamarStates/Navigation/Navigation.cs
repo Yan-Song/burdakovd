@@ -17,6 +17,17 @@ namespace NakamarStates
 
         public override void Configure()
         {
+            if (Memory.CurrentGameState == GameState.World)
+            {
+                new NavigationSettings().ShowDialog();
+                Settings.Default.Save();
+            }
+            else
+                MessageBox.Show("Необходимо зайти в игровой мир", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public void ConfigureWayPointsPath()
+        {
             SaveFileDialog Dialog = new SaveFileDialog();
             Dialog.AddExtension = true;
             Dialog.CheckFileExists = false;
