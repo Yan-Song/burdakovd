@@ -37,12 +37,26 @@ namespace NakamarStates
 
                     if (Memory.CurrentGameState == GameState.World)
                     {
-                        //Logger.Watch("Watcher", "Objects.count", Memory.ObjectManager.Objects.Count());
-                        //Logger.Watch("Watcher", "Players.count", Memory.ObjectManager.Players.Count());
-                        //Logger.Watch("Watcher", "NPC.count", Memory.ObjectManager.NPC.Count());
-
-                        //foreach (NpcObject npc in Memory.ObjectManager.NPC)
-                        //    Logger.Watch("Watcher", "GUID:" + npc.Guid.ToString("X"), npc.ToString());
+                        PlayerObject player = Memory.ObjectManager.LocalPlayer;
+                        Logger.Watch("Watcher", "LocalPlayer",
+                            "XYZ(" + player.XPosition + "; " + player.YPosition + "; " + player.ZPosition +
+                            "), rotation: " + player.Rotation);
+                        Logger.Watch("Watcher", "Player.Guid", player.Guid);
+                        Logger.Watch("Watcher", "Target name", Memory.TargetName);
+                        try
+                        {
+                            CreatureObject target = Memory.ObjectManager.ByGuid(player.TargetGuid) as CreatureObject;
+                            Logger.Watch("Watcher", "target", "XYZ(" + target.XPosition + "; " + target.YPosition + "; " + target.ZPosition +
+                            "), rotation: " + target.Rotation);
+                            
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            Logger.Watch("Watcher", "target", "target not found (" + player.TargetGuid + ")");
+                        }
+                        //Logger.Watch("Watcher", "Player.Guid2", player.Guid2);
+                        /*foreach (WoWObject o in Memory.ObjectManager.Objects)
+                            Logger.Watch("Watcher", o.ToString(), "Type is " + o.Type + ", Name is " + o.Name);*/
                     }
 
                 }

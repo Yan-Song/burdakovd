@@ -50,5 +50,7 @@ namespace WoWMemoryManager
         /// </summary>
         public static uint GameState = 0x012A75C0;
 
+        public static uint PlayerBase = 0x010BD5F4;
+
     }
 }

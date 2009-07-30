@@ -38,6 +38,7 @@ namespace WoWMemoryManager
         public int id;
         public string command;
         public string[] arguments;
+        public string target;
         public override string ToString()
         {
             return "[AddonMessage #" + id + "]: " + command + "(" + string.Join(", ", arguments) + ")";
@@ -330,14 +331,16 @@ namespace WoWMemoryManager
             return x < y ? x : y;
         }
 
-        private string GetRawAddonMessage(double[] signature)
+        private string[] GetRawAddonMessage(double[] signature)
         {
             uint p = CachedDoublePattern(signature);
             if (p == 0) return null;
-            p = BM.ReadUInt(p + 16 * (uint)signature.Length);
+            uint pMessage = BM.ReadUInt(p + 16 * (uint)signature.Length);
+            uint pTarget = BM.ReadUInt(p + 16 * ((uint)signature.Length + 1));
             // http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html#post717199
-            string text = BM.ReadASCIIString(p+0x14, BM.ReadInt(p+0x10));
-            return text;
+            string text = BM.ReadUTF8String(pMessage + 0x14, BM.ReadUInt(pMessage+0x10));
+            string target = BM.ReadUTF8String(pTarget + 0x14, BM.ReadUInt(pTarget+0x10));
+            return new string[] { text, target };
         }
 
         public AddonMessage GetAddonMessage()
@@ -351,15 +354,18 @@ namespace WoWMemoryManager
         /// <returns></returns>
         public AddonMessage GetAddonMessage(bool lastIfPatternFailed)
         {
-            string text = GetRawAddonMessage(signature);
-            if (text == null) return lastIfPatternFailed ? LastMessage : null;
+            string[] raw = GetRawAddonMessage(signature);
+            if (raw == null) return lastIfPatternFailed ? LastMessage : null;
+            string text = raw[0];
+            string target = raw[1];
             string[] ss = text.Split('|');
             AddonMessage result = new AddonMessage();
             result.id = int.Parse(ss[0]);
             string[] tt = ss[1].Split(';');
+            result.command = tt[0];
             result.arguments = new string[tt.Length-1];
             Array.Copy(tt, 1, result.arguments, 0, tt.Length-1);
-            result.command = tt[0];
+            result.target = target;
             return LastMessage = result;
         }
 
@@ -378,7 +384,14 @@ namespace WoWMemoryManager
         {
             LastProcessedMessage = id;
         }
-        
+
+        public string TargetName
+        {
+            get
+            {
+                return GetAddonMessage() == null ? null : GetAddonMessage().target;
+            }
+        }
 
     }
 }

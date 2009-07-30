@@ -73,13 +73,35 @@ namespace WoWMemoryManager.WoWObject
     public class ObjectManager
     {
         private const uint
-            localGuidOffset = 0xC0;            // offset from the object manager to the local guid
+            localGuidOffset = 0xC0,            // offset from the object manager to the local guid
+            PlayerBaseOffset1 = 0x34,
+            PlayerBaseOffset2 = 0x24;
 
         private BlackMagic Reader;
         public uint BaseAddress;               // the address off the object manager
         public IEnumerable<GameObject> GameObjects { get; private set; }
         public IEnumerable<PlayerObject> Players { get; private set; }
         public IEnumerable<NpcObject> NPC { get; private set; }
+        public IEnumerable<WoWObject> Objects { get; private set; }
+
+        public PlayerObject LocalPlayer
+        {
+            get
+            {
+                uint p = Reader.ReadUInt(Patterns.PlayerBase);
+                p = Reader.ReadUInt(p + PlayerBaseOffset1);
+                p = Reader.ReadUInt(p + PlayerBaseOffset2);
+                return new PlayerObject(Reader, p);
+            }
+        }
+
+        public WoWObject ByGuid(ulong guid)
+        {
+            foreach(WoWObject w in new ObjectList<WoWObject>(Reader, BaseAddress))
+                if(w.Guid == guid)
+                    return w;
+            throw new KeyNotFoundException("guid " + guid + " not found");
+        }
 
         public ObjectManager(BlackMagic reader, uint objectManagerBaseAddress)
         {
@@ -88,6 +110,7 @@ namespace WoWMemoryManager.WoWObject
             GameObjects = new ObjectList<GameObject>(Reader, BaseAddress);
             Players = new ObjectList<PlayerObject>(Reader, BaseAddress);
             NPC = new ObjectList<NpcObject>(Reader, BaseAddress);
+            Objects = new ObjectList<WoWObject>(Reader, BaseAddress);
         }
     }
 }
