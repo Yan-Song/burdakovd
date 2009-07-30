@@ -17,25 +17,6 @@ namespace NakamarStates
 
         public MessageTimeout(object machine, object memory) : base(machine, memory) { }
 
-        public override void Configure()
-        {
-            DialogResult result = MessageBox.Show("Этот модуль будет выключать бота если в течение " +
-                WaitMinutes + " минут не получено ни одного сообщения от аддона " + Environment.NewLine +
-                "Включить?", "Включить MessageTimeout?",
-                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                Settings.Default.EnableMessageTimeout = true;
-                Log("Включён");
-            }
-            else if(result == DialogResult.No)
-            {
-                Settings.Default.EnableMessageTimeout = false;
-                Log("Отключён");
-            }
-            Settings.Default.Save();
-        }
-
         public override int Priority
         {
             get { return int.MaxValue; }
@@ -45,9 +26,6 @@ namespace NakamarStates
         {
             get
             {
-                if (!Settings.Default.EnableMessageTimeout)
-                    return false;
-
                 if (Memory.CurrentGameState != GameState.World)
                     return false;
 

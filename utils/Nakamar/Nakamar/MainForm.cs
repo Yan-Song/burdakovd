@@ -20,7 +20,8 @@ namespace Nakamar
             set
             {
                 StatesList.Enabled = StateSettings.Enabled = RestartButton.Enabled = 
-                    DisableBotButton.Enabled = _botenabled = value;
+                    DisableBotButton.Enabled = _botenabled =
+                    BlockedStatesGroup.Enabled = BlockStateButton.Enabled = value;
 
                 EnableBotButton.Enabled = !value;
                 Text = value ? "Running" : "Not running";
@@ -175,12 +176,7 @@ namespace Nakamar
             FSM.LoadStates(Settings.Default.StatesPath);
             FSM.States.Sort();
 
-            // update gui list
-            StatesList.BeginUpdate();
-            StatesList.Items.Clear();
-            foreach(State state in FSM.States)
-                StatesList.Items.Add(state.GetType().FullName);
-            StatesList.EndUpdate();
+            UpdateStatesGUI();
 
             FSM.StartEngine((int)Settings.Default.NeededFPS);
             BotEnabled = true;
@@ -247,11 +243,12 @@ namespace Nakamar
             if (FSM != null)
             {
                 CurrentFPSValue.Visible = true;
-                CurrentFPSValue.Text = "FPS: "+(FSM.FrameCount - PreviousFrameCount);
-                LastStateValue.ToolTipText = FSM.CurrentState==null ? "" :
-                    FSM.CurrentState.Module + Environment.NewLine + FSM.CurrentState.AssemblyQualifiedName;
-                LastStateValue.Text = (FSM.CurrentState==null) ? "запускается" : FSM.CurrentState.Name;
-                PreviousFrameCount = FSM.FrameCount;
+                lock (FSM.Stats)
+                {
+                    CurrentFPSValue.Text = "FPS: " + (FSM.FrameCount - PreviousFrameCount);
+                    LastStateValue.Text = (FSM.CurrentState == null) ? "запускается" : FSM.CurrentState.Name;
+                    PreviousFrameCount = FSM.FrameCount;
+                }
             }
             else
             {
@@ -302,16 +299,16 @@ namespace Nakamar
             else
             {
                 string name = StatesList.Items[index] as string;
-                foreach(State state in FSM.States)
-                    if (state.GetType().FullName == name)
-                    {
-                        lock (state)
+                lock (FSM.Locker)
+                {
+                    foreach (State state in FSM.States)
+                        if (state.GetType().FullName == name)
                         {
                             TopMost = false; // чтобы окно конфигурации не было ниже главного
                             state.Configure();
                             TopMost = true;
                         }
-                    }
+                }
             }
         }
 
@@ -371,6 +368,65 @@ namespace Nakamar
                     Log("нужен файл Wow.exe");
             else
                 Log("Файл Wow.exe не найден");
+        }
+
+        private void BlockStateButton_Click(object sender, EventArgs e)
+        {
+            int index = StatesList.SelectedIndex;
+            if (index == -1)
+                ShowError("нужно выбрать состояние из списка прежде чем нажимать кнопку блокирования");
+            else
+            {
+                string name = StatesList.Items[index] as string;
+                lock (FSM.Locker)
+                {
+                    if (FSM.DisabledStates.Contains(name))
+                    {
+                        ShowError("Это состояние уже заблокировано");
+                    }
+                    else
+                    {
+                        FSM.DisabledStates.Add(name);
+                        FSM.SaveSettings();
+                        UpdateStatesGUI();
+                    }
+                }
+            }
+        }
+
+        private void UpdateStatesGUI()
+        {
+            // update gui list
+            StatesList.BeginUpdate();
+            StatesList.Items.Clear();
+            foreach(State state in FSM.States)
+                StatesList.Items.Add(state.GetType().FullName);
+            StatesList.EndUpdate();
+
+            BlockedStatesList.BeginUpdate();
+            BlockedStatesList.Items.Clear();
+
+            foreach (string blocked in FSM.DisabledStates)
+                BlockedStatesList.Items.Add(blocked);
+
+            BlockedStatesList.EndUpdate();
+        }
+
+        private void UnBlockButton_Click(object sender, EventArgs e)
+        {
+            int index = BlockedStatesList.SelectedIndex;
+            if (index == -1)
+                ShowError("нужно выбрать состояние из списка прежде чем нажимать кнопку разблокирования");
+            else
+            {
+                string name = BlockedStatesList.Items[index] as string;
+                lock (FSM.Locker)
+                {
+                    FSM.DisabledStates.Remove(name);
+                    FSM.SaveSettings();
+                    UpdateStatesGUI();
+                }
+            }
         }
     }
 }
