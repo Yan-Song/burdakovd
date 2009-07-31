@@ -63,7 +63,7 @@ namespace Nakamar
         private void LogToListBoxFunction(string text)
         {
             LogBox.Items.Add(text);
-            if (AutoScrollCheckBox.Checked)
+            if (Settings.Default.AutoScroll)
                 LogBox.TopIndex = LogBox.Items.Count - 1;
         }
 
