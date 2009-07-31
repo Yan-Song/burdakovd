@@ -7,6 +7,7 @@ using NakamarStates.Properties;
 using System.IO;
 using System.Windows.Forms;
 using WoWMemoryManager;
+using WoWMemoryManager.WoWObject;
 
 namespace NakamarStates
 {
@@ -14,6 +15,15 @@ namespace NakamarStates
     {
         WayPointList WayPoints;
         Point Destination = null;
+
+        Point Me
+        {
+            get
+            {
+                var player = Memory.ObjectManager.LocalPlayer;
+                return new Point(player.XPosition, player.YPosition, player.ZPosition);
+            }
+        }
 
         public override void Configure()
         {
@@ -136,10 +146,12 @@ namespace NakamarStates
                 else if (m.command == "waypoint")
                 {
                     ManageWayPoints(m);
+                    Memory.ProcessAddonMessage(m.id);
                 }
                 else if (m.command == "route")
                 {
                     ManageRoutes(m);
+                    Memory.ProcessAddonMessage(m.id);
                 }
             }
             else if (Destination != null)
@@ -163,11 +175,11 @@ namespace NakamarStates
 
         private void ManageWayPoints(AddonMessage m)
         {
-            string command = m.arguments[0];
-            if (command == "add")
-            {
+            string command = m.argument(0);
+            if (command == null)
+                LogError("нужно указать add|remove|rename");
+            else if (command == "add")
                 AddWayPoint(m);
-            }
             else if (command == "remove" || command == "delete")
                 RemoveWayPoint(m);
             else if (command == "rename")
@@ -186,37 +198,67 @@ namespace NakamarStates
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// waypoint;add;Type[;Name[;Tag]]
+        /// </summary>
+        /// <param name="m"></param>
         private void AddWayPoint(AddonMessage m)
         {
-            WayPointType type = (WayPointType)Enum.Parse(typeof(WayPointType), m.arguments[1], true);
-            string name;
-            if (m.arguments.Length == 2)
-                name = WayPoints.NewName();
-            else
-                name = m.arguments[2];
-            if (type == WayPointType.Simple)
-                AddSimpleWayPoint(name);
-            else if (type == WayPointType.NPC)
-                AddNPCWayPoint(name);
-            else if (type == WayPointType.Mailbox)
-                AddMailboxWayPoint(name);
-            else
-                throw new NotImplementedException();
+            WayPointType type = (WayPointType)Enum.Parse(typeof(WayPointType), m.argument(1, "Simple"), true);
+
+            try
+            {
+                Point point;
+                if (type == WayPointType.Simple)
+                    point = NewSimpleWayPoint(m.argument(2), m.argument(3)); // name, tag
+                else if (type == WayPointType.Mailbox)
+                    point = NewMailboxWayPoint(m.argument(3), m.argument(3)); // name, tag
+                else if (type == WayPointType.NPC)
+                    point = NewNPCWayPoint(m.argument(2)); // tag
+                else
+                    throw new NotImplementedException(type.ToString());
+
+                if (point != null)
+                {
+                    WayPoints.Add(point);
+                    Log("Добавлена  " + point.ToString() + ", расстояние до неё: " + Me.Distance(point));
+                    WayPoints.Save(Settings.Default.WayPointsPath);
+                }
+            }
+            catch (Exception e)
+            {
+                LogError("Не удалось добавить точку маршрута: " + e.Message);
+            }
         }
 
-        private void AddMailboxWayPoint(string name)
+        private Point NewNPCWayPoint(string tag)
+        {
+            try
+            {
+                NpcObject target = (NpcObject)Memory.ObjectManager.ByGuid(Memory.ObjectManager.LocalPlayer.TargetGuid);
+                return null;
+            }
+            catch (KeyNotFoundException)
+            {
+                LogError("Необходимо выбрать NPC");
+            }
+            catch (InvalidCastException)
+            {
+                LogError("Необходимо выбрать именно NPC");
+            }
+            return null;
+        }
+
+        private Point NewMailboxWayPoint(string name, string tag)
         {
             throw new NotImplementedException();
         }
 
-        private void AddNPCWayPoint(string name)
+        private Point NewSimpleWayPoint(string name, string tag)
         {
-            throw new NotImplementedException();
-        }
-
-        private void AddSimpleWayPoint(string name)
-        {
-            throw new NotImplementedException();
+            var player = Memory.ObjectManager.LocalPlayer;
+            return new Point(name ?? WayPoints.NewName(), WayPointType.Simple, tag ?? "",
+                player.XPosition, player.YPosition, player.ZPosition);
         }
 
         private void Navigate()

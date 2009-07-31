@@ -6,7 +6,8 @@ using Nakamar.Properties;
 using Util;
 using System.Diagnostics;
 using System.Drawing;
-using System.Collections.Generic; // for Logger
+using System.Collections.Generic;
+using System.Collections; // for Logger
 
 
 namespace Nakamar
@@ -167,7 +168,7 @@ namespace Nakamar
             int WoWId = WoWProcesses()[0];
 
             WoW = new WoWMemoryManager.MemoryManager(WoWId,
-                Settings.Default.FindPatternCache.Clone() as System.Collections.Hashtable);
+                (Hashtable)Settings.Default.FindPatternCache.Clone());
 
             FSM = new Engine(WoW);
 
@@ -298,7 +299,7 @@ namespace Nakamar
                 ShowError("нужно выбрать состояние из списка прежде чем нажимать кнопку настройки");
             else
             {
-                string name = StatesList.Items[index] as string;
+                string name = (string)StatesList.Items[index];
                 lock (FSM.Locker)
                 {
                     foreach (State state in FSM.States)
@@ -377,7 +378,7 @@ namespace Nakamar
                 ShowError("нужно выбрать состояние из списка прежде чем нажимать кнопку блокирования");
             else
             {
-                string name = StatesList.Items[index] as string;
+                string name = (string)StatesList.Items[index];
                 lock (FSM.Locker)
                 {
                     if (FSM.DisabledStates.Contains(name))
@@ -419,7 +420,7 @@ namespace Nakamar
                 ShowError("нужно выбрать состояние из списка прежде чем нажимать кнопку разблокирования");
             else
             {
-                string name = BlockedStatesList.Items[index] as string;
+                string name = (string)BlockedStatesList.Items[index];
                 lock (FSM.Locker)
                 {
                     FSM.DisabledStates.Remove(name);

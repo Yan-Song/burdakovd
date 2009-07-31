@@ -29,8 +29,8 @@ namespace FiniteStateMachine
 
         protected State(object machine, object memory)
         {
-            Machine = machine as Engine;
-            Memory = memory as MemoryManager;
+            Machine = (Engine)machine;
+            Memory = (MemoryManager)memory;
         }
 
         protected void Log(string message)
