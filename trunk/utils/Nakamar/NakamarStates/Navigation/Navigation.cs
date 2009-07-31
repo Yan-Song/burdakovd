@@ -111,7 +111,7 @@ namespace NakamarStates
                 if (!Memory.NewAddonMessage())
                     return false; // nothing to process
                 string command = Memory.GetAddonMessage().command;
-                return command == "waypoint" || command == "goto" || command == "break";
+                return command == "waypoint" || command == "goto" || command == "break" || command == "route";
             }
         }
 
@@ -137,6 +137,10 @@ namespace NakamarStates
                 {
                     ManageWayPoints(m);
                 }
+                else if (m.command == "route")
+                {
+                    ManageRoutes(m);
+                }
             }
             else if (Destination != null)
             {
@@ -147,11 +151,23 @@ namespace NakamarStates
 
         }
 
+        private void SetDestination(AddonMessage m)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ManageRoutes(AddonMessage m)
+        {
+            throw new NotImplementedException();
+        }
+
         private void ManageWayPoints(AddonMessage m)
         {
             string command = m.arguments[0];
             if (command == "add")
+            {
                 AddWayPoint(m);
+            }
             else if (command == "remove" || command == "delete")
                 RemoveWayPoint(m);
             else if (command == "rename")
@@ -208,7 +224,7 @@ namespace NakamarStates
             throw new NotImplementedException();
         }
 
-        private void SetDestination(AddonMessage addonMessage)
+        private void SetDestination(string destination)
         {
             throw new NotImplementedException();
         }
