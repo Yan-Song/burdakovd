@@ -38,7 +38,10 @@ namespace WoWMemoryManager.WoWObject
 
         public override string ToString()
         {
-            return "WoW Object with GUID: 0x" + Guid.ToString("X");
+            return "WoW Object with GUID: 0x" + Guid.ToString("X16") +
+                " XYZ(" +
+                XPosition + ", " + YPosition + ", " + ZPosition +
+                ")";
         }
 
         public WoWObject(BlackMagic reader, uint baseAddress)
@@ -169,7 +172,17 @@ namespace WoWMemoryManager.WoWObject
 
         public override string Name
         {
-            get { return Reader.ReadUTF8String(Reader.ReadUInt(Reader.ReadUInt(BaseAddress + 0x968) + 0x54), 1000); }
+            get
+            {
+                try
+                {
+                    return Reader.ReadUTF8String(Reader.ReadUInt(Reader.ReadUInt(BaseAddress + NameOffset1) + NameOffset2), 1000);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
         }
 
         /*public ulong AttackingGuid
@@ -265,10 +278,17 @@ namespace WoWMemoryManager.WoWObject
 
     public class GameObject : WoWObject
     {
-        protected const uint descGameObject_XPosition = 0x10 * 4,
-            descGameObject_YPosition = 0x11 * 4,
-            descGameObject_ZPosition = 0x12 * 4,
-            displayId = 0x8 * 4;
+        protected const uint
+            displayId = 0x8 * 4,
+            NameOffset1 = 0x1a4,
+            NameOffset2 = 0x88;
+
+        new protected const uint
+            XPositionOffset = 0x3A * 4;
+        new protected const uint
+            YPositionOffset = 0x3B * 4;
+        new protected const uint
+            ZPositionOffset = 0x3C * 4;
 
         public GameObject(BlackMagic reader, uint baseAddress)
             : base(reader, baseAddress)
@@ -278,23 +298,30 @@ namespace WoWMemoryManager.WoWObject
         {
             get
             {
-                return Reader.ReadUTF8String(Reader.ReadUInt(BaseAddress + 0x1a4) + 0x88, 1000);
+                try
+                {
+                    return Reader.ReadUTF8String(Reader.ReadUInt(Reader.ReadUInt(BaseAddress + NameOffset1) + NameOffset2), 1000);
+                }
+                catch
+                {
+                    return null;
+                }
             }
         }
 
         public override float XPosition
         {
-            get { return Reader.ReadFloat(DescriptorFields + descGameObject_XPosition); }
+            get { return Reader.ReadFloat(BaseAddress + XPositionOffset); }
         }
 
         public override float YPosition
         {
-            get { return Reader.ReadFloat(DescriptorFields + descGameObject_YPosition); }
+            get { return Reader.ReadFloat(BaseAddress + YPositionOffset); }
         }
 
         public override float ZPosition
         {
-            get { return Reader.ReadFloat(DescriptorFields + descGameObject_ZPosition); }
+            get { return Reader.ReadFloat(BaseAddress + ZPositionOffset); }
         }
 
         public int DisplayId
