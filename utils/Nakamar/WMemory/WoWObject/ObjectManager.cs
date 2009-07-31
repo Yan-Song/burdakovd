@@ -27,10 +27,12 @@ namespace WoWMemoryManager.WoWObject
         public IEnumerator GetEnumerator()
         {
             uint CurrentObjectAddress = Reader.ReadUInt(BaseAddress + firstObjectOffset);
-            WoWObject CurrentObject = new WoWObject(Reader, CurrentObjectAddress);
+            
 
             while (CurrentObjectAddress != 0 && CurrentObjectAddress % 2 == 0)
-            {              
+            {
+                WoWObject CurrentObject = new WoWObject(Reader, CurrentObjectAddress);
+
                 ObjectType type = CurrentObject.Type;
                 if (type == ObjectType.NPC)
                     CurrentObject = new NpcObject(Reader, CurrentObjectAddress);
@@ -45,7 +47,6 @@ namespace WoWMemoryManager.WoWObject
                 */
                 yield return CurrentObject;
                 CurrentObjectAddress = Reader.ReadUInt(CurrentObjectAddress + nextObjectOffset);
-                CurrentObject.BaseAddress = CurrentObjectAddress;
             }
 
             yield break;
