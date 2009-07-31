@@ -21,20 +21,26 @@ namespace NakamarStates
         public float Z { get; set; }
         public WayPointType Type { get; private set; }
         public string Name { get; set; }
+        public string Tag { get; set; }
         /// <summary>
         /// names of WayPoints, directly reachable from this
         /// </summary>
         public List<string> Neighbours { get; private set;  }
 
-        public Point(string name, WayPointType type, float x, float y, float z)
+        public Point(string name, WayPointType type, string tag, float x, float y, float z)
         {
             X = x;
             Y = y;
             Z = z;
             Type = type;
             Name = name;
+            Tag = tag;
             Neighbours = new List<string>();
         }
+
+        public Point(string name, WayPointType type, float x, float y, float z)
+            : this
+                (name, type, "", x, y, z) { }
 
         public Point(WayPointType type, float x, float y, float z) : this(null, type, x, y, z) {}
 
@@ -42,11 +48,12 @@ namespace NakamarStates
 
         public Point(XElement xml)
             : this(xml.Attribute("Name").Value,
-            (WayPointType)Enum.Parse(typeof(WayPointType),
-            xml.Attribute("Type").Value),
+            (WayPointType)Enum.Parse(typeof(WayPointType), xml.Attribute("Type").Value),
+            xml.Attribute("Tag").Value,
             Convert.ToSingle(xml.Attribute("X").Value),
             Convert.ToSingle(xml.Attribute("Y").Value),
             Convert.ToSingle(xml.Attribute("Z").Value))
+            
         {
             IEnumerable<XElement> neighbours = xml.Descendants("Neighbour");
             foreach (XElement neighbour in neighbours)
@@ -71,6 +78,7 @@ namespace NakamarStates
             XElement xml = new XElement("Point",
                 new XAttribute("Name", Name),
                 new XAttribute("Type", Type),
+                new XAttribute("Tag", Tag),
                 new XAttribute("X", X),
                 new XAttribute("Y", Y),
                 new XAttribute("Z", Z));
