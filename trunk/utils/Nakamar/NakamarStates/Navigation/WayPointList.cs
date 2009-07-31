@@ -40,10 +40,7 @@ namespace NakamarStates
 
         public void Add(Point point)
         {
-            if (point.Name == null)
-            {
-                point.Name = NewName();
-            }
+            point.Name = point.Name ?? NewName();
             this[point.Name] = point;
         }
 

@@ -2,6 +2,7 @@
 using System.Xml.Linq;
 using System.Collections.Generic;
 using System.Collections;
+using System.Globalization;
 
 namespace NakamarStates
 {
@@ -50,9 +51,9 @@ namespace NakamarStates
             : this(xml.Attribute("Name").Value,
             (WayPointType)Enum.Parse(typeof(WayPointType), xml.Attribute("Type").Value),
             xml.Attribute("Tag").Value,
-            Convert.ToSingle(xml.Attribute("X").Value),
-            Convert.ToSingle(xml.Attribute("Y").Value),
-            Convert.ToSingle(xml.Attribute("Z").Value))
+            float.Parse(xml.Attribute("X").Value, CultureInfo.InvariantCulture),
+            float.Parse(xml.Attribute("X").Value, CultureInfo.InvariantCulture),
+            float.Parse(xml.Attribute("X").Value, CultureInfo.InvariantCulture))
             
         {
             IEnumerable<XElement> neighbours = xml.Descendants("Neighbour");
@@ -148,6 +149,16 @@ namespace NakamarStates
         public void RemoveNeighbour(Point neighbour)
         {
             RemoveNeighbour(neighbour.Name);
+        }
+
+        public override string ToString()
+        {
+            return "WayPoint(Type=" + Type + ", " +
+                "Name = " + Name + ", " +
+                "Tag = " + Tag + ", " +
+                "X = " + X + ", " +
+                "Y = " + Y + ", " +
+                "Z = " + Z + ")";
         }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Input;
 using Magic;
 using Util;
@@ -42,6 +40,26 @@ namespace WoWMemoryManager
         public override string ToString()
         {
             return "[AddonMessage #" + id + "]: " + command + "(" + string.Join(", ", arguments) + ")";
+        }
+        /// <summary>
+        /// возвращает null если такого аргумента нет
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public string argument(int position)
+        {
+            return arguments.ElementAtOrDefault(position);
+        }
+
+        /// <summary>
+        /// возвращает defaultValue если такого аргумента нет
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public string argument(int position, string defaultValue)
+        {
+            return argument(position) ?? defaultValue;
         }
     }
 

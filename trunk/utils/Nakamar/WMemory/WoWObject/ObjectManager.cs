@@ -61,7 +61,7 @@ namespace WoWMemoryManager.WoWObject
             {
                 foreach (WoWObject w in this)
                     if (w is T)
-                        yield return w as T;
+                        yield return (T)w;
                 yield break;
             }
         }
