@@ -47,6 +47,7 @@ namespace NakamarStates
         {
             Log("За последние " + WaitMinutes + " минут не получено ни одного сообщения от аддона");
             Log("Выключаю WoW");
+            Machine.DoNotRestart = true;
             Memory.StopWoW();
             Machine.StopEngineByWorker();
         }

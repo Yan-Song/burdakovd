@@ -52,8 +52,8 @@ namespace NakamarStates
             (WayPointType)Enum.Parse(typeof(WayPointType), xml.Attribute("Type").Value),
             xml.Attribute("Tag").Value,
             float.Parse(xml.Attribute("X").Value, CultureInfo.InvariantCulture),
-            float.Parse(xml.Attribute("X").Value, CultureInfo.InvariantCulture),
-            float.Parse(xml.Attribute("X").Value, CultureInfo.InvariantCulture))
+            float.Parse(xml.Attribute("Y").Value, CultureInfo.InvariantCulture),
+            float.Parse(xml.Attribute("Z").Value, CultureInfo.InvariantCulture))
             
         {
             IEnumerable<XElement> neighbours = xml.Descendants("Neighbour");

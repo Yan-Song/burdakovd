@@ -56,6 +56,7 @@
     <Compile Include="Misc\MessageScanner.cs" />
     <Compile Include="Misc\MessageTimeout.cs" />
     <Compile Include="Navigation\Navigation.cs" />
+    <Compile Include="Navigation\PlayerPoint.cs" />
     <Compile Include="Navigation\WayPoint.cs" />
     <Compile Include="Navigation\WayPointList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

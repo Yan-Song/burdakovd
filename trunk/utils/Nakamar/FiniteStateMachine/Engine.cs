@@ -13,6 +13,7 @@ using Util;
 using System.Text.RegularExpressions;
 using System.Collections.Specialized;
 using FiniteStateMachine.Properties;
+using WoWMemoryManager;
 
 namespace FiniteStateMachine
 {
@@ -123,10 +124,24 @@ namespace FiniteStateMachine
             }
             catch (Exception e)
             {
-                DoNotRestart = true;
                 Logger.LogError("FSM-worker", "Необработанное исключение в рабочем потоке");
                 foreach(string line in Regex.Split(e.ToString(), Environment.NewLine))
                     Logger.Log("FSM-worker", " "+line);
+
+                Thread.Sleep(10000);
+                try
+                {
+                    if (Memory.CurrentGameState == GameState.World)
+                    {
+                        Logger.LogError("FSM-worker", "В мире ошибок допускать нельзя, спалят. Запрещаю перезапуск");
+                        DoNotRestart = true;
+                    }
+                }
+                catch
+                {
+                    Logger.LogError("FSM-worker", "WoW закрылся неожиданно. Запрещаю перезапуск");
+                    DoNotRestart = true;
+                }
             }
             finally
             {
