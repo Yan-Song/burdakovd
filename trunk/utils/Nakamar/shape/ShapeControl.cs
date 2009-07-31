@@ -39,7 +39,7 @@ namespace ShapeControl
 		int _borderwidth=3;
 		GraphicsPath _outline=new GraphicsPath();
 		bool _usegradient=false;
-		Color _centercolor=Color.FromArgb(100,255,0,0) ;
+        Color _centercolor = Color.FromArgb(100, 255, 0, 0);
 		Color _surroundcolor=Color.FromArgb(100,0,255,255);
 
 		[Category("Shape"),Description("Text to display")]
@@ -183,8 +183,13 @@ namespace ShapeControl
 
 		private void InitializeComponent()
 		{
-
-			this.TextChanged += new System.EventHandler(this.ShapeControl_TextChanged);
+            this.SuspendLayout();
+            // 
+            // CustomControl1
+            // 
+            this.Name = "CustomControl1";
+            this.TextChanged += new System.EventHandler(this.ShapeControl_TextChanged);
+            this.ResumeLayout(false);
 
 		}
 
