@@ -10,7 +10,7 @@ namespace WoWMemoryManager
     {
         public static string ReadUTF8String(this BlackMagic BM, uint address, uint maxLength)
         {
-            byte[] bytes = BM.ReadBytes(address, (int)maxLength);
+            byte[] bytes = BM.ReadBytes(address, (int)maxLength).TakeWhile(c => c != 0).ToArray(); // удаляем лишнее после \0
             return System.Text.Encoding.UTF8.GetString(bytes);
         }
     }
