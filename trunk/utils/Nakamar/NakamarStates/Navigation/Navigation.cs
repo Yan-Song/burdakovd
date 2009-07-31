@@ -218,16 +218,14 @@ namespace NakamarStates
                 else
                     throw new NotImplementedException(type.ToString());
 
-                if (point != null)
-                {
-                    WayPoints.Add(point);
-                    Log("Добавлена  " + point.ToString() + ", расстояние до неё: " + Me.Distance(point));
-                    WayPoints.Save(Settings.Default.WayPointsPath);
-                }
+                WayPoints.Add(point);
+                Log("Добавлена  " + point.ToString() + ", расстояние до неё: " + Me.Distance(point));
+                WayPoints.Save(Settings.Default.WayPointsPath);
+
             }
             catch (Exception e)
             {
-                LogError("Не удалось добавить точку маршрута: " + e.Message);
+                LogError("Не удалось добавить точку маршрута: " + e);
             }
         }
 
@@ -236,22 +234,27 @@ namespace NakamarStates
             try
             {
                 NpcObject target = (NpcObject)Memory.ObjectManager.ByGuid(Memory.ObjectManager.LocalPlayer.TargetGuid);
-                return null;
+                return new Point(target.Name, WayPointType.NPC, tag ?? "", target.XPosition, target.YPosition, target.ZPosition);
             }
             catch (KeyNotFoundException)
             {
-                LogError("Необходимо выбрать NPC");
+                throw new Exception("Необходимо выбрать NPC");
             }
             catch (InvalidCastException)
             {
-                LogError("Необходимо выбрать именно NPC");
+                throw new Exception("Необходимо выбрать именно NPC");
             }
-            return null;
         }
 
         private Point NewMailboxWayPoint(string name, string tag)
         {
-            throw new NotImplementedException();
+            IEnumerable<GameObject> mailboxes = Memory.ObjectManager.GameObjects.Where(g => g.Name == "Mailbox");
+            
+            GameObject nearestMailbox =
+                mailboxes.OrderBy(g => Me.Distance(g.XPosition, g.YPosition, g.ZPosition)).Single();
+
+            return new Point(name ?? WayPoints.NewName(), WayPointType.Mailbox, tag ?? "",
+                nearestMailbox.XPosition, nearestMailbox.YPosition, nearestMailbox.ZPosition);
         }
 
         private Point NewSimpleWayPoint(string name, string tag)
