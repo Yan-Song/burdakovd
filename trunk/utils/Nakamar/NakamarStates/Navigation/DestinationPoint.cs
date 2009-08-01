@@ -15,9 +15,26 @@ namespace NakamarStates
 
     public class DestinationPoint : Point
     {
+        private const double
+            NPCRange = 3.0,
+            MailboxRange = 3.0,
+            XYZRange = 1.0;
+
         public WayPointType Type { get; private set; }
         public string Name { get; set; }
         public string Tag { get; set; }
+
+        public override double Range
+        {
+            get
+            {
+                if (Type == WayPointType.Mailbox)
+                    return MailboxRange;
+                if (Type == WayPointType.NPC)
+                    return NPCRange;
+                return XYZRange;
+            }
+        }
 
         public DestinationPoint(string name, WayPointType type, string tag, float x, float y, float z) : base(x, y, z)
         {

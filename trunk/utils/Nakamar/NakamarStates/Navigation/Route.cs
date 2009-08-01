@@ -21,7 +21,12 @@ namespace NakamarStates
             To = to;
         }
 
-        public Route(): this(null, null, null)
+        public Route(string name)
+            : this(name, null, null)
+        {
+        }
+
+        public Route()
         {
         }
 
@@ -45,6 +50,21 @@ namespace NakamarStates
                 xroute.Add(point.GetXml());
 
             return xroute;
+        }
+
+        public double TotalLength(WayPointSet w)
+        {
+            double ans = 0;
+            Point prev = w[From];
+            foreach (Point p in Points)
+            {
+                ans += prev.Distance(p);
+                prev = p;
+            }
+            ans += prev.Distance(w[To]);
+
+            return ans;
+
         }
     }
 }
