@@ -11,9 +11,23 @@ namespace NakamarStates
     /// </summary>
     public class Point
     {
+        private const double SimplePointRange = 1.0;
+
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
+
+        public virtual double Range { get { return SimplePointRange; } }
+
+        public bool InRange(double range, Point other)
+        {
+            return Distance(other) < range;
+        }
+
+        public virtual bool InRange(Point other)
+        {
+            return InRange(Range, other);
+        }
 
         public Point(float x, float y, float z)
         {

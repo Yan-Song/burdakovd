@@ -11,6 +11,14 @@ namespace NakamarStates
     {
         public Dictionary<string, List<Route>> Routes;
 
+        public int RoutesCount
+        {
+            get
+            {
+                return Routes.Select(kvp => kvp.Value.Count).Sum();
+            }
+        }
+
         public WayPointSet() : base()
         {
             Routes = new Dictionary<string, List<Route>>();
@@ -37,10 +45,7 @@ namespace NakamarStates
             foreach (XElement xroute in routes)
             {
                 Route route = new Route(xroute);
-                string from = route.From;
-                if(!Routes.ContainsKey(from))
-                    Routes[from] = new List<Route>();
-                Routes[from].Add(route);
+                Add(route);
             }
         }
 
@@ -51,8 +56,8 @@ namespace NakamarStates
             foreach (DestinationPoint p in this.Values)
                 file.Add(p.GetXml());
 
-            foreach (var kvp in this.Routes)
-                foreach (Route route in kvp.Value)
+            foreach (var routes in this.Routes.Values)
+                foreach (Route route in routes)
                     file.Add(route.GetXml());
 
             file.Save(filePath);
@@ -64,16 +69,45 @@ namespace NakamarStates
             this[point.Name] = point;
         }
 
-        public string NewName()
+        public string NewName(string prefix, HashSet<string> names)
         {
             string name;
             int n = 1;
             do
             {
-                name = "DestinationPoint" + n++;
+                name = prefix + n++;
             }
-            while (this.ContainsKey(name));
+            while (names.Contains(name));
             return name;
+        }
+
+        public string NewName(string prefix)
+        {
+            return NewName(prefix, new HashSet<string>(this.Keys));
+        }
+
+        public string NewName()
+        {
+            return NewName("DestinationPoint");
+        }
+
+        public string NewRouteName()
+        {
+            HashSet<string> names = new HashSet<string>();
+            foreach(var routes in Routes.Values)
+                foreach(var route in routes)
+                    names.Add(route.Name);
+
+            return NewName("Маршрут", names);
+        }
+
+        public void Add(Route route)
+        {
+            string from = route.From;
+            if(!Routes.ContainsKey(from))
+                Routes[from] = new List<Route>();
+
+            Routes[from].Add(route);
         }
     }
 }

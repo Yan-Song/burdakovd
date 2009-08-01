@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace NakamarStates
 {
-    class PlayerPoint : Point
+    public class PlayerPoint : Point
     {
         static readonly Vector OX = new Vector(1, 0);
 

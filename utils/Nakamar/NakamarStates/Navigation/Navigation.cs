@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using WoWMemoryManager;
 using WoWMemoryManager.WoWObject;
 using Util;
+using System.Collections;
 
 namespace NakamarStates
 {
@@ -16,8 +17,9 @@ namespace NakamarStates
     {
         WayPointSet Destinations;
         DestinationPoint Destination = null;
+        Route creatingRoute = null;
 
-        PlayerPoint Me
+        public PlayerPoint Me
         {
             get
             {
@@ -83,7 +85,7 @@ namespace NakamarStates
             try
             {
                 Destinations = new WayPointSet(Settings.Default.WayPointsPath);
-                Log("Загружено " + Destinations.Count + " точек маршрута из " + Settings.Default.WayPointsPath);
+                Log("Загружено " + Destinations.Count + " точек и " + Destinations.RoutesCount + " маршрутов из " + Settings.Default.WayPointsPath);
             }
             catch (FileNotFoundException e)
             {
@@ -166,37 +168,100 @@ namespace NakamarStates
 
         private void MakeRoute(AddonMessage m)
         {
-            throw new NotImplementedException();
+            string query = m.argument(0);
+            if (query == null)
+                throw new Exception("Куда идти?");
+            MakeRoute(query);
+        }
+
+        private IEnumerable<Point> RouteToSomeDestinationPoint()
+        {
+            Point nearestPoint = null;
+            Route nearestRoute = null;
+            double minDistance = double.MaxValue;
+            foreach (var routes in Destinations.Routes.Values)
+                foreach (var route in routes)
+                    foreach (var point in route.Points)
+                        if (Me.Distance(point) < minDistance)
+                        {
+                            minDistance = Me.Distance(point);
+                            nearestPoint = point;
+                            nearestRoute = route;
+                        }
+
+            Queue<Point> q = new Queue<Point>(nearestRoute.Points);
+            while (q.Peek() != nearestPoint)
+                q.Dequeue();
+           
+            q.Enqueue(Destinations[nearestRoute.To]);
+
+            return q;
         }
 
         private void ManageRoutes(AddonMessage m)
         {
-            string command = m.argument(0);
-            if (command == null)
-                LogError("нужно указать субкоманду begin|point|commit");
-            else if (command == "begin")
-                BeginRoute(m);
-            else if (command == "point")
-                AddPointInRoute();
-            else if (command == "commit")
-                CommitRoute();
-            else
-                throw new NotImplementedException(command);
+            try
+            {
+                string command = m.argument(0);
+                if (command == null)
+                    LogError("нужно указать субкоманду begin|point|commit");
+                else if (command == "begin")
+                    BeginRoute(m);
+                else if (command == "point")
+                    AddPointInRoute();
+                else if (command == "commit")
+                    CommitRoute(m);
+                else
+                    throw new NotImplementedException(command);
+            }
+            catch (Exception e)
+            {
+                LogError("Исключение при работе с маршрутами: " + e);
+            }
         }
 
         private void BeginRoute(AddonMessage m)
         {
-            throw new NotImplementedException();
+            DestinationPoint from = Destinations[m.argument(1)];
+            string name = m.argument(2) ?? Destinations.NewRouteName();
+
+            creatingRoute = new Route(name);
+            creatingRoute.From = from.Name;
+
+            Log("Начинаю создавать новый маршрут: " + name);
+            Log("Начальная точка: " + from);
         }
 
         private void AddPointInRoute()
         {
-            throw new NotImplementedException();
+            var player = Memory.ObjectManager.LocalPlayer;
+            Point current = new Point(player.XPosition, player.YPosition, player.ZPosition);
+            creatingRoute.Points.Add(current);
+            Point prev = creatingRoute.Points.Count < 2 ?
+                Destinations[creatingRoute.From] :
+                creatingRoute.Points[creatingRoute.Points.Count-2];
+            Log("В " + creatingRoute.Name + " добавлена точка №" + creatingRoute.Points.Count +
+                " (" + current.X + "; " + current.Y + "; " + current.Z + ")" +
+                ", расстояние от предыдущей точки: " + prev.Distance(current));
         }
 
-        private void CommitRoute()
+        private void CommitRoute(AddonMessage m)
         {
-            throw new NotImplementedException();
+            DestinationPoint to = Destinations[m.argument(1)];
+
+            creatingRoute.To = to.Name;
+
+            Destinations.Add(creatingRoute);
+
+            Log("Добавлен новый маршрут: '" + creatingRoute.Name);
+            Log("Количество промежуточных точек: " + creatingRoute.Points.Count);
+            Log("Общая длина маршрута: " + creatingRoute.TotalLength(Destinations));
+            Log("Исходная точка: " + Destinations[creatingRoute.From]);
+            Log("Конечная точка: " + Destinations[creatingRoute.To]);
+
+            creatingRoute = null;
+
+            Destinations.Save(Settings.Default.WayPointsPath);
         }
 
         private void ManageDestinations(AddonMessage m)
@@ -258,6 +323,7 @@ namespace NakamarStates
                 }
             if (nearest == null)
                 throw new Exception("there is no points");
+            
             return nearest;
         }
 
@@ -317,14 +383,14 @@ namespace NakamarStates
             GameObject nearestMailbox =
                 mailboxes.OrderBy(g => Me.Distance(g.XPosition, g.YPosition, g.ZPosition)).Single();
 
-            return new DestinationPoint(name ?? Destinations.NewName(), WayPointType.Mailbox, tag ?? "",
+            return new DestinationPoint(name ?? Destinations.NewName("Mailbox"), WayPointType.Mailbox, tag ?? "",
                 nearestMailbox.XPosition, nearestMailbox.YPosition, nearestMailbox.ZPosition);
         }
 
         private DestinationPoint NewSimpleDestination(string name, string tag)
         {
             var player = Memory.ObjectManager.LocalPlayer;
-            return new DestinationPoint(name ?? Destinations.NewName(), WayPointType.Simple, tag ?? "",
+            return new DestinationPoint(name ?? Destinations.NewName("XYZ"), WayPointType.Simple, tag ?? "",
                 player.XPosition, player.YPosition, player.ZPosition);
         }
 
@@ -333,9 +399,39 @@ namespace NakamarStates
             throw new NotImplementedException();
         }
 
-        private void MakeRoute(string destination)
+        private void MakeRoute(string query)
         {
-            throw new NotImplementedException();
+            DestinationPoint destination;
+            if (Destinations.ContainsKey(query)) // by name
+                destination = Destinations[query];
+            else // by tag
+            {
+                List<DestinationPoint> candidates = new List<DestinationPoint>();
+                foreach (DestinationPoint d in Destinations.Values)
+                    if (d.Tag == query)
+                        candidates.Add(d);
+                if (candidates.Count == 0)
+                    throw new Exception("destination not found");
+                destination = candidates[(new Random()).Next(0, candidates.Count)];
+            }
+            Queue<Point> points;
+            Log("Прокладываю маршрут к " + destination + "...");
+            DestinationPoint start = GetNearestDestinationPoint();
+            if (!start.InRange(Me))
+            {
+                Log("Я не нахожусь в радиусе действия ни одной из точек назначения. Поиск ближайшего маршрута...");
+                points = new Queue<Point>(RouteToSomeDestinationPoint());
+                start = (DestinationPoint)(points.Last());
+                Log("Ближайший маршрут ведёт к " + start);
+            }
+            else
+            {
+                points = new Queue<Point>();
+                Log("Сейчас я нахожусь возле " + start);
+            }
+            Log("Прокладываю маршрут от " + start + " до " + destination + "...");
+
+
         }
     }
 }
