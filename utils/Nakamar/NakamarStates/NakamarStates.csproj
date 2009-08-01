@@ -55,10 +55,12 @@
     <Compile Include="Misc\Idle.cs" />
     <Compile Include="Misc\MessageScanner.cs" />
     <Compile Include="Misc\MessageTimeout.cs" />
+    <Compile Include="Navigation\DestinationPoint.cs" />
     <Compile Include="Navigation\Navigation.cs" />
     <Compile Include="Navigation\PlayerPoint.cs" />
+    <Compile Include="Navigation\Route.cs" />
     <Compile Include="Navigation\WayPoint.cs" />
-    <Compile Include="Navigation\WayPointList.cs" />
+    <Compile Include="Navigation\WayPointSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

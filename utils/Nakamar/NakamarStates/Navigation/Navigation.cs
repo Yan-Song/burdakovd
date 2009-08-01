@@ -14,8 +14,8 @@ namespace NakamarStates
 {
     public class Navigation : State
     {
-        WayPointList WayPoints;
-        Point Destination = null;
+        WayPointSet Destinations;
+        DestinationPoint Destination = null;
 
         PlayerPoint Me
         {
@@ -82,13 +82,13 @@ namespace NakamarStates
         {
             try
             {
-                WayPoints = new WayPointList(Settings.Default.WayPointsPath);
-                Log("Загружено " + WayPoints.Count + " точек маршрута из " + Settings.Default.WayPointsPath);
+                Destinations = new WayPointSet(Settings.Default.WayPointsPath);
+                Log("Загружено " + Destinations.Count + " точек маршрута из " + Settings.Default.WayPointsPath);
             }
             catch (FileNotFoundException e)
             {
                 LogError("Точки маршрута не загружены: " + e.Message);
-                WayPoints = new WayPointList();
+                Destinations = new WayPointSet();
             }
         }
 
@@ -96,7 +96,7 @@ namespace NakamarStates
         {
             try
             {
-                WayPoints.Save(Settings.Default.WayPointsPath);
+                Destinations.Save(Settings.Default.WayPointsPath);
                 Log("Точки маршрута сохранены");
             }
             catch(Exception e)
@@ -122,7 +122,7 @@ namespace NakamarStates
                 if (!Memory.NewAddonMessage())
                     return false; // nothing to process
                 string command = Memory.GetAddonMessage().command;
-                return command == "waypoint" || command == "goto" || command == "break" || command == "route";
+                return command == "destination" || command == "goto" || command == "break" || command == "route";
             }
         }
 
@@ -134,7 +134,7 @@ namespace NakamarStates
             {
                 if (m.command == "goto")
                 {
-                    SetDestination(m);
+                    MakeRoute(m);
                     Memory.ProcessAddonMessage(m.id);
                 }
                 else if (m.command == "break" && Destination != null)
@@ -144,9 +144,9 @@ namespace NakamarStates
                     Memory.KB.KeyUpAll();
                     // do not ProcessAddonMessage(), because other states need to break too
                 }
-                else if (m.command == "waypoint")
+                else if (m.command == "destination")
                 {
-                    ManageWayPoints(m);
+                    ManageDestinations(m);
                     Memory.ProcessAddonMessage(m.id);
                 }
                 else if (m.command == "route")
@@ -164,7 +164,7 @@ namespace NakamarStates
 
         }
 
-        private void SetDestination(AddonMessage m)
+        private void MakeRoute(AddonMessage m)
         {
             throw new NotImplementedException();
         }
@@ -186,7 +186,7 @@ namespace NakamarStates
 
         private void BeginRoute(AddonMessage m)
         {
-            
+            throw new NotImplementedException();
         }
 
         private void AddPointInRoute()
@@ -199,13 +199,13 @@ namespace NakamarStates
             throw new NotImplementedException();
         }
 
-        private void ManageWayPoints(AddonMessage m)
+        private void ManageDestinations(AddonMessage m)
         {
             string command = m.argument(0);
             if (command == null)
                 LogError("нужно указать субкоманду");
             else if (command == "add")
-                AddWayPoint(m);
+                AddDestination(m);
             else if (command == "info")
                 ShowInfo(m);
             else
@@ -213,9 +213,9 @@ namespace NakamarStates
         }
 
         /// <summary>
-        /// waypoint;info;all (default)
-        /// waypoint;info;nearest
-        /// waypoint;info;WayPointName
+        /// destination;info;all (default)
+        /// destination;info;nearest
+        /// destination;info;DestinationPointName
         /// </summary>
         /// <param name="m"></param>
         private void ShowInfo(AddonMessage m)
@@ -224,33 +224,33 @@ namespace NakamarStates
             if (name == "nearest")
             {
                 Log("Информация о ближайшей точке:");
-                ShowInfo(GetNearestWayPoint());
+                ShowInfo(GetNearestDestinationPoint());
             }
             else if (name == "all")
             {
                 Log("Информация о всех точках:");
-                foreach (Point p in WayPoints.Values)
+                foreach (DestinationPoint p in Destinations.Values)
                     ShowInfo(p);
             }
             else
             {
                 Log("Информация о " + name + ":");
-                ShowInfo(WayPoints[name]);
+                ShowInfo(Destinations[name]);
             }
         }
 
-        private void ShowInfo(Point p)
+        private void ShowInfo(DestinationPoint p)
         {
             Log("  " + p.Name + "(x = " + p.X + "; y = " + p.Y + "; z = " + p.Z +
                 "; distance = " + Me.Distance(p) + "; angle = " + Me.Angle(p) +
                 "; relativeAngle = " + Me.RelativeAngle(Memory.ObjectManager.LocalPlayer.Rotation, p));
         }
 
-        private Point GetNearestWayPoint()
+        private DestinationPoint GetNearestDestinationPoint()
         {
-            Point nearest = null;
+            DestinationPoint nearest = null;
             double minDistance = double.MaxValue;
-            foreach(Point p in WayPoints.Values)
+            foreach(DestinationPoint p in Destinations.Values)
                 if (Me.Distance(p) < minDistance)
                 {
                     nearest = p;
@@ -262,28 +262,28 @@ namespace NakamarStates
         }
 
         /// <summary>
-        /// waypoint;add;Type[;Name[;Tag]]
+        /// destination;add;Type[;Name[;Tag]]
         /// </summary>
         /// <param name="m"></param>
-        private void AddWayPoint(AddonMessage m)
+        private void AddDestination(AddonMessage m)
         {
             WayPointType type = (WayPointType)Enum.Parse(typeof(WayPointType), m.argument(1, "Simple"), true);
 
             try
             {
-                Point point;
+                DestinationPoint point;
                 if (type == WayPointType.Simple)
-                    point = NewSimpleWayPoint(m.argument(2), m.argument(3)); // name, tag
+                    point = NewSimpleDestination(m.argument(2), m.argument(3)); // name, tag
                 else if (type == WayPointType.Mailbox)
-                    point = NewMailboxWayPoint(m.argument(2), m.argument(3)); // name, tag
+                    point = NewMailboxDestination(m.argument(2), m.argument(3)); // name, tag
                 else if (type == WayPointType.NPC)
-                    point = NewNPCWayPoint(m.argument(2)); // tag
+                    point = NewNPCDestination(m.argument(2)); // tag
                 else
                     throw new NotImplementedException(type.ToString());
 
-                WayPoints.Add(point);
+                Destinations.Add(point);
                 Log("Добавлена  " + point.ToString() + ", расстояние до неё: " + Me.Distance(point));
-                WayPoints.Save(Settings.Default.WayPointsPath);
+                Destinations.Save(Settings.Default.WayPointsPath);
 
             }
             catch (Exception e)
@@ -292,12 +292,12 @@ namespace NakamarStates
             }
         }
 
-        private Point NewNPCWayPoint(string tag)
+        private DestinationPoint NewNPCDestination(string tag)
         {
             try
             {
                 NpcObject target = (NpcObject)Memory.ObjectManager.ByGuid(Memory.ObjectManager.LocalPlayer.TargetGuid);
-                return new Point(target.Name, WayPointType.NPC, tag ?? "",
+                return new DestinationPoint(target.Name, WayPointType.NPC, tag ?? "",
                     target.XPosition, target.YPosition, target.ZPosition);
             }
             catch (KeyNotFoundException)
@@ -310,21 +310,21 @@ namespace NakamarStates
             }
         }
 
-        private Point NewMailboxWayPoint(string name, string tag)
+        private DestinationPoint NewMailboxDestination(string name, string tag)
         {
             IEnumerable<GameObject> mailboxes = Memory.ObjectManager.GameObjects.Where(g => g.Name == name);
             
             GameObject nearestMailbox =
                 mailboxes.OrderBy(g => Me.Distance(g.XPosition, g.YPosition, g.ZPosition)).Single();
 
-            return new Point(name ?? WayPoints.NewName(), WayPointType.Mailbox, tag ?? "",
+            return new DestinationPoint(name ?? Destinations.NewName(), WayPointType.Mailbox, tag ?? "",
                 nearestMailbox.XPosition, nearestMailbox.YPosition, nearestMailbox.ZPosition);
         }
 
-        private Point NewSimpleWayPoint(string name, string tag)
+        private DestinationPoint NewSimpleDestination(string name, string tag)
         {
             var player = Memory.ObjectManager.LocalPlayer;
-            return new Point(name ?? WayPoints.NewName(), WayPointType.Simple, tag ?? "",
+            return new DestinationPoint(name ?? Destinations.NewName(), WayPointType.Simple, tag ?? "",
                 player.XPosition, player.YPosition, player.ZPosition);
         }
 
@@ -333,7 +333,7 @@ namespace NakamarStates
             throw new NotImplementedException();
         }
 
-        private void SetDestination(string destination)
+        private void MakeRoute(string destination)
         {
             throw new NotImplementedException();
         }
