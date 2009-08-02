@@ -316,7 +316,7 @@ namespace Nakamar
         private void OnDeactivated(object sender, EventArgs e)
         {
             Opacity = (double)Settings.Default.Opacity / 100;
-            if (TransparentLogBox.Checked)
+            if (Settings.Default.TransparentLogBox)
                 LogBox.BackColor = Color.FromArgb(0xff, 0xfd, 0xfe);
             if(Settings.Default.HideButtons)
             {

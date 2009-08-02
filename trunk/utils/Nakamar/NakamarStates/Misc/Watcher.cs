@@ -32,18 +32,18 @@ namespace NakamarStates
                 {
                     //Logger.Watch("CurrentGameState", Memory.CurrentGameState());
                     //Logger.Watch("Watcher", "CurrentState", Machine.CurrentState);
-                    Logger.Watch("Watcher", "GetAddonMessage()", Memory.GetAddonMessage());
+                    //Logger.Watch("Watcher", "GetAddonMessage()", Memory.GetAddonMessage());
                     //Logger.Watch("Watcher", Memory.ObjectManager.Objects.
 
                     if (Memory.CurrentGameState == GameState.World)
                     {
-                        PlayerObject player = Memory.ObjectManager.LocalPlayer;
-                        Logger.Watch("Watcher", "LocalPlayer",
+                        /*PlayerObject player = Memory.ObjectManager.LocalPlayer;*/
+                        /*Logger.Watch("Watcher", "LocalPlayer",
                             "XYZ(" + player.XPosition + "; " + player.YPosition + "; " + player.ZPosition +
-                            "), rotation: " + player.Rotation);
-                        Logger.Watch("Watcher", "Player.Guid", player.Guid);
-                        Logger.Watch("Watcher", "Target name", Memory.TargetName);
-                        try
+                            "), rotation: " + player.Rotation);*/
+                        //Logger.Watch("Watcher", "Player.Guid", player.Guid);
+                        //Logger.Watch("Watcher", "Target name", Memory.TargetName);
+                        /*try
                         {
                             CreatureObject target = Memory.ObjectManager.ByGuid(player.TargetGuid) as CreatureObject;
                             Logger.Watch("Watcher", "target", "XYZ(" + target.XPosition + "; " + target.YPosition + "; " + target.ZPosition +
@@ -53,7 +53,7 @@ namespace NakamarStates
                         catch (KeyNotFoundException)
                         {
                             Logger.Watch("Watcher", "target", "target not found (" + player.TargetGuid + ")");
-                        }
+                        }*/
                         //Logger.Watch("Watcher", "Player.Guid2", player.Guid2);
                         /*foreach (WoWObject o in Memory.ObjectManager.Objects)
                             Logger.Watch("Watcher", o.ToString(), "Type is " + o.Type + ", Name is " + o.Name);*/

@@ -16,9 +16,9 @@ namespace NakamarStates
     public class DestinationPoint : Point
     {
         private const double
-            NPCRange = 3.0,
-            MailboxRange = 3.0,
-            XYZRange = 1.0;
+            NPCRange = 5,
+            MailboxRange = 2.0,
+            XYZRange = 3.0;
 
         public WayPointType Type { get; private set; }
         public string Name { get; set; }
@@ -104,12 +104,7 @@ namespace NakamarStates
 
         public override string ToString()
         {
-            return "DestinationPoint(Type=" + Type + ", " +
-                "Name = " + Name + ", " +
-                "Tag = " + Tag + ", " +
-                "X = " + X + ", " +
-                "Y = " + Y + ", " +
-                "Z = " + Z + ")";
+            return "[" + Tag + "] " + Name;
         }
     }
 }

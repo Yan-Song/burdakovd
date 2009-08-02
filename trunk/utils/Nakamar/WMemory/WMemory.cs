@@ -33,22 +33,24 @@ namespace WoWMemoryManager
 
     public class AddonMessage
     {
-        public int id;
-        public string command;
-        public string[] arguments;
-        public string target;
+        public int Id;
+        public string Command;
+        public string[] Arguments;
+        public string Target;
+        public string DoNotRestart;
+
         public override string ToString()
         {
-            return "[AddonMessage #" + id + "]: " + command + "(" + string.Join(", ", arguments) + ")";
+            return "[AddonMessage #" + Id + "]: " + Command + "(" + string.Join(", ", Arguments) + ")";
         }
         /// <summary>
         /// возвращает null если такого аргумента нет
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        public string argument(int position)
+        public string Argument(int position)
         {
-            return arguments.ElementAtOrDefault(position);
+            return Arguments.ElementAtOrDefault(position);
         }
 
         /// <summary>
@@ -57,9 +59,9 @@ namespace WoWMemoryManager
         /// <param name="position"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public string argument(int position, string defaultValue)
+        public string Argument(int position, string defaultValue)
         {
-            return argument(position) ?? defaultValue;
+            return Argument(position) ?? defaultValue;
         }
     }
 
@@ -355,10 +357,12 @@ namespace WoWMemoryManager
             if (p == 0) return null;
             uint pMessage = BM.ReadUInt(p + 16 * (uint)signature.Length);
             uint pTarget = BM.ReadUInt(p + 16 * ((uint)signature.Length + 1));
+            uint pDoNotRestart = BM.ReadUInt(p + 16 * ((uint)signature.Length + 2));
             // http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html#post717199
             string text = BM.ReadUTF8String(pMessage + 0x14, BM.ReadUInt(pMessage+0x10));
             string target = BM.ReadUTF8String(pTarget + 0x14, BM.ReadUInt(pTarget+0x10));
-            return new string[] { text, target };
+            string DoNotRestart = BM.ReadUTF8String(pDoNotRestart + 0x14, BM.ReadUInt(pDoNotRestart + 0x10));
+            return new string[] { text, target, DoNotRestart };
         }
 
         public AddonMessage GetAddonMessage()
@@ -376,14 +380,16 @@ namespace WoWMemoryManager
             if (raw == null) return lastIfPatternFailed ? LastMessage : null;
             string text = raw[0];
             string target = raw[1];
+            string DoNotRestart = raw[2];
             string[] ss = text.Split('|');
             AddonMessage result = new AddonMessage();
-            result.id = int.Parse(ss[0]);
+            result.Id = int.Parse(ss[0]);
             string[] tt = ss[1].Split(';');
-            result.command = tt[0];
-            result.arguments = new string[tt.Length-1];
-            Array.Copy(tt, 1, result.arguments, 0, tt.Length-1);
-            result.target = target;
+            result.Command = tt[0];
+            result.Arguments = new string[tt.Length-1];
+            Array.Copy(tt, 1, result.Arguments, 0, tt.Length-1);
+            result.Target = target;
+            result.DoNotRestart = DoNotRestart;
             return LastMessage = result;
         }
 
@@ -395,7 +401,7 @@ namespace WoWMemoryManager
 
         public bool NewAddonMessage()
         {
-            return GetAddonMessage()!=null && GetAddonMessage().id > LastProcessedMessage;
+            return GetAddonMessage()!=null && GetAddonMessage().Id > LastProcessedMessage;
         }
 
         public void ProcessAddonMessage(int id)
@@ -407,7 +413,7 @@ namespace WoWMemoryManager
         {
             get
             {
-                return GetAddonMessage() == null ? null : GetAddonMessage().target;
+                return GetAddonMessage() == null ? null : GetAddonMessage().Target;
             }
         }
 

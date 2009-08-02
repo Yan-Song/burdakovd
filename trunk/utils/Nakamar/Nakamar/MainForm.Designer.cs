@@ -41,6 +41,7 @@
             this.NeededFPSLabel = new System.Windows.Forms.Label();
             this.StatesPathBrowser = new System.Windows.Forms.OpenFileDialog();
             this.StatesSettingsGroup = new System.Windows.Forms.GroupBox();
+            this.BlockStateButton = new System.Windows.Forms.Button();
             this.StatesList = new System.Windows.Forms.ListBox();
             this.TopMostCheckBox = new System.Windows.Forms.CheckBox();
             this.OpacityTrackBar = new System.Windows.Forms.TrackBar();
@@ -55,6 +56,9 @@
             this.DisableBotButton = new System.Windows.Forms.Button();
             this.EnableBotButton = new System.Windows.Forms.Button();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.BlockedStatesGroup = new System.Windows.Forms.GroupBox();
+            this.UnBlockButton = new System.Windows.Forms.Button();
+            this.BlockedStatesList = new System.Windows.Forms.ListBox();
             this.WoWAutoStart = new System.Windows.Forms.CheckBox();
             this.WoWPath = new System.Windows.Forms.Button();
             this.AutoScrollCheckBox = new System.Windows.Forms.CheckBox();
@@ -68,10 +72,6 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.LogBoxFontDialog = new System.Windows.Forms.FontDialog();
             this.WoWPathBrowser = new System.Windows.Forms.OpenFileDialog();
-            this.BlockedStatesList = new System.Windows.Forms.ListBox();
-            this.BlockedStatesGroup = new System.Windows.Forms.GroupBox();
-            this.BlockStateButton = new System.Windows.Forms.Button();
-            this.UnBlockButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.NeededFPSSelector)).BeginInit();
             this.StatesSettingsGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OpacityTrackBar)).BeginInit();
@@ -79,8 +79,8 @@
             this.ManagementPage.SuspendLayout();
             this.ManagementPanel.SuspendLayout();
             this.SettingsPage.SuspendLayout();
-            this.StatusBar.SuspendLayout();
             this.BlockedStatesGroup.SuspendLayout();
+            this.StatusBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // SaveSettingsTimer
@@ -111,7 +111,7 @@
             // SelectStatesDirectoryButton
             // 
             this.SelectStatesDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.SelectStatesDirectoryButton.Location = new System.Drawing.Point(6, 191);
+            this.SelectStatesDirectoryButton.Location = new System.Drawing.Point(6, 84);
             this.SelectStatesDirectoryButton.Name = "SelectStatesDirectoryButton";
             this.SelectStatesDirectoryButton.Size = new System.Drawing.Size(84, 23);
             this.SelectStatesDirectoryButton.TabIndex = 14;
@@ -123,7 +123,7 @@
             // StateSettings
             // 
             this.StateSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.StateSettings.Location = new System.Drawing.Point(96, 191);
+            this.StateSettings.Location = new System.Drawing.Point(96, 84);
             this.StateSettings.Name = "StateSettings";
             this.StateSettings.Size = new System.Drawing.Size(84, 23);
             this.StateSettings.TabIndex = 1;
@@ -183,10 +183,21 @@
             this.StatesSettingsGroup.Controls.Add(this.StatesList);
             this.StatesSettingsGroup.Location = new System.Drawing.Point(6, 175);
             this.StatesSettingsGroup.Name = "StatesSettingsGroup";
-            this.StatesSettingsGroup.Size = new System.Drawing.Size(337, 220);
+            this.StatesSettingsGroup.Size = new System.Drawing.Size(337, 113);
             this.StatesSettingsGroup.TabIndex = 14;
             this.StatesSettingsGroup.TabStop = false;
             this.StatesSettingsGroup.Text = "Загруженные состояния";
+            // 
+            // BlockStateButton
+            // 
+            this.BlockStateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BlockStateButton.Location = new System.Drawing.Point(186, 84);
+            this.BlockStateButton.Name = "BlockStateButton";
+            this.BlockStateButton.Size = new System.Drawing.Size(83, 23);
+            this.BlockStateButton.TabIndex = 17;
+            this.BlockStateButton.Text = "Блокировать";
+            this.BlockStateButton.UseVisualStyleBackColor = true;
+            this.BlockStateButton.Click += new System.EventHandler(this.BlockStateButton_Click);
             // 
             // StatesList
             // 
@@ -197,7 +208,7 @@
             this.StatesList.IntegralHeight = false;
             this.StatesList.Location = new System.Drawing.Point(6, 19);
             this.StatesList.Name = "StatesList";
-            this.StatesList.Size = new System.Drawing.Size(325, 166);
+            this.StatesList.Size = new System.Drawing.Size(325, 59);
             this.StatesList.Sorted = true;
             this.StatesList.TabIndex = 0;
             this.StatesList.DoubleClick += new System.EventHandler(this.ConfigureState);
@@ -248,7 +259,7 @@
             this.Tabs.Location = new System.Drawing.Point(0, 0);
             this.Tabs.Name = "Tabs";
             this.Tabs.SelectedIndex = 0;
-            this.Tabs.Size = new System.Drawing.Size(745, 427);
+            this.Tabs.Size = new System.Drawing.Size(835, 320);
             this.Tabs.TabIndex = 18;
             // 
             // ManagementPage
@@ -259,7 +270,7 @@
             this.ManagementPage.Location = new System.Drawing.Point(4, 22);
             this.ManagementPage.Name = "ManagementPage";
             this.ManagementPage.Padding = new System.Windows.Forms.Padding(3);
-            this.ManagementPage.Size = new System.Drawing.Size(737, 401);
+            this.ManagementPage.Size = new System.Drawing.Size(827, 294);
             this.ManagementPage.TabIndex = 0;
             this.ManagementPage.Text = "Управление";
             // 
@@ -276,7 +287,7 @@
             this.LogBox.Location = new System.Drawing.Point(3, 55);
             this.LogBox.Name = "LogBox";
             this.LogBox.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.LogBox.Size = new System.Drawing.Size(731, 343);
+            this.LogBox.Size = new System.Drawing.Size(821, 236);
             this.LogBox.TabIndex = 7;
             // 
             // ManagementPanel
@@ -290,7 +301,7 @@
             this.ManagementPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.ManagementPanel.Location = new System.Drawing.Point(3, 3);
             this.ManagementPanel.Name = "ManagementPanel";
-            this.ManagementPanel.Size = new System.Drawing.Size(731, 52);
+            this.ManagementPanel.Size = new System.Drawing.Size(821, 52);
             this.ManagementPanel.TabIndex = 5;
             // 
             // StartWoWButton
@@ -365,10 +376,46 @@
             this.SettingsPage.Location = new System.Drawing.Point(4, 22);
             this.SettingsPage.Name = "SettingsPage";
             this.SettingsPage.Padding = new System.Windows.Forms.Padding(3);
-            this.SettingsPage.Size = new System.Drawing.Size(737, 401);
+            this.SettingsPage.Size = new System.Drawing.Size(827, 294);
             this.SettingsPage.TabIndex = 1;
             this.SettingsPage.Text = "Настройки";
             this.SettingsPage.UseVisualStyleBackColor = true;
+            // 
+            // BlockedStatesGroup
+            // 
+            this.BlockedStatesGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.BlockedStatesGroup.Controls.Add(this.UnBlockButton);
+            this.BlockedStatesGroup.Controls.Add(this.BlockedStatesList);
+            this.BlockedStatesGroup.Location = new System.Drawing.Point(439, 175);
+            this.BlockedStatesGroup.Name = "BlockedStatesGroup";
+            this.BlockedStatesGroup.Size = new System.Drawing.Size(380, 113);
+            this.BlockedStatesGroup.TabIndex = 25;
+            this.BlockedStatesGroup.TabStop = false;
+            this.BlockedStatesGroup.Text = "Заблокированные состояния";
+            // 
+            // UnBlockButton
+            // 
+            this.UnBlockButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.UnBlockButton.Location = new System.Drawing.Point(6, 84);
+            this.UnBlockButton.Name = "UnBlockButton";
+            this.UnBlockButton.Size = new System.Drawing.Size(102, 23);
+            this.UnBlockButton.TabIndex = 16;
+            this.UnBlockButton.Text = "Разблокировать";
+            this.UnBlockButton.UseVisualStyleBackColor = true;
+            this.UnBlockButton.Click += new System.EventHandler(this.UnBlockButton_Click);
+            // 
+            // BlockedStatesList
+            // 
+            this.BlockedStatesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.BlockedStatesList.FormattingEnabled = true;
+            this.BlockedStatesList.IntegralHeight = false;
+            this.BlockedStatesList.Location = new System.Drawing.Point(6, 19);
+            this.BlockedStatesList.Name = "BlockedStatesList";
+            this.BlockedStatesList.Size = new System.Drawing.Size(368, 59);
+            this.BlockedStatesList.TabIndex = 15;
             // 
             // WoWAutoStart
             // 
@@ -459,16 +506,16 @@
             this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LastStateValue,
             this.CurrentFPSValue});
-            this.StatusBar.Location = new System.Drawing.Point(0, 430);
+            this.StatusBar.Location = new System.Drawing.Point(0, 323);
             this.StatusBar.Name = "StatusBar";
             this.StatusBar.ShowItemToolTips = true;
-            this.StatusBar.Size = new System.Drawing.Size(745, 22);
+            this.StatusBar.Size = new System.Drawing.Size(835, 22);
             this.StatusBar.TabIndex = 23;
             // 
             // LastStateValue
             // 
             this.LastStateValue.Name = "LastStateValue";
-            this.LastStateValue.Size = new System.Drawing.Size(705, 17);
+            this.LastStateValue.Size = new System.Drawing.Size(795, 17);
             this.LastStateValue.Spring = true;
             this.LastStateValue.Text = "state";
             this.LastStateValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -507,58 +554,11 @@
             this.WoWPathBrowser.Filter = "Программы (*.exe)|*.exe";
             this.WoWPathBrowser.ReadOnlyChecked = true;
             // 
-            // BlockedStatesList
-            // 
-            this.BlockedStatesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.BlockedStatesList.FormattingEnabled = true;
-            this.BlockedStatesList.IntegralHeight = false;
-            this.BlockedStatesList.Location = new System.Drawing.Point(6, 19);
-            this.BlockedStatesList.Name = "BlockedStatesList";
-            this.BlockedStatesList.Size = new System.Drawing.Size(368, 166);
-            this.BlockedStatesList.TabIndex = 15;
-            // 
-            // BlockedStatesGroup
-            // 
-            this.BlockedStatesGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.BlockedStatesGroup.Controls.Add(this.UnBlockButton);
-            this.BlockedStatesGroup.Controls.Add(this.BlockedStatesList);
-            this.BlockedStatesGroup.Location = new System.Drawing.Point(349, 175);
-            this.BlockedStatesGroup.Name = "BlockedStatesGroup";
-            this.BlockedStatesGroup.Size = new System.Drawing.Size(380, 220);
-            this.BlockedStatesGroup.TabIndex = 25;
-            this.BlockedStatesGroup.TabStop = false;
-            this.BlockedStatesGroup.Text = "Заблокированные состояния";
-            // 
-            // BlockStateButton
-            // 
-            this.BlockStateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BlockStateButton.Location = new System.Drawing.Point(186, 191);
-            this.BlockStateButton.Name = "BlockStateButton";
-            this.BlockStateButton.Size = new System.Drawing.Size(83, 23);
-            this.BlockStateButton.TabIndex = 17;
-            this.BlockStateButton.Text = "Блокировать";
-            this.BlockStateButton.UseVisualStyleBackColor = true;
-            this.BlockStateButton.Click += new System.EventHandler(this.BlockStateButton_Click);
-            // 
-            // UnBlockButton
-            // 
-            this.UnBlockButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.UnBlockButton.Location = new System.Drawing.Point(6, 191);
-            this.UnBlockButton.Name = "UnBlockButton";
-            this.UnBlockButton.Size = new System.Drawing.Size(102, 23);
-            this.UnBlockButton.TabIndex = 16;
-            this.UnBlockButton.Text = "Разблокировать";
-            this.UnBlockButton.UseVisualStyleBackColor = true;
-            this.UnBlockButton.Click += new System.EventHandler(this.UnBlockButton_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(745, 452);
+            this.ClientSize = new System.Drawing.Size(835, 345);
             this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.Tabs);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::Nakamar.Properties.Settings.Default, "MainWindowLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -581,9 +581,9 @@
             this.ManagementPanel.PerformLayout();
             this.SettingsPage.ResumeLayout(false);
             this.SettingsPage.PerformLayout();
+            this.BlockedStatesGroup.ResumeLayout(false);
             this.StatusBar.ResumeLayout(false);
             this.StatusBar.PerformLayout();
-            this.BlockedStatesGroup.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

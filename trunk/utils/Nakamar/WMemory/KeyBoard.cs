@@ -135,8 +135,18 @@ namespace WoWMemoryManager
 
         public void KeyUpAll()
         {
-            foreach(int key in PressedKeys)
+            List<int> p = new List<int>(PressedKeys);
+            foreach(int key in p)
                 KeyUp(key, false);
+        }
+
+        public void PressKeys(IEnumerable<Key> keys, bool wait)
+        {
+            foreach (Key key in keys)
+            {
+                Thread.Sleep(rnd.Next(50, 100));
+                PressKey(key, wait);
+            }
         }
 
         #endregion

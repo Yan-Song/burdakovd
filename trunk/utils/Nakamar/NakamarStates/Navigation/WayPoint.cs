@@ -11,7 +11,7 @@ namespace NakamarStates
     /// </summary>
     public class Point
     {
-        private const double SimplePointRange = 1.0;
+        private const double SimplePointRange = 2.0;
 
         public float X { get; set; }
         public float Y { get; set; }

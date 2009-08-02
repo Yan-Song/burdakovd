@@ -13,7 +13,7 @@ namespace NakamarStates
     {
         DateTime LastMessageTime = DateTime.Now;
         int LastMessageId = -1;
-        const int WaitMinutes = 5;
+        const int WaitMinutes = 10;
 
         public MessageTimeout(object machine, object memory) : base(machine, memory) { }
 
@@ -31,7 +31,7 @@ namespace NakamarStates
 
                 if (Memory.GetAddonMessage() != null)
                 {
-                    int id = Memory.GetAddonMessage().id;
+                    int id = Memory.GetAddonMessage().Id;
                     if (id != LastMessageId)
                     {
                         LastMessageId = id;
