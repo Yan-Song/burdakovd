@@ -263,7 +263,7 @@ namespace WoWMemoryManager
 
             uint bufferSize = 1<<26;
 
-            foreach(MEMORY_BASIC_INFORMATION m in Extern.EnumerateMemoryRanges(BM.ProcessHandle).Reverse())
+            foreach(MEMORY_BASIC_INFORMATION m in Extern.EnumerateMemoryRanges(BM.ProcessHandle))
 
                 if (m.State == MemoryState.MEM_COMMIT &&
                     m.lType == MemoryType.MEM_PRIVATE &&

@@ -447,6 +447,8 @@ namespace NakamarStates
 
         private void RandomJump()
         {
+            if (!CurrentMovementState)
+                return;
             if ((DateTime.Now - lastRandomJumpDecisionTime).TotalSeconds < 1)
                 return;
 
