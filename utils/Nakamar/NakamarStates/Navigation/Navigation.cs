@@ -10,14 +10,30 @@ using WoWMemoryManager;
 using WoWMemoryManager.WoWObject;
 using Util;
 using System.Collections;
+using System.Windows.Input;
+using System.Threading;
 
 namespace NakamarStates
 {
+    enum TurningState
+    {
+        Left, Right, None
+    }
+
     public class Navigation : State
     {
+        private const double
+            // максимальный угол между текущим и необходимым Rotation, при котором ещё можно идти вперёд
+            MoveMaxAngle = Math.PI / 3,
+            // минимальный угол -->>--, при котором уже можно жать кнопки поворота
+            TurnMinAngle = Math.PI / 9;
+
         WayPointSet Destinations;
-        DestinationPoint Destination = null;
+        Queue<Point> MovementQueue = null;
         Route creatingRoute = null;
+
+        bool CurrentMovementState = false;
+        TurningState CurrentTurningState = TurningState.None;
 
         public PlayerPoint Me
         {
@@ -119,11 +135,16 @@ namespace NakamarStates
         {
             get
             {
-                if (Destination != null)
+                if (!Memory.IsWoWForeground())
+                {
+                    StopNavigation();
+                    return false;
+                }
+                if (MovementQueue != null)
                     return true; // need to move
                 if (!Memory.NewAddonMessage())
                     return false; // nothing to process
-                string command = Memory.GetAddonMessage().command;
+                string command = Memory.GetAddonMessage().Command;
                 return command == "destination" || command == "goto" || command == "break" || command == "route";
             }
         }
@@ -134,30 +155,27 @@ namespace NakamarStates
 
             if (Memory.NewAddonMessage())
             {
-                if (m.command == "goto")
+                if (m.Command == "goto")
                 {
                     MakeRoute(m);
-                    Memory.ProcessAddonMessage(m.id);
+                    Memory.ProcessAddonMessage(m.Id);
                 }
-                else if (m.command == "break" && Destination != null)
+                else if (m.Command == "break" && MovementQueue != null)
                 {
-                    Destination = null;
-                    Log("Отменяю движение");
-                    Memory.KB.KeyUpAll();
-                    // do not ProcessAddonMessage(), because other states need to break too
+                    StopNavigation();
                 }
-                else if (m.command == "destination")
+                else if (m.Command == "destination")
                 {
                     ManageDestinations(m);
-                    Memory.ProcessAddonMessage(m.id);
+                    Memory.ProcessAddonMessage(m.Id);
                 }
-                else if (m.command == "route")
+                else if (m.Command == "route")
                 {
                     ManageRoutes(m);
-                    Memory.ProcessAddonMessage(m.id);
+                    Memory.ProcessAddonMessage(m.Id);
                 }
             }
-            else if (Destination != null)
+            else if (MovementQueue != null)
             {
                 Navigate();
             }
@@ -168,7 +186,7 @@ namespace NakamarStates
 
         private void MakeRoute(AddonMessage m)
         {
-            string query = m.argument(0);
+            string query = m.Argument(0);
             if (query == null)
                 throw new Exception("Куда идти?");
             MakeRoute(query);
@@ -202,7 +220,7 @@ namespace NakamarStates
         {
             try
             {
-                string command = m.argument(0);
+                string command = m.Argument(0);
                 if (command == null)
                     LogError("нужно указать субкоманду begin|point|commit");
                 else if (command == "begin")
@@ -222,8 +240,8 @@ namespace NakamarStates
 
         private void BeginRoute(AddonMessage m)
         {
-            DestinationPoint from = Destinations[m.argument(1)];
-            string name = m.argument(2) ?? Destinations.NewRouteName();
+            DestinationPoint from = Destinations[m.Argument(1)];
+            string name = m.Argument(2) ?? Destinations.NewRouteName();
 
             creatingRoute = new Route(name);
             creatingRoute.From = from.Name;
@@ -247,7 +265,7 @@ namespace NakamarStates
 
         private void CommitRoute(AddonMessage m)
         {
-            DestinationPoint to = Destinations[m.argument(1)];
+            DestinationPoint to = Destinations[m.Argument(1)];
 
             creatingRoute.To = to.Name;
 
@@ -261,12 +279,12 @@ namespace NakamarStates
 
             creatingRoute = null;
 
-            Destinations.Save(Settings.Default.WayPointsPath);
+            Save();
         }
 
         private void ManageDestinations(AddonMessage m)
         {
-            string command = m.argument(0);
+            string command = m.Argument(0);
             if (command == null)
                 LogError("нужно указать субкоманду");
             else if (command == "add")
@@ -285,7 +303,7 @@ namespace NakamarStates
         /// <param name="m"></param>
         private void ShowInfo(AddonMessage m)
         {
-            string name = m.argument(1, "all");
+            string name = m.Argument(1, "all");
             if (name == "nearest")
             {
                 Log("Информация о ближайшей точке:");
@@ -333,23 +351,23 @@ namespace NakamarStates
         /// <param name="m"></param>
         private void AddDestination(AddonMessage m)
         {
-            WayPointType type = (WayPointType)Enum.Parse(typeof(WayPointType), m.argument(1, "Simple"), true);
+            WayPointType type = (WayPointType)Enum.Parse(typeof(WayPointType), m.Argument(1, "Simple"), true);
 
             try
             {
                 DestinationPoint point;
                 if (type == WayPointType.Simple)
-                    point = NewSimpleDestination(m.argument(2), m.argument(3)); // name, tag
+                    point = NewSimpleDestination(m.Argument(2), m.Argument(3)); // name, tag
                 else if (type == WayPointType.Mailbox)
-                    point = NewMailboxDestination(m.argument(2), m.argument(3)); // name, tag
+                    point = NewMailboxDestination(m.Argument(2), m.Argument(3)); // name, tag
                 else if (type == WayPointType.NPC)
-                    point = NewNPCDestination(m.argument(2)); // tag
+                    point = NewNPCDestination(m.Argument(2)); // tag
                 else
                     throw new NotImplementedException(type.ToString());
 
                 Destinations.Add(point);
                 Log("Добавлена  " + point.ToString() + ", расстояние до неё: " + Me.Distance(point));
-                Destinations.Save(Settings.Default.WayPointsPath);
+                Save();
 
             }
             catch (Exception e)
@@ -396,11 +414,243 @@ namespace NakamarStates
 
         private void Navigate()
         {
-            throw new NotImplementedException();
+            Point current = MovementQueue.Peek();
+            PlayerObject player = Memory.ObjectManager.LocalPlayer;
+
+            AntiStuck();
+            if (MovementQueue == null)
+                return;
+
+            RandomJump();
+
+            if (current.InRange(Me)) // подошли к некоторой точке маршрута
+                if (MovementQueue.Count == 1)
+                {
+                    SetMovementState(false);
+                    SetTurningState(TurningState.None);
+                    DoInteract((DestinationPoint)current);
+                }
+                else
+                {
+                    //Log("Переход к следующей точке маршрута");
+                    MovementQueue.Dequeue();
+                }
+            else
+            {
+                double relativeAngle = Me.RelativeAngle(player.Rotation, current);
+                SetMovementState(Math.Abs(relativeAngle) < MoveMaxAngle);
+                SetTurningState(relativeAngle);
+            }
+        }
+
+        DateTime lastRandomJumpDecisionTime = DateTime.Now;
+
+        private void RandomJump()
+        {
+            if ((DateTime.Now - lastRandomJumpDecisionTime).TotalSeconds < 1)
+                return;
+
+            lastRandomJumpDecisionTime = DateTime.Now;
+
+            if ((new Random()).Next(1, 10) == 1)
+                Jump();
+        }
+
+        DateTime LastJumped = new DateTime(0), LastTimeChecked = new DateTime(0);
+        Point rememberedWaypoint;
+        double lastDistance;
+        private void AntiStuck()
+        {
+            if (!CurrentMovementState || rememberedWaypoint != MovementQueue.Peek())
+            {
+                LastTimeChecked = DateTime.Now;
+                rememberedWaypoint = MovementQueue.Peek();
+                lastDistance = Me.Distance(rememberedWaypoint);
+            }
+            // за последние 0.5 секунды
+            if ((DateTime.Now - LastTimeChecked).TotalSeconds >= 0.5)
+            {
+                if (lastDistance - Me.Distance(rememberedWaypoint) > 1) // за последние полсекунды прошли более 1, сбрасываем
+                {
+                    lastDistance = Me.Distance(rememberedWaypoint);
+                    LastTimeChecked = DateTime.Now;
+                }
+                else if ((DateTime.Now - LastTimeChecked).TotalSeconds > 5) // прошло уже 5 секунд
+                {
+                    Log("совсем застрял!!! закрываю всё");
+                    StopNavigation();
+                    Memory.StopWoW();
+                    Machine.DoNotRestart = true;
+                    Machine.StopEngineByWorker();
+                }
+                else // застрял и прошло от 0.5 до 5 секунд
+                {
+                    if ((DateTime.Now - LastJumped).TotalSeconds > 0.5) // за последние полсекунды не прыгали
+                    {
+                        Log("застрял? попробую попрыгать");
+                        Jump();
+                        LastJumped = DateTime.Now;
+                    }
+                }
+            }
+        }
+
+        private void Jump()
+        {
+            Memory.KB.PressKey(KeyBindings.Jump, false);
+        }
+
+        private void SetTurningState(double relativeAngle, double turnMinAngle)
+        {
+            double a = Math.Abs(relativeAngle);
+
+            if (a > turnMinAngle)
+                if (relativeAngle > 0)
+                    SetTurningState(TurningState.Left);
+                else
+                    SetTurningState(TurningState.Right);
+            else
+                SetTurningState(TurningState.None);
+        }
+
+        private void SetTurningState(double relativeAngle)
+        {
+            SetTurningState(relativeAngle, TurnMinAngle);
+        }
+
+        private void SetTurningState(TurningState turningState)
+        {
+            if (turningState == CurrentTurningState) return;
+
+            //Log("TurningState = " + turningState);
+
+            // отменяем предыдущий поворот если он был
+            if (CurrentTurningState == TurningState.Left)
+                Memory.KB.KeyUp(KeyBindings.TurnLeft, false);
+            else if (CurrentTurningState == TurningState.Right)
+                Memory.KB.KeyUp(KeyBindings.TurnRight, false);
+
+            // делаем новый если не None
+            if (turningState == TurningState.Left)
+                Memory.KB.KeyDown(KeyBindings.TurnLeft, false);
+            else if (turningState == TurningState.Right)
+                Memory.KB.KeyDown(KeyBindings.TurnRight, false);
+
+            CurrentTurningState = turningState;
+        }
+
+        private void SetMovementState(bool isMoving)
+        {
+            if(isMoving != CurrentMovementState)
+            {
+                CurrentMovementState = isMoving;
+                if (isMoving)
+                {
+                    //Log("startMovement");
+                    Memory.KB.KeyDown(KeyBindings.MoveForward, false);
+                }
+                else
+                {
+                    //Log("stopMovement");
+                    Memory.KB.KeyUp(KeyBindings.MoveForward, false);
+                }
+            }
+        }
+
+        DateTime nextNPCInteractTry = DateTime.Now;
+        DateTime? interactStartTime = null;
+        private void DoInteract(DestinationPoint current)
+        {
+            var player = Memory.ObjectManager.LocalPlayer;
+            if (interactStartTime == null)
+                interactStartTime = DateTime.Now;
+
+            if ((DateTime.Now - (DateTime)interactStartTime).TotalSeconds > 30)
+            {
+                Log("Не получилось сделать Interact c " + current + " в течение 30 секунд, делаю скриншот");
+                Memory.KB.PressKey(KeyBindings.PrintScreen, true);
+                Thread.Sleep(1000);
+                Log("Выключаю всё.");
+                Memory.StopWoW();
+                Machine.DoNotRestart = true;
+                Machine.StopEngineByWorker();
+            }
+
+            if (current.Type == WayPointType.Simple)
+            {
+                StopNavigation();
+            }
+            else if (current.Type == WayPointType.NPC)
+            {
+                double required = Math.PI / 3, now = Me.RelativeAngle(player.Rotation, current);
+                SetTurningState(now, required); // повернуться к NPC лицом
+                if (Math.Abs(now) > required) return;
+
+                if (DateTime.Now > nextNPCInteractTry)
+                {
+                    string target;
+                    try
+                    {
+                        WoWObject oTarget = Memory.ObjectManager.ByGuid(player.TargetGuid);
+                        if (oTarget is NpcObject)
+                            target = ((NpcObject)oTarget).Name;
+                        else
+                            target = "";
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        target = "";
+                    }
+
+                    if (target == current.Name)
+                    {
+                        Memory.KB.PressKey(KeyBindings.Interact, true);
+                        StopNavigation();
+                    }
+                    else
+                    {
+                        Memory.KB.PressKey(KeyBindings.SelectNearestFriend, true);
+                        nextNPCInteractTry = DateTime.Now + TimeSpan.FromMilliseconds((new Random()).Next(600, 1200));
+                    }
+                }
+            }
+            else if (current.Type == WayPointType.Mailbox)
+            {
+                // повернуться к Mailbox, чтоб он был посреди экрана +- 10 градусов
+
+                double required = Math.PI / 18, now = Me.RelativeAngle(player.Rotation, current);
+                SetTurningState(now, required);
+                if (Math.Abs(now) > required) return;
+
+                List<Key> zoomInKeys = new List<Key>();
+                for (int i = 0; i < 10; i++)
+                    zoomInKeys.Add(KeyBindings.CameraZoomIn);
+
+                Memory.KB.PressKeys(zoomInKeys, true); // приблизить камеру на максимум
+                //Memory.KB.PressKey(KeyBindings.CameraZoomedIn, true);
+                Thread.Sleep(2000);
+                Memory.KB.PressKey(KeyBindings.MouseInteract, true);
+                Memory.KB.PressKey(KeyBindings.CameraNormal, false); // вернуть
+                StopNavigation();
+            }
+            else
+                throw new NotImplementedException();
+        }
+
+        private void StopNavigation()
+        {
+            if(MovementQueue != null)
+                Log("Навигатор завершает свою работу");
+            MovementQueue = null;
+            CurrentMovementState = false;
+            CurrentTurningState = TurningState.None;
+            interactStartTime = null;
+            Memory.KB.KeyUpAll();
         }
 
         private void MakeRoute(string query)
         {
+            StopNavigation();
             DestinationPoint destination;
             if (Destinations.ContainsKey(query)) // by name
                 destination = Destinations[query];
@@ -415,7 +665,7 @@ namespace NakamarStates
                 destination = candidates[(new Random()).Next(0, candidates.Count)];
             }
             Queue<Point> points;
-            Log("Прокладываю маршрут к " + destination + "...");
+            
             DestinationPoint start = GetNearestDestinationPoint();
             if (!start.InRange(Me))
             {
@@ -427,11 +677,88 @@ namespace NakamarStates
             else
             {
                 points = new Queue<Point>();
-                Log("Сейчас я нахожусь возле " + start);
+                points.Enqueue(start);
             }
-            Log("Прокладываю маршрут от " + start + " до " + destination + "...");
+            Log("Прокладываю маршрут от " + start + " до " + destination);
 
+            IEnumerable<DestinationPoint> metaRoute = BFS(start, destination);
+            DestinationPoint current = start;
+            foreach (DestinationPoint next in metaRoute)
+            {
+                Route route = DirectRoute(current, next);
+                foreach (var point in route.Points)
+                    points.Enqueue(point);
+                points.Enqueue(Destinations[route.To]);
+                current = next;
+            }
+            
+            MovementQueue = new Queue<Point>(points);
 
+            Log("Маршрут проложен, " + points.Count + " точек");
+            /*foreach (Point p in points)
+                Log("  => " + p);*/
+        }
+
+        private IEnumerable<DestinationPoint> BFS(DestinationPoint start, DestinationPoint finish)
+        {
+            Dictionary<string, int> distance = new Dictionary<string, int>();
+            Dictionary<string, DestinationPoint> parent =
+                new Dictionary<string, DestinationPoint>();
+
+            distance[start.Name] = 0;
+
+            Queue<DestinationPoint> q = new Queue<DestinationPoint>();
+
+            q.Enqueue(start);
+
+            while (q.Count != 0 && !distance.ContainsKey(finish.Name))
+            {
+                DestinationPoint current = q.Dequeue();
+                foreach (Route r in Destinations.RoutesFrom(current))
+                {
+                    DestinationPoint to = Destinations[r.To];
+                    if (!distance.ContainsKey(to.Name) || distance[current.Name] + 1 < distance[to.Name])
+                    {
+                        distance[to.Name] = distance[current.Name] + 1;
+                        parent[to.Name] = current;
+                        if (!q.Contains(to))
+                            q.Enqueue(to);
+                    }
+                }
+            }
+
+            if (distance.ContainsKey(finish.Name))
+            {
+                List<DestinationPoint> l = new List<DestinationPoint>();
+                DestinationPoint current = finish;
+                while (current != start)
+                {
+                    l.Insert(0, current);
+                    current = parent[current.Name];
+                }
+                return l;
+            }
+            else
+                throw new Exception("destination unreachable");
+        }
+
+        private Route DirectRoute(DestinationPoint start, DestinationPoint destination)
+        {
+            if (start == destination)
+                return new Route("empty", start.Name, destination.Name);
+
+            List<Route> directRoutes = new List<Route>(
+                from route in Destinations.RoutesFrom(start)
+                where route.To == destination.Name
+                select route);
+
+            if (directRoutes.Count == 0)
+                return null;
+            else
+            {
+                Route route = directRoutes[(new Random()).Next(0, directRoutes.Count)];
+                return route;
+            }
         }
     }
 }

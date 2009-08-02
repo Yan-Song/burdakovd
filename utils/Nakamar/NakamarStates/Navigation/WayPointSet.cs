@@ -109,5 +109,13 @@ namespace NakamarStates
 
             Routes[from].Add(route);
         }
+
+        public IEnumerable<Route> RoutesFrom(DestinationPoint from)
+        {
+            if (Routes.ContainsKey(from.Name))
+                return Routes[from.Name];
+            else
+                return new List<Route>();
+        }
     }
 }

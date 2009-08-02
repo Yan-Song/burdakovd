@@ -52,9 +52,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Misc\DoNotRestart.cs" />
     <Compile Include="Misc\Idle.cs" />
+    <Compile Include="Misc\KeyBindings.cs" />
     <Compile Include="Misc\MessageScanner.cs" />
     <Compile Include="Misc\MessageTimeout.cs" />
+    <Compile Include="Misc\RandomPet.cs" />
     <Compile Include="Navigation\DestinationPoint.cs" />
     <Compile Include="Navigation\Navigation.cs" />
     <Compile Include="Navigation\PlayerPoint.cs" />

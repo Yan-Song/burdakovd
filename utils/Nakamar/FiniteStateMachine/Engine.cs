@@ -128,6 +128,14 @@ namespace FiniteStateMachine
                 foreach(string line in Regex.Split(e.ToString(), Environment.NewLine))
                     Logger.Log("FSM-worker", " "+line);
 
+                try
+                {
+                    Memory.KB.KeyUpAll();
+                }
+                catch
+                {
+                };
+
                 Thread.Sleep(10000);
                 try
                 {
