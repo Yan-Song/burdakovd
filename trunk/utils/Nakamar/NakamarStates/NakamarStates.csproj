@@ -57,10 +57,12 @@
     <Compile Include="Misc\KeyBindings.cs" />
     <Compile Include="Misc\MessageScanner.cs" />
     <Compile Include="Misc\MessageTimeout.cs" />
+    <Compile Include="Misc\PurchaseConfirmation.cs" />
     <Compile Include="Misc\RandomPet.cs" />
     <Compile Include="Navigation\DestinationPoint.cs" />
     <Compile Include="Navigation\Navigation.cs" />
     <Compile Include="Navigation\PlayerPoint.cs" />
+    <Compile Include="Navigation\Point.cs" />
     <Compile Include="Navigation\Route.cs" />
     <Compile Include="Navigation\WayPoint.cs" />
     <Compile Include="Navigation\WayPointSet.cs" />
@@ -90,9 +92,9 @@
       <Project>{78DF6A81-A7AC-44DF-8F8F-278E0D119903}</Project>
       <Name>FiniteStateMachine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Logger\Logger.csproj">
+    <ProjectReference Include="..\Logger\Util.csproj">
       <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
-      <Name>Logger</Name>
+      <Name>Util</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMemory\WMemory.csproj">
       <Project>{6E806492-5FFE-4C3C-BF20-22277FAED955}</Project>

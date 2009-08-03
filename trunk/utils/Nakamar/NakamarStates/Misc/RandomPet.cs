@@ -22,8 +22,10 @@ namespace NakamarStates
         {
             get
             {
-                return Memory.CurrentGameState == GameState.World &&
-                    (DateTime.Now - lastRandomPetDecisionTime).TotalSeconds > 1;
+                return
+                    (DateTime.Now - lastRandomPetDecisionTime).TotalSeconds > 1
+                    && Memory.CurrentGameState == GameState.World
+                    && Memory.IsWoWForeground();
             }
         }
 

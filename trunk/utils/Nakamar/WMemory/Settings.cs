@@ -1,5 +1,5 @@
-﻿namespace Nakamar.Properties {
-    
+﻿namespace WoWMemoryManager.Properties
+{
     
     // Этот класс позволяет обрабатывать определенные события в классе параметров:
     //  Событие SettingChanging возникает перед изменением значения параметра.
@@ -7,6 +7,37 @@
     //  Событие SettingsLoaded возникает после загрузки значений параметров.
     //  Событие SettingsSaving возникает перед сохранением значений параметров.
     internal sealed partial class Settings {
+
+        [global::System.Configuration.SettingsSerializeAs(System.Configuration.SettingsSerializeAs.Xml)]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public global::Util.SerializableDictionary<Pattern, uint> FindPatternCache
+        {
+            get
+            {
+                return ((global::Util.SerializableDictionary<Pattern, uint>)(this["FindPatternCache"]));
+            }
+            set
+            {
+                this["FindPatternCache"] = value;
+            }
+        }
+
+        [global::System.Configuration.SettingsSerializeAs(System.Configuration.SettingsSerializeAs.Xml)]
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public global::Util.SerializableDictionary<double[], global::System.Collections.Generic.List<uint>> AddonSignatureStatistics
+        {
+            get
+            {
+                return ((global::Util.SerializableDictionary<double[], global::System.Collections.Generic.List<uint>>)
+                    (this["AddonSignatureStatistics"]));
+            }
+            set
+            {
+                this["AddonSignatureStatistics"] = value;
+            }
+        }
 
         public Settings() {
             // // Для добавления обработчиков событий для сохранения и изменения параметров раскомментируйте приведенные ниже строки:

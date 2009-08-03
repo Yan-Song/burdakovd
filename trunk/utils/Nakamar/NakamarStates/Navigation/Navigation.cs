@@ -29,7 +29,7 @@ namespace NakamarStates
             TurnMinAngle = Math.PI / 9;
 
         WayPointSet Destinations;
-        Queue<Point> MovementQueue = null;
+        Queue<WayPoint> MovementQueue = null;
         Route creatingRoute = null;
 
         bool CurrentMovementState = false;
@@ -192,26 +192,43 @@ namespace NakamarStates
             MakeRoute(query);
         }
 
-        private IEnumerable<Point> RouteToSomeDestinationPoint()
+        /// <summary>
+        /// ищет ближайший отрезок маршрута,  затем идёт по этому маршруту до ближайшей точки назначения
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<WayPoint> RouteToSomeDestinationPoint()
         {
-            Point nearestPoint = null;
+            WayPoint secondPointOfNearestSegment = null;
             Route nearestRoute = null;
             double minDistance = double.MaxValue;
+
             foreach (var routes in Destinations.Routes.Values)
-                foreach (var route in routes)
-                    foreach (var point in route.Points)
-                        if (Me.Distance(point) < minDistance)
+                foreach (Route route in routes)
+                {
+                    WayPoint previous = Destinations[route.From];
+                    List<WayPoint> points = new List<WayPoint>(route.Points);
+                    points.Add(Destinations[route.To]);
+
+                    foreach (WayPoint point in points)
+                    {
+                        double distance = Me.Distance(previous, point);
+                        if (distance < minDistance)
                         {
-                            minDistance = Me.Distance(point);
-                            nearestPoint = point;
+                            minDistance = distance;
+                            secondPointOfNearestSegment = point;
                             nearestRoute = route;
                         }
+                        previous = point;
+                    }
+                }
 
-            Queue<Point> q = new Queue<Point>(nearestRoute.Points);
-            while (q.Peek() != nearestPoint)
-                q.Dequeue();
-           
+            Log("Расстояние до ближайшего маршрута: " + minDistance);
+
+            Queue<WayPoint> q = new Queue<WayPoint>(nearestRoute.Points);
             q.Enqueue(Destinations[nearestRoute.To]);
+
+            while (q.Peek() != secondPointOfNearestSegment)
+                q.Dequeue();
 
             return q;
         }
@@ -253,9 +270,9 @@ namespace NakamarStates
         private void AddPointInRoute()
         {
             var player = Memory.ObjectManager.LocalPlayer;
-            Point current = new Point(player.XPosition, player.YPosition, player.ZPosition);
+            WayPoint current = new WayPoint(player.XPosition, player.YPosition, player.ZPosition);
             creatingRoute.Points.Add(current);
-            Point prev = creatingRoute.Points.Count < 2 ?
+            WayPoint prev = creatingRoute.Points.Count < 2 ?
                 Destinations[creatingRoute.From] :
                 creatingRoute.Points[creatingRoute.Points.Count-2];
             Log("В " + creatingRoute.Name + " добавлена точка №" + creatingRoute.Points.Count +
@@ -401,7 +418,7 @@ namespace NakamarStates
             GameObject nearestMailbox =
                 mailboxes.OrderBy(g => Me.Distance(g.XPosition, g.YPosition, g.ZPosition)).Single();
 
-            return new DestinationPoint(name ?? Destinations.NewName("Mailbox"), WayPointType.Mailbox, tag ?? "",
+            return new DestinationPoint(name, WayPointType.Mailbox, tag ?? "",
                 nearestMailbox.XPosition, nearestMailbox.YPosition, nearestMailbox.ZPosition);
         }
 
@@ -414,14 +431,8 @@ namespace NakamarStates
 
         private void Navigate()
         {
-            Point current = MovementQueue.Peek();
+            WayPoint current = MovementQueue.Peek();
             PlayerObject player = Memory.ObjectManager.LocalPlayer;
-
-            AntiStuck();
-            if (MovementQueue == null)
-                return;
-
-            RandomJump();
 
             if (current.InRange(Me)) // подошли к некоторой точке маршрута
                 if (MovementQueue.Count == 1)
@@ -437,6 +448,14 @@ namespace NakamarStates
                 }
             else
             {
+                // двигаемся
+
+                AntiStuck();
+                if (MovementQueue == null)
+                    return;
+
+                RandomJump();
+
                 double relativeAngle = Me.RelativeAngle(player.Rotation, current);
                 SetMovementState(Math.Abs(relativeAngle) < MoveMaxAngle);
                 SetTurningState(relativeAngle);
@@ -458,41 +477,61 @@ namespace NakamarStates
                 Jump();
         }
 
-        DateTime LastJumped = new DateTime(0), LastTimeChecked = new DateTime(0);
-        Point rememberedWaypoint;
+        DateTime LastJumped = new DateTime(0),
+            LastTimeChecked = new DateTime(0),
+            LastTimeChecked5 = new DateTime(0);
+        WayPoint rememberedWaypoint;
         double lastDistance;
+        double lastDistance5;
         private void AntiStuck()
         {
-            if (!CurrentMovementState || rememberedWaypoint != MovementQueue.Peek())
+            if (rememberedWaypoint != MovementQueue.Peek())
+            {
+                LastTimeChecked = LastTimeChecked5 = DateTime.Now;
+                rememberedWaypoint = MovementQueue.Peek();
+                lastDistance = lastDistance5 = Me.Distance(rememberedWaypoint);
+            }
+
+            if(!CurrentMovementState)
             {
                 LastTimeChecked = DateTime.Now;
-                rememberedWaypoint = MovementQueue.Peek();
                 lastDistance = Me.Distance(rememberedWaypoint);
             }
+
             // за последние 0.5 секунды
-            if ((DateTime.Now - LastTimeChecked).TotalSeconds >= 0.5)
+            if ((DateTime.Now - LastTimeChecked).TotalSeconds > 0.5)
             {
                 if (lastDistance - Me.Distance(rememberedWaypoint) > 1) // за последние полсекунды прошли более 1, сбрасываем
                 {
                     lastDistance = Me.Distance(rememberedWaypoint);
                     LastTimeChecked = DateTime.Now;
                 }
-                else if ((DateTime.Now - LastTimeChecked).TotalSeconds > 5) // прошло уже 5 секунд
-                {
-                    Log("совсем застрял!!! закрываю всё");
-                    StopNavigation();
-                    Memory.StopWoW();
-                    Machine.DoNotRestart = true;
-                    Machine.StopEngineByWorker();
-                }
-                else // застрял и прошло от 0.5 до 5 секунд
+                else // возможно застрял
                 {
                     if ((DateTime.Now - LastJumped).TotalSeconds > 0.5) // за последние полсекунды не прыгали
                     {
-                        Log("застрял? попробую попрыгать");
+                        //Log("застрял? попробую попрыгать");
                         Jump();
                         LastJumped = DateTime.Now;
                     }
+                }
+            }
+
+            // за последние 5 секунд
+            if ((DateTime.Now - LastTimeChecked5).TotalSeconds > 5)
+            {
+                if (lastDistance5 - Me.Distance(rememberedWaypoint) > 1) // за последние 5 секунд прошли более 1, сбрасываем
+                {
+                    lastDistance5 = Me.Distance(rememberedWaypoint);
+                    LastTimeChecked5 = DateTime.Now;
+                }
+                else // точно застрял
+                {
+                    Log("совсем застрял!!! закрываю всё");
+                    StopNavigation();
+                    Machine.DoNotRestart = true;
+                    Memory.StopWoW();
+                    Machine.StopEngineByWorker();               
                 }
             }
         }
@@ -559,11 +598,72 @@ namespace NakamarStates
             }
         }
 
+        private void InteractWithXYZ(DestinationPoint point)
+        {
+            StopNavigation();
+        }
+
         DateTime nextNPCInteractTry = DateTime.Now;
+        private void InteractWithNPC(DestinationPoint npc)
+        {
+            var player = Memory.ObjectManager.LocalPlayer;
+            double required = Math.PI / 3, now = Me.RelativeAngle(player.Rotation, npc);
+            SetTurningState(now, required); // повернуться к NPC лицом
+            if (Math.Abs(now) > required) return;
+
+            if (DateTime.Now > nextNPCInteractTry)
+            {
+                string target;
+                try
+                {
+                    WoWObject oTarget = Memory.ObjectManager.ByGuid(player.TargetGuid);
+                    if (oTarget is NpcObject)
+                        target = ((NpcObject)oTarget).Name;
+                    else
+                        target = "";
+                }
+                catch (KeyNotFoundException)
+                {
+                    target = "";
+                }
+
+                if (target == npc.Name)
+                {
+                    Memory.KB.PressKey(KeyBindings.Interact, true);
+                    StopNavigation();
+                }
+                else
+                {
+                    Memory.KB.PressKey(KeyBindings.SelectNearestFriend, true);
+                    nextNPCInteractTry = DateTime.Now + TimeSpan.FromMilliseconds((new Random()).Next(1200, 2400));
+                }
+            }
+        }
+
+        private void InteractWithMailbox(DestinationPoint mailbox)
+        {
+            var player = Memory.ObjectManager.LocalPlayer;
+            // повернуться к Mailbox, чтоб он был посреди экрана +- 10 градусов
+
+            double required = Math.PI / 18, now = Me.RelativeAngle(player.Rotation, mailbox);
+            SetTurningState(now, required);
+            if (Math.Abs(now) > required) return;
+
+            List<Key> zoomInKeys = new List<Key>();
+            for (int i = 0; i < 10; i++)
+                zoomInKeys.Add(KeyBindings.CameraZoomIn);
+
+            Memory.KB.PressKeys(zoomInKeys, true); // приблизить камеру на максимум
+            //Memory.KB.PressKey(KeyBindings.CameraZoomedIn, true);
+            Thread.Sleep(2000);
+            Memory.KB.PressKey(KeyBindings.MouseInteract, true);
+            Memory.KB.PressKey(KeyBindings.CameraNormal, false); // вернуть
+            StopNavigation();
+        }
+
         DateTime? interactStartTime = null;
         private void DoInteract(DestinationPoint current)
         {
-            var player = Memory.ObjectManager.LocalPlayer;
             if (interactStartTime == null)
                 interactStartTime = DateTime.Now;
 
@@ -573,68 +673,18 @@ namespace NakamarStates
                 Memory.KB.PressKey(KeyBindings.PrintScreen, true);
                 Thread.Sleep(1000);
                 Log("Выключаю всё.");
+                StopNavigation();
                 Memory.StopWoW();
                 Machine.DoNotRestart = true;
                 Machine.StopEngineByWorker();
             }
 
-            if (current.Type == WayPointType.Simple)
-            {
-                StopNavigation();
-            }
+            else if (current.Type == WayPointType.Simple)
+                InteractWithXYZ(current);
             else if (current.Type == WayPointType.NPC)
-            {
-                double required = Math.PI / 3, now = Me.RelativeAngle(player.Rotation, current);
-                SetTurningState(now, required); // повернуться к NPC лицом
-                if (Math.Abs(now) > required) return;
-
-                if (DateTime.Now > nextNPCInteractTry)
-                {
-                    string target;
-                    try
-                    {
-                        WoWObject oTarget = Memory.ObjectManager.ByGuid(player.TargetGuid);
-                        if (oTarget is NpcObject)
-                            target = ((NpcObject)oTarget).Name;
-                        else
-                            target = "";
-                    }
-                    catch (KeyNotFoundException)
-                    {
-                        target = "";
-                    }
-
-                    if (target == current.Name)
-                    {
-                        Memory.KB.PressKey(KeyBindings.Interact, true);
-                        StopNavigation();
-                    }
-                    else
-                    {
-                        Memory.KB.PressKey(KeyBindings.SelectNearestFriend, true);
-                        nextNPCInteractTry = DateTime.Now + TimeSpan.FromMilliseconds((new Random()).Next(600, 1200));
-                    }
-                }
-            }
+                InteractWithNPC(current);
             else if (current.Type == WayPointType.Mailbox)
-            {
-                // повернуться к Mailbox, чтоб он был посреди экрана +- 10 градусов
-
-                double required = Math.PI / 18, now = Me.RelativeAngle(player.Rotation, current);
-                SetTurningState(now, required);
-                if (Math.Abs(now) > required) return;
-
-                List<Key> zoomInKeys = new List<Key>();
-                for (int i = 0; i < 10; i++)
-                    zoomInKeys.Add(KeyBindings.CameraZoomIn);
-
-                Memory.KB.PressKeys(zoomInKeys, true); // приблизить камеру на максимум
-                //Memory.KB.PressKey(KeyBindings.CameraZoomedIn, true);
-                Thread.Sleep(2000);
-                Memory.KB.PressKey(KeyBindings.MouseInteract, true);
-                Memory.KB.PressKey(KeyBindings.CameraNormal, false); // вернуть
-                StopNavigation();
-            }
+                InteractWithMailbox(current);
             else
                 throw new NotImplementedException();
         }
@@ -666,22 +716,21 @@ namespace NakamarStates
                     throw new Exception("destination not found");
                 destination = candidates[(new Random()).Next(0, candidates.Count)];
             }
-            Queue<Point> points;
+            Queue<WayPoint> points;
             
             DestinationPoint start = GetNearestDestinationPoint();
             if (!start.InRange(Me))
             {
                 Log("Я не нахожусь в радиусе действия ни одной из точек назначения. Поиск ближайшего маршрута...");
-                points = new Queue<Point>(RouteToSomeDestinationPoint());
+                points = new Queue<WayPoint>(RouteToSomeDestinationPoint());
                 start = (DestinationPoint)(points.Last());
                 Log("Ближайший маршрут ведёт к " + start);
             }
             else
             {
-                points = new Queue<Point>();
+                points = new Queue<WayPoint>();
                 points.Enqueue(start);
             }
-            Log("Прокладываю маршрут от " + start + " до " + destination);
 
             IEnumerable<DestinationPoint> metaRoute = BFS(start, destination);
             DestinationPoint current = start;
@@ -694,11 +743,9 @@ namespace NakamarStates
                 current = next;
             }
             
-            MovementQueue = new Queue<Point>(points);
+            MovementQueue = new Queue<WayPoint>(points);
 
-            Log("Маршрут проложен, " + points.Count + " точек");
-            /*foreach (Point p in points)
-                Log("  => " + p);*/
+            Log("Проложен маршрут от " + start + " до " + destination + ", " + points.Count + " точек");
         }
 
         private IEnumerable<DestinationPoint> BFS(DestinationPoint start, DestinationPoint finish)

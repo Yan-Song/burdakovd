@@ -15,12 +15,11 @@ namespace NakamarStates
             Jump = Key.Space,
             PrintScreen = Key.PrintScreen,
             RandomPet = Key.F4,
-            ConfirmBuy = Key.F9,
             SelectNearestFriend = Key.F1,
             Interact = Key.F2,
             MouseInteract = Key.F3,
             CameraZoomIn = Key.F6,
-            CameraZoomedIn = Key.F7,
-            CameraNormal = Key.F8;
+            CameraNormal = Key.F8,
+            ConfirmPurchase = Key.F9;
     }
 }

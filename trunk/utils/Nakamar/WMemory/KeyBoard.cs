@@ -13,7 +13,7 @@ namespace WoWMemoryManager
 {
     public class KeyBoard
     {
-        /// <summary>
+        /*/// <summary>
         /// тут могут быть проблемы если окно не просто на заднем плане, а ещё и свёрнуто,
         /// то эта функция его не разворачивает, а активирует прямо свёрнутое, после чего оно ведёт себя странно
         /// </summary>
@@ -23,7 +23,7 @@ namespace WoWMemoryManager
             {
                 Extern.SetForegroundWindow(window);
             }
-        }
+        }*/
 
         private void PostOrSendMessageSafe(UInt32 msg, UInt32 wParam, UInt32 lParam, bool wait)
         {
@@ -41,6 +41,7 @@ namespace WoWMemoryManager
         {
             uint code = Extern.MapVirtualKey((uint)k, MAPVK_VK_TO_VSC);
             Debug.Assert(code < 256);
+            Debug.Assert(code >= 0);
             return code;
         }
 

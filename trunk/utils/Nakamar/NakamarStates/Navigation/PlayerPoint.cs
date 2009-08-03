@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace NakamarStates
 {
-    public class PlayerPoint : Point
+    public class PlayerPoint : WayPoint
     {
         static readonly Vector OX = new Vector(1, 0);
 
@@ -23,7 +23,7 @@ namespace NakamarStates
         /// </summary>
         /// <param name="p"></param>
         /// <returns>0..2*Math.PI</returns>
-        public double Angle(Point p)
+        public double Angle(WayPoint p)
         {
             Vector v = new Vector(p.X - this.X, p.Y - this.Y);
             double angle = Vector.AngleBetween(OX, v);
@@ -40,7 +40,7 @@ namespace NakamarStates
         /// </summary>
         /// <param name="p"></param>
         /// <returns>-Math.PI..Math.PI</returns>
-        public double RelativeAngle(double currentRotation, Point p)
+        public double RelativeAngle(double currentRotation, WayPoint p)
         {
             double rel = Angle(p) - currentRotation;
             while (rel > Math.PI)
