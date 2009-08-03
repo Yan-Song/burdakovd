@@ -96,30 +96,31 @@ namespace FiniteStateMachine
             }
         }
 
+        private int neededFPS = 100;
         public void StartEngine(int framesPerSecond)
         {
-            // We want to round a bit here.
-            int sleepTime = 1000 / framesPerSecond;
-
             Running = true;
-
+            neededFPS = framesPerSecond;
             // Leave it as a background thread. This CAN trail off
             // as the program exits, without any issues really.
             _workerThread = new Thread(Run) { IsBackground = true, Name = "FSM-worker" };
-            _workerThread.Start(sleepTime);
+            _workerThread.Start();
         }
 
-        private void Run(object sleepTime)
+        private int sleepTime;
+        private void Run()
         {
             try
             {
+                sleepTime = 1000 / neededFPS;
                 // This will immitate a games FPS
                 // and attempt to 'pulse' each frame
                 while (Running)
                 {
+                    AdjustSleepTime();
                     Pulse();
                     // Sleep for a 'frame'
-                    Thread.Sleep((int)sleepTime);
+                    Thread.Sleep(sleepTime);
                 }
             }
             catch (Exception e)
@@ -160,6 +161,27 @@ namespace FiniteStateMachine
                 // and other bugs.
                 Running = false;
             }
+        }
+
+        private DateTime previousAdjustTime = DateTime.Now;
+        private ulong previousFrameCount = 0;
+        private void AdjustSleepTime()
+        {
+            if (DateTime.Now - previousAdjustTime < new TimeSpan(0, 0, 1))
+                return;
+
+            previousAdjustTime = DateTime.Now;
+
+            int realFPS = (int)(FrameCount - previousFrameCount);
+
+            previousFrameCount = FrameCount;
+
+            int adj = Math.Max(1, sleepTime / 10);
+
+            if (realFPS < neededFPS)
+                sleepTime -= adj;
+            else if (realFPS > neededFPS)
+                sleepTime += adj;
         }
 
         /// <summary>
