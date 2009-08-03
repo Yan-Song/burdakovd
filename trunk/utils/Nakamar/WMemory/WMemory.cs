@@ -307,7 +307,7 @@ namespace WoWMemoryManager
                         if (pos != 0)
                         {
                             Log("Сигнатура аддона найдена по адресу 0x" +
-                                pos.ToString("X8") + " за " + DateTime.Now-startTime + " сек.");
+                                pos.ToString("X8") + " за " + (DateTime.Now-startTime) + " сек.");
                             DynamicDoublePatternCache[pattern] = pos;
                             if (!Settings.Default.AddonSignatureStatistics.ContainsKey(pattern))
                                 Settings.Default.AddonSignatureStatistics[pattern] = new List<uint>();
