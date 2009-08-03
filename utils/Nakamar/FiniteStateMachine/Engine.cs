@@ -167,12 +167,14 @@ namespace FiniteStateMachine
         private ulong previousFrameCount = 0;
         private void AdjustSleepTime()
         {
-            if (DateTime.Now - previousAdjustTime < new TimeSpan(0, 0, 1))
+            double elapsed = (DateTime.Now - previousAdjustTime).TotalSeconds;
+
+            if (elapsed < 1)
                 return;
 
             previousAdjustTime = DateTime.Now;
 
-            int realFPS = (int)(FrameCount - previousFrameCount);
+            double realFPS = (FrameCount - previousFrameCount) / elapsed;
 
             previousFrameCount = FrameCount;
 
@@ -180,7 +182,7 @@ namespace FiniteStateMachine
 
             if (realFPS < neededFPS)
                 sleepTime -= adj;
-            else if (realFPS > neededFPS)
+            else
                 sleepTime += adj;
         }
 
