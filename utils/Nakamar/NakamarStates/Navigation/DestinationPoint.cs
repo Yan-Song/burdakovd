@@ -13,7 +13,7 @@ namespace NakamarStates
         Mailbox,
     }
 
-    public class DestinationPoint : Point
+    public class DestinationPoint : WayPoint
     {
         private const double
             NPCRange = 5,
@@ -36,18 +36,18 @@ namespace NakamarStates
             }
         }
 
-        public DestinationPoint(string name, WayPointType type, string tag, float x, float y, float z) : base(x, y, z)
+        public DestinationPoint(string name, WayPointType type, string tag, double x, double y, double z) : base(x, y, z)
         {
             Type = type;
             Name = name;
             Tag = tag;
         }
 
-        public DestinationPoint(string name, WayPointType type, float x, float y, float z)
+        public DestinationPoint(string name, WayPointType type, double x, double y, double z)
             : this
                 (name, type, "", x, y, z) { }
 
-        public DestinationPoint(WayPointType type, float x, float y, float z) : this(null, type, x, y, z) {}
+        public DestinationPoint(WayPointType type, double x, double y, double z) : this(null, type, x, y, z) {}
 
         public DestinationPoint(XElement xml) : base(xml)
         {

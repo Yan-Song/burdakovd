@@ -11,11 +11,11 @@ namespace NakamarStates
         public string From;
         public string To;
         public string Name;
-        public List<Point> Points;
+        public List<WayPoint> Points;
 
         public Route(string name, string from, string to)
         {
-            Points = new List<Point>();
+            Points = new List<WayPoint>();
             Name = name;
             From = from;
             To = to;
@@ -36,7 +36,7 @@ namespace NakamarStates
             xml.Attribute("To").Value)
         {
             foreach (XElement xpoint in xml.Descendants("Point"))
-                Points.Add(new Point(xpoint));
+                Points.Add(new WayPoint(xpoint));
         }
 
         public XElement GetXml()
@@ -46,7 +46,7 @@ namespace NakamarStates
                 new XAttribute("From", From),
                 new XAttribute("To", To));
 
-            foreach (Point point in Points)
+            foreach (WayPoint point in Points)
                 xroute.Add(point.GetXml());
 
             return xroute;
@@ -55,8 +55,8 @@ namespace NakamarStates
         public double TotalLength(WayPointSet w)
         {
             double ans = 0;
-            Point prev = w[From];
-            foreach (Point p in Points)
+            WayPoint prev = w[From];
+            foreach (WayPoint p in Points)
             {
                 ans += prev.Distance(p);
                 prev = p;

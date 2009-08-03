@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMemory", "WMemory\WMemory.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiniteStateMachine", "FiniteStateMachine\FiniteStateMachine.csproj", "{78DF6A81-A7AC-44DF-8F8F-278E0D119903}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "Logger\Util.csproj", "{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Binaries", "Binaries", "{7BB8E694-86A2-4447-8BDE-79421B030684}"
 	ProjectSection(SolutionItems) = preProject

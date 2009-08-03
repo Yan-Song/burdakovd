@@ -104,7 +104,8 @@ namespace Nakamar
 
             Log("Программа запущена");
             Monitor(sender, e);
-            
+
+            RestoreWindowState();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -117,6 +118,7 @@ namespace Nakamar
 
         private void SaveSettings()
         {
+            SaveWindowState();
             Settings.Default.Save();
         }      
         
@@ -167,8 +169,7 @@ namespace Nakamar
 
             int WoWId = WoWProcesses()[0];
 
-            WoW = new WoWMemoryManager.MemoryManager(WoWId,
-                (Hashtable)Settings.Default.FindPatternCache.Clone());
+            WoW = new WoWMemoryManager.MemoryManager(WoWId);
 
             FSM = new Engine(WoW);
 
@@ -202,7 +203,6 @@ namespace Nakamar
                 Settings.Default.WoWAutoStart = false;
             }
             FSM = null;
-            Settings.Default.FindPatternCache = WoW.Cache;
             WoW = null;
             BotEnabled = false;
             lastDisabled = DateTime.Now;
@@ -226,15 +226,14 @@ namespace Nakamar
 
         private void Monitor(object sender, EventArgs e)
         {
-            // run WoW if needed
-            if (Settings.Default.WoWAutoStart && !IsWoWRunning())
-                StartWoW(sender, e);
-
-            StartWoWButton.Enabled = !IsWoWRunning();
-
             // stop bot if something goes wrong
             if (BotEnabled && !(FSM.Running && IsOneWoWRunning()))
                 DisableBot();
+
+            // run WoW if needed
+            if (Settings.Default.WoWAutoStart && !IsWoWRunning())
+                StartWoW(sender, e);
+            StartWoWButton.Enabled = !IsWoWRunning();
 
             // start if needed
             if (!BotEnabled && Settings.Default.AutoEnable && IsOneWoWRunning() && (DateTime.Now-lastDisabled).Ticks>100000000)
@@ -428,6 +427,33 @@ namespace Nakamar
                     UpdateStatesGUI();
                 }
             }
+        }
+
+        private void SaveWindowState()
+        {
+            if (WindowState == FormWindowState.Normal)
+            {
+                Properties.Settings.Default.MainFormLocation = Location;
+                Properties.Settings.Default.MainFormSize = Size;
+            }
+            else
+            {
+                Properties.Settings.Default.MainFormLocation = RestoreBounds.Location;
+                Properties.Settings.Default.MainFormSize = RestoreBounds.Size;
+            }
+            Properties.Settings.Default.MainFormState = WindowState;
+        }
+
+        private void RestoreWindowState()
+        {
+            if (Properties.Settings.Default.MainFormSize == new Size(0, 0))
+            {
+                return; // state has never been saved
+            }
+            StartPosition = FormStartPosition.Manual;
+            Location = Properties.Settings.Default.MainFormLocation;
+            Size = Properties.Settings.Default.MainFormSize;
+            WindowState = Properties.Settings.Default.MainFormState;
         }
     }
 }

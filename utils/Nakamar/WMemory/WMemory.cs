@@ -7,6 +7,8 @@ using System.Windows.Input;
 using Magic;
 using Util;
 using WoWMemoryManager.WoWObject;
+using WoWMemoryManager.Properties;
+using System.Collections.Generic;
 
 /*
 // вычисляем оффсеты
@@ -38,6 +40,7 @@ namespace WoWMemoryManager
         public string[] Arguments;
         public string Target;
         public string DoNotRestart;
+        public bool NeedPurchaseConfirmation;
 
         public override string ToString()
         {
@@ -68,9 +71,8 @@ namespace WoWMemoryManager
     public class MemoryManager
     {
         public BlackMagic BM;
-        public Hashtable Cache;
         public KeyBoard KB;
-        private Hashtable DynamicCache;
+        private Dictionary<double[], uint> DynamicDoublePatternCache = new Dictionary<double[],uint>();
         private static double[] signature = {901791, 349667, 371721, 139443, 213674};
         private AddonMessage LastMessage;
         private int LastProcessedMessage = -1;
@@ -107,11 +109,9 @@ namespace WoWMemoryManager
 
         #endregion
 
-        public MemoryManager(int id, Hashtable cache)
+        public MemoryManager(int id)
         {
             BM = new BlackMagic(id);
-            Cache = cache;
-            DynamicCache = new Hashtable();
             KB = new KeyBoard(BM.WindowHandle);
             LastMessage = null;
         }
@@ -142,24 +142,37 @@ namespace WoWMemoryManager
 
         private uint FindPattern(Pattern pattern)
         {
-            string key = pattern.PatternString + ", " + pattern.Mask + ", " + pattern.Offset;
-            if (Cache.Contains(key) && Cache[key] is uint)
+            if (Settings.Default.FindPatternCache.ContainsKey(pattern))
             {
-                uint cached = (uint)Cache[key];
-                if (CheckPattern(pattern, cached))
+                uint cached = Settings.Default.FindPatternCache[pattern];
+                bool ok = true;
+                try
+                {
+                    if (!CheckPattern(pattern, cached))
+                        ok = false;
+                }
+                catch
+                {
+                    ok = false;
+                }
+                if (ok)
                     return cached;
                 else
                 {
-                    Log("кэшированный оффсет FindPattern(" + key + ") == " + cached.ToString("X") + " устарел, ищем заново");
-                    Cache.Remove(key);
+                    Log("кэшированный оффсет FindPattern(" + pattern + ") == 0x" + cached.ToString("X8") + " устарел, ищем заново");
+                    Settings.Default.FindPatternCache.Remove(pattern);
+                    Settings.Default.Save();
                 }
             }
             uint ans = BM.FindPattern(pattern.PatternString, pattern.Mask);
             if (ans == (uint)BM.MainModule.BaseAddress) throw new ApplicationException("Pattern not found");
 
-            Cache[key] = ans + pattern.Offset;
-            Log("найден новый оффсет FindPattern(" + key + ") == " + ((uint)Cache[key]).ToString("X"));
-            return (uint)Cache[key];
+            Settings.Default.FindPatternCache[pattern] = ans + pattern.Offset;
+            Log("найден новый оффсет FindPattern(" + pattern + ") == 0x" +
+                Settings.Default.FindPatternCache[pattern].ToString("X8"));
+
+            Settings.Default.Save();
+            return Settings.Default.FindPatternCache[pattern];
         }
 
         private uint FindPattern(uint pattern)
@@ -179,7 +192,7 @@ namespace WoWMemoryManager
         #endregion
 
         /// <summary>
-        /// возвращает тру если окно WoW сейчас активировано
+        /// возвращает тру если окно WoW сейчас активно
         /// </summary>
         /// <returns></returns>
         public bool IsWoWForeground()
@@ -228,21 +241,38 @@ namespace WoWMemoryManager
 
         public void StopWoW()
         {
+            Log("Закрываю WoW...");
             Process wow = Process.GetProcessById(BM.ProcessId);
             wow.CloseMainWindow();
             wow.WaitForExit();
+            Log("WoW закрыт");
         }
 
         private uint CachedDoublePattern(double[] pattern)
         {
-            if (DynamicCache.Contains(pattern))
-                if (CheckDoublePattern((uint)DynamicCache[pattern], pattern))
-                    return (uint)DynamicCache[pattern];
+            if (DynamicDoublePatternCache.ContainsKey(pattern))
+            {
+                uint cached = DynamicDoublePatternCache[pattern];
+                bool ok = true;
+                
+                try
+                {
+                    if (!CheckDoublePattern(DynamicDoublePatternCache[pattern], pattern))
+                        ok = false;
+                }
+                catch
+                {
+                    ok = false;
+                }
+
+                if (ok)
+                    return cached;
                 else
                 {
-                    DynamicCache.Remove(pattern);
+                    DynamicDoublePatternCache.Remove(pattern);
                     Log("Сигнатура аддона потеряна");
                 }
+            }
 
             return 0;
         }
@@ -256,6 +286,7 @@ namespace WoWMemoryManager
         private uint FindDoublePattern(double[] pattern)
         {
             uint cached = CachedDoublePattern(pattern);
+
             if (cached != 0)
                 return cached;
 
@@ -275,9 +306,13 @@ namespace WoWMemoryManager
                         uint pos = FindDoublePattern(start, readBytes, pattern);
                         if (pos != 0)
                         {
-                            Log("Сигнатура аддона найдена по адресу " +
-                                pos.ToString("X") + " за " + (DateTime.Now-startTime).TotalSeconds + " сек.");
-                            DynamicCache[pattern] = pos;
+                            Log("Сигнатура аддона найдена по адресу 0x" +
+                                pos.ToString("X8") + " за " + DateTime.Now-startTime + " сек.");
+                            DynamicDoublePatternCache[pattern] = pos;
+                            if (!Settings.Default.AddonSignatureStatistics.ContainsKey(pattern))
+                                Settings.Default.AddonSignatureStatistics[pattern] = new List<uint>();
+                            Settings.Default.AddonSignatureStatistics[pattern].Add(pos);
+                            Settings.Default.Save();
                             return pos;
                         }
                     }
@@ -358,11 +393,14 @@ namespace WoWMemoryManager
             uint pMessage = BM.ReadUInt(p + 16 * (uint)signature.Length);
             uint pTarget = BM.ReadUInt(p + 16 * ((uint)signature.Length + 1));
             uint pDoNotRestart = BM.ReadUInt(p + 16 * ((uint)signature.Length + 2));
+            uint pNeedPurchaseConfirmation = BM.ReadUInt(p + 16 * ((uint)signature.Length + 3));
             // http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html#post717199
             string text = BM.ReadUTF8String(pMessage + 0x14, BM.ReadUInt(pMessage+0x10));
             string target = BM.ReadUTF8String(pTarget + 0x14, BM.ReadUInt(pTarget+0x10));
             string DoNotRestart = BM.ReadUTF8String(pDoNotRestart + 0x14, BM.ReadUInt(pDoNotRestart + 0x10));
-            return new string[] { text, target, DoNotRestart };
+            string NeedPurchaseConfirmation =
+                BM.ReadUTF8String(pNeedPurchaseConfirmation + 0x14, BM.ReadUInt(pNeedPurchaseConfirmation + 0x10));
+            return new string[] { text, target, DoNotRestart, NeedPurchaseConfirmation };
         }
 
         public AddonMessage GetAddonMessage()
@@ -390,6 +428,7 @@ namespace WoWMemoryManager
             Array.Copy(tt, 1, result.Arguments, 0, tt.Length-1);
             result.Target = target;
             result.DoNotRestart = DoNotRestart;
+            result.NeedPurchaseConfirmation = raw[3] != "";
             return LastMessage = result;
         }
 

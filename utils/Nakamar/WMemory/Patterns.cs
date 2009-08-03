@@ -1,10 +1,13 @@
 ﻿
+using System;
+
 namespace WoWMemoryManager
 {
     /// <summary>
     /// структура хранения паттерна, которым можно будет пользоваться в SearchPattern
     /// </summary>
-    struct Pattern
+    [Serializable]
+    public struct Pattern
     {
         public string PatternString;
         public string Mask;
@@ -21,6 +24,11 @@ namespace WoWMemoryManager
             PatternString = pattern;
             Mask = mask;
             Offset = offset;
+        }
+
+        public override string ToString()
+        {
+            return PatternString + " / " + Mask + ", " + Offset.ToString();
         }
     }
 

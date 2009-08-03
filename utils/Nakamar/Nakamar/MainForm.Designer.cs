@@ -561,9 +561,8 @@
             this.ClientSize = new System.Drawing.Size(835, 345);
             this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.Tabs);
-            this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::Nakamar.Properties.Settings.Default, "MainWindowLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.DataBindings.Add(new System.Windows.Forms.Binding("TopMost", global::Nakamar.Properties.Settings.Default, "TopMost", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.Location = global::Nakamar.Properties.Settings.Default.MainWindowLocation;
+            this.Location = new System.Drawing.Point(100, 100);
             this.Name = "MainForm";
             this.Text = "Программа =)";
             this.TopMost = global::Nakamar.Properties.Settings.Default.TopMost;
