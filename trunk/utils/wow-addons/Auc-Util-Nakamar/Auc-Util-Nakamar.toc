@@ -1,6 +1,6 @@
 ## Title: Auc:Util:Nakamar
 ## Interface: 30100
-## Dependancies: Auc-Advanced, BankMover, Postal
+## Dependancies: Auc-Advanced, BankMover, Postal, NAddon
 ##
 ## Version: 3.0.3.1
 ## Author: burdakovd

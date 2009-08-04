@@ -93,12 +93,12 @@ function private.updateBankStats()
 end
 
 function private.ERROR()
-	-- maybe print screen ang quit the game
 	private.playSound("ERROR")
 	print("что-то не так..")
 	if(AucAdvanced.Settings.GetSetting("util.nakamar.quit_on_error")) then
-		print("Quit через 60 секунд")
+		print("Quit через "..tostring(private.waitbeforequitseconds).." секунд")
 		private.changeState("QUIT")
+		NDoNotRestart("что-то не так...")
 	else
 		private.changeState("ERROR")
 		private.changeState("THINKING")
@@ -114,22 +114,42 @@ local updateNextMailTime = function()
 		wait = random(5000,10000)
 	else
 		print("что-то с почты собрано, так что скоро можно будет проверить её ещё раз")
-		wait = random(100,200)
+		wait = random(60,100)
 	end
 	private.nextMailTime = private.gtime + wait
 end
 
 function lib.CancelQuit()
 	if private.state == "QUIT" then
-		print("Quit отменён")
+		NDoNotRestart("") -- отменить donotrestart
 		private.changeState("THINKING")
+		print("Quit отменён")
+	else
+		print("а Quit делать никто и не собирался...")
 	end
 end
 
+function private.GoToAuction()
+	CloseAuctionHouse()
+	NGoTo("Аукцион")
+end
+
+function private.GoToMail()
+	CloseMail()
+	NGoTo("Почта")
+end
+
+function private.GoToBank()
+	CloseBankFrame()
+	NGoTo("Банк")
+end
+
 function private.everySecond()
+	NKeepAlive()
+	NNeedPurchaseConfirmation(lib.NeedPurchaseConfirmation())
 	private.updateBankStats()
 	
-	if private.state == "QUIT" and private.stateTime()>60 then
+	if private.state == "QUIT" and private.stateTime()>private.waitbeforequitseconds then
 		print("QUIT NOW")
 		Screenshot()
 		private.changeState("QUITED")
@@ -139,6 +159,7 @@ function private.everySecond()
 	end
 	if private.state == "QUITED" then
 		print("Quiting...")
+		return
 	end
 	
 	if not AucAdvanced.Settings.GetSetting('util.nakamar.enabled') then return end
@@ -147,6 +168,7 @@ function private.everySecond()
     if private.state == "THINKING" and #lib.nonbatchItems()>0 then
 		if private.bankSlots or private.bankTime<private.gtime-3600 then
 			print(string.format("В сумках есть %d итемов, которые не выставляются на аукцион, надо отнести их в банк", #lib.nonbatchItems()))
+			private.GoToBank()
 			private.changeState("WAITING_FOR_BANK")
 			return
 		else
@@ -158,8 +180,11 @@ function private.everySecond()
 		private.changeState("THINKING")
 	return end
 	
-	if private.state == "THINKING" and #lib.batchItems()>0 then
+	local needWaitForMail = (private.nextMailTime - private.gtime < 120) and GBM:FindFreeBagSlot()
+	
+	if private.state == "THINKING" and not needWaitForMail and #lib.batchItems()>0 then
 		print(string.format("В сумках есть %d итемов на продажу, надо идти на аукцион", #lib.batchItems()))
+		private.GoToAuction()
 		private.changeState("WAITING_FOR_AUCTION")
 		return
 	end
@@ -170,13 +195,19 @@ function private.everySecond()
 			CloseAuctionHouse()
 		end
 		print("Надо проверить почтовый ящик")
+		private.GoToMail()
 		private.changeState("WAITING_FOR_MAILBOX")		
 		return
 	end
 	if private.state=="WAITING_FOR_MAILBOX" and not GBM:FindFreeBagSlot() then private.changeState("THINKING"); return end
 	
+	if private.state == "THINKING" and needWaitForMail then
+		return
+	end
+	
 	if private.state == "THINKING" then
 		print("Делать пока нечего, но можно пойти посканировать аукцион")
+		private.GoToAuction()
 		private.changeState("WAITING_FOR_AUCTION")
 		return
 	end
@@ -215,7 +246,7 @@ function private.everySecond()
 			CloseBankFrame()
 			return
 		else
-			-- wait
+			return
 		end
 	end
 	
@@ -384,6 +415,7 @@ function private.doPosting()
 	print("Выкладываю всё из сумок на аукцион")
 	local items = lib.batchItems();
 	local stage1 = {}
+	local counts = {}
 	for i,v in ipairs(items) do
 		local link, bag, slot = unpack(v)
 		local _, itemCount = GetContainerItemInfo(bag, slot)
@@ -394,12 +426,32 @@ function private.doPosting()
 		end
 		stage1[sig] = (stage1[sig] or 0)
 		if itemCount <= postedStack then
+			-- it is not guaranteed that auc-advanced can post this item
+			-- example: have two stack of 15, and posting in stacks of 20, and other bag slots are  full with something else
 			stage1[sig] = stage1[sig] + 1
+		end
+		counts[sig] = (counts[sig] or 0) + itemCount
+	end
+	for i,v in ipairs(items) do
+		local link, bag, slot = unpack(v)
+		local _, itemCount = GetContainerItemInfo(bag, slot)
+		local sig = AucAdvanced.API.GetSigFromLink(link)
+		local postedStack = AucAdvanced.Settings.GetSetting("util.appraiser.item."..sig..".stack") or AucAdvanced.Settings.GetSetting("util.appraiser.stack")
+		if postedStack == "max" then
+			_, _, _, _, _, _, _, postedStack = GetItemInfo(hyperlink)
+		end
+		local firstPost = counts[sig] % postedStack
+		if firstPost==0 then
+			firstPost = postedStack
+		end
+		if itemCount <= firstPost then
+			-- it is guaranteed that auc-advanced can post this item
+			stage1[sig] = stage1[sig] + 1000
 		end
 	end
 	local stage2 = {}
 	for sig, count in pairs(stage1) do
-		table.insert(stage2, {sig, count})
+		table.insert(stage2, {sig, stage1[sig]})
 	end
 	table.sort(stage2, function(x,y) return x[2]>y[2] end)
 	if stage2[1][2]==0 and not GBM:FindFreeBagSlot() then
@@ -451,6 +503,7 @@ end
 function lib.OnLoad()
 	if not Nakamar then Nakamar = {} end
 
+	private.waitbeforequitseconds = random(30,60)
 	private.changeState("THINKING")
 	private.frame = CreateFrame("Frame", "NakamarFrame", UIParent)
 	private.frame:SetFrameStrata("TOOLTIP")
@@ -466,7 +519,7 @@ function lib.OnLoad()
 	RegisterEvent("MAIL_SHOW", function() mailboxOpenedTime = private.gtime end)
 	RegisterEvent("MAIL_CLOSED", function() mailboxAvailable = false end)
 	AucAdvanced.Settings.SetDefault("util.nakamar.printwindow", 1)
-
+	RegisterEvent("CHAT_MSG_WHISPER", private.Chat)
 end
 
 function private.HookAH()
@@ -589,22 +642,17 @@ function lib.nonbatchItems()
 	return lib.bagItems(function(...) return not lib.isBatch(...) end)
 end
 
--- myitem = "|cffa335ee|Hitem:43481:0:0:0:0:0:0:0:0|h[Тролльский тканый наплеч]|h|r"
--- function private.printpdfs()
-	-- local serverKey = AucAdvanced.GetFaction()
-	-- local modules = AucAdvanced.Modules.Stat
-	-- engines = {}
-	-- for _name, engineLib in pairs(modules) do
-		-- local fn = engineLib.GetItemPDF;
-		-- if fn then
-			-- local p, lower, upper, area = fn(myitem, serverKey)
-			-- local PDF = function(...) if p then return p(...) or -1 else return 31415926 end end
-			-- tinsert(engines, {pdf = p, array = engineLib.GetPriceArray, name = _name});
-			-- print(_name)
-			-- print(string.format("    pdf=%s, lower=%.2f, upper=%.2f, area=%.4f", tostring(p), lower or -1000000000, upper or 1000000000, area or 1))
-			-- print(string.format("    pdf(0)=%.4f, pdf(1g)=%.4f, pdf(100g)=%.4f, pdf(500g)=%.4f, pdf(1000g)=%.4f, pdf(5000g)=%.4f",
-				-- PDF(0), PDF(10000), PDF(1000000), PDF(5000000), PDF(10000000), PDF(50000000)))
-		-- end
-	-- end
-	
--- end
+function private.Chat()
+	print("получен whisper")
+	private.ERROR()
+end
+
+function lib.NeedPurchaseConfirmation()
+	return AuctionFrame and AuctionFrame:IsVisible() and AucAdvanced.Buy.Private.Prompt:IsVisible()
+end
+
+function lib.ConfirmPurchase()
+	if lib.NeedPurchaseConfirmation() then
+		AucAdvanced.Buy.Private.Prompt.Yes:Click()
+	end
+end
