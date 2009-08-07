@@ -178,7 +178,7 @@ namespace FiniteStateMachine
 
             previousFrameCount = FrameCount;
 
-            int adj = Math.Max(1, sleepTime / 10);
+            int adj = 1;
 
             if (realFPS < neededFPS)
                 sleepTime -= adj;

@@ -165,7 +165,8 @@ namespace WoWMemoryManager
                 }
             }
             uint ans = BM.FindPattern(pattern.PatternString, pattern.Mask);
-            if (ans == (uint)BM.MainModule.BaseAddress) throw new ApplicationException("Pattern not found");
+            if (ans == (uint)BM.MainModule.BaseAddress)
+                throw new ApplicationException("Pattern not found");
 
             Settings.Default.FindPatternCache[pattern] = ans + pattern.Offset;
             Log("найден новый оффсет FindPattern(" + pattern + ") == 0x" +

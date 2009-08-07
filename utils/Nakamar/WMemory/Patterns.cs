@@ -38,13 +38,13 @@ namespace WoWMemoryManager
     static class Patterns
     {
         /// <summary>
-        /// адрес структуры g_clientConnection
+        /// адрес структуры g_clientConnection, works for 3.2.0
         /// </summary>
         public static Pattern ClientConnection =
             new Pattern("64 8B 15 00 00 00 00 8B 34 00 8B 0D 00 00 00 00 89 81", "xxx????xx?xx????xx", 12);
         
         /// <summary>
-        /// смещение адреса ObjectManager относительно ClientConnection
+        /// смещение адреса ObjectManager относительно ClientConnection, works for 3.2.0
         /// </summary>
         public static Pattern ObjectManagerOffset = 
             new Pattern("64 8B 15 00 00 00 00 8B 34 00 8B 0D 00 00 00 00 89 81 00 00 00 00 8B 15", "xxx????xx?xx????xx????xx", 18);
@@ -56,9 +56,9 @@ namespace WoWMemoryManager
         /// and "realmwizard", when you choose a realm
         /// http://www.mmowned.com/forums/wow-memory-editing/241997-3-1-3-some-static-address-found.html
         /// </summary>
-        public static uint GameState = 0x012A75C0;
+        public static uint GameState = 0x010C2138; // for 3.2.0
 
-        public static uint PlayerBase = 0x010BD5F4;
+        public static uint PlayerBase = 0x012BEDB8; // for 3.2.0
 
     }
 }
