@@ -25,14 +25,9 @@
 --]]
 
 
---local libType, libName = "Filter", "Custom"
-
-local print = print
-
-
-local lib, parent, private = AucSearchUI.NewFilter("CustomFilter")
+local lib, parent, private = AucAdvanced.Modules.Util.SearchUI.NewFilter("CustomFilter")
 if not lib then return end
-local get,set,default,Const = AucSearchUI.GetSearchLocals()
+local get,set,default,Const = AucAdvanced.Modules.Util.SearchUI.GetSearchLocals()
 lib.tabname = "Custom Filter"
 
 private.items = {}
@@ -56,7 +51,7 @@ function lib:MakeGuiConfig(gui)
 	gui:AddControl(id, "Checkbox",    0, 1,  "filter.custom.enabled", "Enable custom filter")
 	
 	gui:AddControl(id, "Subhead",     .5, "Filter for:")
-	for name, searcher in pairs(AucSearchUI.Searchers) do
+	for name, searcher in pairs(AucAdvanced.Modules.Util.SearchUI.Searchers) do
 		if searcher and searcher.Search then
 			gui:AddControl(id, "Checkbox", 0.5, 1, "filter.custom.searchers."..name, name)
 			gui:AddTip(id, "Use custom filter when searching with "..name)
@@ -67,11 +62,10 @@ end
 
 --lib.Filter(item, searcher)
 --This function will return true if the item is to be filtered
---Item is the itemtable, and searcher is the name of the searcher being called. If searcher is not given, it will assume you want it active.
 function lib.Filter(item, searcher)
 
-	if (not get("filter.custom.enabled"))
-        or (searcher and (not get("filter.custom.searchers."..searcher))) then
+	if not get("filter.custom.enabled") or not searcher
+        or not get("filter.custom.searchers."..searcher) then
             return
 	end
     
@@ -103,12 +97,8 @@ function lib.Filter(item, searcher)
 	local market = AucAdvanced.API.GetMarketValue(link) or 0
 	
 	if market*simple == 0 then return true end
-	--if AucAdvanced.Modules.Util.Nakamar and AucAdvanced.Modules.Util.Nakamar.Private and AucAdvanced.Modules.Util.Nakamar.print
-	--then 
-	--	print = AucAdvanced.Modules.Util.Nakamar.print
-	--end
+
 	if market >= 2*simple then
-		--print(string.format("market price >= 2 * simple price for %s", link))
 		return true
 	end
 	
