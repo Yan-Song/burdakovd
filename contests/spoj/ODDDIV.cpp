@@ -37,12 +37,50 @@ typedef pair<int,int> pii;
 typedef vector<pii> vpii;
  
 const double pi=2*acos(0.0);
-const int inf=1000000;
+const int inf=1<<25;
  
-
+i64 DC[110000];
+vector< vector<i64> > numbers(10000);
  
 int main()
 {
-    // кнут, art of programming, 2 часть, глава про gcd, упр. 42
+	for(i64 i=1; i<101000; ++i)
+	{
+		//cout<<i<<endl;
+		i64 n = i;
+		i64& dc = DC[i];
+		dc = 1;
+		for(i64 d = 2; d * d <= n; d++)
+		{
+			i64 _dc = 0;
+			while(n % d == 0)
+			{
+				n /= d;
+				++_dc;
+			}
+			dc *= (2*_dc+1);
+		}
+		if(n!=1)
+			dc *= 3;
+
+		numbers[dc].push_back(i*i);
+	}
+
+	//cout<<"precalc done"<<endl;
+
+	
+
+	int c;
+	cin>>c;
+	fo(cc,0,c)
+	{
+		int k, cnt=0;
+		i64 l, h;
+		scanf("%d %lld %lld", &k, &l, &h);
+		vector<i64>::iterator lower = lower_bound(ALL(numbers[k]), l);
+		vector<i64>::iterator upper = upper_bound(ALL(numbers[k]), h);
+		cnt = upper - lower;
+		printf("%d\n", cnt);
+	}
     return 0;
 }

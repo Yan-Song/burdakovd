@@ -16,7 +16,7 @@
  
 #define mset(block,value) memset(block,value,sizeof(block))
 #define fo(i,begin,end) for(int i=begin; i<end; i++)
-#define fosz(i,s,x) for(int i=s; i<x.size(); i++)
+#define fosz(i,s,x) for(unsigned int i=s; i<x.size(); i++)
 #define foreach(i,x) fosz(i,0,x)
 #define debug(x) cerr<<(#x)<<" = "<<(x)<<endl
 #define adebug(x,n) fo(i,0,n) cerr<<(#x)<<"["<<i<<"] = "<<x[i]<<endl
@@ -37,12 +37,47 @@ typedef pair<int,int> pii;
 typedef vector<pii> vpii;
  
 const double pi=2*acos(0.0);
-const int inf=1000000;
+const int inf=1<<25;
  
+vector<string> _map;
+int islands;
+int n, m;
 
- 
+int floodfill(int i, int j)
+{
+	if(_map[i][j] != '#') // undiscovered land
+		return 0;
+
+	_map[i][j] = '@'; // discovered land
+	
+	int ans = 1;
+	for(int di=-1; di<2; ++di)
+		for(int dj=-1; dj<2; ++dj)
+			ans += floodfill(i + di, j + dj);
+
+	return ans;
+}
+
 int main()
 {
-    // кнут, art of programming, 2 часть, глава про gcd, упр. 42
+    int tc;
+	cin>>tc;
+	fo(tn,0,tc)
+	{
+		cin>>n>>m;
+		_map = vector<string>(n);
+
+		foreach(i, _map)
+			cin>>_map[i];
+
+		int islands = 0;
+
+		foreach(i, _map)
+			foreach(j, _map[i])
+				if(floodfill(i, j) > 0)
+					++islands;
+
+		cout<<islands<<endl;
+	}
     return 0;
 }
