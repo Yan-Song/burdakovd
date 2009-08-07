@@ -45,6 +45,7 @@ local _time=0.0
 private.gtime=0.0
 local bankAvailable = nil
 local mailboxAvailable = nil
+local mailboxOpened = false
 local auctionAvailable = nil
 local handlers = {}
 local lastnotification = -1000.0
@@ -146,7 +147,9 @@ end
 
 function private.everySecond()
 	NKeepAlive()
+	
 	NNeedPurchaseConfirmation(lib.NeedPurchaseConfirmation())
+	
 	private.updateBankStats()
 	
 	if private.state == "QUIT" and private.stateTime()>private.waitbeforequitseconds then
@@ -515,9 +518,9 @@ function lib.OnLoad()
 	private.frame:Show()
 	RegisterEvent("BANKFRAME_OPENED", function() bankAvailable = true; private.updateBankStats() end)
 	RegisterEvent("BANKFRAME_CLOSED", function() bankAvailable = nil end)
-	RegisterEvent("MAIL_INBOX_UPDATE", function() mailboxAvailable = true end)
-	RegisterEvent("MAIL_SHOW", function() mailboxOpenedTime = private.gtime end)
-	RegisterEvent("MAIL_CLOSED", function() mailboxAvailable = false end)
+	RegisterEvent("MAIL_INBOX_UPDATE", function() if mailboxOpened then mailboxAvailable = true end end)
+	RegisterEvent("MAIL_SHOW", function() mailboxOpenedTime = private.gtime; mailboxOpened = true end)
+	RegisterEvent("MAIL_CLOSED", function() mailboxAvailable = false; mailboxOpened = false end)
 	AucAdvanced.Settings.SetDefault("util.nakamar.printwindow", 1)
 	RegisterEvent("CHAT_MSG_WHISPER", private.Chat)
 end
@@ -643,6 +646,7 @@ function lib.nonbatchItems()
 end
 
 function private.Chat()
+	if not AucAdvanced.Settings.GetSetting('util.nakamar.enabled') then return end
 	print("получен whisper")
 	private.ERROR()
 end
