@@ -75,12 +75,12 @@ function lib.GetPrice(hyperlink, serverKey)
 	local avgRelistings
 	if seen>0 then
 		if successfulAuctions>0 then
-			avgRelistings = 1.0 * (failedAuctions+3) / (successfulAuctions+1)
+			avgRelistings = 1.0 * (failedAuctions+5) / (successfulAuctions+1)
 		else 
-			avgRelistings = failedAuctions * 2 + 3
+			avgRelistings = failedAuctions * 2 + 5
 		end
 	else
-		avgRelistings = 3 -- для совсем незнакомого товара
+		avgRelistings = 5 -- для совсем незнакомого товара
 	end
 	local deposit = GetDepositCost(hyperlink, 48, nil, 1) or 0 -- 48h
 
@@ -95,7 +95,7 @@ function lib.GetPrice(hyperlink, serverKey)
 	local loss = lossperrelisting * (avgRelistings + 1) + deposit * avgRelistings
 	local gain = price * 0.95 - loss -- налог
 	local krevedValuation
-	if gain>0 then krevedValuation = gain / (1 + 0.01 * get("stat.kreved.percentsperday"))^(2*(avgRelistings+0.5)) -- 48h
+	if gain>0 then krevedValuation = gain / (1 + 0.01 * get("stat.kreved.percentsperday")) ^ (2*(avgRelistings+0.5)) -- 48h
 	else krevedValuation = -1
 	end
 	return krevedValuation, false, successfulAuctions, failedAuctions, avgRelistings, seen, postedStack
