@@ -398,7 +398,7 @@ namespace NakamarStates
             try
             {
                 NpcObject target = (NpcObject)Memory.ObjectManager.ByGuid(Memory.ObjectManager.LocalPlayer.TargetGuid);
-                return new DestinationPoint(target.Name, WayPointType.NPC, tag ?? "",
+                return new DestinationPoint(Memory.GetAddonMessage().Target, WayPointType.NPC, tag ?? "",
                     target.XPosition, target.YPosition, target.ZPosition);
             }
             catch (KeyNotFoundException)
@@ -479,17 +479,17 @@ namespace NakamarStates
 
         DateTime LastJumped = new DateTime(0),
             LastTimeChecked = new DateTime(0),
-            LastTimeChecked5 = new DateTime(0);
+            LastTimeChecked10 = new DateTime(0);
         WayPoint rememberedWaypoint;
         double lastDistance;
-        double lastDistance5;
+        double lastDistance10;
         private void AntiStuck()
         {
             if (rememberedWaypoint != MovementQueue.Peek())
             {
-                LastTimeChecked = LastTimeChecked5 = DateTime.Now;
+                LastTimeChecked = LastTimeChecked10 = DateTime.Now;
                 rememberedWaypoint = MovementQueue.Peek();
-                lastDistance = lastDistance5 = Me.Distance(rememberedWaypoint);
+                lastDistance = lastDistance10 = Me.Distance(rememberedWaypoint);
             }
 
             if(!CurrentMovementState)
@@ -517,17 +517,20 @@ namespace NakamarStates
                 }
             }
 
-            // за последние 5 секунд
-            if ((DateTime.Now - LastTimeChecked5).TotalSeconds > 5)
+            // за последние 10 секунд
+            if ((DateTime.Now - LastTimeChecked10).TotalSeconds > 10)
             {
-                if (lastDistance5 - Me.Distance(rememberedWaypoint) > 1) // за последние 5 секунд прошли более 1, сбрасываем
+                if (lastDistance10 - Me.Distance(rememberedWaypoint) > 1) // за последние 10 секунд прошли более 1, сбрасываем
                 {
-                    lastDistance5 = Me.Distance(rememberedWaypoint);
-                    LastTimeChecked5 = DateTime.Now;
+                    lastDistance10 = Me.Distance(rememberedWaypoint);
+                    LastTimeChecked10 = DateTime.Now;
                 }
                 else // точно застрял
                 {
-                    Log("совсем застрял!!! закрываю всё");
+                    Log("Совсем застрял!!! Делаю скриншот");
+                    Memory.KB.PressKey(KeyBindings.PrintScreen, true);
+                    Thread.Sleep(1000);
+                    Log("Закрываю всё.");
                     StopNavigation();
                     Machine.DoNotRestart = true;
                     Memory.StopWoW();
@@ -616,11 +619,7 @@ namespace NakamarStates
                 string target;
                 try
                 {
-                    WoWObject oTarget = Memory.ObjectManager.ByGuid(player.TargetGuid);
-                    if (oTarget is NpcObject)
-                        target = ((NpcObject)oTarget).Name;
-                    else
-                        target = "";
+                    target = Memory.GetAddonMessage().Target;
                 }
                 catch (KeyNotFoundException)
                 {
@@ -697,6 +696,7 @@ namespace NakamarStates
             CurrentMovementState = false;
             CurrentTurningState = TurningState.None;
             interactStartTime = null;
+            rememberedWaypoint = null;
             Memory.KB.KeyUpAll();
         }
 

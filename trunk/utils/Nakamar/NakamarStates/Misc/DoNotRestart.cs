@@ -27,15 +27,22 @@ namespace NakamarStates
                 return
                     Memory.CurrentGameState == GameState.World &&
                     Memory.GetAddonMessage() != null &&
-                    Memory.GetAddonMessage().DoNotRestart != "";
+                    (Memory.GetAddonMessage().DoNotRestart != "") != Machine.DoNotRestart;
             }
         }
 
         public override void Run()
         {
-            Log("Аддон попросил не перезапускать WoW (" + Memory.GetAddonMessage().DoNotRestart + ")");
-            Machine.DoNotRestart = true;
-            Machine.StopEngineByWorker();
+            if (Memory.GetAddonMessage().DoNotRestart != "")
+            {
+                Log("Аддон попросил не перезапускать WoW (" + Memory.GetAddonMessage().DoNotRestart + ")");
+                Machine.DoNotRestart = true;
+            }
+            else
+            {
+                Log("аларм отменяется");
+                Machine.DoNotRestart = false;
+            }
         }
     }
 }

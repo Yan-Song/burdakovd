@@ -11,8 +11,8 @@ namespace WoWMemoryManager.WoWObject
     class ObjectList<T> : IEnumerable<T> where T: WoWObject
     {
         private const uint
-            firstObjectOffset = 0xAC,          // offset from the object manager to the first object
-            nextObjectOffset = 0x3C;           // offset from one object to the next
+            firstObjectOffset = 0xAC,          // offset from the object manager to the first object // 3.1.3
+            nextObjectOffset = 0x3C;           // offset from one object to the next // 3.1.3
         private uint BaseAddress;
         private BlackMagic Reader;
 
@@ -74,9 +74,8 @@ namespace WoWMemoryManager.WoWObject
     public class ObjectManager
     {
         private const uint
-            localGuidOffset = 0xC0,            // offset from the object manager to the local guid
-            PlayerBaseOffset1 = 0x34,
-            PlayerBaseOffset2 = 0x24;
+            PlayerBaseOffset1 = 0x34, // 3.2.0
+            PlayerBaseOffset2 = 0x24; // 3.2.0
 
         private BlackMagic Reader;
         public uint BaseAddress;               // the address off the object manager
