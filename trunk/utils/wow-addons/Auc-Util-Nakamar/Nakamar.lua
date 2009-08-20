@@ -145,6 +145,7 @@ function private.GoToBank()
 	NGoTo("Банк")
 end
 
+local saidBank = false
 function private.everySecond()
 	NKeepAlive()
 	
@@ -175,9 +176,17 @@ function private.everySecond()
 			private.changeState("WAITING_FOR_BANK")
 			return
 		else
-			print(string.format("В сумках есть %d итемов, которые не выставляются на аукцион, но в банке места уже нет.", #lib.nonbatchItems()))
+			if not saidBank then
+				print(string.format("В сумках есть %d итемов, которые не выставляются на аукцион, но в банке места уже нет.", #lib.nonbatchItems()))
+				saidBank = true
+			end
 		end
 	end
+	
+	if private.state ~= "THINKING" then
+		saidBank = false
+	end
+	
 	if private.state=="WAITING_FOR_BANK" and (#lib.nonbatchItems()==0 or not (private.bankSlots or private.bankTime<private.gtime-3600)) then
 		CloseBankFrame()
 		private.changeState("THINKING")
