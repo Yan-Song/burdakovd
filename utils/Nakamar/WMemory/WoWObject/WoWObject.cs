@@ -23,8 +23,7 @@ namespace WoWMemoryManager.WoWObject
 
     public class WoWObject
     {
-        protected const uint //GuidOffset = 0x30, // works for 3.1.3
-            //TypeOffset = 0x14, // works for 3.1.3
+        protected const uint
             DescriptorFieldsOffset = 0x8,
             XPositionOffset = 0x798, // works for 3.1.3 //3.2.0
             YPositionOffset = 0x79c, // works for 3.1.3 //3.2.0

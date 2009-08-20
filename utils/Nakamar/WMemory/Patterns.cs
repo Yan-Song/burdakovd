@@ -56,7 +56,7 @@ namespace WoWMemoryManager
         /// and "realmwizard", when you choose a realm
         /// http://www.mmowned.com/forums/wow-memory-editing/241997-3-1-3-some-static-address-found.html
         /// </summary>
-        public static uint GameState = 0x010C2138; // for 3.2.0
+        public static uint GameState = 0x010C2138; // works for 3.2.0a
 
         public static uint PlayerBase = 0x012BEDB8; // for 3.2.0
 
