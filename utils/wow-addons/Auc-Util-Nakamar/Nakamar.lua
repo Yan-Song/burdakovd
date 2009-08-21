@@ -38,6 +38,7 @@ private.bankSlots = true
 private.bankTime = -10000.0
 private.lastToBank = -1000.0
 private.nextMailTime = 0.0 -- когда в следующий раз можно будет зайти на почту
+private.lastscan = 0
 
 local ipairs = ipairs
 local pairs = pairs
@@ -53,7 +54,7 @@ local mailboxOpenedTime = 0
 local oldItemsCount = 0
 local prevItemsCount = 0
 local prevICTime = 0
-local freshnessforposting = 3600
+local freshnessforposting = 7200 -- 2h
 
 local RegisterEvent = function(event, f)
 	private.frame:RegisterEvent(event)
@@ -326,11 +327,11 @@ function private.everySecond()
 			return
 			
 		elseif private.state == "SCAN_BEFORE_POSTING" then
-			Nakamar.lastscan = Nakamar.lastscan or 0
-			if time() - Nakamar.lastscan < freshnessforposting then
+			private.lastscan = private.lastscan or 0
+			if time() - private.lastscan < freshnessforposting then
 				private.doPosting()
-			elseif private.stateTime()>3600 then
-				print("сканирую уже больше часа, но до сих пор нет свежего скана")
+			elseif private.stateTime()>7200 then
+				print("сканирую уже больше двух часов, но до сих пор нет свежего скана")
 				private.ERROR()
 			end
 			return
@@ -363,7 +364,7 @@ function private.everySecond()
 		
 		else -- state ~= "POSTING" | "SCAN_BEFORE_POSTING" | "SCANNING" and auctionframe opened
 			local postable = #lib.batchItems()
-			local fresh = (time() - Nakamar.lastscan < freshnessforposting)
+			local fresh = (time() - private.lastscan < freshnessforposting)
 			if postable>0 then
 				if fresh then
 					private.doPosting()
@@ -574,7 +575,7 @@ function private.processScan(stats)
 		--print(string.format("%d из %d лотов соответствует запросу", matched, #scandata.image))
 		if matched == #scandata.image then
 			print("Завершен полный скан")
-			Nakamar.lastscan = time()
+			private.lastscan = time()
 		else
 			--print("Это был неполный скан")
 		end
