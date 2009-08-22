@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComparableListOfDouble.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
