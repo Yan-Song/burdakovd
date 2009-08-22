@@ -59,5 +59,11 @@ namespace Nakamar.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.IO.UnmanagedMemoryStream DoNotRestartSound {
+            get {
+                return ResourceManager.GetStream("DoNotRestartSound", resourceCulture);
+            }
+        }
     }
 }
