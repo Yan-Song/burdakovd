@@ -7,7 +7,8 @@ using Util;
 using System.Diagnostics;
 using System.Drawing;
 using System.Collections.Generic;
-using System.Collections; // for Logger
+using System.Collections;
+using System.Media; // for Logger
 
 
 namespace Nakamar
@@ -196,11 +197,16 @@ namespace Nakamar
             if (!BotEnabled) return;
 
             FSM.StopEngine();
-            if (FSM.DoNotRestart && (Settings.Default.AutoEnable || Settings.Default.WoWAutoStart))
+            if (FSM.DoNotRestart)
             {
-                Log("Автозапуск WoW и бота отключён");
-                Settings.Default.AutoEnable = false;
-                Settings.Default.WoWAutoStart = false;
+                // бот остановлен ненормально
+                if (Settings.Default.AutoEnable || Settings.Default.WoWAutoStart)
+                {
+                    Log("Автозапуск WoW и бота отключён");
+                    Settings.Default.AutoEnable = false;
+                    Settings.Default.WoWAutoStart = false;
+                }
+                PlayDoNotRestartSound();
             }
             FSM = null;
             WoW = null;
@@ -454,6 +460,12 @@ namespace Nakamar
             Location = Properties.Settings.Default.MainFormLocation;
             Size = Properties.Settings.Default.MainFormSize;
             WindowState = Properties.Settings.Default.MainFormState;
+        }
+
+        private void PlayDoNotRestartSound()
+        {
+            SoundPlayer player = new SoundPlayer(Properties.Resources.DoNotRestartSound);
+            player.Play();            
         }
     }
 }

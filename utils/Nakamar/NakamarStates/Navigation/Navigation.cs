@@ -20,6 +20,11 @@ namespace NakamarStates
         Left, Right, None
     }
 
+    enum InteractResult
+    {
+        Success, Failed, Wait, SureSuccess
+    }
+
     public class Navigation : State
     {
         private const double
@@ -601,18 +606,20 @@ namespace NakamarStates
             }
         }
 
-        private void InteractWithXYZ(DestinationPoint point)
+        private InteractResult InteractWithXYZ(DestinationPoint point)
         {
-            StopNavigation();
+            return InteractResult.SureSuccess;
         }
 
         DateTime nextNPCInteractTry = DateTime.Now;
-        private void InteractWithNPC(DestinationPoint npc)
+        private InteractResult InteractWithNPC(DestinationPoint npc)
         {
             var player = Memory.ObjectManager.LocalPlayer;
             double required = Math.PI / 3, now = Me.RelativeAngle(player.Rotation, npc);
             SetTurningState(now, required); // повернуться к NPC лицом
-            if (Math.Abs(now) > required) return;
+
+            if (Math.Abs(now) > required)
+                return InteractResult.Wait;
 
             if (DateTime.Now > nextNPCInteractTry)
             {
@@ -629,27 +636,40 @@ namespace NakamarStates
                 if (target == npc.Name)
                 {
                     Memory.KB.PressKey(KeyBindings.Interact, true);
-                    StopNavigation();
+                    return InteractResult.Success;
                 }
                 else
                 {
                     Memory.KB.PressKey(KeyBindings.SelectNearestFriend, true);
                     nextNPCInteractTry = DateTime.Now + TimeSpan.FromMilliseconds((new Random()).Next(1200, 2400));
+                    return InteractResult.Wait;
                 }
             }
+
+            return InteractResult.Wait;
         }
 
-        private void InteractWithMailbox(DestinationPoint mailbox)
+        private InteractResult InteractWithMailbox(DestinationPoint mailbox)
         {
-            var player = Memory.ObjectManager.LocalPlayer;
-            // повернуться к Mailbox, чтоб он был посреди экрана +- 10 градусов
+            if (!Util.MouseCursor.NearScreenCenter())
+            {
+                Log("Перемещаю указатель мыши к центру экрана");
+                Util.MouseCursor.MoveToScreenCenter();
+                Thread.Sleep(1000);
+            }
 
-            double required = Math.PI / 18, now = Me.RelativeAngle(player.Rotation, mailbox);
+            var player = Memory.ObjectManager.LocalPlayer;
+            // повернуться к Mailbox, чтоб он был посреди экрана +- 5 градусов
+
+            double required = Math.PI / 36;
+            double now = Me.RelativeAngle(player.Rotation, mailbox);
             SetTurningState(now, required);
-            if (Math.Abs(now) > required) return;
+
+            if (Math.Abs(now) > required)
+                return InteractResult.Wait;
 
             List<Key> zoomInKeys = new List<Key>();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 20; i++)
                 zoomInKeys.Add(KeyBindings.CameraZoomIn);
 
             Memory.KB.PressKeys(zoomInKeys, true); // приблизить камеру на максимум
@@ -657,35 +677,92 @@ namespace NakamarStates
             Thread.Sleep(2000);
             Memory.KB.PressKey(KeyBindings.MouseInteract, true);
             Memory.KB.PressKey(KeyBindings.CameraNormal, false); // вернуть
-            StopNavigation();
+
+            return InteractResult.Success;
         }
 
-        DateTime? interactStartTime = null;
-        private void DoInteract(DestinationPoint current)
+        DateTime? tryInteractStartTime = null;
+        private InteractResult TryInteract(DestinationPoint current)
         {
-            if (interactStartTime == null)
-                interactStartTime = DateTime.Now;
+            if (tryInteractStartTime == null)
+                tryInteractStartTime = DateTime.Now;
 
-            if ((DateTime.Now - (DateTime)interactStartTime).TotalSeconds > 30)
+            if ((DateTime.Now - (DateTime)tryInteractStartTime).TotalSeconds > 30)
             {
                 Log("Не получилось сделать Interact c " + current + " в течение 30 секунд, делаю скриншот");
                 Memory.KB.PressKey(KeyBindings.PrintScreen, true);
                 Thread.Sleep(1000);
+                return InteractResult.Failed;
+                /*
                 Log("Выключаю всё.");
                 StopNavigation();
                 Memory.StopWoW();
                 Machine.DoNotRestart = true;
                 Machine.StopEngineByWorker();
+                */
             }
 
             else if (current.Type == WayPointType.Simple)
-                InteractWithXYZ(current);
+                return InteractWithXYZ(current);
             else if (current.Type == WayPointType.NPC)
-                InteractWithNPC(current);
+                return InteractWithNPC(current);
             else if (current.Type == WayPointType.Mailbox)
-                InteractWithMailbox(current);
+                return InteractWithMailbox(current);
             else
                 throw new NotImplementedException();
+        }
+
+        TimeSpan? InteractTryInterval = null;
+        DateTime NextInteractTryTime = DateTime.Now;
+        /// <summary>
+        /// делает повторяющиеся попытки Interact пока они не увенчаются успехом
+        /// </summary>
+        /// <param name="current"></param>
+        private void DoInteract(DestinationPoint current)
+        {
+            Random rnd = new Random();
+
+            InteractTryInterval = InteractTryInterval ?? TimeSpan.FromSeconds(rnd.Next(8, 12));
+
+            // делаем всё это пока аддон не скажет что интеракт прошёл успешно
+            string state = Memory.GetAddonMessage().CurrentState;
+
+            if (state == current.Name || state == current.Tag)
+            {
+                StopNavigation();
+                return;
+            }
+
+            if (DateTime.Now > NextInteractTryTime) // если мы не в паузе
+            {
+                InteractResult result = TryInteract(current);
+
+                if (result == InteractResult.Wait)
+                    return;
+
+                else if (result == InteractResult.SureSuccess) // не нужно ждать проверки со стороны аддона
+                {
+                    StopNavigation();
+                    return;
+                }
+
+                else if (result == InteractResult.Failed || result == InteractResult.Success) // готовимся к следующей попытке
+                {
+                    cleanupInteractTry();
+                    NextInteractTryTime = DateTime.Now + (TimeSpan)InteractTryInterval;
+                    InteractTryInterval = (TimeSpan)InteractTryInterval + (TimeSpan)InteractTryInterval;
+                }
+
+                else
+                    throw new NotImplementedException("Unexpected InteractResult: " + result.ToString());
+            }
+            else
+                return;
+        }
+
+        private void cleanupInteractTry()
+        {
+            tryInteractStartTime = null;
         }
 
         private void StopNavigation()
@@ -695,8 +772,9 @@ namespace NakamarStates
             MovementQueue = null;
             CurrentMovementState = false;
             CurrentTurningState = TurningState.None;
-            interactStartTime = null;
+            InteractTryInterval = null;
             rememberedWaypoint = null;
+            cleanupInteractTry();
             Memory.KB.KeyUpAll();
         }
 

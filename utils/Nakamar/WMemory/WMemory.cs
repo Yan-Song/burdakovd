@@ -41,6 +41,7 @@ namespace WoWMemoryManager
         public string Target;
         public string DoNotRestart;
         public bool NeedPurchaseConfirmation;
+        public string CurrentState;
 
         public override string ToString()
         {
@@ -395,13 +396,15 @@ namespace WoWMemoryManager
             uint pTarget = BM.ReadUInt(p + 16 * ((uint)signature.Length + 1));
             uint pDoNotRestart = BM.ReadUInt(p + 16 * ((uint)signature.Length + 2));
             uint pNeedPurchaseConfirmation = BM.ReadUInt(p + 16 * ((uint)signature.Length + 3));
+            uint pCurrentState = BM.ReadUInt(p + 16 * ((uint)signature.Length + 4));
             // http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html#post717199
             string text = BM.ReadUTF8String(pMessage + 0x14, BM.ReadUInt(pMessage+0x10));
             string target = BM.ReadUTF8String(pTarget + 0x14, BM.ReadUInt(pTarget+0x10));
             string DoNotRestart = BM.ReadUTF8String(pDoNotRestart + 0x14, BM.ReadUInt(pDoNotRestart + 0x10));
             string NeedPurchaseConfirmation =
                 BM.ReadUTF8String(pNeedPurchaseConfirmation + 0x14, BM.ReadUInt(pNeedPurchaseConfirmation + 0x10));
-            return new string[] { text, target, DoNotRestart, NeedPurchaseConfirmation };
+            string CurrentState = BM.ReadUTF8String(pCurrentState + 0x14, BM.ReadUInt(pCurrentState + 0x10));
+            return new string[] { text, target, DoNotRestart, NeedPurchaseConfirmation, CurrentState };
         }
 
         public AddonMessage GetAddonMessage()
@@ -416,7 +419,8 @@ namespace WoWMemoryManager
         public AddonMessage GetAddonMessage(bool lastIfPatternFailed)
         {
             string[] raw = GetRawAddonMessage(signature);
-            if (raw == null) return lastIfPatternFailed ? LastMessage : null;
+            if (raw == null)
+                return lastIfPatternFailed ? LastMessage : null;
             string text = raw[0];
             string target = raw[1];
             string DoNotRestart = raw[2];
@@ -430,6 +434,7 @@ namespace WoWMemoryManager
             result.Target = target;
             result.DoNotRestart = DoNotRestart;
             result.NeedPurchaseConfirmation = raw[3] != "";
+            result.CurrentState = raw[4];
             return LastMessage = result;
         }
 
