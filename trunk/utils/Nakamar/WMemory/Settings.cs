@@ -26,11 +26,11 @@
         [global::System.Configuration.SettingsSerializeAs(System.Configuration.SettingsSerializeAs.Xml)]
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public global::Util.SerializableDictionary<double[], global::System.Collections.Generic.List<uint>> AddonSignatureStatistics
+        public global::Util.SerializableDictionary<global::Util.ComparableListOfDouble, global::System.Collections.Generic.List<uint>> AddonSignatureStatistics
         {
             get
             {
-                return ((global::Util.SerializableDictionary<double[], global::System.Collections.Generic.List<uint>>)
+                return ((global::Util.SerializableDictionary<global::Util.ComparableListOfDouble, global::System.Collections.Generic.List<uint>>)
                     (this["AddonSignatureStatistics"]));
             }
             set

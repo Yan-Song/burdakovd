@@ -73,8 +73,8 @@ namespace WoWMemoryManager
     {
         public BlackMagic BM;
         public KeyBoard KB;
-        private Dictionary<double[], uint> DynamicDoublePatternCache = new Dictionary<double[],uint>();
-        private static double[] signature = {901791, 349667, 371721, 139443, 213674};
+        private Dictionary<ComparableListOfDouble, uint> DynamicDoublePatternCache = new Dictionary<ComparableListOfDouble, uint>();
+        private static ComparableListOfDouble signature = new ComparableListOfDouble(901791, 349667, 371721, 139443, 213674);
         private AddonMessage LastMessage;
         private int LastProcessedMessage = -1;
 
@@ -115,6 +115,8 @@ namespace WoWMemoryManager
             BM = new BlackMagic(id);
             KB = new KeyBoard(BM.WindowHandle);
             LastMessage = null;
+            foreach (var kvp in Settings.Default.AddonSignatureStatistics)
+                DynamicDoublePatternCache[kvp.Key] = kvp.Value.Last();
         }
 
         #region Pattern Methods
@@ -250,7 +252,7 @@ namespace WoWMemoryManager
             Log("WoW закрыт");
         }
 
-        private uint CachedDoublePattern(double[] pattern)
+        private uint CachedDoublePattern(ComparableListOfDouble pattern)
         {
             if (DynamicDoublePatternCache.ContainsKey(pattern))
             {
@@ -285,7 +287,7 @@ namespace WoWMemoryManager
         /// также учитывает что значения гарантировано находятся по адресу кратному 8
         /// http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html
         /// </summary>
-        private uint FindDoublePattern(double[] pattern)
+        private uint FindDoublePattern(ComparableListOfDouble pattern)
         {
             uint cached = CachedDoublePattern(pattern);
 
@@ -321,7 +323,7 @@ namespace WoWMemoryManager
             return 0;
         }
 
-        private uint FindDoublePattern(uint start, uint readBytes, double[] pattern)
+        private uint FindDoublePattern(uint start, uint readBytes, List<double> pattern)
         {
             uint readDoubles = readBytes / 8;
 
@@ -329,14 +331,14 @@ namespace WoWMemoryManager
 
             if (buffer == null) return 0;
 
-            int finish = (int)readDoubles - pattern.Length;
+            int finish = (int)readDoubles - pattern.Count;
 
 
             for (int i = 0; i < finish; ++i)
             {
                 bool ok = true;
 
-                for (int j = 0, p = i; ok && j < pattern.Length; ++j, p += 2)
+                for (int j = 0, p = i; ok && j < pattern.Count; ++j, p += 2)
                     if (pattern[j] != buffer[p])
                         ok = false;
 
@@ -346,9 +348,9 @@ namespace WoWMemoryManager
             return 0;
         }
 
-        private bool CheckDoublePattern(uint start, double[] pattern)
+        private bool CheckDoublePattern(uint start, List<double> pattern)
         {
-            return FindDoublePattern(start, (uint)pattern.Length * 16, pattern)==start;
+            return FindDoublePattern(start, (uint)pattern.Count * 16, pattern)==start;
         }
 
         private double[] ReadDoubles(uint start, uint readDoubles)
@@ -388,15 +390,15 @@ namespace WoWMemoryManager
             return x < y ? x : y;
         }
 
-        private string[] GetRawAddonMessage(double[] signature)
+        private string[] GetRawAddonMessage(ComparableListOfDouble signature)
         {
             uint p = CachedDoublePattern(signature);
             if (p == 0) return null;
-            uint pMessage = BM.ReadUInt(p + 16 * (uint)signature.Length);
-            uint pTarget = BM.ReadUInt(p + 16 * ((uint)signature.Length + 1));
-            uint pDoNotRestart = BM.ReadUInt(p + 16 * ((uint)signature.Length + 2));
-            uint pNeedPurchaseConfirmation = BM.ReadUInt(p + 16 * ((uint)signature.Length + 3));
-            uint pCurrentState = BM.ReadUInt(p + 16 * ((uint)signature.Length + 4));
+            uint pMessage = BM.ReadUInt(p + 16 * (uint)signature.Count);
+            uint pTarget = BM.ReadUInt(p + 16 * ((uint)signature.Count + 1));
+            uint pDoNotRestart = BM.ReadUInt(p + 16 * ((uint)signature.Count + 2));
+            uint pNeedPurchaseConfirmation = BM.ReadUInt(p + 16 * ((uint)signature.Count + 3));
+            uint pCurrentState = BM.ReadUInt(p + 16 * ((uint)signature.Count + 4));
             // http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html#post717199
             string text = BM.ReadUTF8String(pMessage + 0x14, BM.ReadUInt(pMessage+0x10));
             string target = BM.ReadUTF8String(pTarget + 0x14, BM.ReadUInt(pTarget+0x10));
