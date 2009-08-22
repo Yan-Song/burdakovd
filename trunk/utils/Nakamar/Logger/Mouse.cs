@@ -7,10 +7,10 @@ using System.Windows.Forms;
 
 namespace Util
 {
-    public static class Mouse
+    public static class MouseCursor
     {
-        const int checkAccuracy = 30;
-        const int moveAccuracy = 15;
+        const int checkAccuracy = 20;
+        const int moveAccuracy = 10;
         static readonly Random generator = new Random();
 
         public static Point ScreenCenter
@@ -22,7 +22,7 @@ namespace Util
             }
         }
 
-        public static bool InScreenCenter()
+        public static bool NearScreenCenter()
         {
             Point center = ScreenCenter;
             return
@@ -30,7 +30,7 @@ namespace Util
                 && Math.Abs(center.Y - Cursor.Position.Y) < checkAccuracy;
         }
 
-        public static void MoveToCenter()
+        public static void MoveToScreenCenter()
         {
             Point position = ScreenCenter;
             position.X += generator.Next(-moveAccuracy, moveAccuracy);
