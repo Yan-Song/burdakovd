@@ -488,6 +488,7 @@ namespace NakamarStates
         WayPoint rememberedWaypoint;
         double lastDistance;
         double lastDistance10;
+        DateTime LastStuck = DateTime.MinValue;
         private void AntiStuck()
         {
             if (rememberedWaypoint != MovementQueue.Peek())
@@ -535,11 +536,29 @@ namespace NakamarStates
                     Log("Совсем застрял!!! Делаю скриншот");
                     Memory.KB.PressKey(KeyBindings.PrintScreen, true);
                     Thread.Sleep(1000);
-                    Log("Закрываю всё.");
-                    StopNavigation();
-                    Machine.DoNotRestart = true;
-                    Memory.StopWoW();
-                    Machine.StopEngineByWorker();               
+
+                    if (DateTime.Now - LastStuck < TimeSpan.FromMinutes(5))
+                    {
+                        Log("Застрял дважды в течение пяти минут");
+                        Log("Закрываю всё.");
+                        StopNavigation();
+                        Machine.DoNotRestart = true;
+                        Memory.StopWoW();
+                        Machine.StopEngineByWorker();
+                    }
+                    else
+                    {
+                        LastStuck = DateTime.Now;
+
+                        // запоминаем точку назначения и делаем паузу
+                        Log("Пауза...");
+                        DestinationPoint destination = (DestinationPoint)MovementQueue.Last();
+                        StopNavigation();
+                        Thread.Sleep(5000);
+
+                        Log("Строим маршрут заново, возможно поблизости есть rescue point");
+                        MakeRoute(destination);               
+                    }
                 }
             }
         }
@@ -607,6 +626,11 @@ namespace NakamarStates
         }
 
         private InteractResult InteractWithXYZ(DestinationPoint point)
+        {
+            return InteractResult.SureSuccess;
+        }
+
+        private InteractResult InteractWithRescue(DestinationPoint point)
         {
             return InteractResult.SureSuccess;
         }
@@ -693,13 +717,6 @@ namespace NakamarStates
                 Memory.KB.PressKey(KeyBindings.PrintScreen, true);
                 Thread.Sleep(1000);
                 return InteractResult.Failed;
-                /*
-                Log("Выключаю всё.");
-                StopNavigation();
-                Memory.StopWoW();
-                Machine.DoNotRestart = true;
-                Machine.StopEngineByWorker();
-                */
             }
 
             else if (current.Type == WayPointType.Simple)
@@ -708,6 +725,8 @@ namespace NakamarStates
                 return InteractWithNPC(current);
             else if (current.Type == WayPointType.Mailbox)
                 return InteractWithMailbox(current);
+            else if (current.Type == WayPointType.Rescue)
+                return InteractWithRescue(current);
             else
                 throw new NotImplementedException();
         }
@@ -780,7 +799,6 @@ namespace NakamarStates
 
         private void MakeRoute(string query)
         {
-            StopNavigation();
             DestinationPoint destination;
             if (Destinations.ContainsKey(query)) // by name
                 destination = Destinations[query];
@@ -794,6 +812,13 @@ namespace NakamarStates
                     throw new Exception("destination not found");
                 destination = candidates[(new Random()).Next(0, candidates.Count)];
             }
+            MakeRoute(destination);
+        }
+
+        private void MakeRoute(DestinationPoint destination)
+        {
+            StopNavigation();
+            
             Queue<WayPoint> points;
             
             DestinationPoint start = GetNearestDestinationPoint();

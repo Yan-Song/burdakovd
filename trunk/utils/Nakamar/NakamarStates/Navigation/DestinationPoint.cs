@@ -11,14 +11,16 @@ namespace NakamarStates
         Simple,
         NPC,
         Mailbox,
+        Rescue
     }
 
     public class DestinationPoint : WayPoint
     {
         private const double
             NPCRange = 5,
-            MailboxRange = 2.0,
-            XYZRange = 3.0;
+            MailboxRange = 2,
+            XYZRange = 3,
+            RescueRange = 10;
 
         public WayPointType Type { get; private set; }
         public string Name { get; set; }
@@ -32,7 +34,11 @@ namespace NakamarStates
                     return MailboxRange;
                 if (Type == WayPointType.NPC)
                     return NPCRange;
-                return XYZRange;
+                if (Type == WayPointType.Simple)
+                    return XYZRange;
+                if (Type == WayPointType.Rescue)
+                    return RescueRange;
+                throw new NotImplementedException(Type.ToString());
             }
         }
 
