@@ -32,7 +32,7 @@ lib.API = {}
 
 
 
-private.state = "INITIALIZING"
+private.state = "LOADING"
 private.last_change = 0
 private.bankSlots = true
 private.bankTime = -10000.0
@@ -40,6 +40,7 @@ private.lastToBank = -1000.0
 private.nextMailTime = 0.0 -- когда в следующий раз можно будет зайти на почту
 private.lastscan = 0
 
+local frames = 0
 local ipairs = ipairs
 local pairs = pairs
 local _time=0.0
@@ -150,9 +151,19 @@ local saidBank = false
 function private.everySecond()
 	NKeepAlive()
 	
+	-- первые 100 фреймов ничего не делаем,  в надежде что за это время wow успеет нормально запуститься и перестанет лагать
+	if private.state == "LOADING" then
+		if frames > 100 then
+			private.state = "THINKING"
+		else
+			return
+		end
+	end
+	
 	NNeedPurchaseConfirmation(lib.NeedPurchaseConfirmation())
 	
 	private.updateBankStats()
+	local allowedResume = private.allowedResume()
 	
 	if private.state == "QUIT" and private.stateTime()>private.waitbeforequitseconds then
 		print("QUIT NOW")
@@ -284,7 +295,7 @@ function private.everySecond()
 			private.ERROR()
 			updateNextMailTime()
 			return
-		elseif private.gtime - prevICTime > 5 then
+		elseif private.gtime - prevICTime > 10 then
 			prevICTime = private.gtime
 			local cur = GBM:InBagsItemCount() + GetMoney()
 			if cur == prevItemsCount then
@@ -310,9 +321,14 @@ function private.everySecond()
 		AucAdvanced.Modules.Util.SearchUI.Private.SearcherRealTime.ButtonPressed(nil, "LeftButton")
 	end
 	
-	if auctionAvailable and private.allowedScan() then
-		print("Похоже сейчас ничего не запущено.. Запускаю полный скан")
-		AucAdvanced.Scan.StartScan()
+	if auctionAvailable then
+		if private.allowedScan() then
+			print("Похоже сейчас ничего не запущено.. Запускаю полный скан")
+			AucAdvanced.Scan.StartScan("", "", "", nil, nil, nil, nil, nil)
+		elseif allowedResume then
+			print("Скан почему-то не запущен хотя стек сканов не пуст, нажимаю кнопку play")
+			AucAdvanced.Modules.Util.ScanButton.Private.play()
+		end
 	end
 	
 	if (private.state == "SCANNING" or private.state == "SCAN_BEFORE_POSTING" or private.state == "POSTING") and not auctionAvailable then
@@ -347,17 +363,17 @@ function private.everySecond()
 					print("часть товара не удалось выложить на аукцион")
 					private.ERROR()
 				end
-			elseif private.gtime - prevICTime > 60 then
+			elseif private.gtime - prevICTime > 300 then
 				prevICTime = private.gtime
 				local cur = GBM:InBagsItemCount()
 				if cur == prevItemsCount then
-					print("за 60 секунд ни один предмет не исчез из сумок")
+					print("за 5 минут ни один предмет не исчез из сумок")
 					private.ERROR()
 				else
 					prevItemsCount = cur
 				end
-			elseif private.stateTime()>3600 then
-				print("прошёл уже час, а всё ещё не весь товар выложен")
+			elseif private.stateTime()>10800 then
+				print("прошёл уже три часа, а всё ещё не весь товар выложен")
 				private.ERROR()
 			end
 			return
@@ -394,8 +410,8 @@ function private.everySecond()
 		if private.gtime - lastnotification > 60 then
 			print(msgs[private.state]:format(private.stateTime()))
 			lastnotification = private.gtime
-			if delta>300 then
-				print("Прошло более пяти минут")
+			if delta>3600 then
+				print("Прошло более часа")
 				private.ERROR()
 			end
 		end
@@ -479,9 +495,10 @@ function private.doPosting()
 end
 
 function private.OnUpdate(me,elapsed)
-    _time = _time+elapsed
-	private.gtime = private.gtime+elapsed
-    if(_time>1.0) then
+	frames = frames + 1
+    _time = _time + elapsed
+	private.gtime = private.gtime + elapsed
+    if (_time > 1.0) then
         private:everySecond()
         _time = 0.0
     end
@@ -517,7 +534,7 @@ function lib.OnLoad()
 	if not Nakamar then Nakamar = {} end
 
 	private.waitbeforequitseconds = random(30,60)
-	private.changeState("THINKING")
+	private.changeState("LOADING")
 	private.frame = CreateFrame("Frame", "NakamarFrame", UIParent)
 	private.frame:SetFrameStrata("TOOLTIP")
 	private.frame:SetPoint("TOPLEFT", 10, -10)
@@ -526,11 +543,11 @@ function lib.OnLoad()
 	private.frame:SetScript("OnUpdate", private.OnUpdate)
 	private.frame:SetScript("OnEvent", private.OnEvent)
 	private.frame:Show()
-	RegisterEvent("BANKFRAME_OPENED", function() bankAvailable = true; private.updateBankStats() end)
-	RegisterEvent("BANKFRAME_CLOSED", function() bankAvailable = nil end)
+	RegisterEvent("BANKFRAME_OPENED", function() bankAvailable = true; private.updateBankStats(); NCurrentState("Банк") end)
+	RegisterEvent("BANKFRAME_CLOSED", function() bankAvailable = nil; NCurrentState("хз"); end)
 	RegisterEvent("MAIL_INBOX_UPDATE", function() if mailboxOpened then mailboxAvailable = true end end)
-	RegisterEvent("MAIL_SHOW", function() mailboxOpenedTime = private.gtime; mailboxOpened = true end)
-	RegisterEvent("MAIL_CLOSED", function() mailboxAvailable = false; mailboxOpened = false end)
+	RegisterEvent("MAIL_SHOW", function() mailboxOpenedTime = private.gtime; mailboxOpened = true; NCurrentState("Почта") end)
+	RegisterEvent("MAIL_CLOSED", function() mailboxAvailable = false; mailboxOpened = false; NCurrentState("хз") end)
 	AucAdvanced.Settings.SetDefault("util.nakamar.printwindow", 1)
 	RegisterEvent("CHAT_MSG_WHISPER", private.Chat)
 end
@@ -554,11 +571,25 @@ function private.table2string(t)
 	end
 end
 
--- возвращает true если НИ ОДИН скан не запущен, не стоит на паузе, очередь сканов пуста, 
+-- возвращает true если НИ ОДИН скан не запущен, не стоит на паузе
 -- то есть если аукционер вообще ничего не делает
 function private.allowedScan()
-	return not AucAdvanced.Scan.IsPaused() and not AucAdvanced.Scan.IsScanning() and
-		AucAdvanced.Scan.GetScanCount()==0
+	return not AucAdvanced.Scan.IsPaused() and not AucAdvanced.Scan.IsScanning()
+		and AucAdvanced.Scan.GetScanCount() == 0
+end
+
+local lastScanningTime = time()
+-- возвращает true если в течение последних была аукцион был открыт но ничего не сканировал и не стоял на паузе
+-- нужно запускать эту функцию каждый фрейм даже если аукцион закрыт
+function private.allowedResume()
+	if not auctionAvailable or AucAdvanced.Scan.IsPaused() or AucAdvanced.Scan.IsScanning() or AucAdvanced.Buy.Private.Prompt:IsVisible() then
+		lastScanningTime = time()
+	end
+	if time() - lastScanningTime > 60 then
+		lastScanningTime = time()
+		return true
+	end
+	return false
 end
 
 function private.processScan(stats)
@@ -589,8 +620,10 @@ function lib.Processor(callbackType, ...)
         private.HookAH()
 	elseif callbackType == "auctionopen" then
 		auctionAvailable=true
+		NCurrentState("Аукцион")
 	elseif callbackType == "auctionclose" then
 		auctionAvailable=false
+		NCurrentState("хз")
 	elseif callbackType == "scanstats" then
 		private.processScan(...)
 	end
