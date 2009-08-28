@@ -47,31 +47,19 @@ function lib.GetPrice(hyperlink, serverKey)
 		debugPrint("hyperlink==nil o_O")
 		return
 	end
+	
 	if not get("stat.kreved.enable") then return end
-	local price = AucAdvanced.API.GetMarketValue(hyperlink, serverKey)
+	
+	--local price = AucAdvanced.API.GetMarketValue(hyperlink, serverKey)
+	
+	local buy, bid = AucAdvanced.Modules.Util.Appraiser.GetPrice(hyperlink, serverKey)
+	local price = bid
+	
 	if price == nil then return end
 	
-	local success = 0
-	local failed = 0
-
-	local linkType,itemId,property,factor = AucAdvanced.DecodeLink(hyperlink)
-	itemId = tostring(itemId)
-	if BeanCounter and BeanCounter.Private.playerData then
-		if BeanCounter.Private.playerData["completedAuctions"][itemId] then
-			for key in pairs(BeanCounter.Private.playerData["completedAuctions"][itemId]) do
-				success = success + #BeanCounter.Private.playerData["completedAuctions"][itemId][key]
-			end
-		end
-		if BeanCounter.Private.playerData["failedAuctions"][itemId] then
-			for key in pairs(BeanCounter.Private.playerData["failedAuctions"][itemId]) do
-				failed = failed + #BeanCounter.Private.playerData["failedAuctions"][itemId][key]
-			end
-		end
-	end
-	
-	local successfulAuctions = success
-	local failedAuctions = failed
+	local successfulAuctions, failedAuctions = BeanCounter.API.getAHSoldFailed(nil, hyperlink)
 	local seen = successfulAuctions + failedAuctions
+	
 	local avgRelistings
 	if seen>0 then
 		if successfulAuctions>0 then
@@ -98,7 +86,7 @@ function lib.GetPrice(hyperlink, serverKey)
 	if gain>0 then krevedValuation = gain / (1 + 0.01 * get("stat.kreved.percentsperday")) ^ (2*(avgRelistings+0.5)) -- 48h
 	else krevedValuation = -1
 	end
-	return krevedValuation, false, successfulAuctions, failedAuctions, avgRelistings, seen, postedStack
+	return krevedValuation, false, successfulAuctions, failedAuctions, avgRelistings, seen, postedStack, price
 end
 
 function lib.GetPriceColumns()
@@ -110,7 +98,8 @@ function lib.GetPriceArray(hyperlink, serverKey)
 	if not get("stat.kreved.enable") then return end
 	-- Clean out the old array
 	empty(array)
-	array.krevedValuation, _, array.successfulAuctions, array.failedAuctions, array.avgRelistings, array.seen, array.postedStack = lib.GetPrice(hyperlink, serverKey)
+	array.krevedValuation, _, array.successfulAuctions, array.failedAuctions,
+		array.avgRelistings, array.seen, array.postedStack, array.baseprice = lib.GetPrice(hyperlink, serverKey)
 	array.price = array.krevedValuation
 	array.confidence = 0.5
 
@@ -128,6 +117,7 @@ function lib.OnLoad(addon)
 	default("stat.kreved.failed", true)
 	default("stat.kreved.relistings", true)
 	default("stat.kreved.stack", true)
+	default("stat.kreved.baseprice", false)
 	default("stat.kreved.relistingprice", 0.20) -- в голдах
 	default("stat.kreved.percentsperday", 5.0)
 	default("stat.kreved.enable", false)
@@ -158,6 +148,7 @@ function private.SetupConfigGui(gui)
 	gui:AddControl(id, "Checkbox",   0, 1, "stat.kreved.failed",  "показывать failedAuctions")
 	gui:AddControl(id, "Checkbox",   0, 1, "stat.kreved.relistings",  "показывать avgRelistings")
 	gui:AddControl(id, "Checkbox",   0, 1, "stat.kreved.stack",  "показывать postedStack")
+	gui:AddControl(id, "Checkbox",   0, 1, "stat.kreved.baseprice",  "показывать base price")
 	gui:AddControl(id, "Note",       0, 1, nil, nil, " ")
  
 	gui:AddControl(id, "WideSlider", 0, 0, "stat.kreved.relistingprice", 0, 1, 0.01, "Стоимость перевыкладывания итема: %.2fг.")
@@ -177,7 +168,7 @@ function private.ProcessTooltip(tooltip, name, hyperlink, quality, quantity, cos
 
 	local serverKey, realm, faction = GetFaction() -- realm/faction requested for anticipated changes to add cross-faction tooltips
 	
-	local krevedValuation, _, successfulAuctions, failedAuctions, avgRelistings, seen, postedStack = lib.GetPrice(hyperlink, serverKey)
+	local krevedValuation, _, successfulAuctions, failedAuctions, avgRelistings, seen, postedStack, baseprice = lib.GetPrice(hyperlink, serverKey)
 
 	if krevedValuation == nil then
 		tooltip:AddLine("Kreved valuation: хз")
@@ -201,10 +192,13 @@ function private.ProcessTooltip(tooltip, name, hyperlink, quality, quantity, cos
 		tooltip:AddLine(("  Продаём стеками по %d"):format(postedStack))
 	end
 	
+	if (get("stat.kreved.baseprice")) then
+		tooltip:AddLine("  Базовая цена:", baseprice)
+	end
+	
 	if krevedValuation>0 then
 		tooltip:AddLine(("  Kreved valuation x%d:"):format(quantity), krevedValuation * quantity)
 	else
 		tooltip:AddLine("  Kreved valuation: ВЫБРОСИТЬ")
 	end
-
 end
