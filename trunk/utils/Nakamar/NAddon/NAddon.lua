@@ -16,6 +16,7 @@ data[1] = 901791
 --data[7] is target name
 --data[8] is DoNotRestart
 --data[9] is needPurchaseConfirmation
+--data[10] is CurrentState (string)
 
 local msgcount = 0
 local lastCommandTime = 0
@@ -48,7 +49,12 @@ function NDoNotRestart(text)
 	data[8] = text
 end
 
+function NCurrentState(state)
+	data[10] = state
+end
+
 function NGoTo(destination)
+	NCurrentState("waiting for "..tostring(destination))
 	NSendCommand("goto", destination)
 end
 
@@ -64,6 +70,7 @@ NSendCommand("nop")
 data[7] = ""
 data[8] = ""
 data[9] = ""
+data[10] = "init"
 
 ----------------------
 local frame = CreateFrame("Frame")
@@ -76,4 +83,3 @@ frame:SetScript("OnEvent",
 	)
 
 frame:RegisterEvent("PLAYER_TARGET_CHANGED")
-
