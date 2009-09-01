@@ -44,7 +44,7 @@ function lib:MakeGuiConfig(gui)
 		"Инфо",
 		"Этот фильтр отбрасывает итемы, для которых:\
         sold+purchased<10 - чтобы быть уверенным, что мы знаем всё об этом предмете\
-		а также если market >= 2*simple или market*simple==0")
+		а также если market >= 2*simple || market==0 || simple==0")
 
 	gui:AddControl(id, "Header",     0,      "Custom(Kreved) Filter Criteria")
 	
@@ -66,7 +66,7 @@ function lib.Filter(item, searcher)
 
 	if not get("filter.custom.enabled") or not searcher
         or not get("filter.custom.searchers."..searcher) then
-            return
+            return false
 	end
     
     local link = item[Const.LINK]
@@ -96,13 +96,21 @@ function lib.Filter(item, searcher)
 	local simple = AucAdvanced.Modules.Stat.Simple.GetPriceArray(link).price or 0
 	local market = AucAdvanced.API.GetMarketValue(link) or 0
 	
-	if market*simple == 0 then return true end
-
-	if market >= 2*simple then
-		return true
+	if market == 0 then
+		return true, "market==0"
 	end
 	
-    if (sold+purchased<10) then return true end
+	if simple == 0 then
+		return true, "simple==0"
+	end
+
+	if market >= 2*simple then
+		return true, "market>=2*simple, something strange"
+	end
+	
+    if sold + purchased < 10 then
+		return true, "sold+purchased=="..tostring(sold).."+"..tostring(purchased).."=="..tostring(sold+purchased).."<10"
+	end
     
     
     
