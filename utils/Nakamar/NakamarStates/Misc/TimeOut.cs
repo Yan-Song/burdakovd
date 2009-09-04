@@ -10,7 +10,7 @@ namespace NakamarStates
     public class TimeOut : State
     {
         DateTime StartTime;
-        static int WaitMinutes = 5;
+        static int WaitMinutes = 10;
 
         public TimeOut(object machine, object memory) : base(machine, memory)
         {

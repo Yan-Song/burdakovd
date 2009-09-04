@@ -675,13 +675,6 @@ namespace NakamarStates
 
         private InteractResult InteractWithMailbox(DestinationPoint mailbox)
         {
-            if (!Util.MouseCursor.NearScreenCenter())
-            {
-                Log("Перемещаю указатель мыши к центру экрана");
-                Util.MouseCursor.MoveToScreenCenter();
-                Thread.Sleep(1000);
-            }
-
             var player = Memory.ObjectManager.LocalPlayer;
             // повернуться к Mailbox, чтоб он был посреди экрана +- 5 градусов
 
@@ -699,6 +692,14 @@ namespace NakamarStates
             Memory.KB.PressKeys(zoomInKeys, true); // приблизить камеру на максимум
             //Memory.KB.PressKey(KeyBindings.CameraZoomedIn, true);
             Thread.Sleep(2000);
+
+            if (!Util.MouseCursor.NearScreenCenter())
+            {
+                Log("Перемещаю указатель мыши к центру экрана");
+                Util.MouseCursor.MoveToScreenCenter();
+                Thread.Sleep(1000);
+            }
+
             Memory.KB.PressKey(KeyBindings.MouseInteract, true);
             Memory.KB.PressKey(KeyBindings.CameraNormal, false); // вернуть
 
