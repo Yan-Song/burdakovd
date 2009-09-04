@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sdlapplication", "sdlapplication.vcproj", "{8B254586-4568-4F2A-B25A-5ADB745B9E88}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "life", "..\life\life.vcproj", "{63E4B998-DC6C-4D99-8DAA-860E976577C6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8B254586-4568-4F2A-B25A-5ADB745B9E88} = {8B254586-4568-4F2A-B25A-5ADB745B9E88}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
