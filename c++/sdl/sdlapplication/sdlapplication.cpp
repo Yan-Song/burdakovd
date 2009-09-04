@@ -35,7 +35,6 @@ SDLApplication::~SDLApplication()
 
 void SDLApplication::Main()
 {
-	Stop();
 }
 
 void SDLApplication::ProcessEvents()
