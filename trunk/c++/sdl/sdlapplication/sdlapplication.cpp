@@ -1,23 +1,16 @@
 #include <SDL.h>
 #include "sdlapplication.h"
 
-SDLApplication::SDLApplication(): Running(false)
-{
-	InitializeSDL(640, 480, 8);
-}
-
-void SDLApplication::InitializeSDL(int ScreenWidth, int ScreenHeight, int ColorDepth)
+void SDLApplication::InitializeSDL(int ScreenWidth, int ScreenHeight, int ColorDepth, int SDLflags)
 {
 	// Load SDL
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
 		fprintf(stderr, "Unable to initialize SDL: %s\n", SDL_GetError());
 		exit(1);
 	}
 
-	atexit(SDL_Quit); // Clean it up nicely :)
-
-	Screen = SDL_SetVideoMode(ScreenWidth, ScreenHeight, ColorDepth, SDL_DOUBLEBUF);
+	Screen = SDL_SetVideoMode(ScreenWidth, ScreenHeight, ColorDepth, SDLflags);
 	if (!Screen)
 	{
 		fprintf(stderr, "Unable to set video mode: %s\n", SDL_GetError());
@@ -33,20 +26,20 @@ SDLApplication::~SDLApplication()
 	printf("SDL unloaded\n");
 }
 
-void SDLApplication::Main()
-{
-}
-
 void SDLApplication::ProcessEvents()
 {
-}
+	SDL_Event Event;
 
-void SDLApplication::Render()
-{
+	while(SDL_PollEvent(&Event))
+		if(Event.type == SDL_QUIT)
+			Stop();
+		else
+			ProcessEvent(Event);
 }
 
 void SDLApplication::Run()
 {
+	frames = 0;
 	Running = true;
 
 	printf("Run()\n");
@@ -56,6 +49,7 @@ void SDLApplication::Run()
 		ProcessEvents();
 		Main();
 		Render();
+		++frames;
 	}
 
 	printf("Stopped\n");
@@ -65,4 +59,54 @@ void SDLApplication::Stop()
 {
 	Running = false;
 	printf("Stop()\n");
+}
+
+void SDLApplication::LockSurface(SDL_Surface* surface)
+{
+	if(SDL_MUSTLOCK(surface))
+		SDL_LockSurface(surface);
+}
+
+void SDLApplication::UnlockSurface(SDL_Surface* surface)
+{
+	if(SDL_MUSTLOCK(surface))
+		SDL_UnlockSurface(surface);
+}
+
+// http://plg.lrn.ru/doc/sdl/lesson1.html
+void SDLApplication::DrawPixel(SDL_Surface *surface, int x, int y, Uint8 R, Uint8 G, Uint8 B)
+{
+	Uint32 color = SDL_MapRGB(Screen->format, R, G, B); 
+	switch (Screen->format->BytesPerPixel){ 
+	   case 1:  // Assuming 8-bpp 
+	   { 
+		 Uint8 *bufp; 
+		 bufp = (Uint8 *)Screen->pixels + y*Screen->pitch + x; *bufp = color; 
+	   } break; 
+	   case 2: // Probably 15-bpp or 16-bpp 
+	   { 
+		 Uint16 *bufp; 
+		 bufp = (Uint16 *)Screen->pixels + y*Screen->pitch/2 + x; *bufp = color; 
+	   } break; 
+	   case 3: // Slow 24-bpp mode, usually not used 
+	   { 
+		 Uint8 *bufp; 
+		 bufp = (Uint8 *)Screen->pixels + y*Screen->pitch + x * 3; 
+		 if(SDL_BYTEORDER == SDL_LIL_ENDIAN){ 
+		   bufp[0] = color; 
+		   bufp[1] = color >> 8;
+		   bufp[2] = color >> 16; 
+		 }else{ 
+		   bufp[2] = color; 
+		   bufp[1] = color >> 8; 
+		   bufp[0] = color >> 16; 
+		 } 
+	   } break; 
+	   case 4: // Probably 32-bpp 
+	   { 
+		 Uint32 *bufp; 
+		 bufp = (Uint32 *)Screen->pixels + y*Screen->pitch/4 + x; 
+		 *bufp = color; 
+	   } break; 
+	 } 
 }
