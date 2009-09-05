@@ -43,7 +43,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;E:\data\progr\burdakovd\c++\sdl\sdlapplication&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
-				MinimalRebuild="true"
+				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -62,7 +62,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="SDL.lib SDLmain.lib sdlapplication.lib"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;E:\data\progr\burdakovd\c++\sdl\sdlapplication\Debug&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
