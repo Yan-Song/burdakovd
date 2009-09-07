@@ -419,9 +419,9 @@ namespace NakamarStates
         private DestinationPoint NewMailboxDestination(string name, string tag)
         {
             IEnumerable<GameObject> mailboxes = Memory.ObjectManager.GameObjects.Where(g => g.Name == name);
-            
+
             GameObject nearestMailbox =
-                mailboxes.OrderBy(g => Me.Distance(g.XPosition, g.YPosition, g.ZPosition)).Single();
+                mailboxes.OrderBy(g => Me.Distance(g.XPosition, g.YPosition, g.ZPosition)).First();
 
             return new DestinationPoint(name, WayPointType.Mailbox, tag ?? "",
                 nearestMailbox.XPosition, nearestMailbox.YPosition, nearestMailbox.ZPosition);
@@ -557,7 +557,7 @@ namespace NakamarStates
                         Thread.Sleep(5000);
 
                         Log("Строим маршрут заново, возможно поблизости есть rescue point");
-                        MakeRoute(destination);               
+                        MakeRoute(destination.Name);   
                     }
                 }
             }
@@ -800,24 +800,6 @@ namespace NakamarStates
 
         private void MakeRoute(string query)
         {
-            DestinationPoint destination;
-            if (Destinations.ContainsKey(query)) // by name
-                destination = Destinations[query];
-            else // by tag
-            {
-                List<DestinationPoint> candidates = new List<DestinationPoint>();
-                foreach (DestinationPoint d in Destinations.Values)
-                    if (d.Tag == query)
-                        candidates.Add(d);
-                if (candidates.Count == 0)
-                    throw new Exception("destination not found");
-                destination = candidates[(new Random()).Next(0, candidates.Count)];
-            }
-            MakeRoute(destination);
-        }
-
-        private void MakeRoute(DestinationPoint destination)
-        {
             StopNavigation();
             
             Queue<WayPoint> points;
@@ -836,6 +818,20 @@ namespace NakamarStates
                 points.Enqueue(start);
             }
 
+            DestinationPoint destination;
+            if (Destinations.ContainsKey(query)) // by name
+                destination = Destinations[query];
+            else // by tag
+            {
+                List<DestinationPoint> candidates = new List<DestinationPoint>();
+                foreach (DestinationPoint d in Destinations.Values)
+                    if (d.Tag == query && Reachable(start, d))
+                        candidates.Add(d);
+                if (candidates.Count == 0)
+                    throw new Exception("destination not found");
+                destination = candidates[(new Random()).Next(0, candidates.Count)];
+            }
+
             IEnumerable<DestinationPoint> metaRoute = BFS(start, destination);
             DestinationPoint current = start;
             foreach (DestinationPoint next in metaRoute)
@@ -850,6 +846,19 @@ namespace NakamarStates
             MovementQueue = new Queue<WayPoint>(points);
 
             Log("Проложен маршрут от " + start + " до " + destination + ", " + points.Count + " точек");
+        }
+
+        private bool Reachable(DestinationPoint start, DestinationPoint finish)
+        {
+            try
+            {
+                BFS(start, finish);
+                return true;
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
         }
 
         private IEnumerable<DestinationPoint> BFS(DestinationPoint start, DestinationPoint finish)
@@ -892,7 +901,7 @@ namespace NakamarStates
                 return l;
             }
             else
-                throw new Exception("destination unreachable");
+                throw new ArgumentException("destination unreachable");
         }
 
         private Route DirectRoute(DestinationPoint start, DestinationPoint destination)

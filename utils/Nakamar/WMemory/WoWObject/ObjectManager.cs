@@ -40,12 +40,8 @@ namespace WoWMemoryManager.WoWObject
                     CurrentObject = new PlayerObject(Reader, CurrentObjectAddress);
                 else if (type == ObjectType.GameObject)
                     CurrentObject = new GameObject(Reader, CurrentObjectAddress);
-                /*else if (type == ObjectType.DynamicObject)
-                    CurrentObject = new DynamicObject(Reader, CurrentObjectAddress);
-                else if (type == ObjectType.Corpse)
-                     CurrentObject = new CorpseObject(Reader, CurrentObjectAddress);
-                */
                 yield return CurrentObject;
+
                 CurrentObjectAddress = Reader.ReadUInt(CurrentObjectAddress + nextObjectOffset);
             }
 
@@ -80,9 +76,8 @@ namespace WoWMemoryManager.WoWObject
         private BlackMagic Reader;
         public uint BaseAddress;               // the address off the object manager
         public IEnumerable<GameObject> GameObjects { get; private set; }
-        public IEnumerable<PlayerObject> Players { get; private set; }
-        public IEnumerable<NpcObject> NPC { get; private set; }
         public IEnumerable<WoWObject> Objects { get; private set; }
+        public IEnumerable<NpcObject> NpcObjects { get; private set; }
 
         public PlayerObject LocalPlayer
         {
@@ -108,8 +103,7 @@ namespace WoWMemoryManager.WoWObject
             Reader = reader;
             BaseAddress = objectManagerBaseAddress;
             GameObjects = new ObjectList<GameObject>(Reader, BaseAddress);
-            Players = new ObjectList<PlayerObject>(Reader, BaseAddress);
-            NPC = new ObjectList<NpcObject>(Reader, BaseAddress);
+            NpcObjects = new ObjectList<NpcObject>(Reader, BaseAddress);
             Objects = new ObjectList<WoWObject>(Reader, BaseAddress);
         }
     }

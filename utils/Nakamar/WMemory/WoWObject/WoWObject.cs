@@ -38,7 +38,7 @@ namespace WoWMemoryManager.WoWObject
 
         public override string ToString()
         {
-            return "WoW Object with GUID: 0x" + Guid.ToString("X16") +
+            return "WoW Object with type: " + Type.ToString() + ", GUID: 0x" + Guid.ToString("X16") +
                 " XYZ(" +
                 XPosition + ", " + YPosition + ", " + ZPosition +
                 ")";
@@ -63,7 +63,7 @@ namespace WoWMemoryManager.WoWObject
 
         public ObjectType Type
         {
-            get { return (ObjectType)Reader.ReadUInt(DescriptorFields + descObjectFieldType); }
+            get { return (ObjectType)Reader.ReadUInt(BaseAddress+0x14); }
         }
 
         public virtual ulong Guid
@@ -114,17 +114,16 @@ namespace WoWMemoryManager.WoWObject
             : base(reader, baseAddress)
         { }
 
-        /*protected const uint
-            NameOffset1 = 0x968, // 3.1.3
-            NameOffset2 = 0x54; // 3.1.3
+        protected const uint
+            NameOffset1 = 0x968, // 3.2.0
+            NameOffset2 = 0x5c; // 3.2.0
 
-        public override string Name
+        public virtual string Name
         {
             get
             {
                 try
                 {
-                    throw new NotImplementedException();
                     return Reader.ReadUTF8String(Reader.ReadUInt(Reader.ReadUInt(BaseAddress + NameOffset1) + NameOffset2), 1000);
                 }
                 catch
@@ -132,7 +131,7 @@ namespace WoWMemoryManager.WoWObject
                     return null;
                 }
             }
-        }*/
+        }
     }
 
 
