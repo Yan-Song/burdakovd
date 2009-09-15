@@ -76,22 +76,22 @@ void SDLApplication::UnlockSurface(SDL_Surface* surface)
 // http://plg.lrn.ru/doc/sdl/lesson1.html
 void SDLApplication::DrawPixel(SDL_Surface *surface, int x, int y, Uint8 R, Uint8 G, Uint8 B)
 {
-	Uint32 color = SDL_MapRGB(Screen->format, R, G, B); 
-	switch (Screen->format->BytesPerPixel){ 
+	Uint32 color = SDL_MapRGB(surface->format, R, G, B); 
+	switch (surface->format->BytesPerPixel){ 
 	   case 1:  // Assuming 8-bpp 
 	   { 
 		 Uint8 *bufp; 
-		 bufp = (Uint8 *)Screen->pixels + y*Screen->pitch + x; *bufp = color; 
+		 bufp = (Uint8 *)surface->pixels + y*surface->pitch + x; *bufp = color; 
 	   } break; 
 	   case 2: // Probably 15-bpp or 16-bpp 
 	   { 
 		 Uint16 *bufp; 
-		 bufp = (Uint16 *)Screen->pixels + y*Screen->pitch/2 + x; *bufp = color; 
+		 bufp = (Uint16 *)surface->pixels + y*surface->pitch/2 + x; *bufp = color;
 	   } break; 
 	   case 3: // Slow 24-bpp mode, usually not used 
 	   { 
 		 Uint8 *bufp; 
-		 bufp = (Uint8 *)Screen->pixels + y*Screen->pitch + x * 3; 
+		 bufp = (Uint8 *)surface->pixels + y*surface->pitch + x * 3; 
 		 if(SDL_BYTEORDER == SDL_LIL_ENDIAN){ 
 		   bufp[0] = color; 
 		   bufp[1] = color >> 8;
@@ -105,7 +105,7 @@ void SDLApplication::DrawPixel(SDL_Surface *surface, int x, int y, Uint8 R, Uint
 	   case 4: // Probably 32-bpp 
 	   { 
 		 Uint32 *bufp; 
-		 bufp = (Uint32 *)Screen->pixels + y*Screen->pitch/4 + x; 
+		 bufp = (Uint32 *)surface->pixels + y*surface->pitch/4 + x; 
 		 *bufp = color; 
 	   } break; 
 	 } 

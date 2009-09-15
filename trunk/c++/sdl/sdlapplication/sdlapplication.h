@@ -16,9 +16,9 @@ protected:
 	virtual void Main() = 0; // основная логика
 	virtual void Render() = 0; // вывести на экран текущую ситуацию
 	void InitializeSDL(int ScreenWidth, int ScreenHeight, int ColorDepth, int SDLflags); // инициализировать библиотеку SDL
-	void LockSurface(SDL_Surface* surface);
-	void UnlockSurface(SDL_Surface* surface);
-	void DrawPixel(SDL_Surface *surface, int x, int y, Uint8 R, Uint8 G, Uint8 B);
+	static void LockSurface(SDL_Surface* surface);
+	static void UnlockSurface(SDL_Surface* surface);
+	static void DrawPixel(SDL_Surface *surface, int x, int y, Uint8 R, Uint8 G, Uint8 B);
 	SDL_Surface* Screen;
 	long long frames;
 
