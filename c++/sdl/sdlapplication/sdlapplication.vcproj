@@ -149,7 +149,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\color.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\line.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\sdlapplication.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Vector.cpp"
 				>
 			</File>
 		</Filter>
@@ -159,7 +171,23 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\color.h"
+				>
+			</File>
+			<File
+				RelativePath=".\graphobject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\line.h"
+				>
+			</File>
+			<File
 				RelativePath=".\sdlapplication.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Vector.h"
 				>
 			</File>
 		</Filter>

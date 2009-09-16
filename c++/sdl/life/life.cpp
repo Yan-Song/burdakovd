@@ -1,7 +1,9 @@
 #include <iostream>
+
 using namespace std;
 
 #include "life.h"
+#include "Vector.h"
 #include <ctime>
 
 LifeApplication::LifeApplication()
@@ -9,7 +11,7 @@ LifeApplication::LifeApplication()
 	lasttime = time(NULL);
 	lastframes = 0;
 	srand((unsigned int)time(NULL));
-	InitializeSDL(ScreenWidth, ScreenHeight, ColorDepth, SDLflags);
+	InitializeSDL(ScreenSize, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Life", "");
 	Populate();
 }
@@ -41,8 +43,8 @@ void LifeApplication::Main()
 
 void LifeApplication::Populate()
 {
-	for(int i=0; i<ScreenHeight; ++i)
-		for(int j=0; j<ScreenWidth; ++j)
+	for(int i=0; i<ScreenSize.y; ++i)
+		for(int j=0; j<ScreenSize.x; ++j)
 			map[0][i][j] = rand() % 100 < Density;
 	current = 0;
 }
@@ -80,9 +82,13 @@ void LifeApplication::Render()
 	for(int i=0; i<ScreenHeight; ++i)
 		for(int j=0; j<ScreenWidth; ++j)
 			if(map[current][i][j])
-				DrawPixel(Screen, j, i, 255, 255, 0);
+				DrawPixel(Screen, Point(j, i), alive);
 			else
-				DrawPixel(Screen, j, i, 0, 0, 255);
+				DrawPixel(Screen, Point(j, i), dead);
 	UnlockSurface(Screen);
 	SDL_Flip(Screen);
 }
+
+const Color LifeApplication::alive = Color(255, 255, 0);
+const Color LifeApplication::dead = Color(0, 0, 255);
+const Point LifeApplication::ScreenSize = Point(LifeApplication::ScreenWidth, LifeApplication::ScreenHeight);
