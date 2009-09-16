@@ -1,7 +1,13 @@
 #include <SDL.h>
 #include "sdlapplication.h"
+#include <ctime>
 
-void SDLApplication::InitializeSDL(int ScreenWidth, int ScreenHeight, int ColorDepth, int SDLflags)
+SDLApplication::SDLApplication()
+{
+    srand(time(NULL));
+}
+
+void SDLApplication::InitializeSDL(Point ScreenSize, int ColorDepth, int SDLflags)
 {
 	// Load SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -10,7 +16,7 @@ void SDLApplication::InitializeSDL(int ScreenWidth, int ScreenHeight, int ColorD
 		exit(1);
 	}
 
-	Screen = SDL_SetVideoMode(ScreenWidth, ScreenHeight, ColorDepth, SDLflags);
+	Screen = SDL_SetVideoMode(ScreenSize.x, ScreenSize.y, ColorDepth, SDLflags);
 	if (!Screen)
 	{
 		fprintf(stderr, "Unable to set video mode: %s\n", SDL_GetError());
@@ -74,8 +80,12 @@ void SDLApplication::UnlockSurface(SDL_Surface* surface)
 }
 
 // http://plg.lrn.ru/doc/sdl/lesson1.html
-void SDLApplication::DrawPixel(SDL_Surface *surface, int x, int y, Uint8 R, Uint8 G, Uint8 B)
+void SDLApplication::DrawPixel(SDL_Surface *surface, const Point& point, const Color& rgb)
 {
+	int R = rgb.r, G = rgb.g, B = rgb.b;
+	int x = point.x, y = point.y;
+    if(x < 0  || x >= surface->w || y < 0 || y >= surface->h) return;
+
 	Uint32 color = SDL_MapRGB(surface->format, R, G, B); 
 	switch (surface->format->BytesPerPixel){ 
 	   case 1:  // Assuming 8-bpp 
@@ -109,4 +119,16 @@ void SDLApplication::DrawPixel(SDL_Surface *surface, int x, int y, Uint8 R, Uint
 		 *bufp = color; 
 	   } break; 
 	 } 
+}
+
+// исключая x
+int SDLApplication::Rand(int x)
+{
+    return rand() % x;
+}
+
+// [x, y]
+int SDLApplication::Rand(int x, int y)
+{
+    return x > y ? Rand(y, x) : x + Rand(y - x + 1);
 }
