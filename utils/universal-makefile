@@ -1,0 +1,30 @@
+PROG=./something
+
+CPP=g++
+CPPFLAGS= -W -Wall -I/usr/include/SDL 
+LINKFLAGS= -lSDL -lpthread 
+
+SOURCES := $(wildcard *.cpp)
+OBJS := $(patsubst %.cpp, %.o, $(SOURCES))
+DEPS := $(patsubst %.o,%.d,$(OBJS))
+ 
+all: $(PROG)
+
+run: $(PROG)
+ 
+$(PROG): $(OBJS) $(DEPS)
+	$(CPP) $(LINKFLAGS) $(OBJS) -o $@
+ 
+%.o: %.cpp %.d
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+ 
+%.d: %.cpp
+	@set -e; $(CPP) -M $(CPPFLAGS) $< | \
+		sed -e 's%\($*\)\.o[ :]*%\1.o $@ : %g' > $@; \
+		[ -s $@ ] || rm -f $@
+	@echo create $@
+ 
+clean:
+	rm -f $(PROG) $(OBJS) $(DEPS)
+ 
+-include $(DEPS)
