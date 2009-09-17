@@ -1,4 +1,5 @@
 #include "Vector.h"
+#include <cmath>
 
 #define sqr(x) ((x)*(x))
 
@@ -19,15 +20,15 @@ Vector Vector::operator -() const
 
 Vector Vector::operator *(double k) const
 {
-	return Vector(static_cast<int>(x * k), static_cast<int>(y * k));
+	return Vector(x * k, y * k);
 }
 
 Vector Vector::operator /(double k) const
 {
-	return (*this) * (1 / k);
+	return Vector(x / k, y / k);
 }
 
-int Vector::Dist2(const Vector& other) const
+double Vector::Dist(const Vector& other) const
 {
-    return sqr(x - other.x) + sqr(y - other.y);
+    return sqrt(sqr(x - other.x) + sqr(y - other.y));
 }

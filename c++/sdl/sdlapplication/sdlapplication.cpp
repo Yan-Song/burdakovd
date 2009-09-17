@@ -4,10 +4,10 @@
 
 SDLApplication::SDLApplication()
 {
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(NULL)));
 }
 
-void SDLApplication::InitializeSDL(Point ScreenSize, int ColorDepth, int SDLflags)
+void SDLApplication::InitializeSDL(int ScreenHeight, int ScreenWidth, int ColorDepth, int SDLflags)
 {
 	// Load SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -16,7 +16,7 @@ void SDLApplication::InitializeSDL(Point ScreenSize, int ColorDepth, int SDLflag
 		exit(1);
 	}
 
-	Screen = SDL_SetVideoMode(ScreenSize.x, ScreenSize.y, ColorDepth, SDLflags);
+	Screen = SDL_SetVideoMode(ScreenWidth, ScreenHeight, ColorDepth, SDLflags);
 	if (!Screen)
 	{
 		fprintf(stderr, "Unable to set video mode: %s\n", SDL_GetError());
@@ -79,11 +79,15 @@ void SDLApplication::UnlockSurface(SDL_Surface* surface)
 		SDL_UnlockSurface(surface);
 }
 
+void SDLApplication::DrawPixel(SDL_Surface *surface, const Point& point, const Color& color)
+{
+    DrawPixel(surface, static_cast<int>(point.x / point.k), static_cast<int>(point.y / point.k), color);
+}
+
 // http://plg.lrn.ru/doc/sdl/lesson1.html
-void SDLApplication::DrawPixel(SDL_Surface *surface, const Point& point, const Color& rgb)
+void SDLApplication::DrawPixel(SDL_Surface *surface, const int x, const int y, const Color& rgb)
 {
 	int R = rgb.r, G = rgb.g, B = rgb.b;
-	int x = point.x, y = point.y;
     if(x < 0  || x >= surface->w || y < 0 || y >= surface->h) return;
 
 	Uint32 color = SDL_MapRGB(surface->format, R, G, B); 

@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="life"
-	ProjectGUID="{63E4B998-DC6C-4D99-8DAA-860E976577C6}"
-	RootNamespace="life"
+	Name="radar"
+	ProjectGUID="{99AC208E-1B2B-4754-86EF-BABB2292FAEB}"
+	RootNamespace="radar"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -43,7 +43,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;E:\data\progr\burdakovd\c++\sdl\sdlapplication&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
-				MinimalRebuild="false"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -61,8 +61,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib sdlapplication.lib"
-				LinkIncremental="1"
+				AdditionalDependencies="sdlapplication.lib SDLmain.lib SDL.lib"
+				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;E:\data\progr\burdakovd\c++\sdl\sdlapplication\Debug&quot;"
 				IgnoreDefaultLibraryNames="msvcrt.lib"
 				GenerateDebugInformation="true"
@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib sdlapplication.lib"
+				AdditionalDependencies="sdlapplication.lib SDLmain.lib SDL.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;E:\data\progr\burdakovd\c++\sdl\sdlapplication\Release&quot;"
 				IgnoreDefaultLibraryNames="msvcrt.lib"
@@ -179,15 +179,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\sdlapplication\color.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\life.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\radar.cpp"
 				>
 			</File>
 		</Filter>
@@ -197,11 +193,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\sdlapplication\color.h"
-				>
-			</File>
-			<File
-				RelativePath=".\life.h"
+				RelativePath=".\radar.h"
 				>
 			</File>
 		</Filter>

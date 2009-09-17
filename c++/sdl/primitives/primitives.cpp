@@ -7,7 +7,6 @@
 #include <cstring>
 #include "line.h"
 
-const Point PrimitivesApplication::ScreenSize = Point(PrimitivesApplication::ScreenWidth, PrimitivesApplication::ScreenHeight);
 const Color yellow = Color(255, 255, 0);
 const Color black = Color(0, 0, 0);
 const Color white = Color(255, 255, 255);
@@ -18,9 +17,9 @@ const double density = 1, activity = 0.001;
 
 PrimitivesApplication::PrimitivesApplication()
 {
-	srand(time(NULL));
+	srand(static_cast<unsigned int>(time(NULL)));
 
-	InitializeSDL(ScreenSize, ColorDepth, SDLflags);
+	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
 
 	memset(map, 0, sizeof(map));
@@ -82,11 +81,11 @@ void PrimitivesApplication::Render()
 
 	    
         // lines
-        for(int x=start.x; x<=finish.x; x += 1)
-            Line(start, Point(x, finish.y), 0x000000, Color(x*255/800, finish.y*255/600, 0)).Draw(Screen);
+        for(double x=start.x; x<=finish.x; x += 1)
+            Line(start, Point(x, finish.y), 0x000000, Color(x/800, finish.y/600, 0.0)).Draw(Screen);
         
-        for(int y=start.y; y<=finish.y; y += 1)
-            Line(start, Point(finish.x, y), 0x000000, Color(finish.x*255/800, y*255/600, 0)).Draw(Screen);
+        for(double y=start.y; y<=finish.y; y += 1)
+            Line(start, Point(finish.x, y), 0x000000, Color(finish.x/800, y/600, 0.0)).Draw(Screen);
         
     }
 
@@ -106,15 +105,7 @@ void PrimitivesApplication::Render()
 
 void PrimitivesApplication::move(Point a, Point b)
 {
-	if(map[a.y][a.x] == sand && b.y < Screen->h && b.x < Screen->w && b.x >= 0 && b.y >= 0) 
-		if(map[b.y][b.x] == background)
-		{
-			map[a.y][a.x] = background;
-			map[b.y][b.x] = sand;
 
-			DrawPixel(Screen, Point(a.x,a.y), background);
-			DrawPixel(Screen, Point(b.x,b.y), sand);
-		}
 }
 
 void PrimitivesApplication::ProcessEvent(SDL_Event Event)
