@@ -15,6 +15,13 @@ private:
 public:
     Matrix();
 
+    Matrix(double m)
+    {
+        for(int i=0; i<3; ++i)
+            for(int j=0; j<3; ++j)
+                A[i][j] = i == j ? m : 0;
+    }
+
     MatrixRow& operator [](int i)
     {
         return A[i];
@@ -45,7 +52,17 @@ public:
 
     static Matrix ReflectX();
 
+    inline static Matrix ReflectX(const double x)
+    {
+        return Matrix::Shift(Point(x, 0)) * Matrix::ReflectX() * Matrix::Shift(Point(-x, 0));
+    }
+
     static Matrix ReflectY();
+
+    inline static Matrix ReflectY(const double y)
+    {
+        return Matrix::Shift(Point(0, y)) * Matrix::ReflectY() * Matrix::Shift(Point(0, -y));
+    }
 };
 
 Vector operator *(const Matrix& A, const Vector& b);
