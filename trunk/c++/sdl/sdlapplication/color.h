@@ -11,9 +11,9 @@ public:
 	Color(int color) : r(color>>16 & 255), g(color>>8 & 255), b(color & 255) {};
 
 	Color(double rr, double gg, double bb) :
-		r(static_cast<int>(rr*256)),
-		g(static_cast<int>(gg*256)),
-		b(static_cast<int>(bb*256)) {};
+		r(static_cast<int>(rr*255)),
+		g(static_cast<int>(gg*255)),
+		b(static_cast<int>(bb*255)) {};
 
 	operator int() const;
 

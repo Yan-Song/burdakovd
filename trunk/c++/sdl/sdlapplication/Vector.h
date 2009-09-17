@@ -1,6 +1,12 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include <iostream>
+
+/* мутный вектор
+   сложение, умножение на скаляр и вычитание тут идёт не покомпонентно
+   а так, чтобы оно было аналогично параллельному переносу или растяжению.
+*/
 class Vector
 {
 public:
@@ -10,30 +16,39 @@ public:
 
 	Vector(double xx, double yy): x(xx), y(yy), k(1) {};
 
-	Vector(double xx, double yy, double scale):
-		x(xx * scale),
-		y(yy * scale),
-        k(1)
+	Vector(double xx, double yy, double kk):
+		x(xx),
+		y(yy),
+        k(kk)
 		{};
 
-	Vector(Vector base, double xx, double yy, double scale):
-		x(base.x + xx * scale),
-		y(base.y + yy * scale),
-        k(1)
-		{};
+    inline double X() const
+    {
+        return x / k;
+    }
 
-	Vector operator+(const Vector& other) const;
+    inline double Y() const
+    {
+        return y / k;
+    }
 
-	Vector operator-(const Vector& other) const;
+    double& operator [](int index)
+    {
+        return *(index + &x);
+    }
 
-	Vector operator-() const;
+    const double& operator [](int index) const
+    {
+        return *(index + &x);
+    }
 
-	Vector operator*(double k) const;
-
-	Vector operator/(double k) const;
-
-    double Dist(const Vector& other) const;
+    Vector operator -() const
+    {
+        return Vector(-x, -y, k);
+    }
 };
+
+std::ostream& operator<<(std::ostream& os, const Vector& v);
 
 typedef Vector Point;
 

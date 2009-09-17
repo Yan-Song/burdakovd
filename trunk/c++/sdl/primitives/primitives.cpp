@@ -6,6 +6,8 @@
 #include <ctime>
 #include <cstring>
 #include "line.h"
+#include "matrix.h"
+#include <iostream>
 
 const Color yellow = Color(255, 255, 0);
 const Color black = Color(0, 0, 0);
@@ -21,23 +23,12 @@ PrimitivesApplication::PrimitivesApplication()
 
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
-
-	memset(map, 0, sizeof(map));
 	
 }
 
 void PrimitivesApplication::Main()
 {
 	
-}
-
-void PrimitivesApplication::DrawGraph(pFunction& f, Point base, double scale, double dx, double start, double end) const
-{
-	for(double fx = start; fx < end; fx += dx)
-	{
-		double fy = -f(fx);
-		DrawPixel(Screen, Point(base, fx, fy, scale), yellow);
-	}
 }
 
 double norm(double x)
@@ -65,28 +56,26 @@ void PrimitivesApplication::Render()
 
     Point start(20, 220);
     Point finish(Screen->w-20, Screen->h-20);
-    Point center = (start + finish) / 2;
+    Point center = Point((start.x + finish.x) / 2, (start.y + finish.y) / 2);
 
 	if(frames == 0)
     {
-
-        // pixels
-	    DrawGraph(sin, Point(20, 50), 10, 1.0, 0, 36);
-	    DrawGraph(sin, Point(20, 80), 10, 0.5, 0, 36);
-	    DrawGraph(sin, Point(20, 110), 10, 0.2, 0, 36);
-	    DrawGraph(sin, Point(20, 140), 10, 0.1, 0, 36);
-	    DrawGraph(sin, Point(20, 170), 10, 0.05, 0, 36);
-
-        
-
-	    
         // lines
         for(double x=start.x; x<=finish.x; x += 1)
             Line(start, Point(x, finish.y), 0x000000, Color(x/800, finish.y/600, 0.0)).Draw(Screen);
         
         for(double y=start.y; y<=finish.y; y += 1)
             Line(start, Point(finish.x, y), 0x000000, Color(finish.x/800, y/600, 0.0)).Draw(Screen);
-        
+
+        Point p1(10, 10);
+        Point p2(50, 50);
+        Line l(p1, p2, yellow);
+
+        for(int i=0; i<10; ++i)
+        {
+            l.Draw(Screen);
+            l.Scale(Point(200, 10), 0.5, 0.5);
+        }
     }
 
 
@@ -96,16 +85,11 @@ void PrimitivesApplication::Render()
 		{
 			double sx = sin(sf*x*0.1-cf*y*0.1);
 			double sy = sin(cf*x*0.1-sf*y*0.1);
-			DrawPixel(Screen, Point(x, y), Color(norm(sx), norm(sy), norm(1)));
+			DrawPixel(Screen, Point(x, y), Color(norm(sx), norm(sy), norm(-1)));
 		}
 
 	UnlockSurface(Screen);
 	SDL_Flip(Screen);
-}
-
-void PrimitivesApplication::move(Point a, Point b)
-{
-
 }
 
 void PrimitivesApplication::ProcessEvent(SDL_Event Event)

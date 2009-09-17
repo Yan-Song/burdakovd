@@ -159,6 +159,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\matrix.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\sdlapplication.cpp"
 				>
 			</File>
@@ -182,6 +186,10 @@
 			</File>
 			<File
 				RelativePath=".\line.h"
+				>
+			</File>
+			<File
+				RelativePath=".\matrix.h"
 				>
 			</File>
 			<File

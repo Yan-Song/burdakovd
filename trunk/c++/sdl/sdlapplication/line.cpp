@@ -9,10 +9,10 @@
 // для цвета пиксела в случае градиента такая точность не нужна, так что он вычисляется проще
 void Line::Draw(SDL_Surface *surface)
 {
-    int x1 = static_cast<int>(A.x);
-    int y1 = static_cast<int>(A.y);
-    int x2 = static_cast<int>(B.x);
-    int y2 = static_cast<int>(B.y);
+    int x1 = static_cast<int>(A.X());
+    int y1 = static_cast<int>(A.Y());
+    int x2 = static_cast<int>(B.X());
+    int y2 = static_cast<int>(B.Y());
 
 	int dx = abs(x2 - x1);
 	int dy = abs(y2 - y1);
@@ -63,4 +63,10 @@ void Line::Draw(SDL_Surface *surface)
             SDLApplication::DrawPixel(surface, x, y, colorA + (colorB - colorA) * (y - y1) / (y2 - y1));
 		}
 	}
+}
+
+void Line::Modify(const Matrix &m)
+{
+    A = m * A;
+    B = m * B;
 }

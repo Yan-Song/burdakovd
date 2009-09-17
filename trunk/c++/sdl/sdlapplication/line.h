@@ -5,8 +5,9 @@
 #include "Vector.h"
 #include <SDL.h>
 #include "color.h"
+#include "matrix.h"
 
-class Line : GraphObject
+class Line : public GraphObject
 {
 public:
 	Point A, B;
@@ -19,6 +20,8 @@ public:
     Line(Point a, Point b, Color ca, Color cb): A(a), B(b), colorA(ca), colorB(cb) { }
 
 	virtual void Draw(SDL_Surface* surface);
+
+    virtual void Modify(const Matrix& m);
 };
 
 #endif

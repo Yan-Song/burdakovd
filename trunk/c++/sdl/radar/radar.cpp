@@ -13,7 +13,7 @@ Radar::Radar()
     phi = 0;
     dphi = 0.001;
 
-    c = Point(ScreenWidth, ScreenHeight) / 2;
+    c = Point(ScreenWidth / 2, ScreenHeight / 2);
 
     double p = 0.5;
 
