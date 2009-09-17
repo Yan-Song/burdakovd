@@ -11,7 +11,7 @@ LifeApplication::LifeApplication()
 	lasttime = time(NULL);
 	lastframes = 0;
 	srand((unsigned int)time(NULL));
-	InitializeSDL(ScreenSize, ColorDepth, SDLflags);
+	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Life", "");
 	Populate();
 }

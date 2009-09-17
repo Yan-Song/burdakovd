@@ -9,10 +9,15 @@
 // для цвета пиксела в случае градиента такая точность не нужна, так что он вычисляется проще
 void Line::Draw(SDL_Surface *surface)
 {
-	int dx = abs(B.x - A.x);
-	int dy = abs(B.y - A.y);
-	int sx = B.x >= A.x ? 1 : -1;
-	int sy = B.y >= A.y ? 1 : -1;
+    int x1 = static_cast<int>(A.x);
+    int y1 = static_cast<int>(A.y);
+    int x2 = static_cast<int>(B.x);
+    int y2 = static_cast<int>(B.y);
+
+	int dx = abs(x2 - x1);
+	int dy = abs(y2 - y1);
+	int sx = x2 >= x1 ? 1 : -1;
+	int sy = y2 >= y1 ? 1 : -1;
 
 	if(dy <= dx)
 	{
@@ -22,7 +27,7 @@ void Line::Draw(SDL_Surface *surface)
 
 		SDLApplication::DrawPixel(surface, A, colorA);
 
-		for(int x = A.x + sx, y = A.y, i = 1; i <= dx; ++i, x += sx)
+		for(int x = x1 + sx, y = y1, i = 1; i <= dx; ++i, x += sx)
 		{
             if ( d > 0 )
             {
@@ -33,7 +38,7 @@ void Line::Draw(SDL_Surface *surface)
             {
                 d += d1;
             }
-            SDLApplication::DrawPixel(surface, Point(x, y), colorA + (colorB - colorA) * (x - A.x) / (B.x - A.x));
+            SDLApplication::DrawPixel(surface, x, y, colorA + (colorB - colorA) * (x - x1) / (x2 - x1));
 		}
 	}
     else
@@ -44,7 +49,7 @@ void Line::Draw(SDL_Surface *surface)
 
 		SDLApplication::DrawPixel(surface, A, colorA);
 
-		for(int x = A.x, y = A.y + sy, i = 1; i <= dy; ++i, y += sy)
+		for(int x = x1, y = y1 + sy, i = 1; i <= dy; ++i, y += sy)
 		{
             if ( d > 0 )
             {
@@ -55,7 +60,7 @@ void Line::Draw(SDL_Surface *surface)
             {
                 d += d1;
             }
-            SDLApplication::DrawPixel(surface, Point(x, y), colorA + (colorB - colorA) * (y - A.y) / (B.y - A.y));
+            SDLApplication::DrawPixel(surface, x, y, colorA + (colorB - colorA) * (y - y1) / (y2 - y1));
 		}
 	}
 }
