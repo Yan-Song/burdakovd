@@ -1,34 +1,12 @@
 #include "Vector.h"
+#include "matrix.h"
 #include <cmath>
+#include <iostream>
 
 #define sqr(x) ((x)*(x))
 
-Vector Vector::operator +(const Vector& other) const
+std::ostream& operator<<(std::ostream& os, const Vector& v)
 {
-	return Vector(x + other.x, y + other.y);
-}
-
-Vector Vector::operator -(const Vector& other) const
-{
-	return Vector(x - other.x, y - other.y);
-}
-
-Vector Vector::operator -() const
-{
-	return Vector(-x, -y);
-}
-
-Vector Vector::operator *(double k) const
-{
-	return Vector(x * k, y * k);
-}
-
-Vector Vector::operator /(double k) const
-{
-	return Vector(x / k, y / k);
-}
-
-double Vector::Dist(const Vector& other) const
-{
-    return sqrt(sqr(x - other.x) + sqr(y - other.y));
+    os<<"Vector("<<v.x<<"; "<<v.y<<"; "<<v.k<<")";
+    return os;
 }
