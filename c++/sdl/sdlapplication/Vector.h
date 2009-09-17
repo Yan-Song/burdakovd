@@ -2,6 +2,9 @@
 #define VECTOR_H
 
 #include <iostream>
+#include <cmath>
+
+#define sqr(x) ((x)*(x))
 
 /* мутный вектор
    сложение, умножение на скал€р и вычитание тут идЄт не покомпонентно
@@ -45,6 +48,36 @@ public:
     Vector operator -() const
     {
         return Vector(-x, -y, k);
+    }
+
+    inline Vector operator +(const Vector& other) const
+    {
+        return Vector(x * other.k + other.x * k, y * other.k + other.y * k, k * other.k); 
+    }
+
+    inline Vector operator -(const Vector& other) const
+    {
+        return (*this) + (-other);
+    }
+
+    inline Vector operator *(const double p)
+    {
+        return Vector(x * p, y * p, k);
+    }
+
+    inline Vector operator /(const double q)
+    {
+        return Vector(x / q, y / q, k);
+    }
+
+    inline double length()
+    {
+        return sqrt(sqr(X()) + sqr(Y()));
+    }
+
+    inline double dist(const Vector& other)
+    {
+        return (*this - other).length();
     }
 };
 

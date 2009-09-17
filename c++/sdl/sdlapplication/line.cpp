@@ -7,7 +7,7 @@
 // Шикин, Боресков, Компьютерная графика. Полигональные модели. с. 161
 
 // для цвета пиксела в случае градиента такая точность не нужна, так что он вычисляется проще
-void Line::Draw(SDL_Surface *surface)
+void Line::Draw(SDL_Surface *surface) const
 {
     int x1 = static_cast<int>(A.X());
     int y1 = static_cast<int>(A.Y());

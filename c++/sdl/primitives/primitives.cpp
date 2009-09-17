@@ -7,7 +7,11 @@
 #include <cstring>
 #include "line.h"
 #include "matrix.h"
+#include <vector>
 #include <iostream>
+#include <cstdlib>
+
+using namespace std;
 
 const Color yellow = Color(255, 255, 0);
 const Color black = Color(0, 0, 0);
@@ -23,7 +27,7 @@ PrimitivesApplication::PrimitivesApplication()
 
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
-	
+
 }
 
 void PrimitivesApplication::Main()
@@ -52,33 +56,20 @@ void PrimitivesApplication::Render()
 	double cf = cos(0.01 * frames * lcf);
 
 
-	LockSurface(Screen);
-
-    Point start(20, 220);
-    Point finish(Screen->w-20, Screen->h-20);
-    Point center = Point((start.x + finish.x) / 2, (start.y + finish.y) / 2);
+	//LockSurface(Screen);
 
 	if(frames == 0)
     {
-        // lines
-        for(double x=start.x; x<=finish.x; x += 1)
-            Line(start, Point(x, finish.y), 0x000000, Color(x/800, finish.y/600, 0.0)).Draw(Screen);
         
-        for(double y=start.y; y<=finish.y; y += 1)
-            Line(start, Point(finish.x, y), 0x000000, Color(finish.x/800, y/600, 0.0)).Draw(Screen);
+        Point p1(20, 100);
+        Point p2(320, 100);
 
-        Point p1(10, 10);
-        Point p2(50, 50);
-        Line l(p1, p2, yellow);
+        Koh(Line(p1, p2, cyan));
 
-        for(int i=0; i<10; ++i)
-        {
-            l.Draw(Screen);
-            l.Scale(Point(200, 10), 0.5, 0.5);
-        }
+        Dragon(Line(Point(220, 360), Point(520, 360), yellow));
     }
 
-
+    /*
     // chaos
 	for(int x=400; x<780; ++x)
 		for(int y=20; y<200; ++y)
@@ -87,9 +78,10 @@ void PrimitivesApplication::Render()
 			double sy = sin(cf*x*0.1-sf*y*0.1);
 			DrawPixel(Screen, Point(x, y), Color(norm(sx), norm(sy), norm(-1)));
 		}
+    */
 
-	UnlockSurface(Screen);
-	SDL_Flip(Screen);
+	//UnlockSurface(Screen);
+	//SDL_Flip(Screen);
 }
 
 void PrimitivesApplication::ProcessEvent(SDL_Event Event)
@@ -101,4 +93,71 @@ void PrimitivesApplication::ProcessEvent(SDL_Event Event)
 		if(sym == SDLK_ESCAPE || sym == SDLK_q)
 			Stop();
 	}
+}
+
+void PrimitivesApplication::Koh(const int depth, const Line& l, const vector<Matrix>& m, const Matrix& acc)
+{
+    if(depth == 0) // финишная прорисовка
+    {
+        Line tmp = l;
+        tmp.Modify(acc);
+        LockSurface(Screen);
+        tmp.Draw(Screen);
+        UnlockSurface(Screen);
+        SDL_Flip(Screen);
+    }
+    else
+    {
+        for(int i=0; i<m.size(); ++i)
+        {
+            Koh(depth - 1, l, m, acc * m[i]);
+        }
+    }
+}
+
+void PrimitivesApplication::Koh(const Line& l)
+{
+    vector<Matrix> v;
+
+    v.push_back(Matrix::Scale(l.A, 1.0/3, 1.0/3));
+
+    v.push_back(Matrix::Shift((l.B - l.A) / 3) * Matrix::Rotate(l.A, Pi / 3) * Matrix::Scale(l.A, 1.0/3, 1.0/3));
+
+    v.push_back(Matrix::Shift((l.A - l.B) / 3) * Matrix::Rotate(l.B, -Pi / 3) * Matrix::Scale(l.B, 1.0/3, 1.0/3));
+
+    v.push_back(Matrix::Scale(l.B, 1.0/3, 1.0/3));
+
+    Koh(5, l, v, Matrix(1));
+}
+
+
+void PrimitivesApplication::Dragon(const int depth, const Line& l, const vector<Matrix>& m, const Matrix& acc)
+{
+    if(depth == 0) // финишная прорисовка
+    {
+        Line tmp = l;
+        tmp.Modify(acc);
+        LockSurface(Screen);
+        tmp.Draw(Screen);
+        UnlockSurface(Screen);
+        SDL_Flip(Screen);
+    }
+    else
+    {
+        for(int i=0; i<m.size(); ++i)
+        {
+            Dragon(depth - 1, l, m, acc * m[i]);
+        }
+    }
+}
+
+void PrimitivesApplication::Dragon(const Line& l)
+{
+    vector<Matrix> v;
+
+    v.push_back(Matrix::ReflectY(l.A.y) * Matrix::Rotate(l.A, -Pi / 4) * Matrix::Scale(l.A, sqrt(0.5), sqrt(0.5)));
+
+    v.push_back(Matrix::Rotate(l.B, -Pi / 4) * Matrix::Scale(l.B, sqrt(0.5), sqrt(0.5)));
+
+    Dragon(14, l, v, Matrix(1));
 }
