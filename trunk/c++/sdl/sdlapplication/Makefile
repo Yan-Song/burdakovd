@@ -1,7 +1,5 @@
-PROG=./something
-
 CPP=g++
-CPPFLAGS= -W -Wall -I/usr/include/SDL 
+CPPFLAGS= -W -Wall -I/usr/include/SDL
 LINKFLAGS= -lSDL -lpthread 
 
 SOURCES := $(wildcard *.cpp)
@@ -10,18 +8,12 @@ DEPS := $(patsubst %.o,%.d,$(OBJS))
 
 .PHONY: all clean
 
-all: $(PROG)
-
-run: $(PROG)
-	$(PROG)
- 
-$(PROG): $(OBJS) $(DEPS)
-	$(CPP) $(LINKFLAGS) $(OBJS) -o $@
+all: $(OBJS)
  
 %.o: %.cpp %.d
 	$(CPP) $(CPPFLAGS) -c $< -o $@
  
-%.d: %.cpp
+%.d: %.cpp Makefile
 	@set -e; $(CPP) -M $(CPPFLAGS) $< | \
 		sed -e 's%\($*\)\.o[ :]*%\1.o $@ : %g' > $@; \
 		[ -s $@ ] || rm -f $@

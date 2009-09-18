@@ -1,10 +1,10 @@
-PROG=./something
+PROG=./radar
 
 CPP=g++
-CPPFLAGS= -W -Wall -I/usr/include/SDL 
+CPPFLAGS= -W -Wall -I/usr/include/SDL -I../sdlapplication
 LINKFLAGS= -lSDL -lpthread 
 
-SOURCES := $(wildcard *.cpp)
+SOURCES := $(wildcard *.cpp) $(wildcard ../sdlapplication/*.cpp)
 OBJS := $(patsubst %.cpp, %.o, $(SOURCES))
 DEPS := $(patsubst %.o,%.d,$(OBJS))
 
@@ -21,7 +21,7 @@ $(PROG): $(OBJS) $(DEPS)
 %.o: %.cpp %.d
 	$(CPP) $(CPPFLAGS) -c $< -o $@
  
-%.d: %.cpp
+%.d: %.cpp Makefile
 	@set -e; $(CPP) -M $(CPPFLAGS) $< | \
 		sed -e 's%\($*\)\.o[ :]*%\1.o $@ : %g' > $@; \
 		[ -s $@ ] || rm -f $@
