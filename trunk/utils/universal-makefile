@@ -7,7 +7,9 @@ LINKFLAGS= -lSDL -lpthread
 SOURCES := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp, %.o, $(SOURCES))
 DEPS := $(patsubst %.o,%.d,$(OBJS))
- 
+
+.PHONY: all clean
+
 all: $(PROG)
 
 run: $(PROG)
