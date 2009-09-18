@@ -1,34 +1,33 @@
-sdlappdir=../sdlapplication
-sdlapph=$(sdlappdir)/sdlapplication.h
-sdlappcpp=$(sdlappdir)/sdlapplication.cpp
-sdlappobj=$(sdlappdir)/sdlapplication.o
+PROG=./life
 
-# sdl-config
-cflags= -I$(sdlappdir) -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT
-ldflags= -lSDL 
-cpp=g++ $(cflags)
-ld=g++ $(ldflags)
+CPP=g++
+CPPFLAGS= -W -Wall -I/usr/include/SDL -I../sdlapplication
+LINKFLAGS= -lSDL -lpthread 
 
+SOURCES := $(wildcard *.cpp) $(wildcard ../sdlapplication/*.cpp)
+OBJS := $(patsubst %.cpp, %.o, $(SOURCES))
+DEPS := $(patsubst %.o,%.d,$(OBJS))
 
-all: life
+.PHONY: all clean
 
-life: main.o life.o $(sdlappobj)
-	$(ld) main.o life.o $(sdlappobj) -o life
+all: $(PROG)
 
-life.o: life.cpp life.h $(sdlapph)
-	$(cpp) -c life.cpp -o life.o
-
-main.o: main.cpp life.h $(sdlapph)
-	$(cpp) -c main.cpp -o main.o
-
-$(sdlappobj): $(sdlappcpp) $(sdlapph)
-	$(cpp) -c $(sdlappcpp) -o $(sdlappobj)
-
-run: life
-	./life
-
+run: $(PROG)
+	$(PROG)
+ 
+$(PROG): $(OBJS) $(DEPS)
+	$(CPP) $(LINKFLAGS) $(OBJS) -o $@
+ 
+%.o: %.cpp %.d
+	$(CPP) $(CPPFLAGS) -c $< -o $@
+ 
+%.d: %.cpp Makefile
+	@set -e; $(CPP) -M $(CPPFLAGS) $< | \
+		sed -e 's%\($*\)\.o[ :]*%\1.o $@ : %g' > $@; \
+		[ -s $@ ] || rm -f $@
+	@echo create $@
+ 
 clean:
-	rm -f life $(sdlappobj) *.o
-
-
-
+	rm -f $(PROG) $(OBJS) $(DEPS)
+ 
+-include $(DEPS)
