@@ -284,8 +284,9 @@ function private.everySecond()
 	end
 	
 	if private.state == "WAITING_FOR_POSTAL" then
-		if not GBM:FindFreeBagSlot() then
-			print("Закончилось место в сумке")
+		if lib.FreeBagSlots() <= 1 then
+			-- Postal надо настроить оставлять один слот пустым, можно 0, но не больше
+			print("В сумке один или менее свободный слот, прекращаю сбор почты")
 			CloseMail()
 			updateNextMailTime()
 			private.changeState("THINKING")		
@@ -403,12 +404,14 @@ function private.everySecond()
 	end
 	
 	if private.state == "WAITING_FOR_AUCTION" or private.state == "WAITING_FOR_MAILBOX" or private.state == "WAITING_FOR_BANK" then
-		local msgs = { WAITING_FOR_AUCTION="жду аукциона уже %d секунд", 
-			WAITING_FOR_MAILBOX="жду почтовый ящик уже %d секунд", WAITING_FOR_BANK="жду банк уже %d секунд" }
+		local msgs = { WAITING_FOR_AUCTION="Аукцион", 
+			WAITING_FOR_MAILBOX="Почта", WAITING_FOR_BANK="Банк" }
+		local destination = msgs[private.state]
 		if private.last_change>lastnotification	then lastnotification = private.last_change end
 		local delta = private.stateTime()
-		if private.gtime - lastnotification > 60 then
-			print(msgs[private.state]:format(private.stateTime()))
+		if private.gtime - lastnotification > 300 then
+			print(("Жду %s уже %d минут, повторяю запрос"):format(destination, private.stateTime() / 60))
+			NGoTo(destination)
 			lastnotification = private.gtime
 			if delta>3600 then
 				print("Прошло более часа")
@@ -703,3 +706,15 @@ function lib.ConfirmPurchase()
 		AucAdvanced.Buy.Private.Prompt.Yes:Click()
 	end
 end
+
+function lib.FreeBagSlots()
+	local free=0
+	for bag=0,NUM_BAG_SLOTS do
+		local bagFree,bagFam = GetContainerNumFreeSlots(bag)
+		if bagFam == 0 then
+			free = free + bagFree
+		end
+	end
+	return free
+end
+
