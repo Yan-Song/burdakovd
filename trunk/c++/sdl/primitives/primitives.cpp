@@ -127,7 +127,7 @@ void PrimitivesApplication::Koh(const Line& l)
 
     v.push_back(Matrix::Scale(l.B, 1.0/3, 1.0/3));
 
-    Koh(5, l, v, Matrix(1));
+    Koh(4, l, v, Matrix(1));
 }
 
 
@@ -159,5 +159,5 @@ void PrimitivesApplication::Dragon(const Line& l)
 
     v.push_back(Matrix::Rotate(l.B, -Pi / 4) * Matrix::Scale(l.B, sqrt(0.5), sqrt(0.5)));
 
-    Dragon(14, l, v, Matrix(1));
+    Dragon(13, l, v, Matrix(1));
 }

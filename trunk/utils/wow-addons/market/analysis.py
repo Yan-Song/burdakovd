@@ -11,7 +11,7 @@ import time
 #### some html helpers
 
 htmldir = "html"
-dbversion = "2.09"
+dbversion = "2.11"
 transactionsperpage = 500
 topprofitlimit = 5000
 onmainpagecountlimit = 200
@@ -171,7 +171,7 @@ class transaction:
                 line.split(";")
             if self.deposit=="": self.deposit = 0
             self.stack = int(self.stack)
-        elif category=="completedBids/Buyouts":
+        elif category=="completedBidsBuyouts":
             self.stack, self.money, self.deposit, self.fee, self.buyout, \
             self.bid, self.seller, self.time, self.reason, location = \
                 line.split(";")
@@ -205,7 +205,7 @@ class transaction:
             buyer_seller = self.buyer
             if self.fee: fee_depo = gold(fee)
             else: fee_depo = "???"
-        elif self.category=="completedBids/Buyouts":
+        elif self.category=="completedBidsBuyouts":
             stack = int(self.stack)
             if self.bid!=self.buyout:
                 action = div(u"Выиграно", "bought")
@@ -237,7 +237,7 @@ class transaction:
         if self.category=="completedAuctions":
             if self.money: money = int(self.money)
             return money - int(self.deposit)
-        elif self.category=="completedBids/Buyouts":
+        elif self.category=="completedBidsBuyouts":
             if self.bid!=self.buyout:
                 return -int(self.bid)
             else:
@@ -270,7 +270,7 @@ def getrows(c):
                         ),
                         []
                     ),
-                ("completedAuctions", "failedAuctions", "completedBids/Buyouts")
+                ("completedAuctions", "failedAuctions", "completedBidsBuyouts")
             ),
             []
         )
@@ -322,7 +322,7 @@ def check_category(seq, cat):
     return sum(map(lambda z: z.profit(), filter(lambda z: z.category==cat, seq)))
 
 def lostbuy(seq):
-    return -check_category(seq, "completedBids/Buyouts")
+    return -check_category(seq, "completedBidsBuyouts")
 
 def lostdepo(seq):
     return -check_category(seq, "failedAuctions")
@@ -398,6 +398,7 @@ def group_months(market, f):
 
 for realm in realms:
     chars = data[realm].keys()
+    print realm + ": " + ", ".join(chars)
     for char in chars:
         # general
         c = data[realm][char]
@@ -406,10 +407,10 @@ for realm in realms:
         # check db version
         cversion = data[realm][char]["version"]
         if cversion != dbversion:
-            #write(char+"-data", u"История торговли %s" % char, \
-            #    p(u"""База, полученная от BeanCounter для %s имеет версию "%s", а этот
-            #    скрипт умеет работать только с базами версии "%s".""" % \
-            #    (char, cversion, dbversion)))
+            write(char+"-data", u"История торговли %s" % char, \
+                p(u"""База, полученная от BeanCounter для %s имеет версию "%s", а этот
+                скрипт умеет работать только с базами версии "%s".""" % \
+                (char, cversion, dbversion)))
             continue
         
         # raw data
@@ -455,12 +456,12 @@ for realm in realms:
                 #0.0001*t.profit(),
                 0.0001*check_category([t], "completedAuctions"), # сумма продаж
 
-                0.0001*(-check_category([t], "completedBids/Buyouts") \
+                0.0001*(-check_category([t], "completedBidsBuyouts") \
                 -check_category([t], "failedAuctions")), # сумма покупок и фэйлов
 
                 1 if t.category=="completedAuctions" else 0, # кол-во продаж
                 
-                1 if t.category=="completedBids/Buyouts" else 0, # кол-во покупок
+                1 if t.category=="completedBidsBuyouts" else 0, # кол-во покупок
 
                 1, # кол-во всех транзакций
 
@@ -604,7 +605,7 @@ for realm in realms:
                 filter(lambda z: z.category=="completedAuctions", market[ids])))
             gsells = gainedsells(market[ids])
             boughtcount = sum(map(lambda z: z.stack, \
-                filter(lambda z: z.category=="completedBids/Buyouts", market[ids])))
+                filter(lambda z: z.category=="completedBidsBuyouts", market[ids])))
             lbuy = lostbuy(market[ids])
             failedcount = sum(map(lambda z: z.stack, \
                 filter(lambda z: z.category=="failedAuctions", market[ids])))
@@ -649,9 +650,9 @@ for realm in realms:
             tf = lambda z: \
                 (
                     int(z.stack) if z.category=="completedAuctions" else 0,
-                    int(z.stack) if z.category=="completedBids/Buyouts" else 0,
+                    int(z.stack) if z.category=="completedBidsBuyouts" else 0,
                     0.0001*z.profit() if z.category=="completedAuctions" else 0,
-                    -0.0001*z.profit() if z.category=="completedBids/Buyouts" else 0,
+                    -0.0001*z.profit() if z.category=="completedBidsBuyouts" else 0,
                     int(z.stack) if z.category=="failedAuctions" else 0,
                     0.0001*z.profit()
                 )
