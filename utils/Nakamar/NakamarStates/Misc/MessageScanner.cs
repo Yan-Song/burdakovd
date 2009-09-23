@@ -8,7 +8,7 @@ namespace NakamarStates
     {
 
         DateTime nextScan;
-        static int WaitSeconds = 60;
+        static int WaitSeconds = 20;
 
         public MessageScanner(object machine, object memory) : base(machine, memory)
         {
@@ -32,8 +32,18 @@ namespace NakamarStates
         public override void Run()
         {
             Log("Поиск сигнатуры аддона...");
-            if(Memory.RescanAddonMessage()==null)
-                Log("Не найдено. Повтор через " + WaitSeconds + " сек.");
+            try
+            {
+                if (Memory.RescanAddonMessage() == null)
+                    Log("Не найдено. Повтор через " + WaitSeconds + " сек.");
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "ReadUInt failed.")
+                    Log("ReadUInt failed при поиске сигнатуры. Повтор через " + WaitSeconds + " сек.");
+                else
+                    throw;
+            }
             nextScan = DateTime.Now + TimeSpan.FromSeconds(WaitSeconds);
         }
     }
