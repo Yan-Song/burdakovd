@@ -4,7 +4,11 @@
 #include <SDL.h>
 #include "color.h"
 #include "Vector.h"
+#include <vector>
 #include <cmath>
+#include <map>
+
+typedef std::pair<int, int> pii;
 
 const double Pi = acos(-1.0);
 

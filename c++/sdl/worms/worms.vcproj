@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="sdlapplication"
-	ProjectGUID="{8B254586-4568-4F2A-B25A-5ADB745B9E88}"
-	RootNamespace="sdlapplication"
+	Name="worms"
+	ProjectGUID="{1F1251CF-07B2-4075-88F4-3C57BAB71854}"
+	RootNamespace="worms"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="4"
+			ConfigurationType="1"
 			CharacterSet="1"
 			>
 			<Tool
@@ -41,6 +41,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				FavorSizeOrSpeed="0"
+				WholeProgramOptimization="false"
+				AdditionalIncludeDirectories="&quot;E:\data\progr\burdakovd\c++\sdl\sdlapplication&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -59,11 +62,21 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="SDL.lib SDLmain.lib sdlapplication.lib"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;E:\data\progr\burdakovd\c++\sdl\sdlapplication\Debug&quot;"
 				IgnoreDefaultLibraryNames="msvcrt.lib"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				LinkTimeCodeGeneration="0"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -75,6 +88,9 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -82,7 +98,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="4"
+			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -106,6 +122,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
+				AdditionalIncludeDirectories="&quot;E:\data\progr\burdakovd\c++\sdl\sdlapplication&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -123,11 +140,22 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="SDL.lib SDLmain.lib sdlapplication.lib"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;E:\data\progr\burdakovd\c++\sdl\sdlapplication\Release&quot;"
 				IgnoreDefaultLibraryNames=""
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -137,6 +165,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -152,23 +183,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\color.cpp"
+				RelativePath=".\main.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\line.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\matrix.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\sdlapplication.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Vector.cpp"
+				RelativePath=".\WormsApplication.cpp"
 				>
 			</File>
 		</Filter>
@@ -178,27 +197,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\color.h"
+				RelativePath=".\IBody.h"
 				>
 			</File>
 			<File
-				RelativePath=".\graphobject.h"
+				RelativePath=".\IMyBody.h"
 				>
 			</File>
 			<File
-				RelativePath=".\line.h"
+				RelativePath=".\ISomeBody.h"
 				>
 			</File>
 			<File
-				RelativePath=".\matrix.h"
-				>
-			</File>
-			<File
-				RelativePath=".\sdlapplication.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Vector.h"
+				RelativePath=".\WormsApplication.h"
 				>
 			</File>
 		</Filter>
