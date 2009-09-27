@@ -140,7 +140,7 @@
 				AdditionalDependencies="SDL.lib SDLmain.lib sdlapplication.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;E:\data\progr\burdakovd\c++\sdl\sdlapplication\Release&quot;"
-				IgnoreDefaultLibraryNames="msvcrt.lib"
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
