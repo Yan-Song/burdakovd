@@ -56,6 +56,7 @@ local oldItemsCount = 0
 local prevItemsCount = 0
 local prevICTime = 0
 local freshnessforposting = 7200 -- 2h
+local KeepFreeBagSlots = 1
 
 local RegisterEvent = function(event, f)
 	private.frame:RegisterEvent(event)
@@ -204,7 +205,7 @@ function private.everySecond()
 		private.changeState("THINKING")
 	return end
 	
-	local needWaitForMail = (private.nextMailTime - private.gtime < 120) and GBM:FindFreeBagSlot()
+	local needWaitForMail = (private.nextMailTime - private.gtime < 120) and lib.FreeBagSlots() > KeepFreeBagSlots
 	
 	if private.state == "THINKING" and not needWaitForMail and #lib.batchItems()>0 then
 		print(string.format("В сумках есть %d итемов на продажу, надо идти на аукцион", #lib.batchItems()))
@@ -213,7 +214,8 @@ function private.everySecond()
 		return
 	end
 	
-	if (private.state == "THINKING" or private.state == "SCANNING") and private.gtime > private.nextMailTime and GBM:FindFreeBagSlot() then
+	if (private.state == "THINKING" or private.state == "SCANNING") and private.gtime > private.nextMailTime and
+		lib.FreeBagSlots() > KeepFreeBagSlots then
 		-- пора идти на почту
 		if AucAdvanced.Settings.GetSetting('util.nakamar.close_ah_when_scanning') then
 			CloseAuctionHouse()
@@ -223,7 +225,10 @@ function private.everySecond()
 		private.changeState("WAITING_FOR_MAILBOX")		
 		return
 	end
-	if private.state=="WAITING_FOR_MAILBOX" and not GBM:FindFreeBagSlot() then private.changeState("THINKING"); return end
+	if private.state=="WAITING_FOR_MAILBOX" and lib.FreeBagSlots() <= KeepFreeBagSlots then
+		private.changeState("THINKING");
+		return
+	end
 	
 	if private.state == "THINKING" and needWaitForMail then
 		return
