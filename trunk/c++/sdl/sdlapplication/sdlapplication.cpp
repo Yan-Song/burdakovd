@@ -82,7 +82,7 @@ void SDLApplication::UnlockSurface(SDL_Surface* surface)
 
 void SDLApplication::DrawPixel(SDL_Surface *surface, const Point& point, const Color& color)
 {
-    DrawPixel(surface, static_cast<int>(point.x / point.k), static_cast<int>(point.y / point.k), color);
+    DrawPixel(surface, static_cast<int>(point.X()), static_cast<int>(point.Y()), color);
 }
 
 // http://plg.lrn.ru/doc/sdl/lesson1.html
