@@ -5,6 +5,7 @@
 SDLApplication::SDLApplication()
 {
     srand(static_cast<unsigned int>(time(NULL)));
+    printf("Random number generator initialized\n");
 }
 
 void SDLApplication::InitializeSDL(int ScreenHeight, int ScreenWidth, int ColorDepth, int SDLflags)
