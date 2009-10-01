@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Util
 {
@@ -22,12 +24,40 @@ namespace Util
             }
         }
 
-        public static bool NearScreenCenter()
+        [DllImport("user32.dll")]
+        private static extern bool GetWindowRect(IntPtr hWnd, out Rectangle rect);
+
+        public static Point WindowCenter(IntPtr window)
         {
-            Point center = ScreenCenter;
+            Rectangle bounds = new Rectangle();
+            Debug.Assert(GetWindowRect(window, out bounds)); // часто не работает
+            // Это не настоящий прямоугольник, и вместо width && height там right && bottom
+            return new Point((bounds.Left + bounds.Width) / 2, (bounds.Top + bounds.Height) / 2);
+        }
+
+        public static bool NearCenter(Point center)
+        {
             return
                 Math.Abs(center.X - Cursor.Position.X) < checkAccuracy
                 && Math.Abs(center.Y - Cursor.Position.Y) < checkAccuracy;
+        }
+
+        public static bool NearScreenCenter()
+        {
+            return NearCenter(ScreenCenter);
+        }
+
+        public static bool NearWindowCenter(IntPtr window)
+        {
+            return NearCenter(WindowCenter(window));
+        }
+
+        public static void MoveToWindowCenter(IntPtr window)
+        {
+            Point position = WindowCenter(window);
+            position.X += generator.Next(-moveAccuracy, moveAccuracy);
+            position.Y += generator.Next(-moveAccuracy, moveAccuracy);
+            Cursor.Position = position;
         }
 
         public static void MoveToScreenCenter()

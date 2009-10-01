@@ -690,9 +690,9 @@ namespace NakamarStates
                 zoomInKeys.Add(KeyBindings.CameraZoomIn);
 
             Memory.KB.PressKeys(zoomInKeys, true); // приблизить камеру на максимум
-            //Memory.KB.PressKey(KeyBindings.CameraZoomedIn, true);
+            
             Thread.Sleep(2000);
-
+            
             if (!Util.MouseCursor.NearScreenCenter())
             {
                 Log("Перемещаю указатель мыши к центру экрана");
@@ -701,7 +701,7 @@ namespace NakamarStates
             }
 
             Memory.KB.PressKey(KeyBindings.MouseInteract, true);
-            Memory.KB.PressKey(KeyBindings.CameraNormal, false); // вернуть
+            Memory.KB.PressKey(KeyBindings.CameraNormal, false); // вернуть камеру в нормальное положение
 
             return InteractResult.Success;
         }
