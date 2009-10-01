@@ -104,9 +104,10 @@ namespace Nakamar
             };
 
             Log("Программа запущена");
-            Monitor(sender, e);
-
+            
             RestoreWindowState();
+
+            Monitor(sender, e);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
