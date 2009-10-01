@@ -515,7 +515,7 @@
             // LastStateValue
             // 
             this.LastStateValue.Name = "LastStateValue";
-            this.LastStateValue.Size = new System.Drawing.Size(795, 17);
+            this.LastStateValue.Size = new System.Drawing.Size(794, 17);
             this.LastStateValue.Spring = true;
             this.LastStateValue.Text = "state";
             this.LastStateValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -523,7 +523,7 @@
             // CurrentFPSValue
             // 
             this.CurrentFPSValue.Name = "CurrentFPSValue";
-            this.CurrentFPSValue.Size = new System.Drawing.Size(25, 17);
+            this.CurrentFPSValue.Size = new System.Drawing.Size(26, 17);
             this.CurrentFPSValue.Text = "FPS";
             this.CurrentFPSValue.ToolTipText = "Текущий FPS";
             // 
@@ -562,6 +562,7 @@
             this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.Tabs);
             this.DataBindings.Add(new System.Windows.Forms.Binding("TopMost", global::Nakamar.Properties.Settings.Default, "TopMost", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = new System.Drawing.Point(100, 100);
             this.Name = "MainForm";
             this.Text = "Программа =)";
