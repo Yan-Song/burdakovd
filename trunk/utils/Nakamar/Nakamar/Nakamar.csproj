@@ -14,7 +14,7 @@
     <FileAlignment>512</FileAlignment>
     <ManifestCertificateThumbprint>1317CBE1A4DF9E400FD8261486A76D1810494B1F</ManifestCertificateThumbprint>
     <ManifestKeyFile>Nakamar_TemporaryKey.pfx</ManifestKeyFile>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
     <SignManifests>true</SignManifests>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <StartupObject>Nakamar.Program</StartupObject>
@@ -36,6 +36,8 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <ApplicationManifest>Properties\Nakamar.manifest</ApplicationManifest>
+    <ApplicationIcon>warcraft_230.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -154,8 +156,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\app.manifest" />
     <None Include="Resources\MaEmaE.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Nakamar.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="warcraft_230.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
