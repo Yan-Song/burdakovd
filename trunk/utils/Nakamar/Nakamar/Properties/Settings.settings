@@ -18,13 +18,13 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="NeededFPS" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">100</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="StatesPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">NakamarStates.dll</Value>
     </Setting>
     <Setting Name="TopMost" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="TransparentLogBox" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -33,7 +33,7 @@
       <Value Profile="(Default)">Microsoft Sans Serif, 8.25pt</Value>
     </Setting>
     <Setting Name="HideButtons" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="LogBoxColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">WindowText</Value>
@@ -45,7 +45,7 @@
       <Value Profile="(Default)">Wow.exe</Value>
     </Setting>
     <Setting Name="Opacity" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">100</Value>
+      <Value Profile="(Default)">80</Value>
     </Setting>
     <Setting Name="MainFormLocation" Type="System.Drawing.Point" Scope="User">
       <Value Profile="(Default)">0, 0</Value>
