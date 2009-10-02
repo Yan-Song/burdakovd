@@ -184,6 +184,9 @@ namespace FiniteStateMachine
                 sleepTime -= adj;
             else
                 sleepTime += adj;
+
+            if (sleepTime < 0)
+                sleepTime = 0;
         }
 
         /// <summary>
