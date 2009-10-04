@@ -59,6 +59,7 @@
     <Compile Include="Misc\MessageTimeout.cs" />
     <Compile Include="Misc\PurchaseConfirmation.cs" />
     <Compile Include="Misc\RandomPet.cs" />
+    <Compile Include="Misc\WoWWindowActivator.cs" />
     <Compile Include="Navigation\DestinationPoint.cs" />
     <Compile Include="Navigation\Navigation.cs" />
     <Compile Include="Navigation\PlayerPoint.cs" />
