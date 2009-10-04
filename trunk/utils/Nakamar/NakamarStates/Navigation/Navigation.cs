@@ -439,7 +439,7 @@ namespace NakamarStates
             WayPoint current = MovementQueue.Peek();
             PlayerObject player = Memory.ObjectManager.LocalPlayer;
 
-            if (current.InRange(Me)) // подошли к некоторой точке маршрута
+            if (current.InRange2D(Me)) // подошли к некоторой точке маршрута
                 if (MovementQueue.Count == 1)
                 {
                     SetMovementState(false);
