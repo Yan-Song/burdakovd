@@ -185,23 +185,19 @@ namespace WoWMemoryManager
         } 
         #endregion
 
-        #region DllImport
-
-        /// <summary>
-        /// The GetForegroundWindow function returns a handle to the foreground window.
-        /// </summary>
-        [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
-
-        #endregion
-
         /// <summary>
         /// возвращает тру если окно WoW сейчас активно
         /// </summary>
         /// <returns></returns>
         public bool IsWoWForeground()
         {
-            return BM.WindowHandle == GetForegroundWindow();
+            return BM.WindowHandle == Extern.GetForegroundWindow();
+        }
+
+        public void ActivateWoWWindow()
+        {
+            Extern.ShowWindow(BM.WindowHandle, WindowShowStyle.ShowNormal);
+            Extern.SetForegroundWindow(BM.WindowHandle);
         }
 
         public GameState CurrentGameState
