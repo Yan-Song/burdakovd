@@ -26,6 +26,11 @@ namespace NakamarStates
             return Distance(to.X, to.Y, to.Z);
         }
 
+        public double Distance2D(Point to)
+        {
+            return Distance(to.X, to.Y, this.Z);
+        }
+
         public double Distance(double toX, double toY, double toZ)
         {
             double dX = X - toX;

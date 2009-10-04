@@ -26,6 +26,16 @@ namespace NakamarStates
             return InRange(Range, other);
         }
 
+        public virtual bool InRange2D(WayPoint other)
+        {
+            return InRange2D(Range, other);
+        }
+
+        private bool InRange2D(double range, WayPoint other)
+        {
+            return Distance2D(other) < range;
+        }
+
         public WayPoint(double x, double y, double z) : base(x, y, z)
         {
         }
