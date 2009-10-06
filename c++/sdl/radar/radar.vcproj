@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;E:\data\progr\burdakovd\c++\sdl\sdlapplication&quot;"
+				AdditionalIncludeDirectories="&quot;..\sdlapplication&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +63,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="sdlapplication.lib SDLmain.lib SDL.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;E:\data\progr\burdakovd\c++\sdl\sdlapplication\Debug&quot;"
+				AdditionalLibraryDirectories="&quot;..\sdlapplication\Debug&quot;"
 				IgnoreDefaultLibraryNames="msvcrt.lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"

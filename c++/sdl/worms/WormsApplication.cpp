@@ -30,9 +30,9 @@ void WormsApplication::ProcessEvent(SDL_Event Event)
 
 void WormsApplication::Main()
 {
-    LockSurface(Screen);
+    LockSurface();
 	// ...
-	UnlockSurface(Screen);
+	UnlockSurface();
 	SDL_Flip(Screen);
 
 	if(lasttime != time(NULL))
