@@ -68,45 +68,45 @@ void SDLApplication::Stop()
 	printf("Stop()\n");
 }
 
-void SDLApplication::LockSurface(SDL_Surface* surface)
+void SDLApplication::LockSurface()
 {
-	if(SDL_MUSTLOCK(surface))
-		SDL_LockSurface(surface);
+	if(SDL_MUSTLOCK(Screen))
+		SDL_LockSurface(Screen);
 }
 
-void SDLApplication::UnlockSurface(SDL_Surface* surface)
+void SDLApplication::UnlockSurface()
 {
-	if(SDL_MUSTLOCK(surface))
-		SDL_UnlockSurface(surface);
+	if(SDL_MUSTLOCK(Screen))
+		SDL_UnlockSurface(Screen);
 }
 
-void SDLApplication::DrawPixel(SDL_Surface *surface, const Point& point, const Color& color)
+void SDLApplication::DrawPixel(const Point& point, const Color& color) const
 {
-    DrawPixel(surface, static_cast<int>(point.X()), static_cast<int>(point.Y()), color);
+    DrawPixel(static_cast<int>(point.X()), static_cast<int>(point.Y()), color);
 }
 
 // http://plg.lrn.ru/doc/sdl/lesson1.html
-void SDLApplication::DrawPixel(SDL_Surface *surface, const int x, const int y, const Color& rgb)
+void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb) const
 {
 	int R = rgb.r, G = rgb.g, B = rgb.b;
-    if(x < 0  || x >= surface->w || y < 0 || y >= surface->h) return;
+    if(x < 0  || x >= Screen->w || y < 0 || y >= Screen->h) return;
 
-	Uint32 color = SDL_MapRGB(surface->format, R, G, B); 
-	switch (surface->format->BytesPerPixel){ 
+	Uint32 color = SDL_MapRGB(Screen->format, R, G, B); 
+	switch (Screen->format->BytesPerPixel){ 
 	   case 1:  // Assuming 8-bpp 
 	   { 
 		 Uint8 *bufp; 
-		 bufp = (Uint8 *)surface->pixels + y*surface->pitch + x; *bufp = color; 
+		 bufp = (Uint8 *)Screen->pixels + y*Screen->pitch + x; *bufp = color; 
 	   } break; 
 	   case 2: // Probably 15-bpp or 16-bpp 
 	   { 
 		 Uint16 *bufp; 
-		 bufp = (Uint16 *)surface->pixels + y*surface->pitch/2 + x; *bufp = color;
+		 bufp = (Uint16 *)Screen->pixels + y*Screen->pitch/2 + x; *bufp = color;
 	   } break; 
 	   case 3: // Slow 24-bpp mode, usually not used 
 	   { 
 		 Uint8 *bufp; 
-		 bufp = (Uint8 *)surface->pixels + y*surface->pitch + x * 3; 
+		 bufp = (Uint8 *)Screen->pixels + y*Screen->pitch + x * 3; 
 		 if(SDL_BYTEORDER == SDL_LIL_ENDIAN){ 
 		   bufp[0] = color; 
 		   bufp[1] = color >> 8;
@@ -120,7 +120,7 @@ void SDLApplication::DrawPixel(SDL_Surface *surface, const int x, const int y, c
 	   case 4: // Probably 32-bpp 
 	   { 
 		 Uint32 *bufp; 
-		 bufp = (Uint32 *)surface->pixels + y*surface->pitch/4 + x; 
+		 bufp = (Uint32 *)Screen->pixels + y*Screen->pitch/4 + x; 
 		 *bufp = color; 
 	   } break; 
 	 } 

@@ -21,13 +21,13 @@ inline T min(const T& x, const T& y)
 class SDLApplication
 {
 public:
-    SDLApplication();
-	static void LockSurface(SDL_Surface* surface);
-	static void UnlockSurface(SDL_Surface* surface);
-	static void DrawPixel(SDL_Surface *surface, const int x, const int y, const Color& color);
-    static void DrawPixel(SDL_Surface *surface, const Point& point, const Color& color);
-    static int Rand(int x);
-    static int Rand(int x, int y);
+   SDLApplication();
+	void LockSurface();
+	void UnlockSurface();
+	void DrawPixel(const int x, const int y, const Color& color) const;
+   void DrawPixel(const Point& point, const Color& color) const;
+   static int Rand(int x);
+   static int Rand(int x, int y);
 	void Run(); // вызывать извне класса один раз, будет работать пока изнутри не будет вызван Stop()
 	virtual ~SDLApplication(); // деструктор
 

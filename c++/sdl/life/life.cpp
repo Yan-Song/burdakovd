@@ -10,7 +10,6 @@ LifeApplication::LifeApplication()
 {
 	lasttime = time(NULL);
 	lastframes = 0;
-	srand((unsigned int)time(NULL));
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Life", "");
 	Populate();
@@ -43,8 +42,8 @@ void LifeApplication::Main()
 
 void LifeApplication::Populate()
 {
-	for(int i=0; i<ScreenSize.y; ++i)
-		for(int j=0; j<ScreenSize.x; ++j)
+	for(int i=0; i<ScreenSize.X(); ++i)
+		for(int j=0; j<ScreenSize.Y(); ++j)
 			map[0][i][j] = rand() % 100 < Density;
 	current = 0;
 }

@@ -13,9 +13,9 @@ Radar::Radar()
     phi = 0;
     dphi = 0.001;
 
-    c = Point(ScreenWidth / 2, ScreenHeight / 2);
+    c = Point(ScreenWidth / 2, ScreenHeight / 2); // center
 
-    double p = 0.5;
+    double p = 0.3; //  количество нечерных точек от 0 до 1
 
     x = static_cast<int>(Screen->w * Screen->h * dphi * (1 - p) / (2 * Pi * p));
 }
@@ -40,18 +40,18 @@ void Radar::Render()
 {
     phi += dphi;
 
-    Point a(c.x/c.k + r * cos(phi), c.y/c.k + r * sin(phi));
+    Point a(c.X() + r * cos(phi), c.Y() + r * sin(phi));
 
-    LockSurface(Screen);
+    LockSurface();
 
     {
-        Line(c, a, 0x008000, 0x00ff00).Draw(Screen);
+        Line(c, a, 0x00ff00, 0xff0000).Draw(this); //green (gradient)
 
         for(int i=0; i<x; ++i)
-            DrawPixel(Screen, Rand(Screen->w), Rand(Screen->h), 0x000000);
+            DrawPixel(Rand(Screen->w), Rand(Screen->h), 0x000000); //black
     }
 
-    UnlockSurface(Screen);
+    UnlockSurface();
 
     SDL_Flip(Screen);
 }

@@ -2,6 +2,7 @@
 #define ISOMEBODY_H
 
 #include "sdlapplication.h"
+#include "IBody.h"
 #include <vector>
 
 // методами этого класса червь будет пользоваться чтобы осматривать других червей

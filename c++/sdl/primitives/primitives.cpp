@@ -23,11 +23,8 @@ const double density = 1, activity = 0.001;
 
 PrimitivesApplication::PrimitivesApplication()
 {
-	srand(static_cast<unsigned int>(time(NULL)));
-
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
-
 }
 
 void PrimitivesApplication::Main()
@@ -108,7 +105,7 @@ void PrimitivesApplication::Koh(const int depth, const Line& l, const vector<Mat
     }
     else
     {
-        for(int i=0; i<m.size(); ++i)
+        for(Uint16 i=0; i<m.size(); ++i)
         {
             Koh(depth - 1, l, m, acc * m[i]);
         }
@@ -144,7 +141,7 @@ void PrimitivesApplication::Dragon(const int depth, const Line& l, const vector<
     }
     else
     {
-        for(int i=0; i<m.size(); ++i)
+        for(Uint16 i=0; i<m.size(); ++i)
         {
             Dragon(depth - 1, l, m, acc * m[i]);
         }
@@ -155,7 +152,7 @@ void PrimitivesApplication::Dragon(const Line& l)
 {
     vector<Matrix> v;
 
-    v.push_back(Matrix::ReflectY(l.A.y) * Matrix::Rotate(l.A, -Pi / 4) * Matrix::Scale(l.A, sqrt(0.5), sqrt(0.5)));
+    v.push_back(Matrix::ReflectY(l.A.Y()) * Matrix::Rotate(l.A, -Pi / 4) * Matrix::Scale(l.A, sqrt(0.5), sqrt(0.5)));
 
     v.push_back(Matrix::Rotate(l.B, -Pi / 4) * Matrix::Scale(l.B, sqrt(0.5), sqrt(0.5)));
 

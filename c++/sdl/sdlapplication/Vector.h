@@ -12,9 +12,10 @@
 */
 class Vector
 {
-public:
+private:
 	double x, y, k;
-
+ 
+public:
 	Vector(): x(0), y(0), k(1) {};
 
 	Vector(double xx, double yy): x(xx), y(yy), k(1) {};
@@ -79,6 +80,8 @@ public:
     {
         return (*this - other).length();
     }
+    
+    friend std::ostream& operator<<(std::ostream&, const Vector& v);
 };
 
 std::ostream& operator<<(std::ostream& os, const Vector& v);

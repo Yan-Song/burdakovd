@@ -9,7 +9,7 @@ public:
     Radar();
 
 private:
-	static const int ScreenWidth = 800, ScreenHeight = 600;
+	static const int ScreenWidth = 320, ScreenHeight = 240;
 	static const int ColorDepth = 0, SDLflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
     double phi, r, dphi;
     Point c;
