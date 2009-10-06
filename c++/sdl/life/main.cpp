@@ -1,7 +1,7 @@
 #include "sdlapplication.h"
 #include "life.h"
 
-int main(int argc, char *argv[]) // argc/argv важны, без них не компилится
+int main(int, char**) // наличие аргументов важно, без них не компилится под Visual Studio
 {
 	LifeApplication app;
 	app.Run();
