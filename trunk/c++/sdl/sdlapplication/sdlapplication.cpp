@@ -1,36 +1,33 @@
 #include <SDL.h>
 #include "sdlapplication.h"
+#include "SDLException.h"
 #include <ctime>
+#include <iostream>
 
 SDLApplication::SDLApplication()
 {
     srand(static_cast<unsigned int>(time(NULL)));
-    printf("Random number generator initialized\n");
+	std::cout<<"Random number generator initialized"<<std::endl;
 }
 
 void SDLApplication::InitializeSDL(int ScreenHeight, int ScreenWidth, int ColorDepth, int SDLflags)
 {
 	// Load SDL
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-	{
-		fprintf(stderr, "Unable to initialize SDL: %s\n", SDL_GetError());
-		exit(1);
-	}
+	SDLCheck(SDL_Init(SDL_INIT_EVERYTHING));
 
 	Screen = SDL_SetVideoMode(ScreenWidth, ScreenHeight, ColorDepth, SDLflags);
 	if (!Screen)
 	{
-		fprintf(stderr, "Unable to set video mode: %s\n", SDL_GetError());
-		exit(1);
+		throw new SDLException();
 	}
 
-	printf("SDL initialized\n");
+	std::cout<<"SDL initialized"<<std::endl;
 }
 
 SDLApplication::~SDLApplication()
 {
 	SDL_Quit();
-	printf("SDL unloaded\n");
+	std::cout<<"SDL unloaded"<<std::endl;
 }
 
 void SDLApplication::ProcessEvents()
@@ -49,7 +46,7 @@ void SDLApplication::Run()
 	frames = 0;
 	Running = true;
 
-	printf("Run()\n");
+	std::cout<<"Run()"<<std::endl;
 
 	while(Running)
 	{
@@ -59,19 +56,19 @@ void SDLApplication::Run()
 		++frames;
 	}
 
-	printf("Stopped\n");
+	std::cout<<"Stopped"<<std::endl;
 }
 
 void SDLApplication::Stop()
 {
 	Running = false;
-	printf("Stop()\n");
+	std::cout<<"Stop()"<<std::endl;
 }
 
 void SDLApplication::Lock() const
 {
 	if(SDL_MUSTLOCK(Screen))
-		SDL_LockSurface(Screen);
+		SDLCheck(SDL_LockSurface(Screen));
 }
 
 void SDLApplication::Unlock() const
@@ -82,7 +79,7 @@ void SDLApplication::Unlock() const
 
 void SDLApplication::Flip() const
 {
-
+	SDLCheck(SDL_Flip(Screen));
 }
 
 void SDLApplication::DrawPixel(const Point& point, const Color& color) const
@@ -93,10 +90,9 @@ void SDLApplication::DrawPixel(const Point& point, const Color& color) const
 // http://plg.lrn.ru/doc/sdl/lesson1.html
 void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb) const
 {
-	int R = rgb.r, G = rgb.g, B = rgb.b;
-    if(x < 0  || x >= Screen->w || y < 0 || y >= Screen->h) return;
+    if(x < 0  || x >= Screen->w || y < 0 || y >= Screen->h) return; // out of bounds
 
-	Uint32 color = SDL_MapRGB(Screen->format, static_cast<Uint8>(R), static_cast<Uint8>(G), static_cast<Uint8>(B)); 
+	Uint32 color = SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.r), static_cast<Uint8>(rgb.g), static_cast<Uint8>(rgb.b)); 
 	switch (Screen->format->BytesPerPixel){ 
 	   case 1:  // Assuming 8-bpp 
 	   { 

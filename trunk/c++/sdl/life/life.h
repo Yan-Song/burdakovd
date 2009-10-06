@@ -11,7 +11,7 @@ class LifeApplication: public SDLApplication
 public:
 	LifeApplication();
 private:
-	static const int ColorDepth = 0, SDLflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
+	static const int ColorDepth = 32, SDLflags = SDL_DOUBLEBUF || SDL_ANYFORMAT;
 	static const int Density = 30; // 0..100
 	static const int ScreenWidth = 800, ScreenHeight = 600;
 	static const int minimumNeighbours = 2, maximumNeighbours = 3, neighboursForBaby = 3;
