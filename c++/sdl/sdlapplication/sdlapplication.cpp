@@ -96,31 +96,35 @@ void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb) const
 	int R = rgb.r, G = rgb.g, B = rgb.b;
     if(x < 0  || x >= Screen->w || y < 0 || y >= Screen->h) return;
 
-	Uint32 color = SDL_MapRGB(Screen->format, R, G, B); 
+	Uint32 color = SDL_MapRGB(Screen->format, static_cast<Uint8>(R), static_cast<Uint8>(G), static_cast<Uint8>(B)); 
 	switch (Screen->format->BytesPerPixel){ 
 	   case 1:  // Assuming 8-bpp 
 	   { 
 		 Uint8 *bufp; 
-		 bufp = (Uint8 *)Screen->pixels + y*Screen->pitch + x; *bufp = color; 
+		 bufp = (Uint8 *)Screen->pixels + y*Screen->pitch + x; *bufp = static_cast<Uint8>(color); 
 	   } break; 
 	   case 2: // Probably 15-bpp or 16-bpp 
 	   { 
 		 Uint16 *bufp; 
-		 bufp = (Uint16 *)Screen->pixels + y*Screen->pitch/2 + x; *bufp = color;
+		 bufp = (Uint16 *)Screen->pixels + y*Screen->pitch/2 + x; *bufp = static_cast<Uint16>(color);
 	   } break; 
 	   case 3: // Slow 24-bpp mode, usually not used 
 	   { 
 		 Uint8 *bufp; 
 		 bufp = (Uint8 *)Screen->pixels + y*Screen->pitch + x * 3; 
-		 if(SDL_BYTEORDER == SDL_LIL_ENDIAN){ 
-		   bufp[0] = color; 
-		   bufp[1] = color >> 8;
-		   bufp[2] = color >> 16; 
-		 }else{ 
+		 #if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
+		 { 
+		   bufp[0] = static_cast<Uint8>(color); 
+		   bufp[1] = static_cast<Uint8>(color >> 8);
+		   bufp[2] = static_cast<Uint8>(color >> 16); 
+		 }
+		 #else
+		 { 
 		   bufp[2] = color; 
 		   bufp[1] = color >> 8; 
 		   bufp[0] = color >> 16; 
 		 } 
+		#endif
 	   } break; 
 	   case 4: // Probably 32-bpp 
 	   { 
