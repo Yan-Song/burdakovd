@@ -45,8 +45,8 @@ protected:
 private:
 	bool Running;
 	// нельзя копировать
-	SDLApplication(const SDLApplication& a) {};
-	SDLApplication& operator=(const SDLApplication& a) {};
+	SDLApplication(const SDLApplication&) {};
+	SDLApplication& operator=(const SDLApplication&) {};
 };
 
 #endif
