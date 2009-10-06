@@ -77,14 +77,14 @@ void LifeApplication::Turn()
 
 void LifeApplication::Render()
 {
-	LockSurface();
+	Lock();
 	for(int i=0; i<ScreenHeight; ++i)
 		for(int j=0; j<ScreenWidth; ++j)
 			if(map[current][i][j])
 				DrawPixel(Point(j, i), alive);
 			else
 				DrawPixel(Point(j, i), dead);
-	UnlockSurface();
+	Unlock();
 	Flip();
 }
 

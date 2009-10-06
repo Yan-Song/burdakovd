@@ -68,13 +68,13 @@ void SDLApplication::Stop()
 	printf("Stop()\n");
 }
 
-void SDLApplication::LockSurface() const
+void SDLApplication::Lock() const
 {
 	if(SDL_MUSTLOCK(Screen))
 		SDL_LockSurface(Screen);
 }
 
-void SDLApplication::UnlockSurface() const
+void SDLApplication::Unlock() const
 {
 	if(SDL_MUSTLOCK(Screen))
 		SDL_UnlockSurface(Screen);

@@ -22,11 +22,11 @@ class SDLApplication
 {
 public:
 	SDLApplication();
-	void LockSurface() const;
-	void UnlockSurface() const;
-	void Flip() const;
-	void DrawPixel(const int x, const int y, const Color& color) const;
-	void DrawPixel(const Point& point, const Color& color) const;
+	void Lock() const ; // Заблокировать экран чтобы можно было использовать DrawPixel
+	void Unlock() const ; // Разблокировать экран
+	void Flip() const ; // SDL_Flip
+	void DrawPixel(const int x, const int y, const Color& color) const ;
+	void DrawPixel(const Point& point, const Color& color) const ;
 	static int Rand(int x);
 	static int Rand(int x, int y);
 	void Run(); // вызывать извне класса один раз, будет работать пока изнутри не будет вызван Stop()
