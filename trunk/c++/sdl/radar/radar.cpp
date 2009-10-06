@@ -42,7 +42,7 @@ void Radar::Render()
 
     Point a(c.X() + r * cos(phi), c.Y() + r * sin(phi));
 
-    LockSurface();
+    Lock();
 
     {
         Line(c, a, 0x00ff00, 0xff0000).Draw(this); //green (gradient)
@@ -51,7 +51,7 @@ void Radar::Render()
             DrawPixel(Rand(Screen->w), Rand(Screen->h), 0x000000); //black
     }
 
-    UnlockSurface();
+    Unlock();
 
     SDL_Flip(Screen);
 }

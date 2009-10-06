@@ -53,7 +53,7 @@ void PrimitivesApplication::Render()
 	double cf = cos(0.01 * frames * lcf);
 
 
-	//LockSurface(Screen);
+	//Lock(Screen);
 
 	if(frames == 0)
     {
@@ -77,7 +77,7 @@ void PrimitivesApplication::Render()
 		}
     */
 
-	//UnlockSurface(Screen);
+	//Unlock(Screen);
 	//SDL_Flip(Screen);
 }
 
@@ -98,9 +98,9 @@ void PrimitivesApplication::Koh(const int depth, const Line& l, const vector<Mat
     {
         Line tmp = l;
         tmp.Modify(acc);
-        LockSurface();
+        Lock();
         tmp.Draw(this);
-        UnlockSurface();
+        Unlock();
         SDL_Flip(Screen);
     }
     else
@@ -134,9 +134,9 @@ void PrimitivesApplication::Dragon(const int depth, const Line& l, const vector<
     {
         Line tmp = l;
         tmp.Modify(acc);
-        LockSurface();
+        Lock();
         tmp.Draw(this);
-        UnlockSurface();
+        Unlock();
         Flip();
     }
     else
