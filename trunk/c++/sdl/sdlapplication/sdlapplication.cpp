@@ -68,16 +68,21 @@ void SDLApplication::Stop()
 	printf("Stop()\n");
 }
 
-void SDLApplication::LockSurface()
+void SDLApplication::LockSurface() const
 {
 	if(SDL_MUSTLOCK(Screen))
 		SDL_LockSurface(Screen);
 }
 
-void SDLApplication::UnlockSurface()
+void SDLApplication::UnlockSurface() const
 {
 	if(SDL_MUSTLOCK(Screen))
 		SDL_UnlockSurface(Screen);
+}
+
+void SDLApplication::Flip() const
+{
+
 }
 
 void SDLApplication::DrawPixel(const Point& point, const Color& color) const

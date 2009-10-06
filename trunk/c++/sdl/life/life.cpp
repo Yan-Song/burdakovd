@@ -77,15 +77,15 @@ void LifeApplication::Turn()
 
 void LifeApplication::Render()
 {
-	LockSurface(Screen);
+	LockSurface();
 	for(int i=0; i<ScreenHeight; ++i)
 		for(int j=0; j<ScreenWidth; ++j)
 			if(map[current][i][j])
-				DrawPixel(Screen, Point(j, i), alive);
+				DrawPixel(Point(j, i), alive);
 			else
-				DrawPixel(Screen, Point(j, i), dead);
-	UnlockSurface(Screen);
-	SDL_Flip(Screen);
+				DrawPixel(Point(j, i), dead);
+	UnlockSurface();
+	Flip();
 }
 
 const Color LifeApplication::alive = Color(255, 255, 0);

@@ -98,9 +98,9 @@ void PrimitivesApplication::Koh(const int depth, const Line& l, const vector<Mat
     {
         Line tmp = l;
         tmp.Modify(acc);
-        LockSurface(Screen);
-        tmp.Draw(Screen);
-        UnlockSurface(Screen);
+        LockSurface();
+        tmp.Draw(this);
+        UnlockSurface();
         SDL_Flip(Screen);
     }
     else
@@ -134,10 +134,10 @@ void PrimitivesApplication::Dragon(const int depth, const Line& l, const vector<
     {
         Line tmp = l;
         tmp.Modify(acc);
-        LockSurface(Screen);
-        tmp.Draw(Screen);
-        UnlockSurface(Screen);
-        SDL_Flip(Screen);
+        LockSurface();
+        tmp.Draw(this);
+        UnlockSurface();
+        Flip();
     }
     else
     {
