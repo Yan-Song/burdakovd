@@ -19,9 +19,11 @@ public:
 
     Line(Point a, Point b, Color ca, Color cb): A(a), B(b), colorA(ca), colorB(cb) { }
 
-	virtual void Draw(SDL_Surface* surface) const;
+	virtual void Draw(const SDLApplication* ) const;
 
     virtual void Modify(const Matrix& m);
+    
+    virtual ~Line() {};
 };
 
 #endif

@@ -21,6 +21,7 @@ private:
 	static const int ColorDepth = 0, SDLflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
 	static const int ScreenWidth = 800, ScreenHeight = 600;
 	static const Point ScreenSize;
+    void FullRender() const;
 	long long lasttime, lastframes;
 protected:
 	virtual void ProcessEvent(SDL_Event Event);

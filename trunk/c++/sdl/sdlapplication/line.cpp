@@ -7,7 +7,7 @@
 // Шикин, Боресков, Компьютерная графика. Полигональные модели. с. 161
 
 // для цвета пиксела в случае градиента такая точность не нужна, так что он вычисляется проще
-void Line::Draw(SDL_Surface *surface) const
+void Line::Draw(const SDLApplication* app) const
 {
     int x1 = static_cast<int>(A.X());
     int y1 = static_cast<int>(A.Y());
@@ -25,7 +25,7 @@ void Line::Draw(SDL_Surface *surface) const
 		int d1 = dy << 1;
 		int d2 = (dy - dx) << 1;
 
-		SDLApplication::DrawPixel(surface, A, colorA);
+		app->DrawPixel(A, colorA);
 
 		for(int x = x1 + sx, y = y1, i = 1; i <= dx; ++i, x += sx)
 		{
@@ -38,7 +38,7 @@ void Line::Draw(SDL_Surface *surface) const
             {
                 d += d1;
             }
-            SDLApplication::DrawPixel(surface, x, y, colorA + (colorB - colorA) * (x - x1) / (x2 - x1));
+            app->DrawPixel(x, y, colorA + (colorB - colorA) * (x - x1) / (x2 - x1));
 		}
 	}
     else
@@ -47,7 +47,7 @@ void Line::Draw(SDL_Surface *surface) const
 		int d1 = dx << 1;
 		int d2 = (dx - dy) << 1;
 
-		SDLApplication::DrawPixel(surface, A, colorA);
+		app->DrawPixel(A, colorA);
 
 		for(int x = x1, y = y1 + sy, i = 1; i <= dy; ++i, y += sy)
 		{
@@ -60,7 +60,7 @@ void Line::Draw(SDL_Surface *surface) const
             {
                 d += d1;
             }
-            SDLApplication::DrawPixel(surface, x, y, colorA + (colorB - colorA) * (y - y1) / (y2 - y1));
+            app->DrawPixel(x, y, colorA + (colorB - colorA) * (y - y1) / (y2 - y1));
 		}
 	}
 }

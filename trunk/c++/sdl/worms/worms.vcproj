@@ -187,6 +187,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Worm.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\WormsApplication.cpp"
 				>
 			</File>
@@ -206,6 +210,10 @@
 			</File>
 			<File
 				RelativePath=".\ISomeBody.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Worm.h"
 				>
 			</File>
 			<File

@@ -198,6 +198,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SDLException.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Vector.h"
 				>
 			</File>

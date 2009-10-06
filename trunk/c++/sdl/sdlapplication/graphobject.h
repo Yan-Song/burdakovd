@@ -4,11 +4,12 @@
 #include <SDL.h>
 #include "matrix.h"
 #include "Vector.h"
+#include "sdlapplication.h"
 
 class GraphObject
 {
 public:
-	virtual void Draw(SDL_Surface*) const = 0;
+	 virtual void Draw(const SDLApplication*) const = 0;
 	
     virtual void Modify(const Matrix& m) = 0;
 
@@ -36,6 +37,8 @@ public:
     {
         Modify(Matrix::ReflectY(y));
     }
+    
+    virtual ~GraphObject() {};
 };
 
 #endif

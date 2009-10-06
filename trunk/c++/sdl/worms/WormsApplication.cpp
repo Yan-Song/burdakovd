@@ -6,11 +6,13 @@ using namespace std;
 #include "Vector.h"
 #include <ctime>
 
+
+const Point WormsApplication::ScreenSize = Point(WormsApplication::ScreenWidth, WormsApplication::ScreenHeight);
+
 WormsApplication::WormsApplication()
 {
 	lasttime = time(NULL);
 	lastframes = 0;
-	srand((unsigned int)time(NULL));
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Worms", "");
 }
@@ -51,4 +53,3 @@ void WormsApplication::Render()
     */
 }
 
-const Point WormsApplication::ScreenSize = Point(WormsApplication::ScreenWidth, WormsApplication::ScreenHeight);
