@@ -82,9 +82,9 @@ void SDLApplication::Flip() const
 	SDLCheck(SDL_Flip(Screen));
 }
 
-void SDLApplication::DrawPixel(const Point& point, const Color& color) const
+void SDLApplication::DrawPixel(const OldHomogeneousPoint2D& OldHomogeneousPoint2D, const Color& color) const
 {
-    DrawPixel(static_cast<int>(point.X()), static_cast<int>(point.Y()), color);
+    DrawPixel(static_cast<int>(OldHomogeneousPoint2D.X()), static_cast<int>(OldHomogeneousPoint2D.Y()), color);
 }
 
 // http://plg.lrn.ru/doc/sdl/lesson1.html
@@ -92,7 +92,7 @@ void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb) const
 {
     if(x < 0  || x >= Screen->w || y < 0 || y >= Screen->h) return; // out of bounds
 
-	Uint32 color = SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.r), static_cast<Uint8>(rgb.g), static_cast<Uint8>(rgb.b)); 
+	Uint32 color = MapColor(rgb); 
 	switch (Screen->format->BytesPerPixel){ 
 	   case 1:  // Assuming 8-bpp 
 	   { 

@@ -13,7 +13,7 @@ Radar::Radar()
     phi = 0;
     dphi = 0.001;
 
-    c = Point(ScreenWidth / 2, ScreenHeight / 2); // center
+    c = OldHomogeneousPoint2D(ScreenWidth / 2, ScreenHeight / 2); // center
 
     double p = 0.3; //  количество нечерных точек от 0 до 1
 
@@ -40,7 +40,7 @@ void Radar::Render()
 {
     phi += dphi;
 
-    Point a(c.X() + r * cos(phi), c.Y() + r * sin(phi));
+    OldHomogeneousPoint2D a(c.X() + r * cos(phi), c.Y() + r * sin(phi));
 
     Lock();
 

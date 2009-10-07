@@ -13,17 +13,17 @@ public:
 	
     virtual void Modify(const Matrix& m) = 0;
 
-    inline void Shift(const Point& d)
+    inline void Shift(const OldHomogeneousPoint2D& d)
     {
         Modify(Matrix::Shift(d));
     }
 
-    inline void Scale(const Point& base, const double kx, const double ky)
+    inline void Scale(const OldHomogeneousPoint2D& base, const double kx, const double ky)
     {
         Modify(Matrix::Scale(base, kx, ky));
     }
 
-    inline void Rotate(const Point& base, const double phi)
+    inline void Rotate(const OldHomogeneousPoint2D& base, const double phi)
     {
         Modify(Matrix::Rotate(base, phi));
     }

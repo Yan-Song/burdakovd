@@ -26,7 +26,8 @@ public:
 	void Unlock() const ; // Разблокировать экран
 	void Flip() const ; // SDL_Flip
 	void DrawPixel(const int x, const int y, const Color& color) const ;
-	void DrawPixel(const Point& point, const Color& color) const ;
+	void DrawPixel(const OldHomogeneousPoint2D& OldHomogeneousPoint2D, const Color& color) const ;
+	//void FillRectangle 
 	static int Rand(int x);
 	static int Rand(int x, int y);
 	void Run(); // вызывать извне класса один раз, будет работать пока изнутри не будет вызван Stop()
@@ -47,6 +48,10 @@ private:
 	// нельзя копировать
 	SDLApplication(const SDLApplication&) {};
 	SDLApplication& operator=(const SDLApplication&) {};
+	inline Uint32 MapColor(const Color& rgb) const
+	{
+		return SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.r), static_cast<Uint8>(rgb.g), static_cast<Uint8>(rgb.b));
+	}
 };
 
 #endif

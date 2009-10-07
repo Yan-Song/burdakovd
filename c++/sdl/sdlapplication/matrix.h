@@ -34,18 +34,18 @@ public:
 
     Matrix operator *(const Matrix& other) const;
 
-    static Matrix Shift(const Point& d);
+    static Matrix Shift(const OldHomogeneousPoint2D& d);
 
     static Matrix Rotate(const double phi);
 
-    inline static Matrix Rotate(const Point& base, const double phi)
+    inline static Matrix Rotate(const OldHomogeneousPoint2D& base, const double phi)
     {
         return Matrix::Shift(base) * Matrix::Rotate(phi) * Matrix::Shift(-base);
     }
 
     static Matrix Scale(const double kx, const double ky);
 
-    inline static Matrix Scale(const Point& base, const double kx, const double ky)
+    inline static Matrix Scale(const OldHomogeneousPoint2D& base, const double kx, const double ky)
     {
         return Matrix::Shift(base) * Matrix::Scale(kx, ky) * Matrix::Shift(-base);
     }
@@ -54,18 +54,18 @@ public:
 
     inline static Matrix ReflectX(const double x)
     {
-        return Matrix::Shift(Point(x, 0)) * Matrix::ReflectX() * Matrix::Shift(Point(-x, 0));
+        return Matrix::Shift(OldHomogeneousPoint2D(x, 0)) * Matrix::ReflectX() * Matrix::Shift(OldHomogeneousPoint2D(-x, 0));
     }
 
     static Matrix ReflectY();
 
     inline static Matrix ReflectY(const double y)
     {
-        return Matrix::Shift(Point(0, y)) * Matrix::ReflectY() * Matrix::Shift(Point(0, -y));
+        return Matrix::Shift(OldHomogeneousPoint2D(0, y)) * Matrix::ReflectY() * Matrix::Shift(OldHomogeneousPoint2D(0, -y));
     }
 };
 
-Vector operator *(const Matrix& A, const Vector& b);
+OldHomogeneousVector2D operator *(const Matrix& A, const OldHomogeneousVector2D& b);
 
 
 #endif

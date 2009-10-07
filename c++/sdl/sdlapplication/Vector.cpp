@@ -3,8 +3,8 @@
 #include <cmath>
 #include <iostream>
 
-std::ostream& operator<<(std::ostream& os, const Vector& v)
+std::ostream& operator<<(std::ostream& os, const OldHomogeneousVector2D& v)
 {
-    os<<"Vector("<<v.x<<"; "<<v.y<<"; "<<v.k<<")";
+    os<<"OldHomogeneousVector2D("<<v.x<<"; "<<v.y<<"; "<<v.k<<")";
     return os;
 }

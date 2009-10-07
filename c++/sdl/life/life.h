@@ -16,7 +16,7 @@ private:
 	static const int ScreenWidth = 800, ScreenHeight = 600;
 	static const int minimumNeighbours = 2, maximumNeighbours = 3, neighboursForBaby = 3;
 	static const Color alive, dead;
-	static const Point ScreenSize;
+	static const OldHomogeneousPoint2D ScreenSize;
 	bool map[2][ScreenWidth][ScreenHeight];
 	int current;
 	void Populate();

@@ -71,7 +71,7 @@ Matrix Matrix::ReflectY()
     return m;
 }
 
-Matrix Matrix::Shift(const Point& d)
+Matrix Matrix::Shift(const OldHomogeneousPoint2D& d)
 {
     Matrix m;
 
@@ -84,9 +84,9 @@ Matrix Matrix::Shift(const Point& d)
     return m;
 }
 
-Vector operator *(const Matrix& A, const Vector& b)
+OldHomogeneousVector2D operator *(const Matrix& A, const OldHomogeneousVector2D& b)
 {
-    Vector v;
+    OldHomogeneousVector2D v;
     for(int i = 0; i < 3; ++i)
     {
         v[i] = 0;

@@ -4,23 +4,24 @@
 #include <iostream>
 #include <cmath>
 
-#define sqr(x) ((x)*(x))
+#define sqr(x) ((x) * (x))
+#define mset(x, value) memset(x, value, sizeof(x))
 
 /* мутный вектор
    сложение, умножение на скаляр и вычитание тут идёт не покомпонентно
    а так, чтобы оно было аналогично параллельному переносу или растяжению.
 */
-class Vector
+class OldHomogeneousVector2D
 {
 private:
 	double x, y, k;
  
 public:
-	Vector(): x(0), y(0), k(1) {};
+	OldHomogeneousVector2D(): x(0), y(0), k(1) {};
 
-	Vector(double xx, double yy): x(xx), y(yy), k(1) {};
+	OldHomogeneousVector2D(double xx, double yy): x(xx), y(yy), k(1) {};
 
-	Vector(double xx, double yy, double kk):
+	OldHomogeneousVector2D(double xx, double yy, double kk):
 		x(xx),
 		y(yy),
         k(kk)
@@ -46,29 +47,29 @@ public:
         return *(index + &x);
     }
 
-    Vector operator -() const
+    OldHomogeneousVector2D operator -() const
     {
-        return Vector(-x, -y, k);
+        return OldHomogeneousVector2D(-x, -y, k);
     }
 
-    inline Vector operator +(const Vector& other) const
+    inline OldHomogeneousVector2D operator +(const OldHomogeneousVector2D& other) const
     {
-        return Vector(x * other.k + other.x * k, y * other.k + other.y * k, k * other.k); 
+        return OldHomogeneousVector2D(x * other.k + other.x * k, y * other.k + other.y * k, k * other.k); 
     }
 
-    inline Vector operator -(const Vector& other) const
+    inline OldHomogeneousVector2D operator -(const OldHomogeneousVector2D& other) const
     {
         return (*this) + (-other);
     }
 
-    inline Vector operator *(const double p)
+    inline OldHomogeneousVector2D operator *(const double p)
     {
-        return Vector(x * p, y * p, k);
+        return OldHomogeneousVector2D(x * p, y * p, k);
     }
 
-    inline Vector operator /(const double q)
+    inline OldHomogeneousVector2D operator /(const double q)
     {
-        return Vector(x / q, y / q, k);
+        return OldHomogeneousVector2D(x / q, y / q, k);
     }
 
     inline double length()
@@ -76,16 +77,36 @@ public:
         return sqrt(sqr(X()) + sqr(Y()));
     }
 
-    inline double dist(const Vector& other)
+    inline double dist(const OldHomogeneousVector2D& other)
     {
         return (*this - other).length();
     }
     
-    friend std::ostream& operator<<(std::ostream&, const Vector& v);
+    friend std::ostream& operator<<(std::ostream&, const OldHomogeneousVector2D& v);
 };
 
-std::ostream& operator<<(std::ostream& os, const Vector& v);
+std::ostream& operator<<(std::ostream& os, const OldHomogeneousVector2D& v);
 
-typedef Vector Point;
+typedef OldHomogeneousVector2D OldHomogeneousPoint2D;
+
+
+
+template<typename T, int N>
+class GenericVector
+{
+private:
+	T data[N];
+	T scale;
+public:
+	GenericVector<T, N>()
+	{
+		for(int i=0; i<N; ++i)
+			data[i] = 0;
+		scale = 1;
+	}
+
+	
+};
+
 
 #endif

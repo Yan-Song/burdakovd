@@ -10,14 +10,14 @@
 class Line : public GraphObject
 {
 public:
-	Point A, B;
+	OldHomogeneousPoint2D A, B;
 	Color colorA, colorB;
 
-	Line(Point a, Point b): A(a), B(b), colorA(0xffffff), colorB(0xffffff) { }
+	Line(OldHomogeneousPoint2D a, OldHomogeneousPoint2D b): A(a), B(b), colorA(0xffffff), colorB(0xffffff) { }
 
-	Line(Point a, Point b, Color c): A(a), B(b), colorA(c), colorB(c) { }
+	Line(OldHomogeneousPoint2D a, OldHomogeneousPoint2D b, Color c): A(a), B(b), colorA(c), colorB(c) { }
 
-    Line(Point a, Point b, Color ca, Color cb): A(a), B(b), colorA(ca), colorB(cb) { }
+    Line(OldHomogeneousPoint2D a, OldHomogeneousPoint2D b, Color ca, Color cb): A(a), B(b), colorA(ca), colorB(cb) { }
 
 	virtual void Draw(const SDLApplication* ) const;
 

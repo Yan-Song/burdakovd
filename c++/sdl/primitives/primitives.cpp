@@ -58,12 +58,12 @@ void PrimitivesApplication::Render()
 	if(frames == 0)
     {
         
-        Point p1(20, 100);
-        Point p2(320, 100);
+        OldHomogeneousPoint2D p1(20, 100);
+        OldHomogeneousPoint2D p2(320, 100);
 
         Koh(Line(p1, p2, cyan));
 
-        Dragon(Line(Point(220, 360), Point(520, 360), yellow));
+        Dragon(Line(OldHomogeneousPoint2D(220, 360), OldHomogeneousPoint2D(520, 360), yellow));
     }
 
     /*
@@ -73,7 +73,7 @@ void PrimitivesApplication::Render()
 		{
 			double sx = sin(sf*x*0.1-cf*y*0.1);
 			double sy = sin(cf*x*0.1-sf*y*0.1);
-			DrawPixel(Screen, Point(x, y), Color(norm(sx), norm(sy), norm(-1)));
+			DrawPixel(Screen, OldHomogeneousPoint2D(x, y), Color(norm(sx), norm(sy), norm(-1)));
 		}
     */
 
