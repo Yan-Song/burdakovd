@@ -42,8 +42,8 @@ void LifeApplication::Main()
 
 void LifeApplication::Populate()
 {
-	for(int i=0; i<ScreenSize.X(); ++i)
-		for(int j=0; j<ScreenSize.Y(); ++j)
+	for(int i=0; i<ScreenWidth; ++i)
+		for(int j=0; j<ScreenHeight; ++j)
 			map[0][i][j] = rand() % 100 < Density;
 	current = 0;
 }
@@ -81,13 +81,12 @@ void LifeApplication::Render()
 	for(int i=0; i<ScreenHeight; ++i)
 		for(int j=0; j<ScreenWidth; ++j)
 			if(map[current][i][j])
-				DrawPixel(OldHomogeneousPoint2D(j, i), alive);
+				DrawPixel(j, i, alive);
 			else
-				DrawPixel(OldHomogeneousPoint2D(j, i), dead);
+				DrawPixel(j, i, dead);
 	Unlock();
 	Flip();
 }
 
 const Color LifeApplication::alive = Color(0xffff00);
 const Color LifeApplication::dead = Color(0x0000ff);
-const OldHomogeneousPoint2D LifeApplication::ScreenSize = OldHomogeneousPoint2D(LifeApplication::ScreenWidth, LifeApplication::ScreenHeight);

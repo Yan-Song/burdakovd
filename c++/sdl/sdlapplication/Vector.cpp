@@ -3,8 +3,18 @@
 #include <cmath>
 #include <iostream>
 
-std::ostream& operator<<(std::ostream& os, const OldHomogeneousVector2D& v)
+Vector2D Vector2DByCoords(double x, double y)
 {
-    os<<"OldHomogeneousVector2D("<<v.x<<"; "<<v.y<<"; "<<v.k<<")";
-    return os;
+	Vector2D ans;
+	ans[0] = x;
+	ans[1] = y;
+	return ans;
+}
+
+ScreenPoint ScreenPointByCoords(int x, int y)
+{
+	ScreenPoint ans;
+	ans[0] = x;
+	ans[1] = y;
+	return ans;
 }

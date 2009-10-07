@@ -82,9 +82,9 @@ void SDLApplication::Flip() const
 	SDLCheck(SDL_Flip(Screen));
 }
 
-void SDLApplication::DrawPixel(const OldHomogeneousPoint2D& OldHomogeneousPoint2D, const Color& color) const
+void SDLApplication::DrawPixel(const ScreenPoint& point, const Color& color) const
 {
-    DrawPixel(static_cast<int>(OldHomogeneousPoint2D.X()), static_cast<int>(OldHomogeneousPoint2D.Y()), color);
+    DrawPixel(point[0], point[1], color);
 }
 
 // http://plg.lrn.ru/doc/sdl/lesson1.html

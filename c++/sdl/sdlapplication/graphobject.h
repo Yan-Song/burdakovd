@@ -9,9 +9,9 @@
 class GraphObject
 {
 public:
-	 virtual void Draw(const SDLApplication*) const = 0;
+	virtual void Draw(const SDLApplication*) const = 0;
 	
-    virtual void Modify(const Matrix& m) = 0;
+    /*virtual void Modify(const Matrix& m) = 0;
 
     inline void Shift(const OldHomogeneousPoint2D& d)
     {
@@ -37,7 +37,7 @@ public:
     {
         Modify(Matrix::ReflectY(y));
     }
-    
+    */
     virtual ~GraphObject() {};
 };
 

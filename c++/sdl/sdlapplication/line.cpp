@@ -8,10 +8,10 @@
 
 void Line::Draw(const SDLApplication* app) const
 {
-    int x1 = static_cast<int>(A.X());
-    int y1 = static_cast<int>(A.Y());
-    int x2 = static_cast<int>(B.X());
-    int y2 = static_cast<int>(B.Y());
+    int x1 = static_cast<int>(A[0]);
+    int y1 = static_cast<int>(A[1]);
+    int x2 = static_cast<int>(B[0]);
+    int y2 = static_cast<int>(B[1]);
 
 	int dx = abs(x2 - x1);
 	int dy = abs(y2 - y1);
@@ -64,8 +64,8 @@ void Line::Draw(const SDLApplication* app) const
 	}
 }
 
-void Line::Modify(const Matrix &m)
+/*void Line::Modify(const Matrix &m)
 {
     A = m * A;
     B = m * B;
-}
+}*/

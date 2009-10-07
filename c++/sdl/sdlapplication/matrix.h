@@ -3,6 +3,7 @@
 
 #include "Vector.h"
 
+/*
 typedef double MatrixRow[3];
 typedef MatrixRow MatrixData[3];
 
@@ -66,6 +67,6 @@ public:
 };
 
 OldHomogeneousVector2D operator *(const Matrix& A, const OldHomogeneousVector2D& b);
-
+*/
 
 #endif
