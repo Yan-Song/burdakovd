@@ -64,22 +64,15 @@ void PrimitivesApplication::Render()
 	ClearScreen(Palette::Black);
 
 	// CG-8: Заливаем экран грдиентом справа нелево от чёрного к красному.
+	// CG-9  заливаем  градиентом с помощью псевдотонирования. (яркость точки определяетвероятность появления пикселя в этой точке)
 
 	for(int i = 0; i < Screen->w; ++i)
 		for(int j = 0; j < 100; ++j)
-			DrawPixel(i, j, Gradient(Palette::Red, Palette::Black, Screen->w - i, i));
-
-	ScreenPoint a = ScreenPointByCoords(300, 300), b = ScreenPointByCoords(500, 300);
+			DrawPixel(i, j, Gradient(Palette::Black, Palette::Red, Screen->w - i, i));
 
 	for(int i = 0; i < Screen->w; ++i)
-		for(int j = 100; j < Screen->h; ++j)
-		{
-			ScreenPoint current = ScreenPointByCoords(i, j);
-			DrawPixel(current,
-				Palette::Green * max(0, (150 - static_cast<int>(b.Distance(current)))) / 150 +
-				Palette::Red * max(0, (150 - static_cast<int>(a.Distance(current)))) / 150
-			);
-		}
+		for(int j = 100; j < 200; ++j)
+			DrawPixel(i, j, Rand(Screen->w) < i ? Palette::Red : Palette::Black);
 
 	Unlock();
 	Flip();
