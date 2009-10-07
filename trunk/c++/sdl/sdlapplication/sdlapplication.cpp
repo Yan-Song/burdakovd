@@ -48,6 +48,8 @@ void SDLApplication::Run()
 
 	std::cout<<"Run()"<<std::endl;
 
+	InitialRender();
+
 	while(Running)
 	{
 		ProcessEvents();
@@ -142,4 +144,22 @@ int SDLApplication::Rand(int x)
 int SDLApplication::Rand(int x, int y)
 {
     return x > y ? Rand(y, x) : x + Rand(y - x + 1);
+}
+
+void SDLApplication::FillRectangle(const ScreenPoint& LeftTop, const ScreenPoint& RightBottom, const Color& color) const
+{
+	SDL_Rect rect;
+	rect.x = LeftTop[0];
+	rect.y = LeftTop[1];
+	rect.w = RightBottom[0] - rect.x;
+	rect.h = RightBottom[1] - rect.y;
+	SDL_FillRect(Screen, &rect, MapColor(color));
+}
+
+void SDLApplication::ClearScreen(const Color& color) const
+{
+	ScreenPoint LeftTop, RightBottom;
+	RightBottom[0] = Screen->w;
+	RightBottom[1] = Screen->h;
+	FillRectangle(LeftTop, RightBottom, color);
 }

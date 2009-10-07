@@ -23,6 +23,8 @@ protected:
 
 	virtual void ProcessEvent(SDL_Event);
 
+	virtual void InitialRender();
+
 public:
 	PrimitivesApplication();
 
