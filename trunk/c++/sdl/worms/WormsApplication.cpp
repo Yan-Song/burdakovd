@@ -7,7 +7,7 @@ using namespace std;
 #include <ctime>
 
 
-const Point WormsApplication::ScreenSize = Point(WormsApplication::ScreenWidth, WormsApplication::ScreenHeight);
+const OldHomogeneousPoint2D WormsApplication::ScreenSize = OldHomogeneousPoint2D(WormsApplication::ScreenWidth, WormsApplication::ScreenHeight);
 
 WormsApplication::WormsApplication()
 {

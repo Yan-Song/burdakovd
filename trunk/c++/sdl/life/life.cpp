@@ -81,13 +81,13 @@ void LifeApplication::Render()
 	for(int i=0; i<ScreenHeight; ++i)
 		for(int j=0; j<ScreenWidth; ++j)
 			if(map[current][i][j])
-				DrawPixel(Point(j, i), alive);
+				DrawPixel(OldHomogeneousPoint2D(j, i), alive);
 			else
-				DrawPixel(Point(j, i), dead);
+				DrawPixel(OldHomogeneousPoint2D(j, i), dead);
 	Unlock();
 	Flip();
 }
 
 const Color LifeApplication::alive = Color(255, 255, 0);
 const Color LifeApplication::dead = Color(0, 0, 255);
-const Point LifeApplication::ScreenSize = Point(LifeApplication::ScreenWidth, LifeApplication::ScreenHeight);
+const OldHomogeneousPoint2D LifeApplication::ScreenSize = OldHomogeneousPoint2D(LifeApplication::ScreenWidth, LifeApplication::ScreenHeight);
