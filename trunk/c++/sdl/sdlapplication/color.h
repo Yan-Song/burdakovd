@@ -18,11 +18,21 @@ public:
 		{};
 
 	// конструктор от представлени€ одним числом: 0xRRGGBB
-	GenericColor(int GenericColor) :
-		R(GenericColor>>16 & 255),
-		G(GenericColor>>8 & 255),
-		B(GenericColor & 255)
+	GenericColor(int color) :
+		R(color>>16 & 255),
+		G(color>>8 & 255),
+		B(color & 255)
 		{};
+
+	inline GenericColor<I> operator +(const GenericColor<I>& other) const
+	{
+		return GenericColor<I>(R + other.R, G + other.G, B + other.B);
+	}
+
+	inline GenericColor<I> operator -(const GenericColor<I>& other) const
+	{
+		return GenericColor<I>(R - other.R, G - other.G, B - other.B);
+	}
 
 	// умножение всех компонент цвета на скал€р
     inline GenericColor<I> operator *(const I k) const
@@ -35,16 +45,6 @@ public:
 		return GenericColor<I>(R / k, G / k, B / k);
 	}
 
-	inline GenericColor<I> operator +(const GenericColor<I>& other) const
-	{
-		return GenericColor<I>(R + other.R, G + other.G, B + other.B);
-	}
-
-	inline GenericColor<I> operator -(const GenericColor<I>& other) const
-	{
-		return GenericColor<I>(R - other.R, G - other.G, B - other.B);
-	}
-
 	template<typename J>
 	inline operator GenericColor<J>()
 	{
@@ -52,7 +52,29 @@ public:
 	}
 };
 
+
+// градиент работает и дл€ целочисленного случа€
+template<typename I>
+inline GenericColor<I> Gradient(const GenericColor<I>& ColorA, const GenericColor<I>& ColorB, const I WeightA, const I WeightB)
+{
+	return (ColorA * WeightA + ColorB * WeightB) / (WeightA + WeightB);
+}
+
+
+/*
+Ћучше использовать Color, так как он использует только целочисленную арифметику,
+но если вдруг понадобитс€ DoubleColor то он тоже есть и cast работает в обе стороны
+*/
 typedef GenericColor<int> Color;
 typedef GenericColor<double> DoubleColor;
+
+
+// некоторые базовые цвета, хот€ кто их будет использовать?)
+class Palette
+{
+public:
+	static const Color
+		Black, White, Red, Green, Blue, Yellow, Gray;
+};
 
 #endif

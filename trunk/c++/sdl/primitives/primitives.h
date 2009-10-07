@@ -13,11 +13,8 @@ class PrimitivesApplication : public SDLApplication
 {
 private:
 	static const int ScreenWidth = 800, ScreenHeight = 600;
-	static const int ColorDepth = 0, SDLflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
-    void Koh(const Line& l);
-    void Koh(const int depth, const Line& l, const vector<Matrix>& m, const Matrix& acc);
-    void Dragon(const Line& l);
-    void Dragon(const int depth, const Line& l, const vector<Matrix>& m, const Matrix& acc);
+	static const int ColorDepth = 0, SDLflags = SDL_DOUBLEBUF || SDL_ANYFORMAT;
+	long long lasttime, lastframes;
 
 protected:
 	virtual void Main();
