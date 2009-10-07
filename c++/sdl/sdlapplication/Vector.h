@@ -133,9 +133,9 @@ public:
 	// Длина вектора
 	inline double Length() const
 	{
-		double s;
+		double s = 0;
 		for(int i = 0; i < N; ++i)
-			ans += sqr(static_cast<double>(data[i]));
+			s += sqr(static_cast<double>(data[i]));
 		return sqrt(s);
 	}
 

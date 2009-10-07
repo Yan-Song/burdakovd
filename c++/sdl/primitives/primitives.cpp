@@ -51,44 +51,34 @@ int sgn(T x)
 		(x>0 ? 1 : 0);
 }
 
+void PrimitivesApplication::InitialRender()
+{
+	
+}
+
 void PrimitivesApplication::Render()
 {
+	// делаю всякие эксперименты тут а не в InitialRender, чтобы по FPS смотреть скорость работы
     Lock();
 
-	// CG-6: Заливаем весь экран красным, синим, зелёным цветами.
+	ClearScreen(Palette::Black);
 
-	// левый верхний угол - красный
-	for(int i = 0; i < Screen->w / 2; ++i)
-		for(int j = 0; j < Screen->h / 2; ++j)
-			DrawPixel(i, j, Palette::Red);
+	// CG-8: Заливаем экран грдиентом справа нелево от чёрного к красному.
 
-	// правый верхний угол - зелёный
-	for(int i = Screen->w / 2; i < Screen->w; ++i)
-		for(int j = 0; j < Screen->h / 2; ++j)
-			DrawPixel(i, j, Palette::Green);
+	for(int i = 0; i < Screen->w; ++i)
+		for(int j = 0; j < 100; ++j)
+			DrawPixel(i, j, Gradient(Palette::Red, Palette::Black, Screen->w - i, i));
 
-	// левый нижний угол - синий
-	for(int i = 0; i < Screen->w / 2; ++i)
-		for(int j = Screen->h / 2; j < Screen->h; ++j)
-			DrawPixel(i, j, Palette::Blue);
+	ScreenPoint a = ScreenPointByCoords(300, 300), b = ScreenPointByCoords(500, 300);
 
-	// правый нижний - все сразу
-	for(int i = Screen->w / 2; i < Screen->w; ++i)
-		for(int j = Screen->h / 2; j < Screen->h; ++j)
+	for(int i = 0; i < Screen->w; ++i)
+		for(int j = 100; j < Screen->h; ++j)
 		{
-			Color color;
-
-			int c = Rand(1, 3);
-
-			if(c == 1)
-				color = Palette::Red;
-			else if (c == 2)
-				color = Palette::Green;
-			else
-				color = Palette::Blue;
-
-			DrawPixel(i, j, color);
-				
+			ScreenPoint current = ScreenPointByCoords(i, j);
+			DrawPixel(current,
+				Palette::Green * max(0, (150 - static_cast<int>(b.Distance(current)))) / 150 +
+				Palette::Red * max(0, (150 - static_cast<int>(a.Distance(current)))) / 150
+			);
 		}
 
 	Unlock();
