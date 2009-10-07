@@ -92,7 +92,8 @@ void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb) const
 {
     if(x < 0  || x >= Screen->w || y < 0 || y >= Screen->h) return; // out of bounds
 
-	Uint32 color = MapColor(rgb); 
+	Uint32 color = MapColor(rgb);
+
 	switch (Screen->format->BytesPerPixel){ 
 	   case 1:  // Assuming 8-bpp 
 	   { 

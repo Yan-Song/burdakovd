@@ -11,13 +11,11 @@ class Line : public GraphObject
 {
 public:
 	OldHomogeneousPoint2D A, B;
-	Color colorA, colorB;
+	Color color;
 
-	Line(OldHomogeneousPoint2D a, OldHomogeneousPoint2D b): A(a), B(b), colorA(0xffffff), colorB(0xffffff) { }
+	Line(OldHomogeneousPoint2D a, OldHomogeneousPoint2D b): A(a), B(b), color(0xffffff) { }
 
-	Line(OldHomogeneousPoint2D a, OldHomogeneousPoint2D b, Color c): A(a), B(b), colorA(c), colorB(c) { }
-
-    Line(OldHomogeneousPoint2D a, OldHomogeneousPoint2D b, Color ca, Color cb): A(a), B(b), colorA(ca), colorB(cb) { }
+	Line(OldHomogeneousPoint2D a, OldHomogeneousPoint2D b, Color c): A(a), B(b), color(c) { }
 
 	virtual void Draw(const SDLApplication* ) const;
 

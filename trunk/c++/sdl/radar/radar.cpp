@@ -45,7 +45,7 @@ void Radar::Render()
     Lock();
 
     {
-        Line(c, a, 0x00ff00, 0xff0000).Draw(this); //green (gradient)
+        Line(c, a, 0x00ff00).Draw(this); //green
 
         for(int i=0; i<x; ++i)
             DrawPixel(Rand(Screen->w), Rand(Screen->h), 0x000000); //black

@@ -25,7 +25,7 @@ void Line::Draw(const SDLApplication* app) const
 		int d1 = dy << 1;
 		int d2 = (dy - dx) << 1;
 
-		app->DrawPixel(A, colorA);
+		app->DrawPixel(A, color);
 
 		for(int x = x1 + sx, y = y1, i = 1; i <= dx; ++i, x += sx)
 		{
@@ -38,7 +38,7 @@ void Line::Draw(const SDLApplication* app) const
             {
                 d += d1;
             }
-            app->DrawPixel(x, y, colorA + (colorB - colorA) * (x - x1) / (x2 - x1));
+            app->DrawPixel(x, y, color);
 		}
 	}
     else
@@ -47,7 +47,7 @@ void Line::Draw(const SDLApplication* app) const
 		int d1 = dx << 1;
 		int d2 = (dx - dy) << 1;
 
-		app->DrawPixel(A, colorA);
+		app->DrawPixel(A, color);
 
 		for(int x = x1, y = y1 + sy, i = 1; i <= dy; ++i, y += sy)
 		{
@@ -60,7 +60,7 @@ void Line::Draw(const SDLApplication* app) const
             {
                 d += d1;
             }
-            app->DrawPixel(x, y, colorA + (colorB - colorA) * (y - y1) / (y2 - y1));
+            app->DrawPixel(x, y, color);
 		}
 	}
 }

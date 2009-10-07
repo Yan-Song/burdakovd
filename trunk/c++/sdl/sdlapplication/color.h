@@ -1,30 +1,58 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-class Color
+#include <SDL.h>
+
+// I - int/double // как указать в шаблоне допустимые параметры?
+template<typename I>
+class GenericColor
 {
 public:
-	int r, g, b;
+	I R, G, B; // компоненты цвета, 0..255
 
-	Color(int rr, int gg, int bb) : r(rr), g(gg), b(bb) {};
+	// конструктор от трЄх компонент RGB, 0..255
+	GenericColor(I rr, I gg, I bb) :
+		R(rr),
+		G(gg),
+		B(bb)
+		{};
 
-	Color(int color) : r(color>>16 & 255), g(color>>8 & 255), b(color & 255) {};
+	// конструктор от представлени€ одним числом: 0xRRGGBB
+	GenericColor(int GenericColor) :
+		R(GenericColor>>16 & 255),
+		G(GenericColor>>8 & 255),
+		B(GenericColor & 255)
+		{};
 
-	Color(double rr, double gg, double bb) :
-		r(static_cast<int>(rr*255)),
-		g(static_cast<int>(gg*255)),
-		b(static_cast<int>(bb*255)) {};
+	// умножение всех компонент цвета на скал€р
+    inline GenericColor<I> operator *(const I k) const
+	{
+	   return GenericColor<I>(R * k, G * k, B * k);
+	}
 
-	operator int() const;
+	inline GenericColor<I> operator /(const I k) const
+	{
+		return GenericColor<I>(R / k, G / k, B / k);
+	}
 
-    Color operator*(const int k) const;
+	inline GenericColor<I> operator +(const GenericColor<I>& other) const
+	{
+		return GenericColor<I>(R + other.R, G + other.G, B + other.B);
+	}
 
-    Color operator/(const int k) const;
+	inline GenericColor<I> operator -(const GenericColor<I>& other) const
+	{
+		return GenericColor<I>(R - other.R, G - other.G, B - other.B);
+	}
 
-    Color operator+(const Color& other) const;
-
-    Color operator-(const Color& other) const;
-    
+	template<typename J>
+	inline operator GenericColor<J>()
+	{
+		return GenericColor<J>(static_cast<J>(R), static_cast<J>(G), static_cast<J>(B));
+	}
 };
+
+typedef GenericColor<int> Color;
+typedef GenericColor<double> DoubleColor;
 
 #endif

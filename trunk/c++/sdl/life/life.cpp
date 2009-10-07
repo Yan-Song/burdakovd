@@ -88,6 +88,6 @@ void LifeApplication::Render()
 	Flip();
 }
 
-const Color LifeApplication::alive = Color(255, 255, 0);
-const Color LifeApplication::dead = Color(0, 0, 255);
+const Color LifeApplication::alive = Color(0xffff00);
+const Color LifeApplication::dead = Color(0x0000ff);
 const OldHomogeneousPoint2D LifeApplication::ScreenSize = OldHomogeneousPoint2D(LifeApplication::ScreenWidth, LifeApplication::ScreenHeight);

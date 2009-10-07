@@ -50,7 +50,7 @@ private:
 	SDLApplication& operator=(const SDLApplication&) {};
 	inline Uint32 MapColor(const Color& rgb) const
 	{
-		return SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.r), static_cast<Uint8>(rgb.g), static_cast<Uint8>(rgb.b));
+		return SDL_MapRGB(Screen->format, rgb.R, rgb.G, rgb.B);
 	}
 };
 
