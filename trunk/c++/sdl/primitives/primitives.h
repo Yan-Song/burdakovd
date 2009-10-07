@@ -5,10 +5,6 @@
 #include <vector>
 #include "line.h"
 
-using namespace std;
-
-typedef double pFunction(double);
-
 class PrimitivesApplication : public SDLApplication
 {
 private:
