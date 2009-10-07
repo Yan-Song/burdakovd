@@ -10,6 +10,8 @@ class GenericColor
 public:
 	I R, G, B; // компоненты цвета, 0..255
 
+	GenericColor() : R(0), G(0), B(0) {};
+
 	// конструктор от трёх компонент RGB, 0..255
 	GenericColor(I rr, I gg, I bb) :
 		R(rr),
@@ -53,7 +55,7 @@ public:
 };
 
 
-// градиент работает и для целочисленного случая
+// градиент работает и для целочисленного случая (Color)
 template<typename I>
 inline GenericColor<I> Gradient(const GenericColor<I>& ColorA, const GenericColor<I>& ColorB, const I WeightA, const I WeightB)
 {
@@ -63,7 +65,7 @@ inline GenericColor<I> Gradient(const GenericColor<I>& ColorA, const GenericColo
 
 /*
 Лучше использовать Color, так как он использует только целочисленную арифметику,
-но если вдруг понадобится DoubleColor то он тоже есть и cast работает в обе стороны
+но если вдруг понадобится DoubleColor (использует double) то он тоже есть и cast работает в обе стороны
 */
 typedef GenericColor<int> Color;
 typedef GenericColor<double> DoubleColor;

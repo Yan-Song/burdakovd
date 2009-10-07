@@ -27,8 +27,10 @@ public:
 	void Flip() const ; // SDL_Flip
 	void DrawPixel(const int x, const int y, const Color& color) const ;
 	void DrawPixel(const OldHomogeneousPoint2D& OldHomogeneousPoint2D, const Color& color) const ;
-	//void FillRectangle 
+	
+	// число из полуинтервала [0, x)
 	static int Rand(int x);
+	// из отрезка [x, y]
 	static int Rand(int x, int y);
 	void Run(); // вызывать извне класса один раз, будет работать пока изнутри не будет вызван Stop()
 	virtual ~SDLApplication(); // деструктор
@@ -50,7 +52,7 @@ private:
 	SDLApplication& operator=(const SDLApplication&) {};
 	inline Uint32 MapColor(const Color& rgb) const
 	{
-		return SDL_MapRGB(Screen->format, rgb.R, rgb.G, rgb.B);
+		return SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.R), static_cast<Uint8>(rgb.G), static_cast<Uint8>(rgb.B));
 	}
 };
 

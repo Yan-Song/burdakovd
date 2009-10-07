@@ -53,24 +53,43 @@ int sgn(T x)
 
 void PrimitivesApplication::Render()
 {
-    double lsf = norm(sin(0.001 * frames));
-	double lcf = norm(cos(0.001 * frames));
+    Lock();
 
-	double sf = sin(0.01 * frames * lsf);
-	double cf = cos(0.01 * frames * lcf);
+	// CG-6: Заливаем весь экран красным, синим, зелёным цветами.
 
+	// левый верхний угол - красный
+	for(int i = 0; i < Screen->w / 2; ++i)
+		for(int j = 0; j < Screen->h / 2; ++j)
+			DrawPixel(i, j, Palette::Red);
 
-	Lock();
-   
-    // chaos
-	for(int x=400; x<780; ++x)
-		for(int y=20; y<200; ++y)
+	// правый верхний угол - зелёный
+	for(int i = Screen->w / 2; i < Screen->w; ++i)
+		for(int j = 0; j < Screen->h / 2; ++j)
+			DrawPixel(i, j, Palette::Green);
+
+	// левый нижний угол - синий
+	for(int i = 0; i < Screen->w / 2; ++i)
+		for(int j = Screen->h / 2; j < Screen->h; ++j)
+			DrawPixel(i, j, Palette::Blue);
+
+	// правый нижний - все сразу
+	for(int i = Screen->w / 2; i < Screen->w; ++i)
+		for(int j = Screen->h / 2; j < Screen->h; ++j)
 		{
-			double sx = sin(sf*x*0.1-cf*y*0.1);
-			double sy = sin(cf*x*0.1-sf*y*0.1);
-			DrawPixel(OldHomogeneousPoint2D(x, y), DoubleColor(255*norm(sx), 255*norm(sy), 255*norm(-1)));
+			Color color;
+
+			int c = Rand(1, 3);
+
+			if(c == 1)
+				color = Palette::Red;
+			else if (c == 2)
+				color = Palette::Green;
+			else
+				color = Palette::Blue;
+
+			DrawPixel(i, j, color);
+				
 		}
-    
 
 	Unlock();
 	Flip();
