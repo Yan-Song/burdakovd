@@ -2,6 +2,7 @@
 #include "Vector.h"
 #include <cmath>
 
+/*
 Matrix::Matrix()
 {
     for(int i=0; i<3; ++i)
@@ -95,3 +96,4 @@ OldHomogeneousVector2D operator *(const Matrix& A, const OldHomogeneousVector2D&
     }
     return v;
 }
+*/

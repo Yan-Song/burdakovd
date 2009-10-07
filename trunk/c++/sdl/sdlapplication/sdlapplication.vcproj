@@ -203,6 +203,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\utils.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Vector.h"
 				>
 			</File>

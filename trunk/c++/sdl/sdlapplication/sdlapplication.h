@@ -4,19 +4,8 @@
 #include <SDL.h>
 #include "color.h"
 #include "Vector.h"
-#include <vector>
 #include <cmath>
-#include <map>
-
-typedef std::pair<int, int> pii;
-
-const double Pi = acos(-1.0);
-
-template<class T>
-inline T min(const T& x, const T& y)
-{
-    return x > y ? y : x;
-}
+#include "utils.h"
 
 class SDLApplication
 {
@@ -26,7 +15,7 @@ public:
 	void Unlock() const ; // Разблокировать экран
 	void Flip() const ; // SDL_Flip
 	void DrawPixel(const int x, const int y, const Color& color) const ;
-	void DrawPixel(const OldHomogeneousPoint2D& OldHomogeneousPoint2D, const Color& color) const ;
+	void DrawPixel(const ScreenPoint& point, const Color& color) const ;
 	
 	// число из полуинтервала [0, x)
 	static int Rand(int x);

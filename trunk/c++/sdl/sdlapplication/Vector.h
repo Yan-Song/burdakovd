@@ -3,110 +3,161 @@
 
 #include <iostream>
 #include <cmath>
+#include <stdexcept>
 
 #define sqr(x) ((x) * (x))
 #define mset(x, value) memset(x, value, sizeof(x))
 
-/* мутный вектор
-   сложение, умножение на скаляр и вычитание тут идёт не покомпонентно
-   а так, чтобы оно было аналогично параллельному переносу или растяжению.
-*/
-class OldHomogeneousVector2D
-{
-private:
-	double x, y, k;
- 
-public:
-	OldHomogeneousVector2D(): x(0), y(0), k(1) {};
-
-	OldHomogeneousVector2D(double xx, double yy): x(xx), y(yy), k(1) {};
-
-	OldHomogeneousVector2D(double xx, double yy, double kk):
-		x(xx),
-		y(yy),
-        k(kk)
-		{};
-
-    inline double X() const
-    {
-        return x / k;
-    }
-
-    inline double Y() const
-    {
-        return y / k;
-    }
-
-    double& operator [](int index)
-    {
-        return *(index + &x);
-    }
-
-    const double& operator [](int index) const
-    {
-        return *(index + &x);
-    }
-
-    OldHomogeneousVector2D operator -() const
-    {
-        return OldHomogeneousVector2D(-x, -y, k);
-    }
-
-    inline OldHomogeneousVector2D operator +(const OldHomogeneousVector2D& other) const
-    {
-        return OldHomogeneousVector2D(x * other.k + other.x * k, y * other.k + other.y * k, k * other.k); 
-    }
-
-    inline OldHomogeneousVector2D operator -(const OldHomogeneousVector2D& other) const
-    {
-        return (*this) + (-other);
-    }
-
-    inline OldHomogeneousVector2D operator *(const double p)
-    {
-        return OldHomogeneousVector2D(x * p, y * p, k);
-    }
-
-    inline OldHomogeneousVector2D operator /(const double q)
-    {
-        return OldHomogeneousVector2D(x / q, y / q, k);
-    }
-
-    inline double length()
-    {
-        return sqrt(sqr(X()) + sqr(Y()));
-    }
-
-    inline double dist(const OldHomogeneousVector2D& other)
-    {
-        return (*this - other).length();
-    }
-    
-    friend std::ostream& operator<<(std::ostream&, const OldHomogeneousVector2D& v);
-};
-
-std::ostream& operator<<(std::ostream& os, const OldHomogeneousVector2D& v);
-
-typedef OldHomogeneousVector2D OldHomogeneousPoint2D;
-
-
-
-template<typename T, int N>
+// Этот вектор пока не содержит обобщенных координат
+template<typename I, int N>
 class GenericVector
 {
 private:
-	T data[N];
-	T scale;
+	typedef I dataArray[N];
+	dataArray data;
+	
 public:
-	GenericVector<T, N>()
+	static const int Dimensions = N;
+
+	// конструктор по умолчанию
+	GenericVector()
 	{
-		for(int i=0; i<N; ++i)
+		for(int i = 0; i < N; ++i)
 			data[i] = 0;
-		scale = 1;
 	}
 
-	
+	GenericVector(const dataArray& dt)
+	{
+		for(int i = 0; i < N; ++i)
+			data[i] = dt[i];
+	}
+
+	GenericVector(const GenericVector<I, N>& other)
+	{
+		for(int i = 0; i < N; ++i)
+			data[i] = other[i];
+	}
+
+	inline I& operator [](const int index)
+	{
+		if(index < 0 || index >= N)
+			throw new std::out_of_range("Index out of range in I& Vector::operator[]");
+		else
+			return data[index];
+	}
+
+	inline const I& operator [](const int index) const
+	{
+		if(index < 0 || index >= N)
+			throw new std::out_of_range("Index out of range in const I& Vector::operator[]");
+		else
+			return data[index];
+	}
+
+	template<typename J>
+	inline operator GenericVector<J, N>() const
+	{
+		GenericVector<J, N> ans;
+		for(int i = 0; i < N; ++i)
+			ans[i] = static_cast<J>(data[i]);
+		return ans;
+	}
+
+	inline GenericVector<I, N> operator +(const GenericVector<I, N>& other) const
+	{
+		GenericVector<I, N> ans;
+		for(int i = 0; i < N; ++i)
+			ans[i] = data[i] + other[i];
+		return ans;
+	}
+
+	inline GenericVector<I, N> operator -(const GenericVector<I, N>& other) const
+	{
+		GenericVector<I, N> ans;
+		for(int i = 0; i < N; ++i)
+			ans[i] = data[i] - other[i];
+		return ans;
+	}
+
+	inline GenericVector<I, N>& operator +=(const GenericVector<I, N>& other)
+	{
+		for(int i = 0; i < N; ++i)
+			ans[i] += other[i];
+		return *this;
+	}
+
+	inline GenericVector<I, N>& operator -=(const GenericVector<I, N>& other)
+	{
+		for(int i = 0; i < N; ++i)
+			ans[i] -= other[i];
+		return *this;
+	}
+
+	inline GenericVector<I, N> operator *(const I k) const
+	{
+		GenericVector<I, N> ans;
+		for(int i = 0; i < N; ++i)
+			ans[i] = data[i] * k;
+		return ans;
+	}
+
+	inline GenericVector<I, N> operator /(const I k) const
+	{
+		GenericVector<I, N> ans;
+		for(int i = 0; i < N; ++i)
+			ans[i] = data[i] / k;
+		return ans;
+	}
+
+	inline GenericVector<I, N>& operator *=(const I k)
+	{
+		for(int i = 0; i < N; ++i)
+			data[i] *= k;
+	}
+
+	inline GenericVector<I, N>& operator /=(const I k)
+	{
+		for(int i = 0; i < N; ++i)
+			data[i] /= k;
+	}
+
+	// унарный минус
+	inline GenericVector<I, N> operator -() const
+	{
+		GenericVector<I, N> ans;
+		for(int i = 0; i < N; ++i)
+			ans[i] = - data[i];
+		return ans;
+	}
+
+	// Длина вектора
+	inline double Length() const
+	{
+		double s;
+		for(int i = 0; i < N; ++i)
+			ans += sqr(static_cast<double>(data[i]));
+		return sqrt(s);
+	}
+
+	// Расстояние между точками
+	inline double Distance(const GenericVector<I, N>& other)
+	{
+		return (other - *this).Length();
+	}
 };
 
+// вектор на плоскости, координаты - double
+typedef GenericVector<double, 2> Vector2D;
+
+// точка на плоскости, координаты - double
+typedef Vector2D Point2D;
+
+// "Точка на экране", координаты - int, работает быстрее чем Vector2D, рекомендуется к использованию если дробные координаты не нужны.
+typedef GenericVector<int, 2> ScreenPoint;
+
+// а вот это ппц, так как я хз как сделать удобный конструктор с N параметрами
+Vector2D Vector2DByCoords(double x, double y);
+
+ScreenPoint ScreenPointByCoords(int x, int y);
 
 #endif

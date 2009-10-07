@@ -7,8 +7,6 @@ using namespace std;
 #include <ctime>
 
 
-const OldHomogeneousPoint2D WormsApplication::ScreenSize = OldHomogeneousPoint2D(WormsApplication::ScreenWidth, WormsApplication::ScreenHeight);
-
 WormsApplication::WormsApplication()
 {
 	lasttime = time(NULL);

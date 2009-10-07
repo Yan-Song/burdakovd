@@ -20,7 +20,6 @@ public:
 private:
 	static const int ColorDepth = 0, SDLflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
 	static const int ScreenWidth = 800, ScreenHeight = 600;
-	static const OldHomogeneousPoint2D ScreenSize;
     void FullRender() const;
 	long long lasttime, lastframes;
 protected:
