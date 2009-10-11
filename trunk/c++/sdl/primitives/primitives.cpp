@@ -11,69 +11,107 @@
 #include <iostream>
 #include <cstdlib>
 
-using namespace std;
-
-const Color yellow = Color(255, 255, 0);
-const Color black = Color(0, 0, 0);
-const Color white = Color(255, 255, 255);
-const Color background = black;
-const Color sand = Color(200, 200, 0);
-const Color cyan = Color(0, 255, 255);
-const double density = 1, activity = 0.001;
-
 PrimitivesApplication::PrimitivesApplication()
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
 	lasttime = time(NULL);
-	lastframes = 0;
+	// начальное положение
+	Position = Vector2DByCoords(ScreenWidth / 2, ScreenHeight / 2);
+	// начальная скорость
+	vx = 0;
+	vy = 0;
+	// ускорение 100 пикселей / сек^2
+	accelerating = 100;
+	// торможение: 10 пикс / секунду^2
+	stopping = 10;
+	// коэффициент упругости отражения от стен, 1 - абс. упруго, 0 - неупруго
+	reflectK = 0.8;
 }
 
 void PrimitivesApplication::Main()
 {
-	if(lasttime != time(NULL))
+	
+	if(lasttime != time(NULL)) // прошла секунда
 	{
 		lasttime = time(NULL);
-		cout<<"FPS: "<<(frames-lastframes)<<endl;
-		lastframes = frames;
+		std::cout<<"FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
+	}
+	
+	OldPosition = Position;
+	DoNavigation();
+	
+	vx -= stopping * sgn(vx) * dt;
+	vy -= stopping * sgn(vy) * dt;
+
+	Position[0] += vx * dt;
+	Position[1] += vy * dt;
+	
+	if(Position[0] < 0)
+	{
+		Position[0] = 0;
+		vx = abs(reflectK * vx);
+	}
+	
+	if(Position[1] < 0)
+	{
+		Position[1] = 0;
+		vy = abs(reflectK * vy);
+	}
+	
+	if(Position[0] > ScreenWidth)
+	{
+		Position[0] = ScreenWidth;
+		vx = -abs(reflectK * vx);
+	}
+	
+	if(Position[1] > ScreenHeight)
+	{
+		Position[1] = ScreenHeight;
+		vy = -abs(reflectK * vy);
 	}
 }
 
-double norm(double x)
+void PrimitivesApplication::DoNavigation()
 {
-	return 0.5 * (1.0 + x);
-}
+	if(KeyState[SDLK_UP])
+	{
+		vy -= accelerating * dt;
+	}
 
-template<class T>
-int sgn(T x)
-{
-	return x<0 ? -1 :
-		(x>0 ? 1 : 0);
+	if(KeyState[SDLK_DOWN])
+	{
+		vy += accelerating * dt;
+	}
+
+	if(KeyState[SDLK_LEFT])
+	{
+		vx -= accelerating * dt;
+	}
+
+	if(KeyState[SDLK_RIGHT])
+	{
+		vx += accelerating * dt;
+	}
 }
 
 void PrimitivesApplication::InitialRender()
 {
+	Lock();
 	
+	ClearScreen(Palette::Black);
+	
+	Unlock();
+	Flip();
 }
 
 void PrimitivesApplication::Render()
 {
-	// делаю всякие эксперименты тут а не в InitialRender, чтобы по FPS смотреть скорость работы
-    Lock();
-
-	ClearScreen(Palette::Black);
-
-	// CG-8: Заливаем экран грдиентом справа нелево от чёрного к красному.
-	// CG-9  заливаем  градиентом с помощью псевдотонирования. (яркость точки определяетвероятность появления пикселя в этой точке)
-
-	for(int i = 0; i < Screen->w; ++i)
-		for(int j = 0; j < 100; ++j)
-			DrawPixel(i, j, Gradient(Palette::Black, Palette::Red, Screen->w - i, i));
-
-	for(int i = 0; i < Screen->w; ++i)
-		for(int j = 100; j < 200; ++j)
-			DrawPixel(i, j, Rand(Screen->w) < i ? Palette::Red : Palette::Black);
-
+	Lock();
+	
+	Line(OldPosition, Position, 0x505050).Draw(this);
+	DrawPixel(Position, Palette::Yellow);
+	
 	Unlock();
 	Flip();
 }

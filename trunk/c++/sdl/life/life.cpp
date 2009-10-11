@@ -9,7 +9,6 @@ using namespace std;
 LifeApplication::LifeApplication()
 {
 	lasttime = time(NULL);
-	lastframes = 0;
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Life", "");
 	Populate();
@@ -32,11 +31,10 @@ void LifeApplication::ProcessEvent(SDL_Event Event)
 void LifeApplication::Main()
 {
 	Turn();
-	if(lasttime != time(NULL))
+	if(lasttime != time(NULL)) // прошла секунда
 	{
 		lasttime = time(NULL);
-		cout<<"FPS: "<<(frames-lastframes)<<endl;
-		lastframes = frames;
+		std::cout<<"FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
 	}
 }
 

@@ -6,6 +6,21 @@
 #include "Vector.h"
 #include <cmath>
 #include "utils.h"
+#include <list>
+
+struct FrameInfo
+{
+	// значение clock()
+	long long cclock;
+	// clock() - previous clock();
+	long long dclock;
+
+	FrameInfo(long long c, long long d) : cclock(c), dclock(d)
+	{
+	};
+};
+
+typedef std::list<FrameInfo> FrameInfoList;
 
 class SDLApplication
 {
@@ -38,7 +53,25 @@ protected:
 	virtual void InitialRender() {};
 	virtual void Render() = 0; // вывести на экран текущую ситуацию
 	void InitializeSDL(int ScreenHeight, int ScreenWidth, int ColorDepth, int SDLflags); // инициализировать библиотеку SDL
+	// количество кадров всего
 	long long frames;
+	// количество кадров за последнюю секунду
+	inline int FPS() const
+	{
+		return stats.size();
+	}
+	// минимальный dt за последнюю секунду, мс
+	int dtMin() const;
+	// средний dt за последнюю секунду, мс
+	int dtAvg() const;
+	// максимальный dt за последнюю секунду, мс
+	int dtMax() const;
+	// время, прошедшее с предыдущего кадра, сек.
+	double dt;
+	// обновить dt, FPS и прочую информацию
+	void UpdateStats();
+	
+	Uint8* KeyState;
 
 private:
 	bool Running;
@@ -49,6 +82,9 @@ private:
 	{
 		return SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.R), static_cast<Uint8>(rgb.G), static_cast<Uint8>(rgb.B));
 	}
+	long long lastClock;
+	// статистика за последнюю секунду
+	FrameInfoList stats;
 };
 
 #endif

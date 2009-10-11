@@ -20,7 +20,7 @@ private:
 	int current;
 	void Populate();
 	void Turn();
-	long long lasttime, lastframes;
+	long long lasttime;
 protected:
 	virtual void ProcessEvent(SDL_Event Event);
 	virtual void Main();
