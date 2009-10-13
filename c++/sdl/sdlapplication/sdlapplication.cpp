@@ -8,40 +8,39 @@ SDLApplication::SDLApplication()
 {
     srand(static_cast<unsigned int>(time(NULL)));
 	std::cout<<"Random number generator initialized"<<std::endl;
-	std::cout<<"CLOCKS_PER_SEC = "<<CLOCKS_PER_SEC<<std::endl;
 	dt = 0;
 	frames = 0;
-	lastClock = startClock = clock();
+	lastClock = GetTime();
 }
 
 void SDLApplication::UpdateStats()
 {
-	long long cclock = clock();
-	long long dclock = cclock - lastClock;
+	double cclock = GetTime();
+	double dclock = cclock - lastClock;
 	lastClock = cclock;
 	
 	// добавляем статистику по текущему кадру
 	stats.push_back(FrameInfo(cclock, dclock));
 
 	// удаляем статистику старее одной секунды
-	while(!stats.empty() && cclock - stats.front().cclock > CLOCKS_PER_SEC)
+	while(!stats.empty() && cclock - stats.front().cclock > 1)
 		stats.pop_front();
 
 	++frames;
 
-	dt = static_cast<double>(dclock) / CLOCKS_PER_SEC;
+	dt = dclock;
 }
 
 int SDLApplication::dtAvg() const
 {
 	if(stats.size() > 0)
 	{
-		long long sum = 0;
+		double sum = 0;
 		
 		for(FrameInfoList::const_iterator it = stats.begin(); it != stats.end(); ++it)
 			sum += it->dclock;
 
-		return static_cast<int>(sum * 1000.0 / CLOCKS_PER_SEC / stats.size());
+		return static_cast<int>(sum * 1000 / stats.size());
 	}
 	else
 	{
@@ -53,13 +52,13 @@ int SDLApplication::dtMax() const
 {
 	if(stats.size() > 0)
 	{
-		long long ans = 0;
+		double ans = 0;
 		
 		for(FrameInfoList::const_iterator it = stats.begin(); it != stats.end(); ++it)
 			if(it->dclock > ans)
 				ans = it->dclock;
 
-		return static_cast<int>(ans * 1000.0 / CLOCKS_PER_SEC);
+		return static_cast<int>(ans * 1000);
 	}
 	else
 	{
@@ -71,13 +70,13 @@ int SDLApplication::dtMin() const
 {
 	if(stats.size() > 0)
 	{
-		long long ans = 86400 * CLOCKS_PER_SEC; // сутки
+		double ans = 86400; // сутки
 		
 		for(FrameInfoList::const_iterator it = stats.begin(); it != stats.end(); ++it)
 			if(it->dclock < ans)
 				ans = it->dclock;
 
-		return static_cast<int>(ans * 1000.0 / CLOCKS_PER_SEC);
+		return static_cast<int>(ans * 1000);
 	}
 	else
 	{
