@@ -17,7 +17,7 @@ SDLApplication::SDLApplication()
 void SDLApplication::UpdateStats()
 {
 	double ctime = GetTime();
-	double dt = ctime - lastTime;
+	dt = ctime - lastTime;
 	lastTime = ctime;
 	
 	// добавляем статистику по текущему кадру
