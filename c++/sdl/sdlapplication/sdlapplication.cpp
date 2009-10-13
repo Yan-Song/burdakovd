@@ -11,7 +11,7 @@ SDLApplication::SDLApplication()
 	std::cout<<"CLOCKS_PER_SEC = "<<CLOCKS_PER_SEC<<std::endl;
 	dt = 0;
 	frames = 0;
-	lastClock = clock();
+	lastClock = startClock = clock();
 }
 
 void SDLApplication::UpdateStats()

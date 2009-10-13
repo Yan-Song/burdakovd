@@ -35,7 +35,7 @@ void PrimitivesApplication::Main()
 	if(lasttime != time(NULL)) // прошла секунда
 	{
 		lasttime = time(NULL);
-		std::cout<<"FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
+		std::cout<<"Time: "<<GetTime()<<"; FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
 	}
 	
 	OldPosition = Position;

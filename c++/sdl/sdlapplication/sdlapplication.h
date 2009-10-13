@@ -7,6 +7,7 @@
 #include <cmath>
 #include "utils.h"
 #include <list>
+#include <ctime>
 
 struct FrameInfo
 {
@@ -70,6 +71,11 @@ protected:
 	double dt;
 	// обновить dt, FPS и прочую информацию
 	void UpdateStats();
+	// время с момента запуска программы, сек.
+	inline double GetTime() const
+	{
+		return static_cast<double>(clock() - startClock) / CLOCKS_PER_SEC;
+	}
 	
 	Uint8* KeyState;
 
@@ -83,6 +89,7 @@ private:
 		return SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.R), static_cast<Uint8>(rgb.G), static_cast<Uint8>(rgb.B));
 	}
 	long long lastClock;
+	long long startClock;
 	// статистика за последнюю секунду
 	FrameInfoList stats;
 };
