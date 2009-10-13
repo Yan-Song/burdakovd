@@ -13,5 +13,5 @@ Timer::~Timer(void)
 
 double Timer::GetTime() const
 {
-	return (SDL_GetTicks() - startTicks) * 1e-3;
+	return static_cast<double>(SDL_GetTicks() - startTicks) * 1e-3;
 }
