@@ -7,16 +7,14 @@
 #include <cmath>
 #include "utils.h"
 #include <list>
-#include <ctime>
+#include "Timer.h"
 
 struct FrameInfo
 {
-	// значение clock()
-	long long cclock;
-	// clock() - previous clock();
-	long long dclock;
+	double cclock;
+	double dclock;
 
-	FrameInfo(long long c, long long d) : cclock(c), dclock(d)
+	FrameInfo(double c, double d) : cclock(c), dclock(d)
 	{
 	};
 };
@@ -74,9 +72,8 @@ protected:
 	// время с момента запуска программы, сек.
 	inline double GetTime() const
 	{
-		return static_cast<double>(clock() - startClock) / CLOCKS_PER_SEC;
+		return timer.GetTime();
 	}
-	
 	Uint8* KeyState;
 
 private:
@@ -88,10 +85,10 @@ private:
 	{
 		return SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.R), static_cast<Uint8>(rgb.G), static_cast<Uint8>(rgb.B));
 	}
-	long long lastClock;
-	long long startClock;
+	double lastClock;
 	// статистика за последнюю секунду
 	FrameInfoList stats;
+	Timer timer;
 };
 
 #endif
