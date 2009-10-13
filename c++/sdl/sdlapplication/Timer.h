@@ -12,6 +12,7 @@ public:
 	~Timer(void);
 	// время от запуска таймера, сек. С точностью до миллисекунд
 	double GetTime() const;
+	void Reset();
 };
 
 #endif

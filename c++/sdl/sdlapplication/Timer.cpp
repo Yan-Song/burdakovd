@@ -3,6 +3,11 @@
 
 Timer::Timer(void)
 {
+	Reset();
+}
+
+void Timer::Reset(void)
+{
 	startTicks = SDL_GetTicks();
 }
 

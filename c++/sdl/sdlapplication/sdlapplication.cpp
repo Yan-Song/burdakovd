@@ -3,6 +3,7 @@
 #include "SDLException.h"
 #include <ctime>
 #include <iostream>
+#include "Timer.h"
 
 SDLApplication::SDLApplication()
 {
@@ -10,25 +11,24 @@ SDLApplication::SDLApplication()
 	std::cout<<"Random number generator initialized"<<std::endl;
 	dt = 0;
 	frames = 0;
-	lastClock = GetTime();
+	lastTime = GetTime();
 }
 
 void SDLApplication::UpdateStats()
 {
-	double cclock = GetTime();
-	double dclock = cclock - lastClock;
-	lastClock = cclock;
+	double ctime = GetTime();
+	double dt = ctime - lastTime;
+	lastTime = ctime;
 	
 	// добавляем статистику по текущему кадру
-	stats.push_back(FrameInfo(cclock, dclock));
+	stats.push_back(FrameInfo(ctime, dt));
 
 	// удаляем статистику старее одной секунды
-	while(!stats.empty() && cclock - stats.front().cclock > 1)
+	while(!stats.empty() && ctime - stats.front().ctime > 1)
 		stats.pop_front();
 
 	++frames;
 
-	dt = dclock;
 }
 
 int SDLApplication::dtAvg() const
@@ -38,7 +38,7 @@ int SDLApplication::dtAvg() const
 		double sum = 0;
 		
 		for(FrameInfoList::const_iterator it = stats.begin(); it != stats.end(); ++it)
-			sum += it->dclock;
+			sum += it->dt;
 
 		return static_cast<int>(sum * 1000 / stats.size());
 	}
@@ -55,8 +55,8 @@ int SDLApplication::dtMax() const
 		double ans = 0;
 		
 		for(FrameInfoList::const_iterator it = stats.begin(); it != stats.end(); ++it)
-			if(it->dclock > ans)
-				ans = it->dclock;
+			if(it->dt > ans)
+				ans = it->dt;
 
 		return static_cast<int>(ans * 1000);
 	}
@@ -73,8 +73,8 @@ int SDLApplication::dtMin() const
 		double ans = 86400; // сутки
 		
 		for(FrameInfoList::const_iterator it = stats.begin(); it != stats.end(); ++it)
-			if(it->dclock < ans)
-				ans = it->dclock;
+			if(it->dt < ans)
+				ans = it->dt;
 
 		return static_cast<int>(ans * 1000);
 	}
@@ -96,6 +96,8 @@ void SDLApplication::InitializeSDL(int ScreenHeight, int ScreenWidth, int ColorD
 	}
 
 	KeyState = SDL_GetKeyState(NULL);
+
+	timer.Reset();
 
 	std::cout<<"SDL initialized"<<std::endl;
 }
