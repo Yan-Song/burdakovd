@@ -1,6 +1,6 @@
 #include "radar.h"
 #include "sdlapplication.h"
-#include "line.h"
+#include "Segment.h"
 #include <cstdlib>
 #include <SDL.h>
 
@@ -45,7 +45,7 @@ void Radar::Render()
     Lock();
 
     {
-        Line(c, a, 0x00ff00).Draw(this); //green
+        Segment2D(c, a, 0x00ff00).Draw(this); //green
 
         for(int i=0; i<x; ++i)
             DrawPixel(Rand(Screen->w), Rand(Screen->h), 0x000000); //black

@@ -3,24 +3,28 @@
 
 #include "sdlapplication.h"
 #include <vector>
-#include "line.h"
+#include "Segment.h"
+#include "Circle2D.h"
+#include "graphobject.h"
 
 class PrimitivesApplication : public SDLApplication
 {
 private:
 	static const int ScreenWidth = 800, ScreenHeight = 600;
-	static const int ColorDepth = 0, SDLflags = SDL_DOUBLEBUF || SDL_ANYFORMAT || SDL_SWSURFACE;
+	static const int ColorDepth = 0, SDLflags = SDL_DOUBLEBUF || SDL_ANYFORMAT || SDL_HWSURFACE;
 	long long lasttime;
 	
 	void DoNavigation();
 	
-	Point2D Position, OldPosition;
 	// скорость в пикселях в секунду
 	double vx, vy;
 	double accelerating;
 	double stopping;
 	double reflectK;
-
+	static const int R = 50;
+	std::vector<GraphObject2D*> Me;
+	Vector2D center;
+	
 protected:
 	virtual void Main();
 
@@ -32,6 +36,8 @@ protected:
 
 public:
 	PrimitivesApplication();
+
+	virtual ~PrimitivesApplication();
 	
 };
 

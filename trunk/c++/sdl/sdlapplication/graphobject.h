@@ -6,39 +6,28 @@
 #include "Vector.h"
 #include "sdlapplication.h"
 
-class GraphObject
+// методы, не зависящие от числа измерений
+template<int Dimensions>
+class GenericGraphObject
 {
 public:
+	typedef GenericVector<double, Dimensions> Vector;
+
+	// параллельный перенос
+	virtual void Shift(const Vector& v) = 0;
+
+	// ... прочие повороты/растяжения...
+    
+    virtual ~GenericGraphObject() {};
+};
+
+// методы, специфичные для 2D объектов
+class GraphObject2D : public GenericGraphObject<2>
+{
+public:
+	// отрисовать себя на заданной поверхности
 	virtual void Draw(const SDLApplication*) const = 0;
-	
-    /*virtual void Modify(const Matrix& m) = 0;
 
-    inline void Shift(const OldHomogeneousPoint2D& d)
-    {
-        Modify(Matrix::Shift(d));
-    }
-
-    inline void Scale(const OldHomogeneousPoint2D& base, const double kx, const double ky)
-    {
-        Modify(Matrix::Scale(base, kx, ky));
-    }
-
-    inline void Rotate(const OldHomogeneousPoint2D& base, const double phi)
-    {
-        Modify(Matrix::Rotate(base, phi));
-    }
-
-    inline void ReflectX(const double x)
-    {
-        Modify(Matrix::ReflectX(x));
-    }
-
-    inline void ReflectY(const double y)
-    {
-        Modify(Matrix::ReflectY(y));
-    }
-    */
-    virtual ~GraphObject() {};
 };
 
 #endif

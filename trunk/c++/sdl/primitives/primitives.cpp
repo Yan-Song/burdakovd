@@ -5,19 +5,20 @@
 #include <cmath>
 #include <ctime>
 #include <cstring>
-#include "line.h"
+#include "Segment.h"
 #include "matrix.h"
 #include <vector>
 #include <iostream>
 #include <cstdlib>
+#include "Circle2D.h"
+#include "Triangle2D.h"
+#include "Polygon.h"
 
 PrimitivesApplication::PrimitivesApplication()
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
 	lasttime = time(NULL);
-	// начальное положение
-	Position = Vector2DByCoords(ScreenWidth / 2, ScreenHeight / 2);
 	// начальная скорость
 	vx = 0;
 	vy = 0;
@@ -27,6 +28,21 @@ PrimitivesApplication::PrimitivesApplication()
 	stopping = 10;
 	// коэффициент упругости отражения от стен, 1 - абс. упруго, 0 - неупруго
 	reflectK = 0.8;
+	
+	center = ScreenPointByCoords(ScreenWidth / 2, ScreenHeight / 2);
+	Me.push_back(new Circle2D(center, R, Palette::Yellow));
+	Me.push_back(new Triangle2D(center + Vector2DByCoords(0, 0.2*R), center + Vector2DByCoords(0.2*R * cos(-Pi/6), 0.2*R * sin(-Pi/6)),
+		center + Vector2DByCoords(0.2*R * cos(7*Pi/6), 0.2*R * sin(7*Pi/6)), Palette::Green));
+
+	Polygon* star = new Polygon(Palette::Red);
+
+	star->Add(center + Vector2DByCoords(R * cos(-Pi / 2), R * sin(-Pi / 2)));
+	star->Add(center + Vector2DByCoords(R * cos(-Pi / 2 + 4 * Pi / 5), R * sin(-Pi / 2 + 4 * Pi / 5)));
+	star->Add(center + Vector2DByCoords(R * cos(-Pi / 2 + 8 * Pi / 5), R * sin(-Pi / 2 + 8 * Pi / 5)));
+	star->Add(center + Vector2DByCoords(R * cos(-Pi / 2 + 2 * Pi / 5), R * sin(-Pi / 2 + 2 * Pi / 5)));
+	star->Add(center + Vector2DByCoords(R * cos(-Pi / 2 + 6 * Pi / 5), R * sin(-Pi / 2 + 6 * Pi / 5)));
+
+	Me.push_back(star);
 }
 
 void PrimitivesApplication::Main()
@@ -38,36 +54,39 @@ void PrimitivesApplication::Main()
 		std::cout<<"Time: "<<GetTime()<<"; FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
 	}
 	
-	OldPosition = Position;
 	DoNavigation();
 	
 	vx -= stopping * sgn(vx) * dt;
 	vy -= stopping * sgn(vy) * dt;
 
-	Position[0] += vx * dt;
-	Position[1] += vy * dt;
+	Vector2D dr = Vector2DByCoords(vx * dt, vy * dt);
+	center += dr;
 	
-	if(Position[0] < 0)
+	// движение
+	for(int i = 0; i < Me.size(); ++i)
+		Me[i]->Shift(dr);
+	
+	if(center[0] < R)
 	{
-		Position[0] = 0;
+		center[0] = R;
 		vx = abs(reflectK * vx);
 	}
 	
-	if(Position[1] < 0)
+	if(center[1] < R)
 	{
-		Position[1] = 0;
+		center[1] = R;
 		vy = abs(reflectK * vy);
 	}
 	
-	if(Position[0] > ScreenWidth)
+	if(center[0] > ScreenWidth - R)
 	{
-		Position[0] = ScreenWidth;
+		center[0] = ScreenWidth - R;
 		vx = -abs(reflectK * vx);
 	}
 	
-	if(Position[1] > ScreenHeight)
+	if(center[1] > ScreenHeight - R)
 	{
-		Position[1] = ScreenHeight;
+		center[1] = ScreenHeight - R;
 		vy = -abs(reflectK * vy);
 	}
 }
@@ -109,10 +128,12 @@ void PrimitivesApplication::Render()
 {
 	Lock();
 	
-	Line(OldPosition, Position, 0x505050).Draw(this);
-	DrawPixel(Position, Palette::Yellow);
+	ClearScreen(Palette::Black);
+	for(int i = 0; i < Me.size(); ++i)
+		Me[i]->Draw(this);
 	
 	Unlock();
+	
 	Flip();
 }
 
@@ -125,4 +146,10 @@ void PrimitivesApplication::ProcessEvent(SDL_Event Event)
 		if(sym == SDLK_ESCAPE || sym == SDLK_q)
 			Stop();
 	}
+}
+
+PrimitivesApplication::~PrimitivesApplication()
+{
+	for(int i = 0; i < Me.size(); ++i)
+		delete Me[i];
 }
