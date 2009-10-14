@@ -154,11 +154,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\color.cpp"
+				RelativePath=".\Circle2D.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\line.cpp"
+				RelativePath=".\color.cpp"
 				>
 			</File>
 			<File
@@ -166,11 +166,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Polygon.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\sdlapplication.cpp"
 				>
 			</File>
 			<File
+				RelativePath=".\Segment.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Timer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Triangle2D.cpp"
 				>
 			</File>
 			<File
@@ -184,6 +196,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\Circle2D.h"
+				>
+			</File>
+			<File
 				RelativePath=".\color.h"
 				>
 			</File>
@@ -192,11 +208,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\line.h"
+				RelativePath=".\matrix.h"
 				>
 			</File>
 			<File
-				RelativePath=".\matrix.h"
+				RelativePath=".\Polygon.h"
 				>
 			</File>
 			<File
@@ -208,7 +224,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Segment.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Timer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Triangle2D.h"
 				>
 			</File>
 			<File

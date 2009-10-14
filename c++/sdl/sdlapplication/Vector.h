@@ -81,17 +81,15 @@ public:
 
 	inline GenericVector<I, N>& operator +=(const GenericVector<I, N>& other)
 	{
-		GenericVector<I, N> ans;
 		for(int i = 0; i < N; ++i)
-			ans[i] += other[i];
+			data[i] += other[i];
 		return *this;
 	}
 
 	inline GenericVector<I, N>& operator -=(const GenericVector<I, N>& other)
 	{
-		GenericVector<I, N> ans;
 		for(int i = 0; i < N; ++i)
-			ans[i] -= other[i];
+			data[i] -= other[i];
 		return *this;
 	}
 
