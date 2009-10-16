@@ -14,6 +14,10 @@ public:
 	virtual ISomeWorm* Create() const = 0;
 
 	virtual std::string ClassName() const = 0;
+
+	~IWormFactory()
+	{
+	};
 };
 
 #endif

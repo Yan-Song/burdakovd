@@ -7,7 +7,9 @@
 class IMyWorm : public IWorm
 {
 public:
-     
+	virtual ~IMyWorm()
+	{
+	}
 };
 
 #endif

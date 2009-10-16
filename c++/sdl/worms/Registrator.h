@@ -21,20 +21,26 @@ public:
 	Registrator();
 
 	// Количество зарегистрированных червяков
-	inline int Count() const
+	inline unsigned int Count() const
 	{
 		return factories.size();
 	}
 
 	// имя класса заданного червяка
-	inline std::string ClassName(int index) const
+	inline std::string ClassName(unsigned int index) const
 	{
+		if(index >= factories.size())
+			throw new std::out_of_range("ClassName(unsigned int index)");
+
 		return factories[index]->ClassName();
 	}
 
 	// делать delete для этого указателя возлагается на вызывающего
-	inline ISomeWorm* Create(int index) const
+	inline ISomeWorm* Create(unsigned int index) const
 	{
+		if(index >= factories.size())
+			throw new std::out_of_range("Create(unsigned int index)");
+
 		return factories[index]->Create();
 	}
 

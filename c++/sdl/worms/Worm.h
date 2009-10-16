@@ -4,6 +4,7 @@
 #include "IMyWorm.h"
 #include "ISomeWorm.h"
 #include <vector>
+#include "color.h"
 
 class WormsApplication;
 
@@ -19,6 +20,14 @@ private:
 	int ID, classID;
 	double energy;
 	std::vector<pii> position;
+	// локальное врем€ черв€
+	double time;
+	Color color;
+
+	double GetTime()
+	{
+		return time;
+	}
 
 	// возвращает позиции каждой из клеток черв€, [0] - голова
     virtual const std::vector<pii>& Position() const
@@ -33,28 +42,40 @@ private:
 	}
     
     // »дентификатор, уникальный дл€ каждого экземпл€ра черв€
-    virtual int GetID() const
+    virtual unsigned int GetID() const
 	{
 		return ID;
 	}
 
     // »дентификатор, уникальный дл€ каждого класса черв€
-    virtual int GetClassID() const
+    virtual unsigned int GetClassID() const
 	{
 		return classID;
 	}
 
-	virtual void Initialize(WormsApplication* _app, const int _ID, int const _classID, const double _energy, const std::vector<pii>& _position)
+	virtual Color GetColor() const
+	{
+		return color;
+	}
+
+	virtual void Initialize(WormsApplication* _app, const int _ID, int const _classID, const double _energy, const std::vector<pii>& _position,
+		const double _time, const Color& _color)
 	{
 		app = _app;
 		ID = _ID;
 		classID = _classID;
 		energy = _energy;
 		position = _position;
+		time = _time;
+		color = _color;
 	};
 
+	virtual void FullRender() const;
+
 public:
-	
+	virtual ~Worm()
+	{
+	}
 };
 
 #endif

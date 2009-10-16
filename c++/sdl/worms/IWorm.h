@@ -15,10 +15,14 @@ public:
     virtual double Energy() const = 0;
     
     // »дентификатор, уникальный дл€ каждого экземпл€ра черв€
-    virtual int GetID() const = 0;
+    virtual unsigned int GetID() const = 0;
 
     // »дентификатор, уникальный дл€ каждого класса черв€
-    virtual int GetClassID() const = 0;
+    virtual unsigned int GetClassID() const = 0;
+
+	virtual ~IWorm()
+	{
+	}
 };
 
 #endif
