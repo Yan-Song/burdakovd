@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <map>
+#include <cmath>
 
 typedef std::pair<int,int> pii;
 

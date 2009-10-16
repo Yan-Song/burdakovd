@@ -1,16 +1,11 @@
 #include <iostream>
-
-using namespace std;
-
 #include "WormsApplication.h"
 #include "Vector.h"
 #include <ctime>
 
-
 WormsApplication::WormsApplication()
 {
 	lasttime = time(NULL);
-	lastframes = 0;
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Worms", "");
 }
@@ -29,25 +24,18 @@ void WormsApplication::ProcessEvent(SDL_Event Event)
 void WormsApplication::Main()
 {
     Lock();
-	// ...
+	
 	Unlock();
 	SDL_Flip(Screen);
 
 	if(lasttime != time(NULL))
 	{
 		lasttime = time(NULL);
-		cout<<"FPS: "<<(frames-lastframes)<<endl;
-		lastframes = frames;
+		std::cout<<"Time: "<<GetTime()<<"; FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
 	}
 }
 
 void WormsApplication::Render()
 {
-    /*
-    Lock(Screen);
-	// ...
-	Unlock(Screen);
-	SDL_Flip(Screen);
-    */
-}
 
+}

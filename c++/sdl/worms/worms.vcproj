@@ -187,6 +187,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Registrator.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Worm.cpp"
 				>
 			</File>
@@ -201,15 +205,31 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\IBody.h"
+				RelativePath=".\Factory.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IMyBody.h"
+				RelativePath=".\IMyWorm.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ISomeBody.h"
+				RelativePath=".\ISomeWorm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IWorm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IWormFactory.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Registrator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Statue.h"
 				>
 			</File>
 			<File
