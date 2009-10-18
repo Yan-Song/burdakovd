@@ -21,12 +21,24 @@ public:
 	};
 };
 
-const std::string SDLException::prefix = "SDLException: ";
-
 inline void SDLCheck(int code)
 {
 	if(code < 0)
 		throw new SDLException();
 }
+
+class NotImplementedException : public std::runtime_error
+{
+public:
+	NotImplementedException()
+		: std::runtime_error("Not implemented yet.")
+	{
+	};
+
+	NotImplementedException(const std::string& message)
+		: std::runtime_error("Not implemented yet: " + message)
+	{
+	};
+};
 
 #endif

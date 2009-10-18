@@ -43,6 +43,15 @@ public:
 	// из отрезка [x, y]
 	static int Rand(int x, int y);
 	void Run(); // вызывать извне класса один раз, будет работать пока изнутри не будет вызван Stop()
+	// время с момента инициализации библиотек SDL. До вызова InitializeSDL результат вызова функции не определён.
+	inline double GetTime() const
+	{
+		return timer.GetTime();
+	}
+	inline int FPS() const
+	{
+		return stats.size();
+	}
 	virtual ~SDLApplication(); // деструктор
 
 protected:
@@ -57,10 +66,7 @@ protected:
 	// количество кадров всего
 	long long frames;
 	// количество кадров за последнюю секунду
-	inline int FPS() const
-	{
-		return stats.size();
-	}
+	
 	// минимальный dt за последнюю секунду, мс
 	int dtMin() const;
 	// средний dt за последнюю секунду, мс
@@ -71,11 +77,6 @@ protected:
 	double dt;
 	// обновить dt, FPS и прочую информацию
 	void UpdateStats();
-	// время с момента инициализации библиотек SDL, до вызова InitializeSDL результат вызова GetTime() не определён
-	inline double GetTime() const
-	{
-		return timer.GetTime();
-	}
 	Uint8* KeyState;
 
 private:
