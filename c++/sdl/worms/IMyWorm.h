@@ -2,11 +2,16 @@
 #define IMYWORM_H
 
 #include "IWorm.h"
+#include "WormLogic.h"
 
 // методы, которые будут использованы только логикой червя
 class IMyWorm : public IWorm
 {
 public:
+
+	// основная логика червя
+	virtual WormLogic Run() = 0;
+
 	virtual ~IMyWorm()
 	{
 	}

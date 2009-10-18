@@ -1,15 +1,33 @@
 #ifndef IWORM_H
 #define IWORM_H
 
-#include <vector>
+#include <list>
 #include <utils.h>
+
+struct SimplePoint
+{
+	int X, Y;
+	SimplePoint(const int x, const int y) : X(x), Y(y) {};
+	
+	inline bool operator ==(const SimplePoint& other) const
+	{
+		return X == other.X && Y == other.Y;
+	}
+
+	inline bool operator !=(const SimplePoint& other) const
+	{
+		return X != other.X || Y != other.Y;
+	}
+};
+
+typedef std::list<SimplePoint> TPosition;
 
 // методы, общие для логики червя и для основной программы
 class IWorm
 {
 public:
     // возвращает позиции каждой из клеток червя, [0] - голова
-    virtual const std::vector<pii>& Position() const = 0;
+    virtual const TPosition& Position() const = 0;
     
     // его энергия
     virtual double Energy() const = 0;

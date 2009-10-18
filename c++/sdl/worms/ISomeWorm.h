@@ -12,13 +12,26 @@ class WormsApplication;
 class ISomeWorm : private IWorm
 {
 private:
-	virtual void Initialize(WormsApplication* _app, const int _ID, int const classID, const double energy, const std::vector<pii>& position,
+	virtual void Initialize(WormsApplication* _app, const int _ID, const int classID, const double energy, const TPosition& position,
 		const double _time, const Color& _color) = 0;
 
 	// полностью прорисовать черв€
-	virtual void FullRender() const = 0;
+	virtual void Draw() const = 0;
+
+	// обновить €чейки черв€ на карте
+	virtual void UpdateMap() const = 0;
+
+	// стереть черв€ с экрана
+	virtual void EraseOnScreen() const = 0;
+
+	// освободить свои €чейки на карте (сделать их CellEmpty)
+	virtual void EraseOnMap() const = 0;
 
 	virtual Color GetColor() const = 0;
+
+	virtual void Tick() = 0;
+
+	virtual bool Dead() = 0;
 	
 	friend WormsApplication;
 public:

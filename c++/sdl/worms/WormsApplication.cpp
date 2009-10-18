@@ -2,12 +2,13 @@
 #include "WormsApplication.h"
 #include "Vector.h"
 #include <ctime>
+#include "ISomeWorm.h"
 
 const Color WormsApplication::EmptyColor = Palette::Black;
 const Color WormsApplication::WallColor = Palette::Gray;
 const Color WormsApplication::FoodColor = Palette::Red + Palette::Green; // коричневый
 
-WormsApplication::WormsApplication()
+WormsApplication::WormsApplication() : Map(ScreenHeight, ScreenWidth)
 {
 	lasttime = time(NULL);
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
@@ -18,11 +19,12 @@ WormsApplication::WormsApplication()
 	{
 		std::cout<<"Creating "<<registrator.ClassName(i)<<std::endl;
 		int xx = Rand(ScreenWidth), yy = Rand(ScreenHeight);
-		vector<pii> _position;
+		TPosition _position;
 		for(int j = 0; j < 10; ++j)
-			_position.push_back(pii(xx, yy));
+			_position.push_back(SimplePoint(xx, yy));
 		ISomeWorm* _ = registrator.Create(i); // удалим в деструкторе
 		_->Initialize(this, worms.size(), i, 100, _position, GetTime(), Palette::Red);
+		_->UpdateMap();
 		worms.push_back(_); 
 	}
 }
@@ -43,7 +45,7 @@ void WormsApplication::Main()
     Lock();
 	
 	Unlock();
-	SDL_Flip(Screen);
+	Flip();
 
 	if(lasttime != time(NULL))
 	{
@@ -57,7 +59,7 @@ void WormsApplication::Render()
 
 }
 
-void WormsApplication::DrawCell(const pii& position, const CellType type) const
+void WormsApplication::DrawCell(const SimplePoint& position, const CellType type) const
 {
 	if(type == CellEmpty)
 		DrawCell(position, EmptyColor);
@@ -69,14 +71,15 @@ void WormsApplication::DrawCell(const pii& position, const CellType type) const
 		throw new std::invalid_argument("DrawCell(const pii& position, const CellType type) const");
 }
 
-void WormsApplication::DrawWormCell(const pii &position, const ISomeWorm *worm) const
+// возможно index будет использоваться если мы будем к примеру рисовать голову червя другим цветом/текстурой чем остальное тело
+void WormsApplication::DrawWormCell(const SimplePoint &position, const ISomeWorm *worm, const int index) const
 {
 	DrawCell(position, worm->GetColor());
 }
 
-void WormsApplication::DrawCell(const pii &position, const Color &color) const
+void WormsApplication::DrawCell(const SimplePoint &position, const Color &color) const
 {
-	DrawPixel(position.first, position.second, color);
+	DrawPixel(position.X, position.Y, color);
 }
 
 WormsApplication::~WormsApplication()
@@ -84,7 +87,24 @@ WormsApplication::~WormsApplication()
 	std::cout<<"Deleting worms..."<<std::endl;
 	for(unsigned int i = 0; i < worms.size(); ++i)
 	{
-		std::cout<<"  deleting "<<registrator.ClassName(worms[i]->GetClassID())<<", ID="<<worms[i]->GetID()<<std::endl;
 		delete worms[i];
 	}
+}
+
+void WormsApplication::InitialRender()
+{
+	Lock();
+	for(int x = 0; x < Map.Width; ++x)
+		for(int y = 0; y < Map.Height; ++y)
+		{
+			CellType cell = Map.Get(x, y);
+			if(cell != CellWorm)
+				DrawCell(SimplePoint(x, y), Map.Get(x, y));
+		}
+
+	for(int i = 0; i < worms.size(); ++i)
+		worms[i]->Draw();
+
+	Unlock();
+	Flip();
 }
