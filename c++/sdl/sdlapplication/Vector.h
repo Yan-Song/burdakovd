@@ -8,7 +8,7 @@
 #define sqr(x) ((x) * (x))
 #define mset(x, value) memset(x, value, sizeof(x))
 
-// Этот вектор пока не содержит обобщенных координат
+// Р­С‚РѕС‚ РІРµРєС‚РѕСЂ РїРѕРєР° РЅРµ СЃРѕРґРµСЂР¶РёС‚ РѕР±РѕР±С‰РµРЅРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚
 template<typename I, int N>
 class GenericVector
 {
@@ -19,7 +19,7 @@ private:
 public:
 	static const int Dimensions = N;
 
-	// конструктор по умолчанию
+	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 	GenericVector()
 	{
 		for(int i = 0; i < N; ++i)
@@ -121,7 +121,7 @@ public:
 			data[i] /= k;
 	}
 
-	// унарный минус
+	// СѓРЅР°СЂРЅС‹Р№ РјРёРЅСѓСЃ
 	inline GenericVector<I, N> operator -() const
 	{
 		GenericVector<I, N> ans;
@@ -130,7 +130,7 @@ public:
 		return ans;
 	}
 
-	// Длина вектора
+	// Р”Р»РёРЅР° РІРµРєС‚РѕСЂР°
 	inline double Length() const
 	{
 		double s = 0;
@@ -139,23 +139,23 @@ public:
 		return sqrt(s);
 	}
 
-	// Расстояние между точками
+	// Р Р°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ С‚РѕС‡РєР°РјРё
 	inline double Distance(const GenericVector<I, N>& other)
 	{
 		return (other - *this).Length();
 	}
 };
 
-// вектор на плоскости, координаты - double
+// РІРµРєС‚РѕСЂ РЅР° РїР»РѕСЃРєРѕСЃС‚Рё, РєРѕРѕСЂРґРёРЅР°С‚С‹ - double
 typedef GenericVector<double, 2> Vector2D;
 
-// точка на плоскости, координаты - double
+// С‚РѕС‡РєР° РЅР° РїР»РѕСЃРєРѕСЃС‚Рё, РєРѕРѕСЂРґРёРЅР°С‚С‹ - double
 typedef Vector2D Point2D;
 
-// "Точка на экране", координаты - int, работает быстрее чем Vector2D, рекомендуется к использованию если дробные координаты не нужны.
+// "РўРѕС‡РєР° РЅР° СЌРєСЂР°РЅРµ", РєРѕРѕСЂРґРёРЅР°С‚С‹ - int, СЂР°Р±РѕС‚Р°РµС‚ Р±С‹СЃС‚СЂРµРµ С‡РµРј Vector2D, СЂРµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ Рє РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЋ РµСЃР»Рё РґСЂРѕР±РЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅРµ РЅСѓР¶РЅС‹.
 typedef GenericVector<int, 2> ScreenPoint;
 
-// а вот это ппц, так как я хз как сделать удобный конструктор с N параметрами
+// Р° РІРѕС‚ СЌС‚Рѕ РїРїС†, С‚Р°Рє РєР°Рє СЏ С…Р· РєР°Рє СЃРґРµР»Р°С‚СЊ СѓРґРѕР±РЅС‹Р№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ N РїР°СЂР°РјРµС‚СЂР°РјРё
 Vector2D Vector2DByCoords(double x, double y);
 
 ScreenPoint ScreenPointByCoords(int x, int y);

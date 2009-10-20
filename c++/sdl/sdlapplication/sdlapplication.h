@@ -26,26 +26,26 @@ class SDLApplication
 {
 public:
 	SDLApplication();
-	void Lock() const ; // Заблокировать экран чтобы можно было рисовать
-	void Unlock() const ; // Разблокировать экран
+	void Lock() const ; // Р—Р°Р±Р»РѕРєРёСЂРѕРІР°С‚СЊ СЌРєСЂР°РЅ С‡С‚РѕР±С‹ РјРѕР¶РЅРѕ Р±С‹Р»Рѕ СЂРёСЃРѕРІР°С‚СЊ
+	void Unlock() const ; // Р Р°Р·Р±Р»РѕРєРёСЂРѕРІР°С‚СЊ СЌРєСЂР°РЅ
 	void Flip() const ; // SDL_Flip
-	// координаты Декартовы, направление осей экранное (X - вправо, Y - вниз)
+	// РєРѕРѕСЂРґРёРЅР°С‚С‹ Р”РµРєР°СЂС‚РѕРІС‹, РЅР°РїСЂР°РІР»РµРЅРёРµ РѕСЃРµР№ СЌРєСЂР°РЅРЅРѕРµ (X - РІРїСЂР°РІРѕ, Y - РІРЅРёР·)
 	void DrawPixel(const int x, const int y, const Color& color) const;
 	void DrawPixel(const ScreenPoint& point, const Color& color) const;
-	// нарисовать отрезок
+	// РЅР°СЂРёСЃРѕРІР°С‚СЊ РѕС‚СЂРµР·РѕРє
 	void DrawSegment(const ScreenPoint& A, const ScreenPoint& B, const Color& color) const;
-	// нарисовать закрашенный прямоугольник
+	// РЅР°СЂРёСЃРѕРІР°С‚СЊ Р·Р°РєСЂР°С€РµРЅРЅС‹Р№ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє
 	void FillRectangle(const ScreenPoint& LeftTop, const ScreenPoint& RightBottom, const Color& color) const;
-	// очистить экран
+	// РѕС‡РёСЃС‚РёС‚СЊ СЌРєСЂР°РЅ
 	void ClearScreen(const Color& color = Palette::Black) const;
 	
-	// число из полуинтервала [0, x)
+	// С‡РёСЃР»Рѕ РёР· РїРѕР»СѓРёРЅС‚РµСЂРІР°Р»Р° [0, x)
 	static int Rand(int x);
-	// из отрезка [x, y]
+	// РёР· РѕС‚СЂРµР·РєР° [x, y]
 	static int Rand(int x, int y);
-	void Run(); // вызывать извне класса один раз, будет работать пока изнутри не будет вызван Stop()
-	// время с момента инициализации библиотеки SDL в секундах, точность около 1мс.
-	// До вызова InitializeSDL результат вызова функции не определён.
+	void Run(); // РІС‹Р·С‹РІР°С‚СЊ РёР·РІРЅРµ РєР»Р°СЃСЃР° РѕРґРёРЅ СЂР°Р·, Р±СѓРґРµС‚ СЂР°Р±РѕС‚Р°С‚СЊ РїРѕРєР° РёР·РЅСѓС‚СЂРё РЅРµ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ Stop()
+	// РІСЂРµРјСЏ СЃ РјРѕРјРµРЅС‚Р° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Р±РёР±Р»РёРѕС‚РµРєРё SDL РІ СЃРµРєСѓРЅРґР°С…, С‚РѕС‡РЅРѕСЃС‚СЊ РѕРєРѕР»Рѕ 1РјСЃ.
+	// Р”Рѕ РІС‹Р·РѕРІР° InitializeSDL СЂРµР·СѓР»СЊС‚Р°С‚ РІС‹Р·РѕРІР° С„СѓРЅРєС†РёРё РЅРµ РѕРїСЂРµРґРµР»С‘РЅ.
 	inline double GetTime() const
 	{
 		return timer.GetTime();
@@ -58,39 +58,39 @@ public:
 	{
 		return KeyState[key] != 0;
 	}
-	virtual ~SDLApplication(); // деструктор
+	virtual ~SDLApplication(); // РґРµСЃС‚СЂСѓРєС‚РѕСЂ
 
 protected:
 	SDL_Surface* Screen;
-	void Stop(); // вызывается изнутри класса
-	virtual void ProcessEvents(); // обработать ввод пользователя
+	void Stop(); // РІС‹Р·С‹РІР°РµС‚СЃСЏ РёР·РЅСѓС‚СЂРё РєР»Р°СЃСЃР°
+	virtual void ProcessEvents(); // РѕР±СЂР°Р±РѕС‚Р°С‚СЊ РІРІРѕРґ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 	virtual void ProcessEvent(SDL_Event Event) = 0;
-	virtual void Main() = 0; // основная логика
+	virtual void Main() = 0; // РѕСЃРЅРѕРІРЅР°СЏ Р»РѕРіРёРєР°
 	virtual void InitialRender() {};
-	virtual void Render() = 0; // вывести на экран текущую ситуацию
-	void InitializeSDL(int ScreenHeight, int ScreenWidth, int ColorDepth, int SDLflags); // инициализировать библиотеку SDL
-	// количество кадров всего
+	virtual void Render() = 0; // РІС‹РІРµСЃС‚Рё РЅР° СЌРєСЂР°РЅ С‚РµРєСѓС‰СѓСЋ СЃРёС‚СѓР°С†РёСЋ
+	void InitializeSDL(int ScreenHeight, int ScreenWidth, int ColorDepth, int SDLflags); // РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ Р±РёР±Р»РёРѕС‚РµРєСѓ SDL
+	// РєРѕР»РёС‡РµСЃС‚РІРѕ РєР°РґСЂРѕРІ РІСЃРµРіРѕ
 	long long frames;
-	// количество кадров за последнюю секунду
+	// РєРѕР»РёС‡РµСЃС‚РІРѕ РєР°РґСЂРѕРІ Р·Р° РїРѕСЃР»РµРґРЅСЋСЋ СЃРµРєСѓРЅРґСѓ
 	
-	// минимальный dt за последнюю секунду, мс
+	// РјРёРЅРёРјР°Р»СЊРЅС‹Р№ dt Р·Р° РїРѕСЃР»РµРґРЅСЋСЋ СЃРµРєСѓРЅРґСѓ, РјСЃ
 	int dtMin() const;
-	// средний dt за последнюю секунду, мс
+	// СЃСЂРµРґРЅРёР№ dt Р·Р° РїРѕСЃР»РµРґРЅСЋСЋ СЃРµРєСѓРЅРґСѓ, РјСЃ
 	int dtAvg() const;
-	// максимальный dt за последнюю секунду, мс
+	// РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ dt Р·Р° РїРѕСЃР»РµРґРЅСЋСЋ СЃРµРєСѓРЅРґСѓ, РјСЃ
 	int dtMax() const;
-	// время, прошедшее с предыдущего кадра, сек.
+	// РІСЂРµРјСЏ, РїСЂРѕС€РµРґС€РµРµ СЃ РїСЂРµРґС‹РґСѓС‰РµРіРѕ РєР°РґСЂР°, СЃРµРє.
 	double dt;
-	// обновить dt, FPS и прочую информацию
+	// РѕР±РЅРѕРІРёС‚СЊ dt, FPS Рё РїСЂРѕС‡СѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ
 	void UpdateStats();
-	// установить заголовок окна
+	// СѓСЃС‚Р°РЅРѕРІРёС‚СЊ Р·Р°РіРѕР»РѕРІРѕРє РѕРєРЅР°
 	void SetCaption(const std::string& text);
 
 	Uint8* KeyState;
 
 private:
 	bool Running;
-	// нельзя копировать
+	// РЅРµР»СЊР·СЏ РєРѕРїРёСЂРѕРІР°С‚СЊ
 	SDLApplication(const SDLApplication&) {};
 	SDLApplication& operator=(const SDLApplication&) { return *this; };
 	inline Uint32 MapColor(const Color& rgb) const
@@ -98,7 +98,7 @@ private:
 		return SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.R), static_cast<Uint8>(rgb.G), static_cast<Uint8>(rgb.B));
 	}
 	double lastTime;
-	// статистика за последнюю секунду
+	// СЃС‚Р°С‚РёСЃС‚РёРєР° Р·Р° РїРѕСЃР»РµРґРЅСЋСЋ СЃРµРєСѓРЅРґСѓ
 	FrameInfoList stats;
 	Timer timer;
 };

@@ -6,26 +6,26 @@
 #include "Vector.h"
 #include "sdlapplication.h"
 
-// методы, не зависящие от числа измерений
+// РјРµС‚РѕРґС‹, РЅРµ Р·Р°РІРёСЃСЏС‰РёРµ РѕС‚ С‡РёСЃР»Р° РёР·РјРµСЂРµРЅРёР№
 template<int Dimensions>
 class GenericGraphObject
 {
 public:
 	typedef GenericVector<double, Dimensions> Vector;
 
-	// параллельный перенос
+	// РїР°СЂР°Р»Р»РµР»СЊРЅС‹Р№ РїРµСЂРµРЅРѕСЃ
 	virtual void Shift(const Vector& v) = 0;
 
-	// ... прочие повороты/растяжения...
+	// ... РїСЂРѕС‡РёРµ РїРѕРІРѕСЂРѕС‚С‹/СЂР°СЃС‚СЏР¶РµРЅРёСЏ...
     
     virtual ~GenericGraphObject() {};
 };
 
-// методы, специфичные для 2D объектов
+// РјРµС‚РѕРґС‹, СЃРїРµС†РёС„РёС‡РЅС‹Рµ РґР»СЏ 2D РѕР±СЉРµРєС‚РѕРІ
 class GraphObject2D : public GenericGraphObject<2>
 {
 public:
-	// отрисовать себя на заданной поверхности
+	// РѕС‚СЂРёСЃРѕРІР°С‚СЊ СЃРµР±СЏ РЅР° Р·Р°РґР°РЅРЅРѕР№ РїРѕРІРµСЂС…РЅРѕСЃС‚Рё
 	virtual void Draw(const SDLApplication*) const = 0;
 
 };

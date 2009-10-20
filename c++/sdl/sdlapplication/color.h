@@ -3,23 +3,23 @@
 
 #include <SDL.h>
 
-// I - int/double // как указать в шаблоне допустимые параметры?
+// I - int/double // РєР°Рє СѓРєР°Р·Р°С‚СЊ РІ С€Р°Р±Р»РѕРЅРµ РґРѕРїСѓСЃС‚РёРјС‹Рµ РїР°СЂР°РјРµС‚СЂС‹?
 template<typename I>
 class GenericColor
 {
 public:
-	I R, G, B; // компоненты цвета, 0..255
+	I R, G, B; // РєРѕРјРїРѕРЅРµРЅС‚С‹ С†РІРµС‚Р°, 0..255
 
 	GenericColor() : R(0), G(0), B(0) {};
 
-	// конструктор от трёх компонент RGB, 0..255
+	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РѕС‚ С‚СЂС‘С… РєРѕРјРїРѕРЅРµРЅС‚ RGB, 0..255
 	GenericColor(I rr, I gg, I bb) :
 		R(rr),
 		G(gg),
 		B(bb)
 		{};
 
-	// конструктор от представления одним числом: 0xRRGGBB
+	// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РѕС‚ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РѕРґРЅРёРј С‡РёСЃР»РѕРј: 0xRRGGBB
 	GenericColor(int color) :
 		R(color>>16 & 255),
 		G(color>>8 & 255),
@@ -36,7 +36,7 @@ public:
 		return GenericColor<I>(R - other.R, G - other.G, B - other.B);
 	}
 
-	// умножение всех компонент цвета на скаляр
+	// СѓРјРЅРѕР¶РµРЅРёРµ РІСЃРµС… РєРѕРјРїРѕРЅРµРЅС‚ С†РІРµС‚Р° РЅР° СЃРєР°Р»СЏСЂ
     inline GenericColor<I> operator *(const I k) const
 	{
 	   return GenericColor<I>(R * k, G * k, B * k);
@@ -55,7 +55,7 @@ public:
 };
 
 
-// градиент работает и для целочисленного случая (Color)
+// РіСЂР°РґРёРµРЅС‚ СЂР°Р±РѕС‚Р°РµС‚ Рё РґР»СЏ С†РµР»РѕС‡РёСЃР»РµРЅРЅРѕРіРѕ СЃР»СѓС‡Р°СЏ (Color)
 template<typename I>
 inline GenericColor<I> Gradient(const GenericColor<I>& ColorA, const GenericColor<I>& ColorB, const I WeightA, const I WeightB)
 {
@@ -64,14 +64,14 @@ inline GenericColor<I> Gradient(const GenericColor<I>& ColorA, const GenericColo
 
 
 /*
-Лучше использовать Color, так как он использует только целочисленную арифметику,
-но если вдруг понадобится DoubleColor (использует double) то он тоже есть и cast работает в обе стороны
+Р›СѓС‡С€Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Color, С‚Р°Рє РєР°Рє РѕРЅ РёСЃРїРѕР»СЊР·СѓРµС‚ С‚РѕР»СЊРєРѕ С†РµР»РѕС‡РёСЃР»РµРЅРЅСѓСЋ Р°СЂРёС„РјРµС‚РёРєСѓ,
+РЅРѕ РµСЃР»Рё РІРґСЂСѓРі РїРѕРЅР°РґРѕР±РёС‚СЃСЏ DoubleColor (РёСЃРїРѕР»СЊР·СѓРµС‚ double) С‚Рѕ РѕРЅ С‚РѕР¶Рµ РµСЃС‚СЊ Рё cast СЂР°Р±РѕС‚Р°РµС‚ РІ РѕР±Рµ СЃС‚РѕСЂРѕРЅС‹
 */
 typedef GenericColor<int> Color;
 typedef GenericColor<double> DoubleColor;
 
 
-// некоторые базовые цвета, хотя кто их будет использовать?)
+// РЅРµРєРѕС‚РѕСЂС‹Рµ Р±Р°Р·РѕРІС‹Рµ С†РІРµС‚Р°, С…РѕС‚СЏ РєС‚Рѕ РёС… Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ?)
 class Palette
 {
 public:

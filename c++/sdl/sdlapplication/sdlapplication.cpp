@@ -20,10 +20,10 @@ void SDLApplication::UpdateStats()
 	dt = ctime - lastTime;
 	lastTime = ctime;
 	
-	// äîáàâëÿåì ñòàòèñòèêó ïî òåêóùåìó êàäðó
+	// Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼ ÑÑ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÑƒ Ð¿Ð¾ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ¼Ñƒ ÐºÐ°Ð´Ñ€Ñƒ
 	stats.push_back(FrameInfo(ctime, dt));
 
-	// óäàëÿåì ñòàòèñòèêó ñòàðåå îäíîé ñåêóíäû
+	// ÑƒÐ´Ð°Ð»ÑÐµÐ¼ ÑÑ‚Ð°Ñ‚Ð¸ÑÑ‚Ð¸ÐºÑƒ ÑÑ‚Ð°Ñ€ÐµÐµ Ð¾Ð´Ð½Ð¾Ð¹ ÑÐµÐºÑƒÐ½Ð´Ñ‹
 	while(!stats.empty() && ctime - stats.front().ctime > 1)
 		stats.pop_front();
 
@@ -70,7 +70,7 @@ int SDLApplication::dtMin() const
 {
 	if(stats.size() > 0)
 	{
-		double ans = 86400; // ñóòêè
+		double ans = 86400; // ÑÑƒÑ‚ÐºÐ¸
 		
 		for(FrameInfoList::const_iterator it = stats.begin(); it != stats.end(); ++it)
 			if(it->dt < ans)
@@ -211,7 +211,7 @@ void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb) const
 	 } 
 }
 
-// èñêëþ÷àÿ x
+// Ð¸ÑÐºÐ»ÑŽÑ‡Ð°Ñ x
 int SDLApplication::Rand(int x)
 {
     return rand() % x;
@@ -241,9 +241,9 @@ void SDLApplication::ClearScreen(const Color& color) const
 	FillRectangle(LeftTop, RightBottom, color);
 }
 
-// http://ru.wikipedia.org/wiki/Àëãîðèòì_Áðåçåíõýìà
-// Øèêèí, Áîðåñêîâ, Êîìïüþòåðíàÿ ãðàôèêà. Ïîëèãîíàëüíûå ìîäåëè. ñ. 161
-// íàðèñîâàòü îòðåçîê (èëè òî÷êó) áûâàåò íóæíî î÷åíü ÷àñòî, ïîýòîìó ÿ ñäåëàë îòäåëüíûå ìåòîäû äëÿ ýòîãî
+// http://ru.wikipedia.org/wiki/ÐÐ»Ð³Ð¾Ñ€Ð¸Ñ‚Ð¼_Ð‘Ñ€ÐµÐ·ÐµÐ½Ñ…ÑÐ¼Ð°
+// Ð¨Ð¸ÐºÐ¸Ð½, Ð‘Ð¾Ñ€ÐµÑÐºÐ¾Ð², ÐšÐ¾Ð¼Ð¿ÑŒÑŽÑ‚ÐµÑ€Ð½Ð°Ñ Ð³Ñ€Ð°Ñ„Ð¸ÐºÐ°. ÐŸÐ¾Ð»Ð¸Ð³Ð¾Ð½Ð°Ð»ÑŒÐ½Ñ‹Ðµ Ð¼Ð¾Ð´ÐµÐ»Ð¸. Ñ. 161
+// Ð½Ð°Ñ€Ð¸ÑÐ¾Ð²Ð°Ñ‚ÑŒ Ð¾Ñ‚Ñ€ÐµÐ·Ð¾Ðº (Ð¸Ð»Ð¸ Ñ‚Ð¾Ñ‡ÐºÑƒ) Ð±Ñ‹Ð²Ð°ÐµÑ‚ Ð½ÑƒÐ¶Ð½Ð¾ Ð¾Ñ‡ÐµÐ½ÑŒ Ñ‡Ð°ÑÑ‚Ð¾, Ð¿Ð¾ÑÑ‚Ð¾Ð¼Ñƒ Ñ ÑÐ´ÐµÐ»Ð°Ð» Ð¾Ñ‚Ð´ÐµÐ»ÑŒÐ½Ñ‹Ðµ Ð¼ÐµÑ‚Ð¾Ð´Ñ‹ Ð´Ð»Ñ ÑÑ‚Ð¾Ð³Ð¾
 void SDLApplication::DrawSegment(const ScreenPoint& A, const ScreenPoint& B, const Color& color) const
 {
 	int x1 = static_cast<int>(A[0]);
