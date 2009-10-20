@@ -1,4 +1,4 @@
-PROG=./life
+PROG=./Worms
 
 CPP=g++
 CPPFLAGS= -W -Wall -I/usr/include/SDL -I../sdlapplication
