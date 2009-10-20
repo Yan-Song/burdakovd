@@ -31,7 +31,7 @@ void LifeApplication::ProcessEvent(SDL_Event Event)
 void LifeApplication::Main()
 {
 	Turn();
-	if(lasttime != time(NULL)) // прошла секунда
+	if(lasttime != time(NULL)) // РїСЂРѕС€Р»Р° СЃРµРєСѓРЅРґР°
 	{
 		lasttime = time(NULL);
 		std::cout<<"FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;

@@ -16,7 +16,7 @@ private:
 	
 	void DoNavigation();
 	
-	// скорость в пикселях в секунду
+	// СЃРєРѕСЂРѕСЃС‚СЊ РІ РїРёРєСЃРµР»СЏС… РІ СЃРµРєСѓРЅРґСѓ
 	double vx, vy;
 	double accelerating;
 	double stopping;

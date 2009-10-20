@@ -22,25 +22,25 @@ void Mandelbrot::DoNavigation()
 {
 	if(KeyState[SDLK_UP])
 	{
-		by += 20 * k; // на 20 пикселей
+		by += 20 * k; // РЅР° 20 РїРёРєСЃРµР»РµР№
 		needReDraw = true;
 	}
 
 	if(KeyState[SDLK_DOWN])
 	{
-		by -= 20 * k; // на 20 пикселей
+		by -= 20 * k; // РЅР° 20 РїРёРєСЃРµР»РµР№
 		needReDraw = true;
 	}
 
 	if(KeyState[SDLK_LEFT])
 	{
-		bx -= 20 * k; // на 20 пикселей
+		bx -= 20 * k; // РЅР° 20 РїРёРєСЃРµР»РµР№
 		needReDraw = true;
 	}
 
 	if(KeyState[SDLK_RIGHT])
 	{
-		bx += 20 * k; // на 20 пикселей
+		bx += 20 * k; // РЅР° 20 РїРёРєСЃРµР»РµР№
 		needReDraw = true;
 	}
 
@@ -75,7 +75,7 @@ void Mandelbrot::Main()
 
 void Mandelbrot::Render()
 {
-	// Прорисовываем всё подробнее и подробнее
+	// РџСЂРѕСЂРёСЃРѕРІС‹РІР°РµРј РІСЃС‘ РїРѕРґСЂРѕР±РЅРµРµ Рё РїРѕРґСЂРѕР±РЅРµРµ
 	for(int depth = 5; ; depth *= 2)
 	{
 

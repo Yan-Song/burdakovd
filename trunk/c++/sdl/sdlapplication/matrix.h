@@ -7,7 +7,7 @@
 typedef double MatrixRow[3];
 typedef MatrixRow MatrixData[3];
 
-// нормальный класс матриц
+// РЅРѕСЂРјР°Р»СЊРЅС‹Р№ РєР»Р°СЃСЃ РјР°С‚СЂРёС†
 class Matrix
 {
 private:

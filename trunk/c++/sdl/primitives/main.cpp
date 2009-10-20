@@ -3,7 +3,7 @@
 
 #pragma comment(linker, "/STACK:167772160")
 
-int main(int argc, char *argv[]) // argc/argv важны, без них не компилится
+int main(int argc, char *argv[]) // argc/argv РІР°Р¶РЅС‹, Р±РµР· РЅРёС… РЅРµ РєРѕРјРїРёР»РёС‚СЃСЏ
 {
 	PrimitivesApplication app;
 	app.Run();

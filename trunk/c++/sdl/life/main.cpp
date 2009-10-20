@@ -1,7 +1,7 @@
 #include "sdlapplication.h"
 #include "life.h"
 
-int main(int, char**) // наличие аргументов важно, без них не компилится под Visual Studio
+int main(int, char**) // РЅР°Р»РёС‡РёРµ Р°СЂРіСѓРјРµРЅС‚РѕРІ РІР°Р¶РЅРѕ, Р±РµР· РЅРёС… РЅРµ РєРѕРјРїРёР»РёС‚СЃСЏ РїРѕРґ Visual Studio
 {
 	LifeApplication app;
 	app.Run();

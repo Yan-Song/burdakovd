@@ -19,14 +19,14 @@ PrimitivesApplication::PrimitivesApplication()
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
 	lasttime = time(NULL);
-	// начальная скорость
+	// РЅР°С‡Р°Р»СЊРЅР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ
 	vx = 0;
 	vy = 0;
-	// ускорение 100 пикселей / сек^2
+	// СѓСЃРєРѕСЂРµРЅРёРµ 100 РїРёРєСЃРµР»РµР№ / СЃРµРє^2
 	accelerating = 100;
-	// торможение: 10 пикс / секунду^2
+	// С‚РѕСЂРјРѕР¶РµРЅРёРµ: 10 РїРёРєСЃ / СЃРµРєСѓРЅРґСѓ^2
 	stopping = 10;
-	// коэффициент упругости отражения от стен, 1 - абс. упруго, 0 - неупруго
+	// РєРѕСЌС„С„РёС†РёРµРЅС‚ СѓРїСЂСѓРіРѕСЃС‚Рё РѕС‚СЂР°Р¶РµРЅРёСЏ РѕС‚ СЃС‚РµРЅ, 1 - Р°Р±СЃ. СѓРїСЂСѓРіРѕ, 0 - РЅРµСѓРїСЂСѓРіРѕ
 	reflectK = 0.8;
 	
 	center = ScreenPointByCoords(ScreenWidth / 2, ScreenHeight / 2);
@@ -48,7 +48,7 @@ PrimitivesApplication::PrimitivesApplication()
 void PrimitivesApplication::Main()
 {
 	
-	if(lasttime != time(NULL)) // прошла секунда
+	if(lasttime != time(NULL)) // РїСЂРѕС€Р»Р° СЃРµРєСѓРЅРґР°
 	{
 		lasttime = time(NULL);
 		std::cout<<"Time: "<<GetTime()<<"; FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
@@ -62,7 +62,7 @@ void PrimitivesApplication::Main()
 	Vector2D dr = Vector2DByCoords(vx * dt, vy * dt);
 	center += dr;
 	
-	// движение
+	// РґРІРёР¶РµРЅРёРµ
 	for(int i = 0; i < Me.size(); ++i)
 		Me[i]->Shift(dr);
 	
