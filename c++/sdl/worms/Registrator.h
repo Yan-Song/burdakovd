@@ -11,7 +11,7 @@ class Registrator
 private:
 	std::vector<IWormFactory*> factories;
 
-	// delete äëÿ ýòèõ óêàçàòåëåé áóäåò âûçâàí â äåñòðóêòîðå
+	// delete Ð´Ð»Ñ ÑÑ‚Ð¸Ñ… ÑƒÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÐµÐ¹ Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð·Ð²Ð°Ð½ Ð² Ð´ÐµÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€Ðµ
 	inline void Register(IWormFactory* wf)
 	{
 		factories.push_back(wf);
@@ -20,13 +20,13 @@ private:
 public:
 	Registrator();
 
-	// Êîëè÷åñòâî çàðåãèñòðèðîâàííûõ ÷åðâÿêîâ
+	// ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð·Ð°Ñ€ÐµÐ³Ð¸ÑÑ‚Ñ€Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ñ… Ñ‡ÐµÑ€Ð²ÑÐºÐ¾Ð²
 	inline unsigned int Count() const
 	{
 		return factories.size();
 	}
 
-	// èìÿ êëàññà çàäàííîãî ÷åðâÿêà
+	// Ð¸Ð¼Ñ ÐºÐ»Ð°ÑÑÐ° Ð·Ð°Ð´Ð°Ð½Ð½Ð¾Ð³Ð¾ Ñ‡ÐµÑ€Ð²ÑÐºÐ°
 	inline std::string ClassName(unsigned int index) const
 	{
 		if(index >= factories.size())
@@ -35,7 +35,7 @@ public:
 		return factories[index]->ClassName();
 	}
 
-	// äåëàòü delete äëÿ ýòîãî óêàçàòåëÿ âîçëàãàåòñÿ íà âûçûâàþùåãî
+	// Ð´ÐµÐ»Ð°Ñ‚ÑŒ delete Ð´Ð»Ñ ÑÑ‚Ð¾Ð³Ð¾ ÑƒÐºÐ°Ð·Ð°Ñ‚ÐµÐ»Ñ Ð²Ð¾Ð·Ð»Ð°Ð³Ð°ÐµÑ‚ÑÑ Ð½Ð° Ð²Ñ‹Ð·Ñ‹Ð²Ð°ÑŽÑ‰ÐµÐ³Ð¾
 	inline ISomeWorm* Create(unsigned int ClassID) const
 	{
 		if(ClassID >= factories.size())

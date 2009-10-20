@@ -8,7 +8,7 @@
 
 #define REGISTER(worm) Register(new Factory<worm>(#worm))
 
-// тут проходит регистрация всех червей
+// С‚СѓС‚ РїСЂРѕС…РѕРґРёС‚ СЂРµРіРёСЃС‚СЂР°С†РёСЏ РІСЃРµС… С‡РµСЂРІРµР№
 Registrator::Registrator()
 {
 	REGISTER(Statue);
