@@ -22,9 +22,9 @@ public:
 	void DrawCell(const SimplePoint& position, const CellType type) const;
 	void DrawWormCell(const SimplePoint& position, const ISomeWorm* worm, const int index) const;
 	void DrawCell(const SimplePoint& position, const Color& color) const;
-	// создать нового червя заданного класса, добавить его в список, и вернуть указатель на него
-	// вызывающая сторона не должна делать delete для этого указателя
-	// UpdateMap и Draw для созданного червя автоматически не вызывается
+	// СЃРѕР·РґР°С‚СЊ РЅРѕРІРѕРіРѕ С‡РµСЂРІСЏ Р·Р°РґР°РЅРЅРѕРіРѕ РєР»Р°СЃСЃР°, РґРѕР±Р°РІРёС‚СЊ РµРіРѕ РІ СЃРїРёСЃРѕРє, Рё РІРµСЂРЅСѓС‚СЊ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅРµРіРѕ
+	// РІС‹Р·С‹РІР°СЋС‰Р°СЏ СЃС‚РѕСЂРѕРЅР° РЅРµ РґРѕР»Р¶РЅР° РґРµР»Р°С‚СЊ delete РґР»СЏ СЌС‚РѕРіРѕ СѓРєР°Р·Р°С‚РµР»СЏ
+	// UpdateMap Рё Draw РґР»СЏ СЃРѕР·РґР°РЅРЅРѕРіРѕ С‡РµСЂРІСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РЅРµ РІС‹Р·С‹РІР°РµС‚СЃСЏ
 	ISomeWorm* AddWorm(const int ClassID, const double energy, const TPosition& position, const Color& color);
 	virtual ~WormsApplication();
 

@@ -1,11 +1,11 @@
 #include "Config.h"
 
-// параметры
+// РїР°СЂР°РјРµС‚СЂС‹
 
 const double Config::MovementTime = 0.03;
 const double Config::DiscoverTime = 0.001;
 const double Config::WormEnergyPerCell = 10.0;
 const double Config::FoodEnergyPerCell = 1.0;
 const double Config::EnergyLossPerSecond = 1;
-const double Config::DeathEnergyLevel = Config::WormEnergyPerCell; // умирает, когда остается меньше одной ячейки
+const double Config::DeathEnergyLevel = Config::WormEnergyPerCell; // СѓРјРёСЂР°РµС‚, РєРѕРіРґР° РѕСЃС‚Р°РµС‚СЃСЏ РјРµРЅСЊС€Рµ РѕРґРЅРѕР№ СЏС‡РµР№РєРё
 const double Config::ReplicateEnergyLevel = 200.0;

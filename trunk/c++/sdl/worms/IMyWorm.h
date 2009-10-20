@@ -5,12 +5,12 @@
 #include "WormLogic.h"
 #include "SDL.h"
 
-// методы, которые будут использованы только логикой червя
+// РјРµС‚РѕРґС‹, РєРѕС‚РѕСЂС‹Рµ Р±СѓРґСѓС‚ РёСЃРїРѕР»СЊР·РѕРІР°РЅС‹ С‚РѕР»СЊРєРѕ Р»РѕРіРёРєРѕР№ С‡РµСЂРІСЏ
 class IMyWorm : public IWorm
 {
 public:
 
-	// основная логика червя
+	// РѕСЃРЅРѕРІРЅР°СЏ Р»РѕРіРёРєР° С‡РµСЂРІСЏ
 	virtual WormLogic Run() = 0;
 
 	virtual bool isPressed(const SDLKey key) const = 0;

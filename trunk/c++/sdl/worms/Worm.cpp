@@ -49,28 +49,28 @@ void Worm::Go(const WormLogic direction)
 
 	if(target == CellEmpty || target == CellFood)
 	{
-		// если туда можно идти
+		// РµСЃР»Рё С‚СѓРґР° РјРѕР¶РЅРѕ РёРґС‚Рё
 		
-		// если там еда...
+		// РµСЃР»Рё С‚Р°Рј РµРґР°...
 		if(target == CellFood)
 			energy += Config::FoodEnergyPerCell;
 
-		// добавляем голову
+		// РґРѕР±Р°РІР»СЏРµРј РіРѕР»РѕРІСѓ
 		position.push_front(head);
 		
-		// занимаем эту ячейку и рисуем
+		// Р·Р°РЅРёРјР°РµРј СЌС‚Сѓ СЏС‡РµР№РєСѓ Рё СЂРёСЃСѓРµРј
 		app->Map.Set(head.X, head.Y, CellWorm);
 		app->DrawWormCell(head, this, 0);
 		
-		// корректируем длину
+		// РєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РґР»РёРЅСѓ
 		CheckLength();
 	}
 	else
 	{
-		// туда идти нельзя, сжимаемся
+		// С‚СѓРґР° РёРґС‚Рё РЅРµР»СЊР·СЏ, СЃР¶РёРјР°РµРјСЃСЏ
 		position.push_front(position.front());
 		
-		// корректируем длину
+		// РєРѕСЂСЂРµРєС‚РёСЂСѓРµРј РґР»РёРЅСѓ
 		CheckLength();
 	}
 }
@@ -101,11 +101,11 @@ void Worm::AntiGrow()
 	}
 	else
 	{
-		// удаляем последнюю ячейку
+		// СѓРґР°Р»СЏРµРј РїРѕСЃР»РµРґРЅСЋСЋ СЏС‡РµР№РєСѓ
 		const SimplePoint last = position.back();
 		position.pop_back();
 
-		// если в этой клетке не было других ячеек червя, то стираем эту клетку
+		// РµСЃР»Рё РІ СЌС‚РѕР№ РєР»РµС‚РєРµ РЅРµ Р±С‹Р»Рѕ РґСЂСѓРіРёС… СЏС‡РµРµРє С‡РµСЂРІСЏ, С‚Рѕ СЃС‚РёСЂР°РµРј СЌС‚Сѓ РєР»РµС‚РєСѓ
 		for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
 			if(last == *it)
 				return;
@@ -145,38 +145,38 @@ bool Worm::Dead()
 
 void Worm::UpdateEnergy()
 {
-	// 1) обновить энергию
+	// 1) РѕР±РЅРѕРІРёС‚СЊ СЌРЅРµСЂРіРёСЋ
 	double dt = app->GetTime() - lastUpdateEnergyTime;
 	lastUpdateEnergyTime += dt;
 	energy -= Config::EnergyLossPerSecond * dt;
 
-	// 2) не пора ли умереть?
+	// 2) РЅРµ РїРѕСЂР° Р»Рё СѓРјРµСЂРµС‚СЊ?
 	if(energy < Config::DeathEnergyLevel)
 	{
 		Die();
 		return;
 	}
 
-	// 3) не пора ли завести детей?
+	// 3) РЅРµ РїРѕСЂР° Р»Рё Р·Р°РІРµСЃС‚Рё РґРµС‚РµР№?
 	if(energy > Config::ReplicateEnergyLevel)
 	{
 		unsigned int n = position.size();
 		unsigned int n1 = n / 2;
 		unsigned int n2 = n - n1;
 
-		// находим середину
+		// РЅР°С…РѕРґРёРј СЃРµСЂРµРґРёРЅСѓ
 		TPosition::iterator middle = position.begin();
 		for(unsigned int i = 0; i < n1; ++n1)
 			++middle;
 
-		// рассчитываем позиции детей
+		// СЂР°СЃСЃС‡РёС‚С‹РІР°РµРј РїРѕР·РёС†РёРё РґРµС‚РµР№
 		TPosition pfirst(position.begin(), middle);
 		TPosition psecond(middle, position.end());
 
-		// Умереть самому
+		// РЈРјРµСЂРµС‚СЊ СЃР°РјРѕРјСѓ
 		Die();
 
-		// создать детей
+		// СЃРѕР·РґР°С‚СЊ РґРµС‚РµР№
 		ISomeWorm* first = app->AddWorm(GetClassID(), energy, pfirst, GetColor());
 		first->UpdateMap();
 		first->Draw();
@@ -189,10 +189,10 @@ void Worm::UpdateEnergy()
 
 void Worm::DoLogic()
 {
-	// возможно стоит сделать while вместо if, если fps маленький (<10), но там может начаться другая печаль
+	// РІРѕР·РјРѕР¶РЅРѕ СЃС‚РѕРёС‚ СЃРґРµР»Р°С‚СЊ while РІРјРµСЃС‚Рѕ if, РµСЃР»Рё fps РјР°Р»РµРЅСЊРєРёР№ (<10), РЅРѕ С‚Р°Рј РјРѕР¶РµС‚ РЅР°С‡Р°С‚СЊСЃСЏ РґСЂСѓРіР°СЏ РїРµС‡Р°Р»СЊ
 	if(GetTime() < app->GetTime())
 	{
-		// ещё есть время!
+		// РµС‰С‘ РµСЃС‚СЊ РІСЂРµРјСЏ!
 		WormLogic decision = Run();
 		if(decision != Stay)
 		{
@@ -200,7 +200,7 @@ void Worm::DoLogic()
 			Go(decision);
 		}
 	}
-	// также возможно стоит сбрасывать излишки времени в конце функции
+	// С‚Р°РєР¶Рµ РІРѕР·РјРѕР¶РЅРѕ СЃС‚РѕРёС‚ СЃР±СЂР°СЃС‹РІР°С‚СЊ РёР·Р»РёС€РєРё РІСЂРµРјРµРЅРё РІ РєРѕРЅС†Рµ С„СѓРЅРєС†РёРё
 	if(time < app->GetTime()) // !!
 		time = app->GetTime();
 }
