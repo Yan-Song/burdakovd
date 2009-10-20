@@ -38,6 +38,12 @@ public:
     // Идентификатор, уникальный для каждого класса червя
     virtual unsigned int GetClassID() const = 0;
 
+	// число из полуинтервала [0, x)
+	virtual int Rand(const int x) const = 0;
+
+	// из отрезка [x, y]
+	virtual int Rand(const int x, const int y) const = 0;
+
 	virtual ~IWorm()
 	{
 	}

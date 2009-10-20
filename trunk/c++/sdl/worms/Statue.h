@@ -17,7 +17,7 @@ public:
 		return Stay;
 	}
 
-	~Statue()
+	virtual ~Statue()
 	{
 	}
 };

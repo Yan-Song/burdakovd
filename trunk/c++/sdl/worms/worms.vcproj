@@ -245,6 +245,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Manual.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Random.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Registrator.h"
 				>
 			</File>

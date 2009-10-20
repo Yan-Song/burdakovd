@@ -4,6 +4,7 @@
 #include "WormLogic.h"
 #include "Config.h"
 #include "SDLException.h"
+#include "SDL.h"
 
 void Worm::Draw() const
 {
@@ -19,28 +20,59 @@ void Worm::ConsumeTime(const double dt)
 
 void Worm::Tick()
 {
+	UpdateEnergy();
+
 	if(Dead())
 		return;
-	// также возможно стоит сбрасывать излишки времени в конце функции
-	// кроме того нужно уменьшать хп со временем
-	CheckLength(); // подогнать длину под энергию
-	// размножение (деление) при превышении некоторой пороговой величины энергии, смерть при понижении энергии до пороговой величины
-	// возможно стоит сделать while вместо if, если fps маленький (<10), но там может начатьс€ друга€ печаль
-	if(GetTime() < app->GetTime())
-	{
-		// ещЄ есть врем€!
-		WormLogic decision = Run();
-		if(decision != Stay)
-		{
-			ConsumeTime(Config::MovementTime);
-			Go(decision);
-		}
-	}
+
+	DoLogic();
+
+	CheckLength();
 }
 
 void Worm::Go(const WormLogic direction)
 {
-	throw new NotImplementedException();
+	SimplePoint head = position.front();
+
+	if(direction == GoDown)
+		--head.Y;
+	else if(direction == GoLeft)
+		--head.X;
+	else if(direction == GoRight)
+		++head.X;
+	else if(direction == GoUp)
+		++head.Y;
+	else
+		throw new NotImplementedException();
+
+	CellType target = app->Map.Get(head.X, head.Y);
+
+	if(target == CellEmpty || target == CellFood)
+	{
+		// если туда можно идти
+		
+		// если там еда...
+		if(target == CellFood)
+			energy += Config::FoodEnergyPerCell;
+
+		// добавл€ем голову
+		position.push_front(head);
+		
+		// занимаем эту €чейку и рисуем
+		app->Map.Set(head.X, head.Y, CellWorm);
+		app->DrawWormCell(head, this, 0);
+		
+		// корректируем длину
+		CheckLength();
+	}
+	else
+	{
+		// туда идти нельз€, сжимаемс€
+		position.push_front(position.front());
+		
+		// корректируем длину
+		CheckLength();
+	}
 }
 
 void Worm::EraseOnMap() const
@@ -75,10 +107,11 @@ void Worm::AntiGrow()
 
 		// если в этой клетке не было других €чеек черв€, то стираем эту клетку
 		for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
-			if(*it == last)
+			if(last == *it)
 				return;
 
 		app->DrawCell(last, CellEmpty);
+		app->Map.Set(last.X, last.Y, CellEmpty);
 	}
 }
 
@@ -108,4 +141,81 @@ void Worm::Grow()
 bool Worm::Dead()
 {
 	return dead;
+}
+
+void Worm::UpdateEnergy()
+{
+	// 1) обновить энергию
+	double dt = app->GetTime() - lastUpdateEnergyTime;
+	lastUpdateEnergyTime += dt;
+	energy -= Config::EnergyLossPerSecond * dt;
+
+	// 2) не пора ли умереть?
+	if(energy < Config::DeathEnergyLevel)
+	{
+		Die();
+		return;
+	}
+
+	// 3) не пора ли завести детей?
+	if(energy > Config::ReplicateEnergyLevel)
+	{
+		unsigned int n = position.size();
+		unsigned int n1 = n / 2;
+		unsigned int n2 = n - n1;
+
+		// находим середину
+		TPosition::iterator middle = position.begin();
+		for(unsigned int i = 0; i < n1; ++n1)
+			++middle;
+
+		// рассчитываем позиции детей
+		TPosition pfirst(position.begin(), middle);
+		TPosition psecond(middle, position.end());
+
+		// ”мереть самому
+		Die();
+
+		// создать детей
+		ISomeWorm* first = app->AddWorm(GetClassID(), energy, pfirst, GetColor());
+		first->UpdateMap();
+		first->Draw();
+
+		ISomeWorm* second = app->AddWorm(GetClassID(), energy, psecond, GetColor());
+		second->UpdateMap();
+		second->Draw();
+	}
+}
+
+void Worm::DoLogic()
+{
+	// возможно стоит сделать while вместо if, если fps маленький (<10), но там может начатьс€ друга€ печаль
+	if(GetTime() < app->GetTime())
+	{
+		// ещЄ есть врем€!
+		WormLogic decision = Run();
+		if(decision != Stay)
+		{
+			ConsumeTime(Config::MovementTime);
+			Go(decision);
+		}
+	}
+	// также возможно стоит сбрасывать излишки времени в конце функции
+	if(time < app->GetTime()) // !!
+		time = app->GetTime();
+}
+
+bool Worm::isPressed(const SDLKey key) const
+{
+	return app->isPressed(key);
+}
+
+int Worm::Rand(const int x, const int y) const
+{
+	return app->Rand(x, y);
+}
+
+int Worm::Rand(const int x) const
+{
+	return app->Rand(x);
 }

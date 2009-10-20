@@ -8,6 +8,7 @@
 #include "utils.h"
 #include <list>
 #include "Timer.h"
+#include <string>
 
 struct FrameInfo
 {
@@ -43,7 +44,8 @@ public:
 	// из отрезка [x, y]
 	static int Rand(int x, int y);
 	void Run(); // вызывать извне класса один раз, будет работать пока изнутри не будет вызван Stop()
-	// время с момента инициализации библиотек SDL. До вызова InitializeSDL результат вызова функции не определён.
+	// время с момента инициализации библиотеки SDL в секундах, точность около 1мс.
+	// До вызова InitializeSDL результат вызова функции не определён.
 	inline double GetTime() const
 	{
 		return timer.GetTime();
@@ -51,6 +53,10 @@ public:
 	inline int FPS() const
 	{
 		return stats.size();
+	}
+	inline bool isPressed(const SDLKey key) const
+	{
+		return KeyState[key] != 0;
 	}
 	virtual ~SDLApplication(); // деструктор
 
@@ -77,6 +83,9 @@ protected:
 	double dt;
 	// обновить dt, FPS и прочую информацию
 	void UpdateStats();
+	// установить заголовок окна
+	void SetCaption(const std::string& text);
+
 	Uint8* KeyState;
 
 private:
