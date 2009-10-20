@@ -92,7 +92,7 @@ private:
 	bool Running;
 	// нельзя копировать
 	SDLApplication(const SDLApplication&) {};
-	SDLApplication& operator=(const SDLApplication&) {};
+	SDLApplication& operator=(const SDLApplication&) { return *this; };
 	inline Uint32 MapColor(const Color& rgb) const
 	{
 		return SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.R), static_cast<Uint8>(rgb.G), static_cast<Uint8>(rgb.B));
