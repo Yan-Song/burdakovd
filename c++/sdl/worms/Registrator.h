@@ -36,12 +36,12 @@ public:
 	}
 
 	// делать delete для этого указателя возлагается на вызывающего
-	inline ISomeWorm* Create(unsigned int index) const
+	inline ISomeWorm* Create(unsigned int ClassID) const
 	{
-		if(index >= factories.size())
+		if(ClassID >= factories.size())
 			throw new std::out_of_range("Create(unsigned int index)");
 
-		return factories[index]->Create();
+		return factories[ClassID]->Create();
 	}
 
 	~Registrator()

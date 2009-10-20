@@ -3,6 +3,7 @@
 
 #include <map>
 #include <cmath>
+#include "SDLException.h"
 
 typedef std::pair<int,int> pii;
 
@@ -28,5 +29,13 @@ inline T sgn(const T x)
   if(x==0) return 0; 
   return x < 0 ? -1 : 1;
 }
+
+inline void __assert(const bool x, const std::string& text)
+{
+	if(!x)
+		throw new AssertionException(text);
+}
+
+#define assert(assertion) __assert(assertion, #assertion)
 
 #endif

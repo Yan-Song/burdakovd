@@ -301,3 +301,8 @@ void SDLApplication::DrawSegment(const ScreenPoint& A, const ScreenPoint& B, con
 		}
 	}
 }
+
+void SDLApplication::SetCaption(const std::string& text)
+{
+	SDL_WM_SetCaption(text.c_str(), "");
+}

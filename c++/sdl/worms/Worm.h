@@ -6,6 +6,7 @@
 #include "WormLogic.h"
 #include "color.h"
 #include <vector>
+#include "SDL.h"
 
 class WormsApplication;
 
@@ -16,16 +17,28 @@ public:
 	Worm() : dead(false)
 	{
 	}
+	
+	virtual bool isPressed(const SDLKey key) const;
+
+	// число из полуинтервала [0, x)
+	virtual int Rand(const int x) const;
+
+	// из отрезка [x, y]
+	virtual int Rand(const int x, const int y) const;
+
 private:
 	WormsApplication* app;
+	TPosition position;
 	int ID, classID;
 	double energy;
-	TPosition position;
 	// локальное время червя
 	double time;
+	// время последнего обновления энергии
+	double lastUpdateEnergyTime;
 	Color color;
 	bool dead;
 
+	// локальное время червя
 	double GetTime() const
 	{
 		return time;
@@ -68,7 +81,7 @@ private:
 		classID = _classID;
 		energy = _energy;
 		position = _position;
-		time = _time;
+		lastUpdateEnergyTime = time = _time;
 		color = _color;
 	};
 
@@ -86,19 +99,27 @@ private:
 
 	virtual void Go(const WormLogic direction);
 
-	// проверить соотношение своей длины и энергии и удлиниться/укоротиться
+	// проверить соотношение своей длины и энергии и удлиниться/укоротиться при необходимости
 	virtual void CheckLength();
 
-	// увеличить свою длину на 1 клетку
+	// увеличить свою длину на 1 клетку, с хвоста
 	virtual void Grow();
 
-	// уменьшить свою длину на 1 клетку
+	// уменьшить свою длину на 1 клетку, с хвоста
 	virtual void AntiGrow();
 
-	// умереть
+	// умереть (убрать себя с карты, с экрана), вызов Dead() теперь будет возвращать true
 	virtual void Die();
 
 	virtual bool Dead();
+
+	// Уменьшить энергию в соответствии с прошедшим временем с последнего вызова этой функции.
+	// Размножение (деление) при превышении некоторой пороговой величины энергии.
+	// Смерть при понижении энергии до пороговой величины.
+	void UpdateEnergy();
+
+	// Если подошло время - вызвать Run() и перейти в нужном направлении
+	void DoLogic();
 
 public:
 	virtual ~Worm()
