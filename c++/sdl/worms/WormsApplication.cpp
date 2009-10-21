@@ -3,7 +3,7 @@
 #include "Vector.h"
 #include <ctime>
 #include "ISomeWorm.h"
-#include "utils.h"
+#include "Utils.h"
 
 const Color WormsApplication::EmptyColor = Palette::Black;
 const Color WormsApplication::WallColor = Palette::Gray;

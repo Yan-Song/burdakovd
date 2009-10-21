@@ -1,11 +1,11 @@
 #ifndef PRIMITIVES_H
 #define PRIMITIVES_H
 
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 #include <vector>
 #include "Segment.h"
 #include "Circle2D.h"
-#include "graphobject.h"
+#include "GraphObject.h"
 
 class PrimitivesApplication : public SDLApplication
 {

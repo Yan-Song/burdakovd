@@ -1,6 +1,6 @@
 #include "Triangle2D.h"
 #include "Segment.h"
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 
 Triangle2D::~Triangle2D(void)
 {

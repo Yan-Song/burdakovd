@@ -1,9 +1,9 @@
 #ifndef WORMSAPPLICATION_H
 #define WORMSAPPLICATION_H
 
-#include "sdlapplication.h"
-#include "utils.h"
-#include "color.h"
+#include "SDLApplication.h"
+#include "Utils.h"
+#include "Color.h"
 #include "Registrator.h"
 #include "CellType.h"
 #include <vector>

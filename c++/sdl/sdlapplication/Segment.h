@@ -1,11 +1,11 @@
 #ifndef LINE_H
 #define LINE_H
 
-#include "graphobject.h"
+#include "GraphObject.h"
 #include "Vector.h"
 #include <SDL.h>
-#include "color.h"
-#include "matrix.h"
+#include "Color.h"
+#include "Matrix.h"
 
 class Segment2D : public GraphObject2D
 {

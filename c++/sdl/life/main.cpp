@@ -1,4 +1,4 @@
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 #include "life.h"
 
 int main(int, char**) // наличие аргументов важно, без них не компилится под Visual Studio

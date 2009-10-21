@@ -1,10 +1,10 @@
 #ifndef TRAINGLE_H
 #define TRIANGLE_H
 
-#include "graphobject.h"
-#include "sdlapplication.h"
+#include "GraphObject.h"
+#include "SDLApplication.h"
 #include "Vector.h"
-#include "color.h"
+#include "Color.h"
 
 class Triangle2D :
 	public GraphObject2D

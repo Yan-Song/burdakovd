@@ -1,12 +1,12 @@
 #include "primitives.h"
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 #include "Vector.h"
-#include "color.h"
+#include "Color.h"
 #include <cmath>
 #include <ctime>
 #include <cstring>
 #include "Segment.h"
-#include "matrix.h"
+#include "Matrix.h"
 #include <vector>
 #include <iostream>
 #include <cstdlib>

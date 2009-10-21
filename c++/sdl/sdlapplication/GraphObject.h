@@ -2,9 +2,9 @@
 #define GOBJECT_H
 
 #include <SDL.h>
-#include "matrix.h"
+#include "Matrix.h"
 #include "Vector.h"
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 
 // методы, не зависящие от числа измерений
 template<int Dimensions>

@@ -1,9 +1,9 @@
 #ifndef CIRCLE_H
 #define CIRCLE_H
 
-#include "graphobject.h"
-#include "sdlapplication.h"
-#include "color.h"
+#include "GraphObject.h"
+#include "SDLApplication.h"
+#include "Color.h"
 
 class Circle2D :
 	public GraphObject2D

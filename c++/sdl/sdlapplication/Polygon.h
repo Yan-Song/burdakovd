@@ -1,10 +1,10 @@
 #ifndef POLYGON_H
 #define POLYGON_H
 
-#include "graphobject.h"
+#include "GraphObject.h"
 #include "Vector.h"
-#include "sdlapplication.h"
-#include "color.h"
+#include "SDLApplication.h"
+#include "Color.h"
 #include <vector>
 
 class Polygon :

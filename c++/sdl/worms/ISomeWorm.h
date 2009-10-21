@@ -2,7 +2,7 @@
 #define ISOMEWORM_H
 
 #include "IWorm.h"
-#include "color.h"
+#include "Color.h"
 
 class WormsApplication;
 class Worm;

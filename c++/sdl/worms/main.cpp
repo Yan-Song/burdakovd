@@ -1,4 +1,4 @@
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 #include "WormsApplication.h"
 
 #pragma comment(linker, "/STACK:167772160")

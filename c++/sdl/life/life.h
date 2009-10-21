@@ -1,7 +1,7 @@
 #ifndef LIFEAPPLICATION_H
 #define LIFEAPPLICATION_H
 
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 #include <vector>
 
 using namespace std;
