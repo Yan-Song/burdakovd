@@ -162,7 +162,6 @@ void Worm::UpdateEnergy()
 	{
 		unsigned int n = position.size();
 		unsigned int n1 = n / 2;
-		unsigned int n2 = n - n1;
 
 		// находим середину
 		TPosition::iterator middle = position.begin();
