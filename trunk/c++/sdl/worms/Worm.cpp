@@ -165,7 +165,7 @@ void Worm::UpdateEnergy()
 
 		// находим середину
 		TPosition::iterator middle = position.begin();
-		for(unsigned int i = 0; i < n1; ++n1)
+		for(unsigned int i = 0; i < n1; ++i)
 			++middle;
 
 		// рассчитываем позиции детей
