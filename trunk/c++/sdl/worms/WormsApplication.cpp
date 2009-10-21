@@ -160,3 +160,4 @@ ISomeWorm* WormsApplication::AddWorm(const int ClassID, const double energy, con
 	worms.push_back(worm);
 	return worm;
 }
+

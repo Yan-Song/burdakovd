@@ -26,6 +26,9 @@ public:
 	{
 		return _ClassName;
 	}
+	virtual ~Factory()
+	{
+	}
 };
 
 #endif

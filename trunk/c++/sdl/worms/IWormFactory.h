@@ -15,7 +15,7 @@ public:
 
 	virtual std::string ClassName() const = 0;
 
-	~IWormFactory()
+	virtual ~IWormFactory()
 	{
 	};
 };
