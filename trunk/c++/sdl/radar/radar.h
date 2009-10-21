@@ -1,7 +1,7 @@
 #ifndef RADAR_H
 #define RADAR_H
 
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 
 class Radar : public SDLApplication
 {

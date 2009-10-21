@@ -1,6 +1,6 @@
 #include "Segment.h"
 #include <SDL.h>
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 #include "Vector.h"
 
 void Segment2D::Draw(const SDLApplication* app) const

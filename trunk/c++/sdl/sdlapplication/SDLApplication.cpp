@@ -1,5 +1,5 @@
 #include <SDL.h>
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 #include "SDLException.h"
 #include <ctime>
 #include <iostream>

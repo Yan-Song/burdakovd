@@ -1,4 +1,4 @@
-#include "color.h"
+#include "Color.h"
 
 const Color Palette::Black(0x000000),
 			Palette::White(0xffffff),

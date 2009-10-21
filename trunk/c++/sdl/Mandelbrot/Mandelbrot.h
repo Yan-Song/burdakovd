@@ -1,5 +1,5 @@
-#include "sdlapplication.h"
-#include "color.h"
+#include "SDLApplication.h"
+#include "Color.h"
 #include <complex>
 
 typedef std::complex<double> Complex;

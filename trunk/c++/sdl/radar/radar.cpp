@@ -1,5 +1,5 @@
 #include "radar.h"
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 #include "Segment.h"
 #include <cstdlib>
 #include <SDL.h>

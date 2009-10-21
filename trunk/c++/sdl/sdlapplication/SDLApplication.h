@@ -2,10 +2,10 @@
 #define SDLAPPLICATION_H
 
 #include <SDL.h>
-#include "color.h"
+#include "Color.h"
 #include "Vector.h"
 #include <cmath>
-#include "utils.h"
+#include "Utils.h"
 #include <list>
 #include "Timer.h"
 #include <string>

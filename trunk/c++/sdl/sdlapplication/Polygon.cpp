@@ -1,5 +1,5 @@
 #include "Polygon.h"
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 #include "Vector.h"
 
 Polygon::~Polygon(void)

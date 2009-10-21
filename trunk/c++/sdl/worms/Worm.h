@@ -4,7 +4,7 @@
 #include "IMyWorm.h"
 #include "ISomeWorm.h"
 #include "WormLogic.h"
-#include "color.h"
+#include "Color.h"
 #include <vector>
 #include "SDL.h"
 
