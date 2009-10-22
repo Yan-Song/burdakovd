@@ -17,6 +17,8 @@ struct Config
 	static const double DeathEnergyLevel;
 	// количество энергии, при котором червь начинает делиться
 	static const double ReplicateEnergyLevel;
+	// радиус трупа
+	static const int CorpseRadius;
 };
 
 #endif

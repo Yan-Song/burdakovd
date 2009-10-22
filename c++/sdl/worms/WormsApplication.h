@@ -18,14 +18,18 @@ public:
 	WormsApplication();
 	BattleField Map;
 	static const int FieldWidth = 800, FieldHeight = 600;
-	static const Color EmptyColor, WallColor, FoodColor;
 	void DrawCell(const SimplePoint& position, const CellType type) const;
 	void DrawWormCell(const SimplePoint& position, const ISomeWorm* worm, const int index) const;
 	void DrawCell(const SimplePoint& position, const Color& color) const;
+	static const Color EmptyColor, WallColor, FoodColor;
 	// создать нового червя заданного класса, добавить его в список, и вернуть указатель на него
 	// вызывающая сторона не должна делать delete для этого указателя
 	// UpdateMap и Draw для созданного червя автоматически не вызывается
 	ISomeWorm* AddWorm(const int ClassID, const double energy, const TPosition& position, const Color& color);
+	// создать некоторое количество еды для червей
+	void MakeFood();
+	void MakeFood(const int xx, const int yy, const int r);
+	void DrawMap();
 	virtual ~WormsApplication();
 
 private:

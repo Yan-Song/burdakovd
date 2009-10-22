@@ -4,26 +4,27 @@
 #include "Worm.h"
 #include "WormLogic.h"
 
+// лидером у этих червей всегда является старейший (с наименьшим ID)
+// если он умирает, то после отстутствия лидера в течение одной секунды, инициируются перевыборы
+// в LeaderID хранится текущий ID лидера, если у кого-то ID меньше, то он заменяет его своим, так проходят выборы
+// лидер управляется с клавиатуры, остальные следут за ним
 class Manual : public Worm
 {
+private:
+	static unsigned int LeaderID;
+	static SimplePoint LeaderPosition;
+	static double LastLeaderPresenceTime;
 public:
 	Manual()
 	{
-
+		
 	}
 
-	virtual WormLogic Run()
-	{
-		if(isPressed(SDLK_RIGHT))
-			return GoRight;
-		else if(isPressed(SDLK_LEFT))
-			return GoLeft;
-		else if(isPressed(SDLK_UP))
-			return GoUp;
-		else if(isPressed(SDLK_DOWN))
-			return GoDown;
-		return Stay;
-	}
+	virtual WormLogic Run();
+
+	WormLogic FindFood();
+	
+	void InitiateElections();
 
 	virtual ~Manual()
 	{

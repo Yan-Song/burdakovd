@@ -14,7 +14,7 @@ class WormsApplication;
 class Worm : public IMyWorm, public ISomeWorm
 {
 public:
-	Worm() : dead(false)
+	Worm() : dead(false), color(Palette::White)
 	{
 	}
 	
@@ -26,23 +26,15 @@ public:
 	// из отрезка [x, y]
 	virtual int Rand(const int x, const int y) const;
 
-private:
-	WormsApplication* app;
-	TPosition position;
-	int ID, classID;
-	double energy;
 	// локальное время червя
-	double time;
-	// время последнего обновления энергии
-	double lastUpdateEnergyTime;
-	Color color;
-	bool dead;
-
-	// локальное время червя
-	double GetTime() const
+	virtual double GetLocalTime() const
 	{
 		return time;
 	}
+
+	virtual double GetGlobalTime() const;
+
+	virtual CellType Look(const int x, const int y);
 
 	// возвращает позиции каждой из клеток червя, [0] - голова
     virtual const TPosition& Position() const
@@ -72,6 +64,18 @@ private:
 	{
 		return color;
 	}
+
+private:
+	WormsApplication* app;
+	TPosition position;
+	int ID, classID;
+	double energy;
+	// локальное время червя
+	double time;
+	// время последнего обновления энергии
+	double lastUpdateEnergyTime;
+	Color color;
+	bool dead;
 
 	virtual void Initialize(WormsApplication* _app, const int _ID, int const _classID, const double _energy, const TPosition& _position,
 		const double _time, const Color& _color)

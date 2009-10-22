@@ -130,6 +130,10 @@ void Worm::Die()
 {
 	EraseOnMap();
 	EraseOnScreen();
+
+	if(!position.empty())
+		app->MakeFood(position.front().X, position.front().Y, Config::CorpseRadius);
+
 	dead = true;
 }
 
@@ -176,11 +180,11 @@ void Worm::UpdateEnergy()
 		Die();
 
 		// создать детей
-		ISomeWorm* first = app->AddWorm(GetClassID(), energy, pfirst, GetColor());
+		ISomeWorm* first = app->AddWorm(GetClassID(), energy / 2, pfirst, GetColor());
 		first->UpdateMap();
 		first->Draw();
 
-		ISomeWorm* second = app->AddWorm(GetClassID(), energy, psecond, GetColor());
+		ISomeWorm* second = app->AddWorm(GetClassID(), energy / 2, psecond, GetColor());
 		second->UpdateMap();
 		second->Draw();
 	}
@@ -189,7 +193,7 @@ void Worm::UpdateEnergy()
 void Worm::DoLogic()
 {
 	// возможно стоит сделать while вместо if, если fps маленький (<10), но там может начаться другая печаль
-	if(GetTime() < app->GetTime())
+	if(GetLocalTime() < app->GetTime())
 	{
 		// ещё есть время!
 		WormLogic decision = Run();
@@ -217,4 +221,18 @@ int Worm::Rand(const int x, const int y) const
 int Worm::Rand(const int x) const
 {
 	return app->Rand(x);
+}
+
+CellType Worm::Look(const int x, const int y)
+{
+	assert(position.size()>0);
+	SimplePoint head = position.front();
+	int distance = abs(head.X - x) + abs(head.Y - y);
+	ConsumeTime(Config::DiscoverTime * distance);
+	return app->Map.Get(x, y);
+}
+
+double Worm::GetGlobalTime() const
+{
+	return app->GetTime();
 }

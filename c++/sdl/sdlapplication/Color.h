@@ -2,6 +2,7 @@
 #define COLOR_H
 
 #include <SDL.h>
+#include <iostream>
 
 // I - int/double // как указать в шаблоне допустимые параметры?
 template<typename I>
@@ -72,11 +73,22 @@ typedef GenericColor<double> DoubleColor;
 
 
 // некоторые базовые цвета, хотя кто их будет использовать?)
-class Palette
+namespace Palette
 {
-public:
-	static const Color
-		Black, White, Red, Green, Blue, Yellow, Gray;
+	const Color Black(0x000000),
+				White(0xffffff),
+				Red(0xff0000),
+				Green(0x00ff00),
+				Blue(0x0000ff),
+				Yellow(0xffff00),
+				Gray(0x808080);
 };
+
+template<typename I>
+std::ostream& operator <<(std::ostream& os, const GenericColor<I>& color)
+{
+	os<<"Color("<<color.R<<"; "<<color.G<<"; "<<color.B<<")";
+	return os;
+}
 
 #endif
