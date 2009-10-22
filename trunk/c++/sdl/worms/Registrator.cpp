@@ -11,7 +11,7 @@
 // тут проходит регистрация всех червей
 Registrator::Registrator()
 {
-	REGISTER(Statue);
+	//REGISTER(Statue);
 	REGISTER(Manual);
 	REGISTER(Random);
 }

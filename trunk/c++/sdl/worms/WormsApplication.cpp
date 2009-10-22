@@ -4,14 +4,20 @@
 #include <ctime>
 #include "ISomeWorm.h"
 #include "Utils.h"
+#include "Vector.h"
+#include "IWorm.h"
+#include "Color.h"
 
 const Color WormsApplication::EmptyColor = Palette::Black;
 const Color WormsApplication::WallColor = Palette::Gray;
-const Color WormsApplication::FoodColor = Palette::Red + Palette::Green; // коричневый
+const Color WormsApplication::FoodColor = (Palette::Red + Palette::Green) / 5; // коричневый
 
-WormsApplication::WormsApplication() : Map(ScreenHeight, ScreenWidth), nextWormID(0)
+WormsApplication::WormsApplication() : Map(FieldHeight, FieldWidth), nextWormID(0)
 {
 	lasttime = time(NULL);
+	
+	std::cout<<WallColor<<std::endl;
+	std::cout<<FoodColor<<std::endl;
 
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 
@@ -19,24 +25,27 @@ WormsApplication::WormsApplication() : Map(ScreenHeight, ScreenWidth), nextWormI
 
 	const unsigned int ncolors = 5;
 	Color wcolors[ncolors] = { Palette::Green, Palette::Blue, Palette::Gray, Palette::Red, Palette::Yellow };
-	// создаём по одному экземпляру каждого червя в случайных позициях, пока что только так \\todo: выбор условий, и не по одному
+	// создаём по 10 экземпляров каждого червя в случайных позициях, пока что только так \\todo: выбор условий, и не по одному
 	// прорисуются они в InitialRender
 	for(unsigned int i = 0; i < registrator.Count(); ++i)
 	{
-		std::cout<<"Creating "<<registrator.ClassName(i)<<" instance."<<std::endl;
+		std::cout<<"Creating "<<registrator.ClassName(i)<<" instances."<<std::endl;
 		
-		int xx, yy;
-		do
+		for(int j = 0; j < 100; ++j)
 		{
-			xx = Rand(FieldWidth);
-			yy = Rand(FieldHeight);
-		}
-		while(Map.Get(xx, yy) != CellEmpty);
-		
-		TPosition _position;
-		_position.push_back(SimplePoint(xx, yy));
+			int xx, yy;
+			do
+			{
+				xx = Rand(FieldWidth);
+				yy = Rand(FieldHeight);
+			}
+			while(Map.Get(xx, yy) != CellEmpty);
+			
+			TPosition _position;
+			_position.push_back(SimplePoint(xx, yy));
 
-		AddWorm(i, 100, _position, wcolors[i % ncolors])->UpdateMap();
+			AddWorm(i, 100, _position, wcolors[i % ncolors])->UpdateMap();
+		}
 	}
 }
 
@@ -48,6 +57,14 @@ void WormsApplication::ProcessEvent(SDL_Event Event)
 
 		if(sym == SDLK_ESCAPE || sym == SDLK_q)
 			Stop();
+
+		if(sym == SDLK_f)
+		{
+			Lock();
+			MakeFood();
+			Unlock();
+			Flip();
+		}
 	}
 }
 
@@ -90,7 +107,7 @@ void WormsApplication::Main()
 	if(lasttime != time(NULL))
 	{
 		lasttime = time(NULL);
-		std::cout<<"Time: "<<GetTime()<<"; FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
+		std::cout<<"Time: "<<GetTime()<<"; total worms: "<<worms.size()<<"; FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
 	}
 }
 
@@ -137,6 +154,16 @@ WormsApplication::~WormsApplication()
 void WormsApplication::InitialRender()
 {
 	Lock();
+	
+	DrawMap();
+	// ещё тут будет прорисовка чего-то кроме карты, что не меняется на каждом кадре, рамки к примеру
+
+	Unlock();
+	Flip();
+}
+
+void WormsApplication::DrawMap()
+{
 	for(int x = 0; x < Map.Width; ++x)
 		for(int y = 0; y < Map.Height; ++y)
 		{
@@ -147,9 +174,6 @@ void WormsApplication::InitialRender()
 
 	for(unsigned int i = 0; i < worms.size(); ++i)
 		worms[i]->Draw();
-
-	Unlock();
-	Flip();
 }
 
 ISomeWorm* WormsApplication::AddWorm(const int ClassID, const double energy, const TPosition& position, const Color& color)
@@ -161,3 +185,24 @@ ISomeWorm* WormsApplication::AddWorm(const int ClassID, const double energy, con
 	return worm;
 }
 
+void WormsApplication::MakeFood()
+{
+	int xx = Rand(FieldWidth), yy = Rand(FieldHeight);
+	int sz = min(FieldHeight, FieldWidth);
+	int r = Rand(sz / 20, sz / 10);
+	MakeFood(xx, yy, r);
+}
+
+void WormsApplication::MakeFood(const int xx, const int yy, const int r)
+{
+	Point2D center = Vector2DByCoords(xx, yy);
+
+	for(int x = xx - r; x < xx + r; ++x)
+		for(int y = yy - r; y < yy + r; ++y)
+			if(center.Distance(Vector2DByCoords(x, y)) < r)
+				if(Map.Get(x, y) == CellEmpty)
+				{
+					Map.Set(x, y, CellFood);
+					DrawCell(SimplePoint(x, y), CellFood);
+				}
+}

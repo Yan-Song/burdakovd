@@ -44,6 +44,9 @@ public:
 	// из отрезка [x, y]
 	virtual int Rand(const int x, const int y) const = 0;
 
+	// узнать текущее время
+	virtual double GetGlobalTime() const = 0;
+
 	virtual ~IWorm()
 	{
 	}
