@@ -32,6 +32,8 @@ namespace FiniteStateMachine
 
         public Engine(WoWMemoryManager.MemoryManager memory)
         {
+            DoNotRestart = false;
+
             if (Settings.Default.DisabledStates == null)
                 Settings.Default.DisabledStates = new StringCollection();
 
