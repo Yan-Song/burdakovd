@@ -13,6 +13,20 @@
 #include "Circle2D.h"
 #include "Triangle2D.h"
 #include "Polygon.h"
+#include "CompoundObject.h"
+
+class PineTree : public CompoundObject
+{
+public:
+	PineTree(const Vector2D& center)
+	{
+		Add(new Triangle2D(center + Vector2DByCoords(15, 0), center + Vector2DByCoords(-15, 0), center + Vector2DByCoords(0, -15), Palette::Green));
+
+		Add(new Triangle2D(center + Vector2DByCoords(10, -15), center + Vector2DByCoords(-10, -15), center + Vector2DByCoords(0, -25), Palette::Green));
+	
+		Add(new Triangle2D(center + Vector2DByCoords(5, -25), center + Vector2DByCoords(-5, -25), center + Vector2DByCoords(0, -30), Palette::Green));
+	}
+};
 
 PrimitivesApplication::PrimitivesApplication()
 {
@@ -31,18 +45,10 @@ PrimitivesApplication::PrimitivesApplication()
 	
 	center = ScreenPointByCoords(ScreenWidth / 2, ScreenHeight / 2);
 	Me.push_back(new Circle2D(center, R, Palette::Yellow));
-	Me.push_back(new Triangle2D(center + Vector2DByCoords(0, 0.2*R), center + Vector2DByCoords(0.2*R * cos(-Pi/6), 0.2*R * sin(-Pi/6)),
-		center + Vector2DByCoords(0.2*R * cos(7*Pi/6), 0.2*R * sin(7*Pi/6)), Palette::Green));
+	
+	PineTree* yolochka = new PineTree(center);
 
-	Polygon* star = new Polygon(Palette::Red);
-
-	star->Add(center + Vector2DByCoords(R * cos(-Pi / 2), R * sin(-Pi / 2)));
-	star->Add(center + Vector2DByCoords(R * cos(-Pi / 2 + 4 * Pi / 5), R * sin(-Pi / 2 + 4 * Pi / 5)));
-	star->Add(center + Vector2DByCoords(R * cos(-Pi / 2 + 8 * Pi / 5), R * sin(-Pi / 2 + 8 * Pi / 5)));
-	star->Add(center + Vector2DByCoords(R * cos(-Pi / 2 + 2 * Pi / 5), R * sin(-Pi / 2 + 2 * Pi / 5)));
-	star->Add(center + Vector2DByCoords(R * cos(-Pi / 2 + 6 * Pi / 5), R * sin(-Pi / 2 + 6 * Pi / 5)));
-
-	Me.push_back(star);
+	Me.push_back(yolochka);
 }
 
 void PrimitivesApplication::Main()
@@ -63,7 +69,7 @@ void PrimitivesApplication::Main()
 	center += dr;
 	
 	// движение
-	for(int i = 0; i < Me.size(); ++i)
+	for(unsigned int i = 0; i < Me.size(); ++i)
 		Me[i]->Shift(dr);
 	
 	if(center[0] < R)
@@ -129,7 +135,7 @@ void PrimitivesApplication::Render()
 	Lock();
 	
 	ClearScreen(Palette::Black);
-	for(int i = 0; i < Me.size(); ++i)
+	for(unsigned int i = 0; i < Me.size(); ++i)
 		Me[i]->Draw(this);
 	
 	Unlock();
@@ -150,6 +156,6 @@ void PrimitivesApplication::ProcessEvent(SDL_Event Event)
 
 PrimitivesApplication::~PrimitivesApplication()
 {
-	for(int i = 0; i < Me.size(); ++i)
+	for(unsigned int i = 0; i < Me.size(); ++i)
 		delete Me[i];
 }

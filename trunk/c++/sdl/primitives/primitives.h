@@ -22,6 +22,7 @@ private:
 	double stopping;
 	double reflectK;
 	static const int R = 50;
+	// элементы удаляются в деструкторе
 	std::vector<GraphObject2D*> Me;
 	Vector2D center;
 	
