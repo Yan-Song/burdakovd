@@ -24,7 +24,6 @@ private:
 	double reflectK;
 	static const int R = 200;
 	Scene scene;
-	Vector2D center;
 	
 protected:
 	virtual void Main();
