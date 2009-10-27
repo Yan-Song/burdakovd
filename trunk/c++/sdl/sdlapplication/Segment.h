@@ -13,13 +13,11 @@ public:
 	Point2D A, B;
 	Color color;
 
-	Segment2D(Point2D a, Point2D b): A(a), B(b), color(0xffffff) { }
+	Segment2D(Point2D a, Point2D b, Color c = Palette::White): A(a), B(b), color(c) { }
 
-	Segment2D(Point2D a, Point2D b, Color c): A(a), B(b), color(c) { }
+	virtual void Draw(const SDLApplication*, const Vector& base) const;
 
-	virtual void Draw(const SDLApplication*) const;
-
-	virtual void Shift(const Vector2D& v);
+	virtual void Move(const Vector2D& v);
  
     virtual ~Segment2D() {};
 };

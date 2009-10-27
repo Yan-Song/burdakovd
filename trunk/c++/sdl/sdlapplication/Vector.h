@@ -19,20 +19,20 @@ private:
 public:
 	static const int Dimensions = N;
 
-	// конструктор по умолчанию
-	GenericVector()
+	// конструктор по умолчанию - нули
+	inline GenericVector()
 	{
 		for(int i = 0; i < N; ++i)
 			data[i] = 0;
 	}
 
-	GenericVector(const dataArray& dt)
+	inline GenericVector(const dataArray& dt)
 	{
 		for(int i = 0; i < N; ++i)
 			data[i] = dt[i];
 	}
 
-	GenericVector(const GenericVector<I, N>& other)
+	inline GenericVector(const GenericVector<I, N>& other)
 	{
 		for(int i = 0; i < N; ++i)
 			data[i] = other[i];

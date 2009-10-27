@@ -9,28 +9,28 @@ class Circle2D :
 	public GraphObject2D
 {
 private:
-	void circlePoints(const SDLApplication* app, const int x, const int y, const Color& color) const;
+	void circlePoints(const SDLApplication* app, const Vector2D& center, const int x, const int y, const Color& color) const;
 
 public:
-	Vector2D Center;
 	double R;
 	Color color;
 
 	Circle2D(void) {};
 
-	Circle2D(const Vector2D& v, const double r) :
-		Center(v), R(r), color(Palette::White)
+	Circle2D(const double r, const Color& c = Palette::White) :
+		R(r), color(c)
 		{
 		};
 
-	Circle2D(const Vector2D& v, const double r, const Color& c) :
-		Center(v), R(r), color(c)
+	inline Circle2D(const Vector2D& center, const double r, const Color& c = Palette::White) :
+		R(r), color(c)
 		{
+			Center = center;
 		};
 
-	virtual void Draw(const SDLApplication* app) const;
+	virtual void Draw(const SDLApplication* app, const Vector& base) const;
 
-	virtual void Shift(const Vector2D& v);
+	virtual void Move(const Vector2D& v);
 
 	virtual ~Circle2D(void) {};
 };

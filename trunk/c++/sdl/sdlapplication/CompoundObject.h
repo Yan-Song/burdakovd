@@ -19,9 +19,9 @@ protected:
 	void Add(GraphObject2D* const object);
 
 public:
-	virtual void Draw(const SDLApplication* app) const;
+	virtual void Draw(const SDLApplication* app, const Vector& base) const;
 
-	virtual void Shift(const Vector2D& v);
+	virtual void Move(const Vector2D& v);
 };
 
 #endif

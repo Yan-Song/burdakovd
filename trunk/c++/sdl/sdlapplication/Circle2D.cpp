@@ -1,8 +1,8 @@
 #include "Circle2D.h"
 
-void Circle2D::circlePoints(const SDLApplication* app, const int x, const int y, const Color& color) const
+void Circle2D::circlePoints(const SDLApplication* app, const Vector2D& center, const int x, const int y, const Color& color) const
 {
-	const int xCenter = static_cast<int>(Center[0]), yCenter = static_cast<int>(Center[1]);
+	const int xCenter = static_cast<int>(center[0]), yCenter = static_cast<int>(center[1]);
 
 	app->DrawPixel(xCenter + x, yCenter + y, color);
 	app->DrawPixel(xCenter + y, yCenter + x, color);
@@ -14,8 +14,10 @@ void Circle2D::circlePoints(const SDLApplication* app, const int x, const int y,
 	app->DrawPixel(xCenter - x, yCenter + y, color);
 }
 
-void Circle2D::Draw(const SDLApplication* app) const
+void Circle2D::Draw(const SDLApplication* app, const Vector& base) const
 {
+	Vector2D center = base + Center;
+
 	int r = static_cast<int>(R);
 
 	int x = 0;
@@ -26,7 +28,7 @@ void Circle2D::Draw(const SDLApplication* app) const
 	int delta1 = 3;
 	int delta2 = - 2 * r + 5;
 
-	circlePoints(app, x, y, color);
+	circlePoints(app, center, x, y, color);
 
 	while(y > x)
 	{
@@ -45,11 +47,11 @@ void Circle2D::Draw(const SDLApplication* app) const
 			++x;
 			--y;
 		}
-		circlePoints(app, x, y, color);
+		circlePoints(app, center, x, y, color);
 	}
 }
 
-void Circle2D::Shift(const Vector2D& v)
+void Circle2D::Move(const Vector2D& v)
 {
 	Center += v;
 }

@@ -6,19 +6,18 @@ Polygon::~Polygon(void)
 {
 }
 
-void Polygon::Draw(const SDLApplication *app) const
+void Polygon::Draw(const SDLApplication *app, const Vector& base) const
 {
 	if(points.size()==0)
 		return;
 
 	for(unsigned int i = 0; i < points.size(); ++i)
-		app->DrawSegment(points[i], points[(i+1) % points.size()], color);
+		app->DrawSegment(base + Center + points[i], base + Center + points[(i+1) % points.size()], color);
 }
 
-void Polygon::Shift(const Vector2D &v)
+void Polygon::Move(const Vector2D &v)
 {
-	for(Points::iterator it = points.begin(); it != points.end(); ++it)
-		(*it) += v;
+	Center += v;
 }
 
 void Polygon::Add(const Point2D &p)
