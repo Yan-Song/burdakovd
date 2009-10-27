@@ -6,6 +6,7 @@
 #include "Segment.h"
 #include "Circle2D.h"
 #include "GraphObject.h"
+#include "Scene.h"
 
 class PrimitivesApplication : public SDLApplication
 {
@@ -21,9 +22,8 @@ private:
 	double accelerating;
 	double stopping;
 	double reflectK;
-	static const int R = 50;
-	// элементы удаляются в деструкторе
-	std::vector<GraphObject2D*> Me;
+	static const int R = 200;
+	Scene scene;
 	Vector2D center;
 	
 protected:

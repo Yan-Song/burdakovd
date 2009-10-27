@@ -14,6 +14,7 @@
 #include "Triangle2D.h"
 #include "Polygon.h"
 #include "CompoundObject.h"
+#include "Scene.h"
 
 class PineTree : public CompoundObject
 {
@@ -44,11 +45,13 @@ PrimitivesApplication::PrimitivesApplication()
 	reflectK = 0.8;
 	
 	center = ScreenPointByCoords(ScreenWidth / 2, ScreenHeight / 2);
-	Me.push_back(new Circle2D(center, R, Palette::Yellow));
 	
-	PineTree* yolochka = new PineTree(center);
+	scene.Add(new Circle2D(center, R, Palette::Yellow));
+	
+	ScreenPoint dx = ScreenPointByCoords(60, 0);
 
-	Me.push_back(yolochka);
+	for(int i = -3; i < 4; ++i)	
+		scene.Add(new PineTree(center + i * dx));
 }
 
 void PrimitivesApplication::Main()
@@ -69,8 +72,7 @@ void PrimitivesApplication::Main()
 	center += dr;
 	
 	// движение
-	for(unsigned int i = 0; i < Me.size(); ++i)
-		Me[i]->Shift(dr);
+	scene.Shift(dr);
 	
 	if(center[0] < R)
 	{
@@ -135,8 +137,8 @@ void PrimitivesApplication::Render()
 	Lock();
 	
 	ClearScreen(Palette::Black);
-	for(unsigned int i = 0; i < Me.size(); ++i)
-		Me[i]->Draw(this);
+	
+	scene.Draw(this);
 	
 	Unlock();
 	
@@ -156,6 +158,5 @@ void PrimitivesApplication::ProcessEvent(SDL_Event Event)
 
 PrimitivesApplication::~PrimitivesApplication()
 {
-	for(unsigned int i = 0; i < Me.size(); ++i)
-		delete Me[i];
+	
 }
