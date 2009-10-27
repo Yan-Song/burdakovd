@@ -301,7 +301,7 @@ function private.everySecond()
 			private.ERROR()
 			updateNextMailTime()
 			return
-		elseif private.gtime - prevICTime > 10 then
+		elseif private.gtime - prevICTime > 15 then
 			prevICTime = private.gtime
 			local cur = GBM:InBagsItemCount() + GetMoney()
 			if cur == prevItemsCount then
