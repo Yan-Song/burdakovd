@@ -72,7 +72,7 @@ void PrimitivesApplication::Main()
 	center += dr;
 	
 	// движение
-	scene.Shift(dr);
+	scene.Move(dr);
 	
 	if(center[0] < R)
 	{
@@ -138,7 +138,7 @@ void PrimitivesApplication::Render()
 	
 	ClearScreen(Palette::Black);
 	
-	scene.Draw(this);
+	scene.Draw(this, Vector2D());
 	
 	Unlock();
 	

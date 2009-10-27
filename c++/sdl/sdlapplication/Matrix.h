@@ -35,34 +35,34 @@ public:
 
     Matrix operator *(const Matrix& other) const;
 
-    static Matrix Shift(const OldHomogeneousPoint2D& d);
+    static Matrix Move(const OldHomogeneousPoint2D& d);
 
     static Matrix Rotate(const double phi);
 
     inline static Matrix Rotate(const OldHomogeneousPoint2D& base, const double phi)
     {
-        return Matrix::Shift(base) * Matrix::Rotate(phi) * Matrix::Shift(-base);
+        return Matrix::Move(base) * Matrix::Rotate(phi) * Matrix::Move(-base);
     }
 
     static Matrix Scale(const double kx, const double ky);
 
     inline static Matrix Scale(const OldHomogeneousPoint2D& base, const double kx, const double ky)
     {
-        return Matrix::Shift(base) * Matrix::Scale(kx, ky) * Matrix::Shift(-base);
+        return Matrix::Move(base) * Matrix::Scale(kx, ky) * Matrix::Move(-base);
     }
 
     static Matrix ReflectX();
 
     inline static Matrix ReflectX(const double x)
     {
-        return Matrix::Shift(OldHomogeneousPoint2D(x, 0)) * Matrix::ReflectX() * Matrix::Shift(OldHomogeneousPoint2D(-x, 0));
+        return Matrix::Move(OldHomogeneousPoint2D(x, 0)) * Matrix::ReflectX() * Matrix::Move(OldHomogeneousPoint2D(-x, 0));
     }
 
     static Matrix ReflectY();
 
     inline static Matrix ReflectY(const double y)
     {
-        return Matrix::Shift(OldHomogeneousPoint2D(0, y)) * Matrix::ReflectY() * Matrix::Shift(OldHomogeneousPoint2D(0, -y));
+        return Matrix::Move(OldHomogeneousPoint2D(0, y)) * Matrix::ReflectY() * Matrix::Move(OldHomogeneousPoint2D(0, -y));
     }
 };
 

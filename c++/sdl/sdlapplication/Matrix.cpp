@@ -72,7 +72,7 @@ Matrix Matrix::ReflectY()
     return m;
 }
 
-Matrix Matrix::Shift(const OldHomogeneousPoint2D& d)
+Matrix Matrix::Move(const OldHomogeneousPoint2D& d)
 {
     Matrix m;
 

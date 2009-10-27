@@ -13,8 +13,11 @@ class GenericGraphObject
 public:
 	typedef GenericVector<double, Dimensions> Vector;
 
+	// центр этого объекта относительно центра родительского
+	Vector Center;
+
 	// параллельный перенос
-	virtual void Shift(const Vector& v) = 0;
+	virtual void Move(const Vector& v) = 0;
 
 	// ... прочие повороты/растяжения...
     
@@ -25,8 +28,8 @@ public:
 class GraphObject2D : public GenericGraphObject<2>
 {
 public:
-	// отрисовать себя на заданной поверхности
-	virtual void Draw(const SDLApplication*) const = 0;
+	// отрисовать себя, относительно заданной точки
+	virtual void Draw(const SDLApplication*, const Vector& base) const = 0;
 
 };
 

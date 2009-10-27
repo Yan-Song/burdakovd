@@ -3,15 +3,14 @@
 #include "SDLApplication.h"
 #include "Vector.h"
 
-void Segment2D::Draw(const SDLApplication* app) const
+void Segment2D::Draw(const SDLApplication* app, const Vector& base) const
 {
-	app->DrawSegment(A, B, color);
+	app->DrawSegment(base + Center + A, base + Center + B, color);
 }
 
-void Segment2D::Shift(const Vector2D& v)
+void Segment2D::Move(const Vector2D& v)
 {
-	A += v;
-	B += v;
+	Center += v;
 }
 
 /*void Line::Modify(const Matrix &m)
