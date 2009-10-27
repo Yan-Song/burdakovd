@@ -166,4 +166,7 @@ Vector2D Vector2DByCoords(double x, double y);
 
 ScreenPoint ScreenPointByCoords(int x, int y);
 
+// вектор, соответствующий началу координат
+const Vector2D Vector00 = Vector2DByCoords(0.0, 0.0);
+
 #endif

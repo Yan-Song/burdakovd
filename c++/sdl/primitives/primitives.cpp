@@ -21,11 +21,11 @@ class PineTree : public CompoundObject
 public:
 	PineTree(const Vector2D& center)
 	{
-		Add(new Triangle2D(center + Vector2DByCoords(15, 0), center + Vector2DByCoords(-15, 0), center + Vector2DByCoords(0, -15), Palette::Green));
+		Add(new Triangle2D(center + Vector2DByCoords(15, 15), center + Vector2DByCoords(-15, 15), center + Vector2DByCoords(0, 0), Palette::Green));
 
-		Add(new Triangle2D(center + Vector2DByCoords(10, -15), center + Vector2DByCoords(-10, -15), center + Vector2DByCoords(0, -25), Palette::Green));
+		Add(new Triangle2D(center + Vector2DByCoords(10, 0), center + Vector2DByCoords(-10, 0), center + Vector2DByCoords(0, -10), Palette::Green));
 	
-		Add(new Triangle2D(center + Vector2DByCoords(5, -25), center + Vector2DByCoords(-5, -25), center + Vector2DByCoords(0, -30), Palette::Green));
+		Add(new Triangle2D(center + Vector2DByCoords(5, -10), center + Vector2DByCoords(-5, -10), center + Vector2DByCoords(0, -15), Palette::Green));
 	}
 };
 
@@ -44,19 +44,26 @@ PrimitivesApplication::PrimitivesApplication()
 	// коэффициент упругости отражения от стен, 1 - абс. упруго, 0 - неупруго
 	reflectK = 0.8;
 	
-	center = ScreenPointByCoords(ScreenWidth / 2, ScreenHeight / 2);
+	scene.Center = ScreenPointByCoords(ScreenWidth / 2, ScreenHeight / 2);
 	
-	scene.Add(new Circle2D(center, R, Palette::Yellow));
+	scene.Add(new Circle2D(R, Palette::Yellow));
 	
-	ScreenPoint dx = ScreenPointByCoords(60, 0);
+	int TreeR = 25;
 
-	for(int i = -3; i < 4; ++i)	
-		scene.Add(new PineTree(center + i * dx));
+	ScreenPoint dx = ScreenPointByCoords(TreeR * 2, 0);
+	ScreenPoint dy = ScreenPointByCoords(0, TreeR * 2);
+
+	for(int xx = static_cast<int>(-R / TreeR); xx < R / TreeR; ++xx)	
+		for(int yy = static_cast<int>(-R / TreeR); yy < R / TreeR; ++yy)
+		{
+			Vector2D center = xx * dx + yy * dy;
+			if(center.Length() + TreeR < R)
+				scene.Add(new PineTree(center));
+		}
 }
 
 void PrimitivesApplication::Main()
 {
-	
 	if(lasttime != time(NULL)) // прошла секунда
 	{
 		lasttime = time(NULL);
@@ -69,32 +76,31 @@ void PrimitivesApplication::Main()
 	vy -= stopping * sgn(vy) * dt;
 
 	Vector2D dr = Vector2DByCoords(vx * dt, vy * dt);
-	center += dr;
-	
+
 	// движение
 	scene.Move(dr);
 	
-	if(center[0] < R)
+	if(scene.Center[0] < R)
 	{
-		center[0] = R;
+		scene.Center[0] = R;
 		vx = abs(reflectK * vx);
 	}
 	
-	if(center[1] < R)
+	if(scene.Center[1] < R)
 	{
-		center[1] = R;
+		scene.Center[1] = R;
 		vy = abs(reflectK * vy);
 	}
 	
-	if(center[0] > ScreenWidth - R)
+	if(scene.Center[0] > ScreenWidth - R)
 	{
-		center[0] = ScreenWidth - R;
+		scene.Center[0] = ScreenWidth - R;
 		vx = -abs(reflectK * vx);
 	}
 	
-	if(center[1] > ScreenHeight - R)
+	if(scene.Center[1] > ScreenHeight - R)
 	{
-		center[1] = ScreenHeight - R;
+		scene.Center[1] = ScreenHeight - R;
 		vy = -abs(reflectK * vy);
 	}
 }
@@ -138,7 +144,7 @@ void PrimitivesApplication::Render()
 	
 	ClearScreen(Palette::Black);
 	
-	scene.Draw(this, Vector2D());
+	scene.Draw(this, Vector00);
 	
 	Unlock();
 	
