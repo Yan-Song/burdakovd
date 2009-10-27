@@ -146,6 +146,12 @@ public:
 	}
 };
 
+template<typename I, int N>
+inline GenericVector<I, N> operator *(const I k, const GenericVector<I, N>& v)
+{
+	return v * k;
+}
+
 // вектор на плоскости, координаты - double
 typedef GenericVector<double, 2> Vector2D;
 

@@ -55,6 +55,11 @@ public:
 	}
 };
 
+template<typename I>
+inline GenericColor<I> operator *(const I k, const GenericColor<I>& color)
+{
+	return color * k;
+}
 
 // градиент работает и для целочисленного случая (Color)
 template<typename I>
