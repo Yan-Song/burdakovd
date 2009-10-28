@@ -188,7 +188,8 @@ ISomeWorm* WormsApplication::AddWorm(const int ClassID, const double energy, con
 void WormsApplication::MakeFood()
 {
 	int xx = Rand(FieldWidth), yy = Rand(FieldHeight);
-	int sz = min(FieldHeight, FieldWidth);
+	// тут какая-то фигня с компилятором, пока что приходится писать int()
+	int sz = min(int(FieldHeight), int(FieldWidth));
 	int r = Rand(sz / 20, sz / 10);
 	MakeFood(xx, yy, r);
 }
