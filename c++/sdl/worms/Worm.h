@@ -14,7 +14,7 @@ class WormsApplication;
 class Worm : public IMyWorm, public ISomeWorm
 {
 public:
-	Worm() : dead(false), color(Palette::White)
+	Worm() : color(Palette::White), dead(false)
 	{
 	}
 	
