@@ -15,6 +15,7 @@
 #include "Polygon.h"
 #include "CompoundObject.h"
 #include "Scene.h"
+#include "Sprite.h"
 
 class PineTree : public CompoundObject
 {
@@ -60,6 +61,8 @@ PrimitivesApplication::PrimitivesApplication()
 			if(center.Length() + TreeR < R)
 				scene.Add(new PineTree(center));
 		}
+
+	scene.Add(new Sprite("logo.bmp"));
 }
 
 void PrimitivesApplication::Main()
@@ -130,23 +133,15 @@ void PrimitivesApplication::DoNavigation()
 
 void PrimitivesApplication::InitialRender()
 {
-	Lock();
-	
 	ClearScreen(Palette::Black);
-	
-	Unlock();
 	Flip();
 }
 
 void PrimitivesApplication::Render()
 {
-	Lock();
-	
 	ClearScreen(Palette::Black);
 	
 	scene.Draw(this, Vector00);
-	
-	Unlock();
 	
 	Flip();
 }
