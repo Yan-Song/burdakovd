@@ -17,7 +17,10 @@ public:
 	Vector Center;
 
 	// параллельный перенос
-	virtual void Move(const Vector& v) = 0;
+	virtual void Move(const Vector& v)
+	{
+		Center += v;
+	}
 
 	// ... прочие повороты/растяжения...
     

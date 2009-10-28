@@ -26,8 +26,6 @@ public:
 
 	virtual void Draw(const SDLApplication* app, const Vector& base) const;
 
-	virtual void Move(const Vector2D& v);
-
 	// добавить точку (относительно Center)
 	void Add(const Point2D& p);
 

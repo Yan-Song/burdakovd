@@ -17,8 +17,6 @@ public:
 
 	virtual void Draw(const SDLApplication*, const Vector& base) const;
 
-	virtual void Move(const Vector2D& v);
- 
     virtual ~Segment2D() {};
 };
 

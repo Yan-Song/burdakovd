@@ -15,11 +15,6 @@ void Polygon::Draw(const SDLApplication *app, const Vector& base) const
 		app->DrawSegment(base + Center + points[i], base + Center + points[(i+1) % points.size()], color);
 }
 
-void Polygon::Move(const Vector2D &v)
-{
-	Center += v;
-}
-
 void Polygon::Add(const Point2D &p)
 {
 	points.push_back(p);

@@ -50,8 +50,3 @@ void Circle2D::Draw(const SDLApplication* app, const Vector& base) const
 		circlePoints(app, center, x, y, color);
 	}
 }
-
-void Circle2D::Move(const Vector2D& v)
-{
-	Center += v;
-}
