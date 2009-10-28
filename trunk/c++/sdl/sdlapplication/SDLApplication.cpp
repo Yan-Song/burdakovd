@@ -173,6 +173,7 @@ void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb) const
 
 	Uint32 color = MapColor(rgb);
 
+	Lock();
 	switch (Screen->format->BytesPerPixel){ 
 	   case 1:  // Assuming 8-bpp 
 	   { 
@@ -208,7 +209,8 @@ void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb) const
 		 bufp = (Uint32 *)Screen->pixels + y*Screen->pitch/4 + x; 
 		 *bufp = color; 
 	   } break; 
-	 } 
+	 }
+	Unlock();
 }
 
 // исключая x
