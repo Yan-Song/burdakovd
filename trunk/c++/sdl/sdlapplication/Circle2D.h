@@ -30,8 +30,6 @@ public:
 
 	virtual void Draw(const SDLApplication* app, const Vector& base) const;
 
-	virtual void Move(const Vector2D& v);
-
 	virtual ~Circle2D(void) {};
 };
 

@@ -12,8 +12,3 @@ void Triangle2D::Draw(const SDLApplication* app, const Vector& base) const
 	app->DrawSegment(base + Center + B, base + Center + C, color);
 	app->DrawSegment(base + Center + C, base + Center + A, color);
 }
-
-void Triangle2D::Move(const Vector2D &v)
-{
-	Center += v;
-}
