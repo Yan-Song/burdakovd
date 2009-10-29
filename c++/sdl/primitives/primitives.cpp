@@ -14,7 +14,7 @@
 #include "Triangle2D.h"
 #include "Polygon.h"
 #include "CompoundObject.h"
-#include "Scene.h"
+#include "MyScene.h"
 #include "Sprite.h"
 
 class PineTree : public CompoundObject
@@ -22,15 +22,17 @@ class PineTree : public CompoundObject
 public:
 	PineTree(const Vector2D& center)
 	{
-		Add(new Triangle2D(center + Vector2DByCoords(15, 15), center + Vector2DByCoords(-15, 15), center + Vector2DByCoords(0, 0), Palette::Green));
+		Center = center;		
+		
+		Add(new Triangle2D(Vector2DByCoords(15, 15), Vector2DByCoords(-15, 15), Vector2DByCoords(0, 0), Palette::Green));
 
-		Add(new Triangle2D(center + Vector2DByCoords(10, 0), center + Vector2DByCoords(-10, 0), center + Vector2DByCoords(0, -10), Palette::Green));
+		Add(new Triangle2D(Vector2DByCoords(10, 0), Vector2DByCoords(-10, 0), Vector2DByCoords(0, -10), Palette::Green));
 	
-		Add(new Triangle2D(center + Vector2DByCoords(5, -10), center + Vector2DByCoords(-5, -10), center + Vector2DByCoords(0, -15), Palette::Green));
+		Add(new Triangle2D(Vector2DByCoords(5, -10), Vector2DByCoords(-5, -10), Vector2DByCoords(0, -15), Palette::Green));
 	}
 };
 
-PrimitivesApplication::PrimitivesApplication()
+PrimitivesApplication::PrimitivesApplication() : scene(ScreenWidth, ScreenHeight)
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
@@ -47,7 +49,7 @@ PrimitivesApplication::PrimitivesApplication()
 	
 	scene.Center = ScreenPointByCoords(ScreenWidth / 2, ScreenHeight / 2);
 	
-	scene.Add(new Circle2D(R, Palette::Yellow));
+	//scene.Add(new Circle2D(R, Palette::Yellow));
 	
 	int TreeR = 25;
 
@@ -73,7 +75,7 @@ void PrimitivesApplication::Main()
 		std::cout<<"Time: "<<GetTime()<<"; FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
 	}
 	
-	DoNavigation();
+	//DoNavigation();
 	
 	vx -= stopping * sgn(vx) * dt;
 	vy -= stopping * sgn(vy) * dt;
@@ -106,6 +108,8 @@ void PrimitivesApplication::Main()
 		scene.Center[1] = ScreenHeight - R;
 		vy = -abs(reflectK * vy);
 	}
+	
+	scene.Tick();
 }
 
 void PrimitivesApplication::DoNavigation()

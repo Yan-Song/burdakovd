@@ -6,7 +6,7 @@
 #include "Segment.h"
 #include "Circle2D.h"
 #include "GraphObject.h"
-#include "Scene.h"
+#include "MyScene.h"
 
 class PrimitivesApplication : public SDLApplication
 {
@@ -23,7 +23,7 @@ private:
 	double stopping;
 	double reflectK;
 	static const int R = 200;
-	Scene scene;
+	MyScene scene;
 	
 protected:
 	virtual void Main();

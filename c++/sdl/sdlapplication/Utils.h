@@ -15,6 +15,12 @@ inline T min(const T& x, const T& y)
     return x > y ? y : x;
 }
 
+template<typename T>
+inline T abs(const T& x)
+{
+	return x < 0 ? -x : x;
+}
+
 template<class T>
 inline T max(const T& x, const T& y)
 {

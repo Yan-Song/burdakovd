@@ -17,7 +17,7 @@ class WormsApplication: public SDLApplication
 public:
 	WormsApplication();
 	BattleField Map;
-	static const int FieldWidth = 800, FieldHeight = 600;
+	static const int FieldWidth, FieldHeight;
 	void DrawCell(const SimplePoint& position, const CellType type) const;
 	void DrawWormCell(const SimplePoint& position, const ISomeWorm* worm, const int index) const;
 	void DrawCell(const SimplePoint& position, const Color& color) const;

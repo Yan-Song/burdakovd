@@ -12,6 +12,10 @@ const Color WormsApplication::EmptyColor = Palette::Black;
 const Color WormsApplication::WallColor = Palette::Gray;
 const Color WormsApplication::FoodColor = (Palette::Red + Palette::Green) / 5; // коричневый
 
+const int WormsApplication::FieldWidth = 800;
+const int WormsApplication::FieldHeight = 600;
+
+
 WormsApplication::WormsApplication() : Map(FieldHeight, FieldWidth), nextWormID(0)
 {
 	lasttime = time(NULL);
