@@ -109,7 +109,7 @@ void PrimitivesApplication::Main()
 		vy = -abs(reflectK * vy);
 	}
 	
-	scene.Tick();
+	scene.Tick(dt);
 }
 
 void PrimitivesApplication::DoNavigation()
