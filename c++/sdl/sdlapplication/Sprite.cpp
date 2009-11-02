@@ -2,6 +2,8 @@
 #include <string>
 #include <SDL.h>
 
+#pragma warning (disable : 4100)
+
 Sprite::Sprite(const std::string &BMPFile, const Vector2D& center) : image(NULL)
 {
 	Center = center;
@@ -35,4 +37,9 @@ void Sprite::Draw(const SDLApplication *app, const Vector2D &base) const
 	
 	// If srcrect is NULL, the entire surface is copied.
 	SDLCheck(SDL_BlitSurface(image, NULL, app->Screen, &dst));
+}
+
+void Sprite::Rotate(const double phi)
+{
+	// \todo: вращать спрайт пока хз как
 }

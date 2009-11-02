@@ -26,12 +26,12 @@ public:
 
 	virtual void Draw(const SDLApplication* app, const Vector& base) const;
 
+	virtual void Rotate(const double phi);
+
 	// добавить точку (относительно Center)
 	void Add(const Point2D& p);
 
 	void Clear();
-
-	virtual ~Polygon(void);
 };
 
 #endif

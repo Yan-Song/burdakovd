@@ -1,4 +1,7 @@
 #include "Circle2D.h"
+#include "Affine.h"
+
+#pragma warning(disable : 4100)
 
 void Circle2D::circlePoints(const SDLApplication* app, const Vector2D& center, const int x, const int y, const Color& color) const
 {
@@ -49,4 +52,9 @@ void Circle2D::Draw(const SDLApplication* app, const Vector& base) const
 		}
 		circlePoints(app, center, x, y, color);
 	}
+}
+
+void Circle2D::Rotate(const double phi)
+{
+	// круг инвариантен относительно вращения вокруг центра
 }

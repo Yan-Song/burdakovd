@@ -35,7 +35,7 @@ namespace Affine
 		return m;
 	}
 
-	// матрица расяжения относительно заданного центра
+	// матрица растяжения относительно заданного центра
 	template<int N>
 	inline GenericMatrix<N+1> Scale(const GenericVector<double, N>& coefficients, const GenericVector<double, N>& center)
 	{

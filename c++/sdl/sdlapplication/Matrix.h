@@ -101,7 +101,7 @@ public:
 
 // умножение матрицы на матрицу
 template<int N>
-GenericMatrix<N> operator*(const GenericMatrix<N>& A, const GenericMatrix<N>& B)
+GenericMatrix<N> operator *(const GenericMatrix<N>& A, const GenericMatrix<N>& B)
 {
 	GenericMatrix<N> C;
 
@@ -119,7 +119,7 @@ GenericMatrix<N> operator*(const GenericMatrix<N>& A, const GenericMatrix<N>& B)
 
 // умножение матрицы на вектор
 template<int N>
-GenericVector<double, N> operator*(const GenericMatrix<N>& A, const GenericVector<double, N>& v)
+GenericVector<double, N> operator *(const GenericMatrix<N>& A, const GenericVector<double, N>& v)
 {
 	GenericVector<double, N> x;
 
@@ -132,6 +132,30 @@ GenericVector<double, N> operator*(const GenericMatrix<N>& A, const GenericVecto
 	}
 
 	return x;
+}
+
+// умножение матрицы на вектор, предварительно преобразуя вектор в однородный, и после умножения преобразовав обратно
+template<int N>
+GenericVector<double, N> operator *(const GenericMatrix<N+1>& A, const GenericVector<double, N>& v)
+{
+	// 1)
+	GenericVector<double, N+1> homo;
+
+	for(int i = 0; i < N; ++i)
+		homo[i] = v[i];
+
+	homo[N] = 1.0;
+
+	// 2)
+	homo = A * homo;
+
+	// 3)
+	GenericVector<double, N> ans;
+
+	for(int i = 0; i < N; ++i)
+		ans[i] = homo[i] / homo[N];
+
+	return ans;
 }
 
 #endif

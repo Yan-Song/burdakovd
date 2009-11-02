@@ -21,6 +21,7 @@ protected:
 public:
 	virtual void Draw(const SDLApplication* app, const Vector& base) const;
 
+	virtual void Rotate(const double phi);
 };
 
 #endif
