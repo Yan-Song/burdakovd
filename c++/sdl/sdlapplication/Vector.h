@@ -38,6 +38,17 @@ public:
 			data[i] = other[i];
 	}
 
+	// конструктор от вектора с меньшим числом измерений, последняя координата = 1, используется для создания однородных координат
+	// хотелось бы без template тут сделать но не получается
+	template<int M>
+	inline GenericVector(const GenericVector<I, M>& other)
+	{
+		assert(M == N - 1);
+		for(int i = 0; i < M; ++i)
+			data[i] = other[i];
+		data[M] = 1.0;
+	}
+
 	inline I& operator [](const int index)
 	{
 		if(index < 0 || index >= N)
