@@ -21,6 +21,8 @@ public:
 
 	virtual void Draw(const SDLApplication* app, const Vector2D& base) const;
 
+	virtual void Rotate(const double phi);
+
 	virtual ~Sprite();
 };
 

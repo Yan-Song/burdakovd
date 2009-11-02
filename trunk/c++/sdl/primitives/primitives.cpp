@@ -37,19 +37,8 @@ PrimitivesApplication::PrimitivesApplication() : scene(ScreenWidth, ScreenHeight
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
 	lasttime = time(NULL);
-	// начальная скорость
-	vx = 0;
-	vy = 0;
-	// ускорение 100 пикселей / сек^2
-	accelerating = 100;
-	// торможение: 10 пикс / секунду^2
-	stopping = 10;
-	// коэффициент упругости отражения от стен, 1 - абс. упруго, 0 - неупруго
-	reflectK = 0.8;
-	
+		
 	scene.Center = ScreenPointByCoords(ScreenWidth / 2, ScreenHeight / 2);
-	
-	//scene.Add(new Circle2D(R, Palette::Yellow));
 	
 	int TreeR = 25;
 
@@ -75,64 +64,7 @@ void PrimitivesApplication::Main()
 		std::cout<<"Time: "<<GetTime()<<"; FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
 	}
 	
-	//DoNavigation();
-	
-	vx -= stopping * sgn(vx) * dt;
-	vy -= stopping * sgn(vy) * dt;
-
-	Vector2D dr = Vector2DByCoords(vx * dt, vy * dt);
-
-	// движение
-	scene.Move(dr);
-	
-	if(scene.Center[0] < R)
-	{
-		scene.Center[0] = R;
-		vx = abs(reflectK * vx);
-	}
-	
-	if(scene.Center[1] < R)
-	{
-		scene.Center[1] = R;
-		vy = abs(reflectK * vy);
-	}
-	
-	if(scene.Center[0] > ScreenWidth - R)
-	{
-		scene.Center[0] = ScreenWidth - R;
-		vx = -abs(reflectK * vx);
-	}
-	
-	if(scene.Center[1] > ScreenHeight - R)
-	{
-		scene.Center[1] = ScreenHeight - R;
-		vy = -abs(reflectK * vy);
-	}
-	
-	scene.Tick(dt);
-}
-
-void PrimitivesApplication::DoNavigation()
-{
-	if(KeyState[SDLK_UP])
-	{
-		vy -= accelerating * dt;
-	}
-
-	if(KeyState[SDLK_DOWN])
-	{
-		vy += accelerating * dt;
-	}
-
-	if(KeyState[SDLK_LEFT])
-	{
-		vx -= accelerating * dt;
-	}
-
-	if(KeyState[SDLK_RIGHT])
-	{
-		vx += accelerating * dt;
-	}
+	scene.Rotate(0.01);
 }
 
 void PrimitivesApplication::InitialRender()

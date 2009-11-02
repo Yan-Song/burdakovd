@@ -15,13 +15,6 @@ private:
 	static const int ColorDepth = 0, SDLflags = SDL_DOUBLEBUF || SDL_ANYFORMAT || SDL_HWSURFACE;
 	long long lasttime;
 	
-	void DoNavigation();
-	
-	// скорость в пикселях в секунду
-	double vx, vy;
-	double accelerating;
-	double stopping;
-	double reflectK;
 	static const int R = 200;
 	MyScene scene;
 	

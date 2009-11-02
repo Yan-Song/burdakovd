@@ -17,6 +17,8 @@ public:
 
 	virtual void Draw(const SDLApplication*, const Vector& base) const;
 
+	virtual void Rotate(const double phi);
+
     virtual ~Segment2D() {};
 };
 
