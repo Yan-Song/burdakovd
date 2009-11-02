@@ -1,72 +1,137 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#ifndef GENERICMATRIX_H
+#define GENERICMATRIX_H
+
+#pragma warning(disable : 4512)
 
 #include "Vector.h"
 
-/*
-typedef double MatrixRow[3];
-typedef MatrixRow MatrixData[3];
-
-// нормальный класс матриц
-class Matrix
+// Просто матрица NxN, с умножением на себя и вектор, без особых конструкторов
+template<int N>
+class GenericMatrix
 {
+public:
+	static const int Size = N;
+	typedef double Element;
+
 private:
-    MatrixData A;
+	typedef Element MatrixRow[N];
+	typedef MatrixRow MatrixData[N];
+
+	MatrixData A;
+
+	friend class RowAccessor;
+	friend class ConstRowAccessor;
+    
+public:
+	// экземпляры этого класса содержат ссылку на матрицу,
+	// поэтому ими нельзя пользоваться после того как матрица будет удалена, но хз как это запретить
+	class RowAccessor
+	{
+	private:
+		GenericMatrix& matrix;
+		const int row;
+
+		inline RowAccessor(GenericMatrix& _matrix, const int _row) : matrix(_matrix), row(_row) {};
+
+		friend class GenericMatrix;
+
+	public:
+		inline Element& operator [](const int index) const
+		{
+			if(index >= 0 && index < N)
+				return matrix.A[row][index];
+			else
+				throw new std::out_of_range("second matrix index is out of range (RowAccessor)");
+		}
+	};
+
+	class ConstRowAccessor
+	{
+	private:
+		const GenericMatrix& matrix;
+		const int row;
+
+		inline ConstRowAccessor(const GenericMatrix& _matrix, const int _row) : matrix(_matrix), row(_row) {};
+
+		friend class GenericMatrix;
+
+	public:
+		inline const Element& operator [](const int index) const
+		{
+			if(index >= 0 && index < N)
+				return matrix.A[row][index];
+			else
+				throw new std::out_of_range("second matrix index is out of range (ConstRowAccessor)");
+		}
+	};
 
 public:
-    Matrix();
+	// конструктор по умолчанию, матрица, заполненная нулями
+    inline GenericMatrix()
+	{
+		mset(A, 0);
+	}
 
-    Matrix(double m)
+	// матрица, с заданным значением на диагонали, и нулями в остальных клетках
+    inline GenericMatrix(const Element& m)
     {
-        for(int i=0; i<3; ++i)
-            for(int j=0; j<3; ++j)
-                A[i][j] = i == j ? m : 0;
+		mset(A, 0);
+ 
+		for(int i = 0; i < N; ++i)
+			A[i][i] = m;
     }
 
-    MatrixRow& operator [](int i)
+	// индексация, не const
+    inline RowAccessor operator [](const int index)
     {
-        return A[i];
+        if(index >= 0 || index < N)
+			return RowAccessor(*this, index);
+		else
+			throw new std::out_of_range("first matrix index is out of range (operator [])");
     }
 
-    const MatrixRow& operator [](int i) const
+    inline ConstRowAccessor operator [](const int index) const
     {
-        return A[i];
-    }
-
-    Matrix operator *(const Matrix& other) const;
-
-    static Matrix Move(const OldHomogeneousPoint2D& d);
-
-    static Matrix Rotate(const double phi);
-
-    inline static Matrix Rotate(const OldHomogeneousPoint2D& base, const double phi)
-    {
-        return Matrix::Move(base) * Matrix::Rotate(phi) * Matrix::Move(-base);
-    }
-
-    static Matrix Scale(const double kx, const double ky);
-
-    inline static Matrix Scale(const OldHomogeneousPoint2D& base, const double kx, const double ky)
-    {
-        return Matrix::Move(base) * Matrix::Scale(kx, ky) * Matrix::Move(-base);
-    }
-
-    static Matrix ReflectX();
-
-    inline static Matrix ReflectX(const double x)
-    {
-        return Matrix::Move(OldHomogeneousPoint2D(x, 0)) * Matrix::ReflectX() * Matrix::Move(OldHomogeneousPoint2D(-x, 0));
-    }
-
-    static Matrix ReflectY();
-
-    inline static Matrix ReflectY(const double y)
-    {
-        return Matrix::Move(OldHomogeneousPoint2D(0, y)) * Matrix::ReflectY() * Matrix::Move(OldHomogeneousPoint2D(0, -y));
+        if(index >= 0 || index < N)
+			return ConstRowAccessor(*this, index);
+		else
+			throw new std::out_of_range("first matrix index is out of range (operator [] const)");
     }
 };
 
-OldHomogeneousVector2D operator *(const Matrix& A, const OldHomogeneousVector2D& b);
-*/
+// умножение матрицы на матрицу
+template<int N>
+GenericMatrix<N> operator*(const GenericMatrix<N>& A, const GenericMatrix<N>& B)
+{
+	GenericMatrix<N> C;
+
+	for(int i = 0; i < N; ++i)
+		for(int j = 0; j < N; ++j)
+		{
+			C[i][j] = 0;
+
+			for(int k = 0; k < N; ++k)
+				C[i][j] += A[i][k] * B[k][j];
+		}
+
+	return C;
+}
+
+// умножение матрицы на вектор
+template<int N>
+GenericVector<double, N> operator*(const GenericMatrix<N>& A, const GenericVector<double, N>& v)
+{
+	GenericVector<double, N> x;
+
+	for(int i = 0; i < N; ++i)
+	{
+		x[i] = 0;
+
+		for(int j = 0; j < N; ++j)
+			x[i] += A[i][j] * v[j];
+	}
+
+	return x;
+}
 
 #endif

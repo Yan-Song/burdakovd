@@ -37,7 +37,9 @@ private:
 	virtual bool Dead() = 0;
 	
 	friend class WormsApplication;
+
 	friend class Worm;
+
 public:
 	virtual ~ISomeWorm()
 	{
