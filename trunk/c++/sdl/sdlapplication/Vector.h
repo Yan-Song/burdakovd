@@ -4,9 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include <stdexcept>
-
-#define sqr(x) ((x) * (x))
-#define mset(x, value) memset(x, value, sizeof(x))
+#include "Utils.h"
 
 // Этот вектор пока не содержит обобщенных координат
 template<typename I, int N>

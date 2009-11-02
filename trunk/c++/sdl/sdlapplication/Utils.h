@@ -4,6 +4,9 @@
 #include <map>
 #include <cmath>
 #include "SDLException.h"
+#include <cstring>
+
+#define mset(x, v) memset(x, v, sizeof(x))
 
 typedef std::pair<int,int> pii;
 
