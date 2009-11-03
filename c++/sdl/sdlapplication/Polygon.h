@@ -15,12 +15,13 @@ public:
 
 	Points points;
 	Color color;
+	bool Filled;
 
-	Polygon(const Color& c = Palette::White) : color(c)
+	Polygon(const Color& c = Palette::White, const bool filled = false) : color(c), Filled(filled)
 	{
 	};
 
-	Polygon(const Points& v, const Color& c = Palette::White) : points(v), color(c)
+	Polygon(const Points& v, const Color& c = Palette::White, const bool filled = false) : points(v), color(c), Filled(filled)
 	{
 	};
 
