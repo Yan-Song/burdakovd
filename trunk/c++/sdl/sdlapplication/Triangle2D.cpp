@@ -23,3 +23,13 @@ void Triangle2D::Rotate(const double phi)
 	B = rotator * B;
 	C = rotator * C;
 }
+
+void Triangle2D::Scale(const Vector2D& coefficients)
+{
+	for(unsigned int j = 0; j < coefficients.Dimensions; ++j)
+	{
+		A[j] *= coefficients[j];
+		B[j] *= coefficients[j];
+		C[j] *= coefficients[j];
+	}
+}

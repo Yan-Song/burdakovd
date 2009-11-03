@@ -19,6 +19,8 @@ public:
 
 	virtual void Rotate(const double phi);
 
+	virtual void Scale(const Vector2D& coefficients);
+
     virtual ~Segment2D() {};
 };
 

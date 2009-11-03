@@ -53,7 +53,8 @@ PrimitivesApplication::PrimitivesApplication() : scene(ScreenWidth, ScreenHeight
 				scene.Add(new PineTree(center));
 		}
 
-	scene.Add(new Sprite("logo.bmp"));
+	//scene.Add(new Sprite("logo.bmp"));
+	scene.Add(new Circle2D(R, Palette::Yellow));
 }
 
 void PrimitivesApplication::Main()
@@ -64,7 +65,9 @@ void PrimitivesApplication::Main()
 		std::cout<<"Time: "<<GetTime()<<"; FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
 	}
 	
-	scene.Rotate(0.01);
+	double t = GetTime();
+	scene.Rotate(cos(t) * dt);                        // угол поворота завист от времени как phi = sin(t); dphi = cos(t) * dt
+	scene.Scale(exp(cos(t) * dt) * Vector11); // ln(size) = A + sin(t); d(ln(size)) = cos(t) * dt
 }
 
 void PrimitivesApplication::InitialRender()

@@ -22,6 +22,8 @@ public:
 	virtual void Draw(const SDLApplication* app, const Vector& base) const;
 
 	virtual void Rotate(const double phi);
+
+	virtual void Scale(const Vector2D& coefficients);
 };
 
 #endif

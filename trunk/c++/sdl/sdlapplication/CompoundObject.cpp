@@ -18,3 +18,10 @@ void CompoundObject::Rotate(const double phi)
 	for(ObjectList::iterator it = objects.begin(); it != objects.end(); ++it)
 		(*it)->RotateAround(phi, Vector00);
 }
+
+void CompoundObject::Scale(const Vector2D& coefficients)
+{
+	// растянуть все вложенные объекты относительно нашего центра (в их координатах это 0)
+	for(ObjectList::iterator it = objects.begin(); it != objects.end(); ++it)
+		(*it)->ScaleRelative(coefficients, Vector00);
+}

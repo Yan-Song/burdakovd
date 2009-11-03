@@ -22,6 +22,20 @@ public:
 	{
 		Center += v;
 	}
+
+	// растяжение относительно заданной точки
+	virtual void ScaleRelative(const GenericVector<double, Dimensions>& coefficients, const GenericVector<double, Dimensions>& center)
+	{
+		// рассчитываем куда перейдет центр
+		for(unsigned int i = 0; i < coefficients.Dimensions; ++i)
+			Center[i] = center[i] + (Center[i] - center[i]) * coefficients[i];
+
+		// затем делаем растяжение относительно центра
+		Scale(coefficients);
+	}
+
+	// растяжение относительно центра объекта
+	virtual void Scale(const GenericVector<double, Dimensions>& coefficients) = 0;
    
     virtual ~GenericGraphObject() {};
 };
