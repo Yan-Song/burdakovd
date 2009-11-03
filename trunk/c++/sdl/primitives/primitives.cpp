@@ -20,15 +20,15 @@
 class PineTree : public CompoundObject
 {
 public:
-	PineTree(const Vector2D& center)
+	PineTree(const Vector2D& center, const bool filled = false)
 	{
 		Center = center;		
 		
-		Add(new Triangle2D(Vector2DByCoords(15, 15), Vector2DByCoords(-15, 15), Vector2DByCoords(0, 0), Palette::Green));
+		Add(new Triangle2D(Vector2DByCoords(15, 15), Vector2DByCoords(-15, 15), Vector2DByCoords(0, 0), Palette::Green, filled));
 
-		Add(new Triangle2D(Vector2DByCoords(10, 0), Vector2DByCoords(-10, 0), Vector2DByCoords(0, -10), Palette::Green));
+		Add(new Triangle2D(Vector2DByCoords(10, 0), Vector2DByCoords(-10, 0), Vector2DByCoords(0, -10), Palette::Green, filled));
 	
-		Add(new Triangle2D(Vector2DByCoords(5, -10), Vector2DByCoords(-5, -10), Vector2DByCoords(0, -15), Palette::Green));
+		Add(new Triangle2D(Vector2DByCoords(5, -10), Vector2DByCoords(-5, -10), Vector2DByCoords(0, -15), Palette::Green, filled));
 	}
 };
 
@@ -50,7 +50,7 @@ PrimitivesApplication::PrimitivesApplication() : scene(ScreenWidth, ScreenHeight
 		{
 			Vector2D center = xx * dx + yy * dy;
 			if(center.Length() + TreeR < R)
-				scene.Add(new PineTree(center));
+				scene.Add(new PineTree(center, true));
 		}
 
 	//scene.Add(new Sprite("logo.bmp"));

@@ -5,27 +5,28 @@
 #include "SDLApplication.h"
 #include "Vector.h"
 #include "Color.h"
+#include "Polygon.h"
+
+// к счастью тут удалось обойтись без множественного наледования
+// единственное, что портит вид - так это неиспользуемый метод Add, но лучшего пути скрыть унаследованный от Polygon метод Add я не видел
 
 class Triangle2D :
-	public GraphObject2D
+	public Polygon
 {
+private:
+	void Add(const Point2D& p) // чтобы не была видна извне
+	{
+		Polygon::Add(p);
+	};
+
 public:
-	Vector2D A, B, C;
-	Color color;
-
-	Triangle2D(const Color& c) : color(c) {};
-
-	Triangle2D(const Vector2D& a, const Vector2D& b, const Vector2D& c, const Color& co = Palette::White)
-		: A(a), B(b), C(c), color(co)
-	{};
-
-	virtual void Draw(const SDLApplication* app, const Vector& base) const;
-
-	virtual void Rotate(const double phi);
-
-	virtual void Scale(const Vector2D& coefficients);
-
-	virtual ~Triangle2D(void);
+	Triangle2D(const Vector2D& a, const Vector2D& b, const Vector2D& c, const Color& _color = Palette::White, const bool filled = false)
+		: Polygon(_color, filled)
+	{
+		Polygon::Add(a);
+		Polygon::Add(b);
+		Polygon::Add(c);
+	}
 };
 
 #endif

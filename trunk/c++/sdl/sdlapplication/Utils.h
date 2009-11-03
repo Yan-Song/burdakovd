@@ -47,4 +47,6 @@ inline void __assert(const bool x, const std::string& text)
 
 #define assert(assertion) __assert(assertion, #assertion)
 
+#define ALL(v) v.begin(), v.end()
+
 #endif
