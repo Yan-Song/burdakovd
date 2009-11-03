@@ -43,3 +43,8 @@ void Sprite::Rotate(const double phi)
 {
 	// \todo: вращать спрайт пока хз как
 }
+
+void Sprite::Scale(const Vector2D& coefficients)
+{
+	// \todo: раст€гивать спрайт пока тоже не умею
+}

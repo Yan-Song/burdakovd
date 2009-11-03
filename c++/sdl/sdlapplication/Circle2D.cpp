@@ -58,3 +58,14 @@ void Circle2D::Rotate(const double phi)
 {
 	// круг инвариантен относительно вращения вокруг центра
 }
+
+void Circle2D::Scale(const Vector2D& coefficients)
+{
+	// \todo: растягивать неравномерно круг не не умею, так что растягиваю равномерно во все стороны
+	double k = 0;
+	for(int i = 0; i < coefficients.Dimensions; ++i)
+		k += abs(coefficients[i]);
+	k /= coefficients.Dimensions;
+
+	R *= k;
+}

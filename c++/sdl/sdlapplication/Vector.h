@@ -167,4 +167,7 @@ ScreenPoint ScreenPointByCoords(int x, int y);
 // вектор, соответствующий началу координат
 const Vector2D Vector00 = Vector2DByCoords(0.0, 0.0);
 
+// x = 1.0, y = 1.0
+const Vector2D Vector11 = Vector2DByCoords(1.0, 1.0);
+
 #endif
