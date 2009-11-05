@@ -172,6 +172,14 @@ inline GenericVector<I, N> operator *=(GenericVector<I, N>& A, const GenericVect
 	return A;
 }
 
+// z-координата векторного произведения двумерных векторов, лежащих в плоскости XY
+// вычисляется как будто это трёхмерные вектора, с нулевой третьей координатой
+template<typename I>
+inline I operator ^(const GenericVector<I, 2>& A, const GenericVector<I, 2>& B)
+{
+	return A[0] * B[1] - A[1] * B[0];
+}
+
 // вектор на плоскости, координаты - double
 typedef GenericVector<double, 2> Vector2D;
 
