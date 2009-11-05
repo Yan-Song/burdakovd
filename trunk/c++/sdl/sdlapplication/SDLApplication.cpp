@@ -23,8 +23,8 @@ void SDLApplication::UpdateStats()
 	// добавляем статистику по текущему кадру
 	stats.push_back(FrameInfo(ctime, dt));
 
-	// удаляем статистику старее одной секунды
-	while(!stats.empty() && ctime - stats.front().ctime > 1)
+	// удаляем статистику старее одной секунды, кроме того не хранить более 1000 элементов
+	while(!stats.empty() && ctime - stats.front().ctime > 1 || stats.size() > 1000)
 		stats.pop_front();
 
 	++frames;
@@ -106,6 +106,7 @@ SDLApplication::~SDLApplication()
 {
 	SDL_Quit();
 	std::cout<<"SDL unloaded"<<std::endl;
+	stats.clear();
 }
 
 void SDLApplication::ProcessEvents()
@@ -167,9 +168,11 @@ void SDLApplication::DrawPixel(const ScreenPoint& point, const Color& color) con
 }
 
 // http://plg.lrn.ru/doc/sdl/lesson1.html
-void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb) const
+void SDLApplication::DrawPixel(const int x, int y, const Color& rgb) const
 {
     if(x < 0  || x >= Screen->w || y < 0 || y >= Screen->h) return; // out of bounds
+
+	y = Screen->h - y; // чтоб не париться
 
 	Uint32 color = MapColor(rgb);
 

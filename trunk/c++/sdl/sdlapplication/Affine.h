@@ -43,6 +43,9 @@ namespace Affine
 	}
 
 	// Flip() - отражение - частный случай растяжения с коэффициентом -1
+
+	// Матрица вращения вокруг заданной оси
+	GenericMatrix<4> Rotate3D(const int axe, const double phi, const Vector3D& center = Vector000);
 };
 
 #endif
