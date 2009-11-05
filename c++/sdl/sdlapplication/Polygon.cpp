@@ -73,6 +73,5 @@ void Polygon::Rotate(const double phi)
 void Polygon::Scale(const Vector2D& coefficients)
 {
 	for(unsigned int i = 0; i < points.size(); ++i)
-		for(unsigned int j = 0; j < coefficients.Dimensions; ++j)
-			points[i][j] *= coefficients[j];
+		points[i] *= coefficients;
 }
