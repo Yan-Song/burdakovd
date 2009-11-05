@@ -51,3 +51,15 @@ void CompoundObject3D::Scale(const Vector3D &coefficients)
 	for(ObjectList::const_iterator it = objects.begin(); it != objects.end(); ++it)
 		(*it)->ScaleRelative(coefficients, Vector000);
 }
+
+CompoundObject2D::~CompoundObject2D()
+{
+	for(ObjectList::const_iterator it = objects.begin(); it != objects.end(); ++it)
+		delete (*it);
+}
+
+CompoundObject3D::~CompoundObject3D()
+{
+	for(ObjectList::const_iterator it = objects.begin(); it != objects.end(); ++it)
+		delete (*it);
+}

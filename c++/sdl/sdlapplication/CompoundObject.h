@@ -24,6 +24,8 @@ public:
 	virtual void Rotate(const double phi);
 
 	virtual void Scale(const Vector2D& coefficients);
+
+	virtual ~CompoundObject2D();
 };
 
 class CompoundObject3D : public GraphObject3D
@@ -43,6 +45,8 @@ public:
 	virtual void Draw(const SDLApplication* app, const Vector3D& base) const;
 
 	virtual void Rotate(const int axe, const double phi);
+
+	virtual ~CompoundObject3D();
 };
 
 #endif
