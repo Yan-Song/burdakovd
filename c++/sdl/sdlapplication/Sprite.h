@@ -1,6 +1,8 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
+#pragma warning (disable : 4100)
+
 #include "GraphObject.h"
 #include "Vector.h"
 #include "SDLApplication.h"
@@ -11,10 +13,14 @@ class SDLApplication;
 
 // экземпляры этого класса можно создавать только _после_ инициализации SDL
 // !! При прорисовке спрайта поверхность не должна быть заблокирована!
+// их нельзя копировать
 class Sprite : public GraphObject2D
 {
 private:
 	SDL_Surface* image;
+
+	Sprite(const Sprite& other) {}
+	void operator =(const Sprite& other) {}
 
 public:
 	Sprite(const std::string& BMPFile, const Vector2D& center = Vector00);

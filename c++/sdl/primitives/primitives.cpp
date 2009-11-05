@@ -15,16 +15,17 @@
 #include "Polygon.h"
 #include "CompoundObject.h"
 #include "Sprite.h"
+#include "Scene.h"
 #include "Geometry2D.h"
+#include "Cube.h"
 
-PrimitivesApplication::PrimitivesApplication()
+PrimitivesApplication::PrimitivesApplication() : ZRotationSpeed(0), XRotationSpeed(0), RotationAccelerating(2.0)
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
 	lasttime = time(NULL);
 		
-	border[0] = Rand(ScreenWidth);
-	border[1] = Rand(ScreenHeight);
+	scene.Add(new Cube(Vector000, 100));
 }
 
 void PrimitivesApplication::Main()
@@ -34,22 +35,39 @@ void PrimitivesApplication::Main()
 		lasttime = time(NULL);
 		std::cout<<"Time: "<<GetTime()<<"; FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
 	}
+
+	if(KeyState[SDLK_RIGHT])
+		ZRotationSpeed += RotationAccelerating * dt;
+
+	if(KeyState[SDLK_LEFT])
+		ZRotationSpeed -= RotationAccelerating * dt;
+
+	if(KeyState[SDLK_UP])
+		XRotationSpeed -= RotationAccelerating * dt;
+
+	if(KeyState[SDLK_DOWN])
+		XRotationSpeed += RotationAccelerating * dt;
+
+	XRotationSpeed /= exp(dt);
+	ZRotationSpeed /= exp(dt);
+
+	scene.RotateZ(ZRotationSpeed * dt);
+	scene.RotateX(XRotationSpeed * dt);
 }
 
 void PrimitivesApplication::InitialRender()
 {
-	ClearScreen(Palette::Black);
+	ClearScreen();
+
 	Flip();
 }
 
 void PrimitivesApplication::Render()
 {
-	Vector2D point = Vector2DByCoords(Rand(ScreenWidth), Rand(ScreenHeight));
-
-	if((point ^ border) > 0)
-		DrawPixel(point, Palette::Red);
-	else
-		DrawPixel(point, Palette::Blue);
+	ClearScreen();
+	
+	// центр сцены где-то посредине экрана, на глубине в 200 пикселей...
+	scene.Draw(this, Vector3DByCoords(ScreenWidth / 2, 200, ScreenHeight / 2));
 
 	Flip();
 }

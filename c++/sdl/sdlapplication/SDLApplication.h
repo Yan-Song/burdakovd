@@ -34,7 +34,7 @@ public:
 	void Flip() const ; // SDL_Flip
 	// координаты Декартовы, направление осей экранное (X - вправо, Y - вниз)
 	
-	void DrawPixel(const int x, const int y, const Color& color) const;
+	void DrawPixel(const int x, int y, const Color& color) const;
 	
 	void DrawPixel(const ScreenPoint& point, const Color& color) const;
 	

@@ -189,15 +189,22 @@ typedef Vector2D Point2D;
 // "Точка на экране", координаты - int, работает быстрее чем Vector2D, рекомендуется к использованию если дробные координаты не нужны.
 typedef GenericVector<int, 2> ScreenPoint;
 
-// а вот это ппц, так как я хз как сделать удобный конструктор с N параметрами
-Vector2D Vector2DByCoords(double x, double y);
+// вектор в пространстве, координаты - double
+typedef GenericVector<double, 3> Vector3D;
+typedef Vector3D Point3D;
 
-ScreenPoint ScreenPointByCoords(int x, int y);
+// а вот это ппц, так как я хз как сделать удобный конструктор с N параметрами
+Vector2D Vector2DByCoords(const double x, const double y);
+Vector3D Vector3DByCoords(const double x, const double y, const double zs);
+
+ScreenPoint ScreenPointByCoords(const int x, const int y);
 
 // вектор, соответствующий началу координат
 const Vector2D Vector00 = Vector2DByCoords(0.0, 0.0);
+const Vector3D Vector000 = Vector3DByCoords(0.0, 0.0, 0.0);
 
 // x = 1.0, y = 1.0
 const Vector2D Vector11 = Vector2DByCoords(1.0, 1.0);
+const Vector3D Vector111 = Vector3DByCoords(1.0, 1.0, 1.0);
 
 #endif

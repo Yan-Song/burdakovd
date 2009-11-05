@@ -11,21 +11,21 @@
 // единственное, что портит вид - так это неиспользуемый метод Add, но лучшего пути скрыть унаследованный от Polygon метод Add я не видел
 
 class Triangle2D :
-	public Polygon
+	public Polygon2D
 {
 private:
 	void Add(const Point2D& p) // чтобы не была видна извне
 	{
-		Polygon::Add(p);
+		Polygon2D::Add(p);
 	};
 
 public:
 	Triangle2D(const Vector2D& a, const Vector2D& b, const Vector2D& c, const Color& _color = Palette::White, const bool filled = false)
-		: Polygon(_color, filled)
+		: Polygon2D(_color, filled)
 	{
-		Polygon::Add(a);
-		Polygon::Add(b);
-		Polygon::Add(c);
+		Polygon2D::Add(a);
+		Polygon2D::Add(b);
+		Polygon2D::Add(c);
 	}
 };
 

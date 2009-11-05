@@ -5,14 +5,23 @@
 #include "CompoundObject.h"
 #include "GraphObject.h"
 
-class Scene : public CompoundObject
+class Scene2D : public CompoundObject2D
 {
 public:
 	// добавить объект
 	// объект, указатель на который передан, будет удалён в деструкторе, вызывыющая сторона не должна этим заниматься
 	inline void Add(GraphObject2D* const object)
 	{
-		CompoundObject::Add(object);
+		CompoundObject2D::Add(object);
+	}
+};
+
+class Scene3D : public CompoundObject3D
+{
+public:
+	inline void Add(GraphObject3D* const object)
+	{
+		CompoundObject3D::Add(object);
 	}
 };
 
