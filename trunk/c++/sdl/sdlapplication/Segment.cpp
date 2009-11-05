@@ -18,9 +18,6 @@ void Segment2D::Rotate(const double phi)
 
 void Segment2D::Scale(const Vector2D& coefficients)
 {
-	for(unsigned int j = 0; j < coefficients.Dimensions; ++j)
-	{
-		A[j] *= coefficients[j];
-		B[j] *= coefficients[j];
-	}
+	A *= coefficients;
+	B *= coefficients;
 }

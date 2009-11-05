@@ -27,8 +27,7 @@ public:
 	virtual void ScaleRelative(const GenericVector<double, Dimensions>& coefficients, const GenericVector<double, Dimensions>& center)
 	{
 		// рассчитываем куда перейдет центр
-		for(unsigned int i = 0; i < coefficients.Dimensions; ++i)
-			Center[i] = center[i] + (Center[i] - center[i]) * coefficients[i];
+		Center = center + (Center - center) * coefficients;
 
 		// затем делаем растяжение относительно центра
 		Scale(coefficients);

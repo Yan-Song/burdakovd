@@ -150,6 +150,28 @@ inline GenericVector<I, N> operator *(const I k, const GenericVector<I, N>& v)
 	return v * k;
 }
 
+// евклидово скалярное произведение (попарное произведение соответствующих координат)
+template<typename I, int N>
+inline GenericVector<I, N> operator *(const GenericVector<I, N>& A, const GenericVector<I, N>& B)
+{
+	GenericVector<I, N> C;
+
+	for(int i = 0; i < N; ++i)
+		C[i] = A[i] * B[i];
+
+	return C;
+}
+
+// евклидово скалярное произведение (попарное произведение соответствующих координат)
+template<typename I, int N>
+inline GenericVector<I, N> operator *=(GenericVector<I, N>& A, const GenericVector<I, N>& B)
+{
+	for(int i = 0; i < N; ++i)
+		A[i] *= B[i];
+
+	return A;
+}
+
 // вектор на плоскости, координаты - double
 typedef GenericVector<double, 2> Vector2D;
 
