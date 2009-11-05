@@ -14,36 +14,17 @@
 #include "Triangle2D.h"
 #include "Polygon.h"
 #include "CompoundObject.h"
-#include "MyScene.h"
 #include "Sprite.h"
 #include "Geometry2D.h"
 
-PrimitivesApplication::PrimitivesApplication() : scene(ScreenWidth, ScreenHeight)
+PrimitivesApplication::PrimitivesApplication()
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
 	lasttime = time(NULL);
 		
-	scene.Center = Vector00;
-	
-	std::vector<Segment2D*> segments;
-	for(int i = 0; i < 10; ++i)
-	{
-		segments.push_back(new Segment2D(Vector2DByCoords(Rand(ScreenWidth), Rand(ScreenHeight)),
-										Vector2DByCoords(Rand(ScreenWidth), Rand(ScreenHeight)),
-										Palette::Gray));
-		scene.Add(segments[i]);
-	}
-	
-	for(int i = 0; i < segments.size(); ++i)
-		for(int j = 0; j < i; ++j)
-		{
-			Segment2D* first = segments[i];
-			Segment2D* second = segments[j];
-
-			if(Geometry2D::hasIntersection(first->A, first->B, second->A, second->B))
-				scene.Add(new Circle2D(Geometry2D::Intersection(first->A, first->B, second->A, second->B), 5, Palette::Yellow));
-		}
+	border[0] = Rand(ScreenWidth);
+	border[1] = Rand(ScreenHeight);
 }
 
 void PrimitivesApplication::Main()
@@ -63,10 +44,13 @@ void PrimitivesApplication::InitialRender()
 
 void PrimitivesApplication::Render()
 {
-	ClearScreen(Palette::Black);
-	
-	scene.Draw(this, Vector00);
-	
+	Vector2D point = Vector2DByCoords(Rand(ScreenWidth), Rand(ScreenHeight));
+
+	if((point ^ border) > 0)
+		DrawPixel(point, Palette::Red);
+	else
+		DrawPixel(point, Palette::Blue);
+
 	Flip();
 }
 
