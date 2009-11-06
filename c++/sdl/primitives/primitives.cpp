@@ -19,6 +19,16 @@
 #include "Geometry2D.h"
 #include "Cube.h"
 #include "Projection.h"
+#include "Surface.h"
+
+double f(const double x, const double y)
+{
+	return x * x * x + x * y;
+	// x * y - седло
+	// x * x + y * y - какая-то штука (параболоид?)
+	// sqrt(x * x + y * y) - конус
+	// x * x - типа параболы но плоскость
+}
 
 PrimitivesApplication::PrimitivesApplication() : ZRotationSpeed(0), XRotationSpeed(0), RotationAccelerating(2.0)
 {
@@ -34,8 +44,14 @@ PrimitivesApplication::PrimitivesApplication() : ZRotationSpeed(0), XRotationSpe
 	// центр сцены где-то посредине экрана, на глубине в 200 пикселей...
 	scene.Center = Vector3DByCoords(ScreenWidth / 2, 200, ScreenHeight / 2);
 
-	// Добавляю в сцену куб, с центром в начале координат (относительно центра сцены), и ребром в 300 пикселей
-	scene.Add(new Cube(Vector000, 300));
+	// График функции двух переменных (с самой функцией можно поэкспериментировать в начале файла)
+	GraphObject3D* surface = new Surface(f, -2, -2, 2, 2, 0.2, 0.2, Palette::Green);
+
+	// растянуть в 50 раз
+	surface->Scale(Vector111 * 50);
+
+	// добавляем график в сцену
+	scene.Add(surface);
 
 	// чтобы было красивее можно немного наклонить сцену
 	scene.RotateX(0.3);
