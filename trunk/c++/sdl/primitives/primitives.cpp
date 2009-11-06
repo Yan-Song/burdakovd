@@ -18,14 +18,28 @@
 #include "Scene.h"
 #include "Geometry2D.h"
 #include "Cube.h"
+#include "Projection.h"
 
 PrimitivesApplication::PrimitivesApplication() : ZRotationSpeed(0), XRotationSpeed(0), RotationAccelerating(2.0)
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
 	lasttime = time(NULL);
-		
-	scene.Add(new Cube(Vector000, 100));
+	
+	// направление координат X - вправо, Y - вперёд сквозь экран, Z - вверх
+	
+	// наблюдатель примерно на расстоянии около 1200 пикселей от центра экрана, перпендикулярно его плоскости
+	position = Vector3DByCoords(ScreenWidth / 2, -1200, ScreenHeight / 2);
+
+	// центр сцены где-то посредине экрана, на глубине в 200 пикселей...
+	scene.Center = Vector3DByCoords(ScreenWidth / 2, 200, ScreenHeight / 2);
+
+	// Добавляю в сцену куб, с центром в начале координат (относительно центра сцены), и ребром в 300 пикселей
+	scene.Add(new Cube(Vector000, 300));
+
+	// чтобы было красивее можно немного наклонить сцену
+	scene.RotateX(0.3);
+	scene.RotateZ(0.3);
 }
 
 void PrimitivesApplication::Main()
@@ -66,8 +80,9 @@ void PrimitivesApplication::Render()
 {
 	ClearScreen();
 	
-	// центр сцены где-то посредине экрана, на глубине в 200 пикселей...
-	scene.Draw(this, Vector3DByCoords(ScreenWidth / 2, 200, ScreenHeight / 2));
+	IProjector* projector = new Projection::PerspectiveProjector(position);
+	scene.Draw(this, Vector000, projector);
+	delete projector;
 
 	Flip();
 }

@@ -56,7 +56,7 @@ public:
 
 	virtual void Scale(const Vector3D& coefficients);
 
-	virtual void Draw(const SDLApplication* app, const Vector3D& base) const;
+	virtual void Draw(const SDLApplication* app, const Vector3D& base, const IProjector* projector) const;
 
 	virtual void Rotate(const int axe, const double phi);
 

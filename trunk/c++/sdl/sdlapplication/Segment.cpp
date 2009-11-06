@@ -30,14 +30,9 @@ void Segment3D::Scale(const Vector3D &coefficients)
 	B *= coefficients;
 }
 
-void Segment3D::Draw(const SDLApplication *app, const Vector3D &base) const
+void Segment3D::Draw(const SDLApplication *app, const Vector3D &base, const IProjector* projector) const
 {
-	Projection::Matrix projection = Projection::OrthographicYProjection();
-
-	Point2D a = Projection::GetXZ(projection * (base + Center + A));
-	Point2D b = Projection::GetXZ(projection * (base + Center + B));
-
-	app->DrawSegment(a, b, color);
+	app->DrawSegment(projector->projection(base + A), projector->projection(base + B), color);
 }
 
 void Segment3D::Rotate(const int axe, const double phi)

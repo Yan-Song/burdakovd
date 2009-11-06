@@ -172,7 +172,7 @@ void SDLApplication::DrawPixel(const int x, int y, const Color& rgb) const
 {
     if(x < 0  || x >= Screen->w || y < 0 || y >= Screen->h) return; // out of bounds
 
-	y = Screen->h - y; // чтоб не париться
+	y = Screen->h - 1 - y; // чтоб не париться
 
 	Uint32 color = MapColor(rgb);
 

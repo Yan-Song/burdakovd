@@ -60,12 +60,20 @@ public:
 	}
 };
 
+// для простейших проекций, без учёта невидимых повехностей и линий
+class IProjector
+{
+public:
+	virtual ScreenPoint projection(const Vector3D& point) const = 0;
+	virtual ~IProjector() {}
+};
+
 // методы, специфичные для 3D объектов
 class GraphObject3D : public GenericGraphObject<3>
 {
 public:
-	// отрисовать себя, относительно заданной точки
-	virtual void Draw(const SDLApplication* app, const Vector3D& base) const = 0;
+	// отрисовать себя, относительно заданной точки, проецируя точки на экран с помощью заданного класса, operator()
+	virtual void Draw(const SDLApplication* app, const Vector3D& base, const IProjector* projector) const = 0;
 
 	// повращать вокруг заданной оси, так чтоб Center остался неподвижным
 	virtual void Rotate(const int axe, const double phi) = 0;
@@ -79,19 +87,19 @@ public:
 	}
 
 	// Вообще говоря у параметра center здесь значимы только координаты y и z
-	inline void RotateX(const double phi, const Vector3D& center = Vector000)
+	inline void RotateX(const double phi)
 	{
-		RotateRelative(0, phi, center);
+		Rotate(0, phi);
 	}
 
-	inline void RotateY(const double phi, const Vector3D& center = Vector000)
+	inline void RotateY(const double phi)
 	{
-		RotateRelative(1, phi, center);
+		Rotate(1, phi);
 	}
 
-	inline void RotateZ(const double phi, const Vector3D& center = Vector000)
+	inline void RotateZ(const double phi)
 	{
-		RotateRelative(2, phi, center);
+		Rotate(2, phi);
 	}
 };
 
