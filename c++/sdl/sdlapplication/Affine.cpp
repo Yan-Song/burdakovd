@@ -23,22 +23,22 @@ GenericMatrix<4> Affine::Rotate3D(const int axe, const double phi, const Vector3
 	if(axe == 0) // x
 	{
 		m[1][1] = cos(phi);
-		m[1][2] = sin(phi);
-		m[2][1] = -sin(phi);
+		m[1][2] = -sin(phi);
+		m[2][1] = sin(phi);
 		m[2][2] = cos(phi);
 	}
 	else if(axe == 1) // y
 	{
 		m[2][2] = cos(phi);
-		m[2][0] = sin(phi);
-		m[0][2] = -sin(phi);
+		m[2][0] = -sin(phi);
+		m[0][2] = sin(phi);
 		m[0][0] = cos(phi);
 	}
 	else if(axe == 2) // z
 	{
 		m[0][0] = cos(phi);
-		m[0][1] = sin(phi);
-		m[1][0] = -sin(phi);
+		m[0][1] = -sin(phi);
+		m[1][0] = sin(phi);
 		m[1][1] = cos(phi);
 	}
 

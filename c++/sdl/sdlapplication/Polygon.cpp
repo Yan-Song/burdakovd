@@ -77,19 +77,17 @@ void Polygon2D::Scale(const Vector2D& coefficients)
 		points[i] *= coefficients;
 }
 
-void Polygon3D::Draw(const SDLApplication *app, const Vector3D &base) const
+void Polygon3D::Draw(const SDLApplication *app, const Vector3D &base, const IProjector* projector) const
 {
 	unsigned int n = points.size();
-
-	Projection::Matrix projection = Projection::OrthographicYProjection();
 
 	std::vector<ScreenPoint> spoints(n);
 
 	for(unsigned int i = 0; i < n; ++i)
-		spoints[i] = Projection::GetXZ(projection * (base + Center + points[i]));
+		spoints[i] = projector->projection(base + Center + points[i]);
 
 	for(unsigned int i = 0; i < n; ++i)
-			app->DrawSegment(spoints[i], spoints[(i+1) % n], color);
+		app->DrawSegment(spoints[i], spoints[(i+1) % n], color);
 }
 
 void Polygon3D::Rotate(const int axe, const double phi)

@@ -8,6 +8,8 @@
 #include "GraphObject.h"
 #include "Scene.h"
 
+// направление координат X - вправо, Y - вперёд сквозь экран, Z - вверх
+
 class PrimitivesApplication : public SDLApplication
 {
 private:
@@ -17,6 +19,7 @@ private:
 	Scene3D scene;
 	double ZRotationSpeed, XRotationSpeed;
 	double RotationAccelerating;
+	Vector3D position;
 	
 protected:
 	virtual void Main();
