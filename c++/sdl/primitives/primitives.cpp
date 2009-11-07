@@ -20,6 +20,12 @@
 #include "Cube.h"
 #include "Projection.h"
 #include "Surface.h"
+#include "Triangle3D.h"
+#include "Frustum.h"
+#include "Pencil.h"
+#include "DemoScene.h"
+
+#pragma warning(disable: 4355)
 
 double f(const double x, const double y)
 {
@@ -30,32 +36,33 @@ double f(const double x, const double y)
 	// x * x - типа параболы но плоскость
 }
 
-PrimitivesApplication::PrimitivesApplication() : ZRotationSpeed(0), XRotationSpeed(0), RotationAccelerating(2.0)
+PrimitivesApplication::PrimitivesApplication() :
+	ZRotationSpeed(0), XRotationSpeed(0), RotationAccelerating(2),
+	// наблюдатель примерно на расстоянии около 1200 пикселей от центра экрана, перпендикулярно его плоскости
+	scene(Vector3DByCoords(ScreenWidth / 2, -1200, ScreenHeight / 2), ScreenPointByCoords(ScreenWidth, ScreenHeight), this),
+	LightPosition(Vector3DByCoords(20000, -10000, 10000))
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
 	lasttime = time(NULL);
+
+	// создаём некоторый набор объектов и добавляем его в сцену
+	Objects = new CompoundObject3D();
+	scene.Add(Objects);
+
+	// центр где-то посредине экрана, на глубине в 400 пикселей...
+	Objects->Center = Vector3DByCoords(ScreenWidth / 2, 400, ScreenHeight / 2);
+
+	// добавляем демо-сцену в набор
+	Objects->Add(new DemoScene(Vector000));
 	
-	// направление координат X - вправо, Y - вперёд сквозь экран, Z - вверх
-	
-	// наблюдатель примерно на расстоянии около 1200 пикселей от центра экрана, перпендикулярно его плоскости
-	position = Vector3DByCoords(ScreenWidth / 2, -1200, ScreenHeight / 2);
+	// чтобы было красивее можно немного наклонить набор
+	Objects->RotateX(1.0);
+	Objects->RotateZ(0.2);
+	Objects->RotateY(-0.1);
 
-	// центр сцены где-то посредине экрана, на глубине в 200 пикселей...
-	scene.Center = Vector3DByCoords(ScreenWidth / 2, 200, ScreenHeight / 2);
-
-	// График функции двух переменных (с самой функцией можно поэкспериментировать в начале файла)
-	GraphObject3D* surface = new Surface(f, -2, -2, 2, 2, 0.2, 0.2, Palette::Green);
-
-	// растянуть в 50 раз
-	surface->Scale(Vector111 * 50);
-
-	// добавляем график в сцену
-	scene.Add(surface);
-
-	// чтобы было красивее можно немного наклонить сцену
-	scene.RotateX(0.3);
-	scene.RotateZ(0.3);
+	// добавить освещенность
+	scene.AddLight(LightPosition, 1);
 }
 
 void PrimitivesApplication::Main()
@@ -81,8 +88,8 @@ void PrimitivesApplication::Main()
 	XRotationSpeed /= exp(dt);
 	ZRotationSpeed /= exp(dt);
 
-	scene.RotateZ(ZRotationSpeed * dt);
-	scene.RotateX(XRotationSpeed * dt);
+	Objects->RotateZ(ZRotationSpeed * dt);
+	Objects->RotateX(XRotationSpeed * dt);
 }
 
 void PrimitivesApplication::InitialRender()
@@ -94,13 +101,7 @@ void PrimitivesApplication::InitialRender()
 
 void PrimitivesApplication::Render()
 {
-	ClearScreen();
-	
-	IProjector* projector = new Projection::PerspectiveProjector(position);
-	scene.Draw(this, Vector000, projector);
-	delete projector;
-
-	Flip();
+	scene.Render();
 }
 
 void PrimitivesApplication::ProcessEvent(SDL_Event Event)
@@ -111,6 +112,19 @@ void PrimitivesApplication::ProcessEvent(SDL_Event Event)
 
 		if(sym == SDLK_ESCAPE || sym == SDLK_q)
 			Stop();
+
+		if(sym == SDLK_l)
+		{
+			if(scene.LightCount() == 0)
+				scene.AddLight(LightPosition, 1);
+			else
+				scene.ClearLights();
+		}
+
+		if(sym == SDLK_s)
+		{
+			scene.Smoothing = !scene.Smoothing;
+		}
 	}
 }
 

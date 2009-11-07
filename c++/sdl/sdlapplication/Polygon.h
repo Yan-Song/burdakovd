@@ -6,6 +6,7 @@
 #include "SDLApplication.h"
 #include "Color.h"
 #include <vector>
+#include "CompoundObject.h"
 
 class Polygon2D :
 	public GraphObject2D
@@ -38,27 +39,18 @@ public:
 };
 
 class Polygon3D :
-	public GraphObject3D
+	public CompoundObject3D
 {
-public:
-	typedef std::vector<Point3D> Points;
+private:
+	Point3D first, last;
+	unsigned int vcount;
 
-	Points points;
+public:
 	Color color;
 
-	Polygon3D(const Color& c = Palette::White) : color(c)
+	Polygon3D(const Color& _color = Palette::White) : vcount(0), color(_color)
 	{
 	};
-
-	Polygon3D(const Points& v, const Color& c = Palette::White) : points(v), color(c)
-	{
-	};
-
-	virtual void Scale(const Vector3D& coefficients);
-
-	virtual void Draw(const SDLApplication* app, const Vector3D& base, const IProjector* projector) const;
-
-	virtual void Rotate(const int axe, const double phi);
 
 	// добавить точку (относительно Center)
 	void Add(const Point3D& p);

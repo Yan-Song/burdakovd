@@ -14,9 +14,9 @@ bool Geometry2D::hasIntersection(const Point2D& A, const Point2D& B,  const Poin
 	// кратчайший поворот от CD к CB и от CD к CA - в разных направлениях <=>
 	// по определению векторного произведения: CD ^ CB и CD ^ CA имеют Z координаты противоположного знака <=>
 	// при их умножении получим отрицательное число
-	bool first = (CD ^ CB) * (CD ^ CA) < 0;
+	bool first = VectorMultiplication2D(CD, CB) * VectorMultiplication2D(CD, CA) < 0;
 
-	bool second = (AB ^ AC) * (AB ^ AD) < 0;
+	bool second = VectorMultiplication2D(AB, AC) * VectorMultiplication2D(AB, AD) < 0;
 
 	return first && second;
 }
@@ -33,7 +33,7 @@ struct Line2D
 
 Point2D operator *(const Line2D& first, const Line2D& second)
 {
-	double t1 = ((second.P - first.P) ^ second.D) / (first.D ^ second.D);
+	double t1 = VectorMultiplication2D(second.P - first.P, second.D) / VectorMultiplication2D(first.D, second.D);
 
 	return first.P + t1 * first.D;
 }

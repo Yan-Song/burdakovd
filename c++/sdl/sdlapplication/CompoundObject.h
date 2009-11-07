@@ -35,14 +35,14 @@ protected:
 
 	ObjectList objects;
 
+public:
 	// добавить объект
 	// объект, указатель на который передан, будет удалён в деструкторе, вызывыющая сторона не должна этим заниматься
 	void Add(GraphObject3D* const object);
 
-public:
 	virtual void Scale(const Vector3D& coefficients);
 
-	virtual void Draw(const SDLApplication* app, const Vector3D& base, const IProjector* projector) const;
+	virtual void Draw(const Vector3D& base, ITriangleDrawer* const drawer) const;
 
 	virtual void Rotate(const int axe, const double phi);
 

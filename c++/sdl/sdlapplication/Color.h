@@ -49,7 +49,7 @@ public:
 	}
 
 	template<typename J>
-	inline operator GenericColor<J>()
+	inline operator GenericColor<J>() const
 	{
 		return GenericColor<J>(static_cast<J>(R), static_cast<J>(G), static_cast<J>(B));
 	}

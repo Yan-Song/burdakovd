@@ -32,9 +32,12 @@ public:
 	void Unlock() const ; // Разблокировать экран
 	
 	void Flip() const ; // SDL_Flip
-	// координаты Декартовы, направление осей экранное (X - вправо, Y - вниз)
-	
+
+	// координаты Декартовы, направление осей нормальное (X - вправо, Y - вверх)
 	void DrawPixel(const int x, int y, const Color& color) const;
+
+	// не блокирует экран (предполагается что он уже заблокирован)
+	void RawDrawPixel(const int x, int y, const Color& color) const;
 	
 	void DrawPixel(const ScreenPoint& point, const Color& color) const;
 	

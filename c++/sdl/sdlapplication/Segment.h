@@ -24,19 +24,4 @@ public:
     virtual ~Segment2D() {};
 };
 
-class Segment3D : public GraphObject3D
-{
-public:
-	Point3D A, B;
-	Color color;
-
-	Segment3D(const Point3D& a, const Point3D& b, const Color& c = Palette::White) : A(a), B(b), color(c) {}
-
-	virtual void Scale(const Vector3D& coefficients);
-
-	virtual void Draw(const SDLApplication* app, const Vector3D& base, const IProjector* projector) const;
-
-	virtual void Rotate(const int axe, const double phi);
-};
-
 #endif

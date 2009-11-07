@@ -6,6 +6,7 @@
 #include "Vector.h"
 #include "SDLApplication.h"
 #include "Affine.h"
+#include "Interfaces.h"
 
 // методы, не зависящие от числа измерений
 template<int Dimensions>
@@ -27,7 +28,7 @@ public:
 	inline void ScaleRelative(const GenericVector<double, Dimensions>& coefficients, const GenericVector<double, Dimensions>& center)
 	{
 		// рассчитываем куда перейдет центр
-		Center = center + (Center - center) * coefficients;
+		Center = center + zipWithMultiplication(Center - center, coefficients);
 
 		// затем делаем растяжение относительно центра
 		Scale(coefficients);
@@ -60,20 +61,12 @@ public:
 	}
 };
 
-// для простейших проекций, без учёта невидимых повехностей и линий
-class IProjector
-{
-public:
-	virtual ScreenPoint projection(const Vector3D& point) const = 0;
-	virtual ~IProjector() {}
-};
-
 // методы, специфичные для 3D объектов
 class GraphObject3D : public GenericGraphObject<3>
 {
 public:
-	// отрисовать себя, относительно заданной точки, проецируя точки на экран с помощью заданного класса, operator()
-	virtual void Draw(const SDLApplication* app, const Vector3D& base, const IProjector* projector) const = 0;
+	// отрисовать себя, относительно заданной точки, используя заданный класс отрисовки треугольников
+	virtual void Draw(const Vector3D& base, ITriangleDrawer* const drawer) const = 0;
 
 	// повращать вокруг заданной оси, так чтоб Center остался неподвижным
 	virtual void Rotate(const int axe, const double phi) = 0;
