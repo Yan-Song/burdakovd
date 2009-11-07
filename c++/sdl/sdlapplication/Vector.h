@@ -137,7 +137,7 @@ inline GenericVector<I, N>& operator -=(GenericVector<I, N>& first, const Generi
 {
 	for(int i = 0; i < N; ++i)
 		first[i] -= other[i];
-	return *this;
+	return first;
 }
 
 template<typename I, int N>

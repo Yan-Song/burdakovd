@@ -19,7 +19,6 @@
 #include "Geometry2D.h"
 #include "Cube.h"
 #include "Projection.h"
-#include "Surface.h"
 #include "Triangle3D.h"
 #include "Frustum.h"
 #include "Pencil.h"
