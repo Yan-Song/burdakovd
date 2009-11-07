@@ -1,6 +1,6 @@
 PROG=./primitives
 
-CPP=g++
+CPP=g++ -O3
 CPPFLAGS= -W -Wall -I/usr/include/SDL -I../sdlapplication
 LINKFLAGS= -lSDL -lpthread 
 
