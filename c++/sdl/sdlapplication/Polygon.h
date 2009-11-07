@@ -32,7 +32,7 @@ public:
 
 	virtual void Rotate(const double phi);
 
-	// добавить точку (относительно Center)
+	// РґРѕР±Р°РІРёС‚СЊ С‚РѕС‡РєСѓ (РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ Center)
 	void Add(const Point2D& p);
 
 	void Clear();
@@ -52,7 +52,7 @@ public:
 	{
 	};
 
-	// добавить точку (относительно Center)
+	// РґРѕР±Р°РІРёС‚СЊ С‚РѕС‡РєСѓ (РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ Center)
 	void Add(const Point3D& p);
 };
 

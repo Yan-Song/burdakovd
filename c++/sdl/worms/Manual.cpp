@@ -10,20 +10,20 @@ double Manual::LastLeaderPresenceTime = 0;
 
 WormLogic Manual::Run()
 {
-	// Èíèöèèðîâàòü ïåðåâûáîðû, åñëè ëèäåðà íå áûëî â òå÷åíèå îäíîé ñåêóíäû, íàâåðíî îí ñäîõ
+	// Ð˜Ð½Ð¸Ñ†Ð¸Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð¿ÐµÑ€ÐµÐ²Ñ‹Ð±Ð¾Ñ€Ñ‹, ÐµÑÐ»Ð¸ Ð»Ð¸Ð´ÐµÑ€Ð° Ð½Ðµ Ð±Ñ‹Ð»Ð¾ Ð² Ñ‚ÐµÑ‡ÐµÐ½Ð¸Ðµ Ð¾Ð´Ð½Ð¾Ð¹ ÑÐµÐºÑƒÐ½Ð´Ñ‹, Ð½Ð°Ð²ÐµÑ€Ð½Ð¾ Ð¾Ð½ ÑÐ´Ð¾Ñ…
 	if(GetGlobalTime() - LastLeaderPresenceTime > 1)
 	{
 		InitiateElections();
 		std::cout<<"Initiate elections ["<<GetID()<<"]"<<std::endl;
 	}
 
-	// åñëè ìîé ID ìåíüøå ÷åì ó ëèäåðà, òî ïåðåõâàòèòü âëàñòü
+	// ÐµÑÐ»Ð¸ Ð¼Ð¾Ð¹ ID Ð¼ÐµÐ½ÑŒÑˆÐµ Ñ‡ÐµÐ¼ Ñƒ Ð»Ð¸Ð´ÐµÑ€Ð°, Ñ‚Ð¾ Ð¿ÐµÑ€ÐµÑ…Ð²Ð°Ñ‚Ð¸Ñ‚ÑŒ Ð²Ð»Ð°ÑÑ‚ÑŒ
 	if(GetID() < LeaderID)
 		LeaderID = GetID();
 
 	if(GetID() == LeaderID)
 	{
-		// ÿ ëèäåð, ïåðâîî÷åðåäíàÿ çàäà÷à ñëåäèòü çà êëàâèàòóðîé
+		// Ñ Ð»Ð¸Ð´ÐµÑ€, Ð¿ÐµÑ€Ð²Ð¾Ð¾Ñ‡ÐµÑ€ÐµÐ´Ð½Ð°Ñ Ð·Ð°Ð´Ð°Ñ‡Ð° ÑÐ»ÐµÐ´Ð¸Ñ‚ÑŒ Ð·Ð° ÐºÐ»Ð°Ð²Ð¸Ð°Ñ‚ÑƒÑ€Ð¾Ð¹
 		LastLeaderPresenceTime = GetGlobalTime();
 		LeaderPosition = Position().front();
 		
@@ -38,7 +38,7 @@ WormLogic Manual::Run()
 	}
 	else
 	{
-		// ïåðâîî÷åðåäíàÿ çàäà÷à - ñëåäîâàòü çà ëèäåðîì
+		// Ð¿ÐµÑ€Ð²Ð¾Ð¾Ñ‡ÐµÑ€ÐµÐ´Ð½Ð°Ñ Ð·Ð°Ð´Ð°Ñ‡Ð° - ÑÐ»ÐµÐ´Ð¾Ð²Ð°Ñ‚ÑŒ Ð·Ð° Ð»Ð¸Ð´ÐµÑ€Ð¾Ð¼
 		SimplePoint head = Position().front();
 		double distance = Vector2DByCoords(head.X, head.Y).Distance(Vector2DByCoords(LeaderPosition.X, LeaderPosition.Y));
 
@@ -76,7 +76,7 @@ WormLogic Manual::Run()
 
 void Manual::InitiateElections()
 {
-	// ïðåäëàãàþ ñâîþ êàíäèäàòóðó íà ðîëü ëèäåðà, åñëè ó êîãî-òî ID ìåíüøå - ïîìåíÿþò LeaderID
+	// Ð¿Ñ€ÐµÐ´Ð»Ð°Ð³Ð°ÑŽ ÑÐ²Ð¾ÑŽ ÐºÐ°Ð½Ð´Ð¸Ð´Ð°Ñ‚ÑƒÑ€Ñƒ Ð½Ð° Ñ€Ð¾Ð»ÑŒ Ð»Ð¸Ð´ÐµÑ€Ð°, ÐµÑÐ»Ð¸ Ñƒ ÐºÐ¾Ð³Ð¾-Ñ‚Ð¾ ID Ð¼ÐµÐ½ÑŒÑˆÐµ - Ð¿Ð¾Ð¼ÐµÐ½ÑÑŽÑ‚ LeaderID
 	LeaderID = GetID();
 	LastLeaderPresenceTime = GetGlobalTime();
 	

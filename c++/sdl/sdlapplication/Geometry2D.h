@@ -5,10 +5,10 @@
 
 namespace Geometry2D
 {
-	// пересекаются ли отрезки AB и CD
+	// РїРµСЂРµСЃРµРєР°СЋС‚СЃСЏ Р»Рё РѕС‚СЂРµР·РєРё AB Рё CD
 	bool hasIntersection(const Point2D& A, const Point2D& B,  const Point2D& C, const Point2D& D);
 
-	// точка пересечения отрезков AB и CD, если есть, иначе exception
+	// С‚РѕС‡РєР° РїРµСЂРµСЃРµС‡РµРЅРёСЏ РѕС‚СЂРµР·РєРѕРІ AB Рё CD, РµСЃР»Рё РµСЃС‚СЊ, РёРЅР°С‡Рµ exception
 	Point2D Intersection(const Point2D& A, const Point2D& B,  const Point2D& C, const Point2D& D);
 }
 

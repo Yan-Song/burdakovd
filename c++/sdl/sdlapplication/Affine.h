@@ -6,11 +6,11 @@
 
 namespace Affine
 {
-	// Матрица параллельного переноса, не зависит от размерности, поэтому шаблон
+	// РњР°С‚СЂРёС†Р° РїР°СЂР°Р»Р»РµР»СЊРЅРѕРіРѕ РїРµСЂРµРЅРѕСЃР°, РЅРµ Р·Р°РІРёСЃРёС‚ РѕС‚ СЂР°Р·РјРµСЂРЅРѕСЃС‚Рё, РїРѕСЌС‚РѕРјСѓ С€Р°Р±Р»РѕРЅ
 	template<int N>
 	GenericMatrix<N+1> Move(const GenericVector<double, N>& v)
 	{
-		GenericMatrix<N+1> ans(1.0); // единичная матрица
+		GenericMatrix<N+1> ans(1.0); // РµРґРёРЅРёС‡РЅР°СЏ РјР°С‚СЂРёС†Р°
 
 		for(int i = 0; i < N; ++i)
 			ans[i][N] = v[i];
@@ -18,10 +18,10 @@ namespace Affine
 		return ans;
 	}
 
-	// Матрица вращения, пока только для 2D
+	// РњР°С‚СЂРёС†Р° РІСЂР°С‰РµРЅРёСЏ, РїРѕРєР° С‚РѕР»СЊРєРѕ РґР»СЏ 2D
 	GenericMatrix<3> Rotate2D(const double phi, const Vector2D& center = Vector00);
 
-	// Матрица растяжения, только вдоль осей координат, для любых размерностей
+	// РњР°С‚СЂРёС†Р° СЂР°СЃС‚СЏР¶РµРЅРёСЏ, С‚РѕР»СЊРєРѕ РІРґРѕР»СЊ РѕСЃРµР№ РєРѕРѕСЂРґРёРЅР°С‚, РґР»СЏ Р»СЋР±С‹С… СЂР°Р·РјРµСЂРЅРѕСЃС‚РµР№
 	template<int N>
 	GenericMatrix<N+1> Scale(const GenericVector<double, N>& coefficients)
 	{
@@ -35,16 +35,16 @@ namespace Affine
 		return m;
 	}
 
-	// матрица растяжения относительно заданного центра
+	// РјР°С‚СЂРёС†Р° СЂР°СЃС‚СЏР¶РµРЅРёСЏ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ Р·Р°РґР°РЅРЅРѕРіРѕ С†РµРЅС‚СЂР°
 	template<int N>
 	inline GenericMatrix<N+1> Scale(const GenericVector<double, N>& coefficients, const GenericVector<double, N>& center)
 	{
 		return Move(center) * Scale(coefficients) * Move(-center);
 	}
 
-	// Flip() - отражение - частный случай растяжения с коэффициентом -1
+	// Flip() - РѕС‚СЂР°Р¶РµРЅРёРµ - С‡Р°СЃС‚РЅС‹Р№ СЃР»СѓС‡Р°Р№ СЂР°СЃС‚СЏР¶РµРЅРёСЏ СЃ РєРѕСЌС„С„РёС†РёРµРЅС‚РѕРј -1
 
-	// Матрица вращения вокруг заданной оси
+	// РњР°С‚СЂРёС†Р° РІСЂР°С‰РµРЅРёСЏ РІРѕРєСЂСѓРі Р·Р°РґР°РЅРЅРѕР№ РѕСЃРё
 	GenericMatrix<4> Rotate3D(const int axe, const double phi, const Vector3D& center = Vector000);
 };
 
