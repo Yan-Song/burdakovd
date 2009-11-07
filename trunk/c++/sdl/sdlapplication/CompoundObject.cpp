@@ -14,14 +14,14 @@ void CompoundObject2D::Draw(const SDLApplication *app, const Vector& base) const
 
 void CompoundObject2D::Rotate(const double phi)
 {
-	// повращать все вложенные объекты, относительно нашего центра (в их координатах это начало координат)
+	// РїРѕРІСЂР°С‰Р°С‚СЊ РІСЃРµ РІР»РѕР¶РµРЅРЅС‹Рµ РѕР±СЉРµРєС‚С‹, РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РЅР°С€РµРіРѕ С†РµРЅС‚СЂР° (РІ РёС… РєРѕРѕСЂРґРёРЅР°С‚Р°С… СЌС‚Рѕ РЅР°С‡Р°Р»Рѕ РєРѕРѕСЂРґРёРЅР°С‚)
 	for(ObjectList::iterator it = objects.begin(); it != objects.end(); ++it)
 		(*it)->RotateAround(phi, Vector00);
 }
 
 void CompoundObject2D::Scale(const Vector2D& coefficients)
 {
-	// растянуть все вложенные объекты относительно нашего центра (в их координатах это 0)
+	// СЂР°СЃС‚СЏРЅСѓС‚СЊ РІСЃРµ РІР»РѕР¶РµРЅРЅС‹Рµ РѕР±СЉРµРєС‚С‹ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РЅР°С€РµРіРѕ С†РµРЅС‚СЂР° (РІ РёС… РєРѕРѕСЂРґРёРЅР°С‚Р°С… СЌС‚Рѕ 0)
 	for(ObjectList::iterator it = objects.begin(); it != objects.end(); ++it)
 		(*it)->ScaleRelative(coefficients, Vector00);
 }

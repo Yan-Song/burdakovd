@@ -43,7 +43,7 @@ void Polygon2D::Draw(const SDLApplication *app, const Vector& base) const
 	if(Filled)
 	{
 		std::vector<ScreenPoint> spoints(points.size());
-		// переводим их в абсолютные координаты и заодно в целочисленные
+		// РїРµСЂРµРІРѕРґРёРј РёС… РІ Р°Р±СЃРѕР»СЋС‚РЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ Рё Р·Р°РѕРґРЅРѕ РІ С†РµР»РѕС‡РёСЃР»РµРЅРЅС‹Рµ
 		std::transform(points.begin(), points.end(), spoints.begin(), PointsTransformer(base + Center));
 		FillPolygon(spoints, ScreenPointByCoords(app->Screen->w, app->Screen->h), PixelDrawer(app, color));
 	}
@@ -66,7 +66,7 @@ void Polygon2D::Clear()
 
 void Polygon2D::Rotate(const double phi)
 {
-	// точки повращать относительно центра, в их координатах это 0
+	// С‚РѕС‡РєРё РїРѕРІСЂР°С‰Р°С‚СЊ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ С†РµРЅС‚СЂР°, РІ РёС… РєРѕРѕСЂРґРёРЅР°С‚Р°С… СЌС‚Рѕ 0
 	GenericMatrix<3> rotator = Affine::Rotate2D(phi, Vector00);
 
 	for(unsigned int i = 0; i < points.size(); ++i)

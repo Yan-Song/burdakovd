@@ -7,9 +7,9 @@
 
 Cube::Cube(const Vector3D &center, const double edgeLength, const Color &color)
 {
-	// сначала строим стандартный маленький кубик, затем масштабируем и перемещаем его куда надо
+	// СЃРЅР°С‡Р°Р»Р° СЃС‚СЂРѕРёРј СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РјР°Р»РµРЅСЊРєРёР№ РєСѓР±РёРє, Р·Р°С‚РµРј РјР°СЃС€С‚Р°Р±РёСЂСѓРµРј Рё РїРµСЂРµРјРµС‰Р°РµРј РµРіРѕ РєСѓРґР° РЅР°РґРѕ
 
-	// стандартные вершины (центр: начало координат, ребро: 2)
+	// СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РІРµСЂС€РёРЅС‹ (С†РµРЅС‚СЂ: РЅР°С‡Р°Р»Рѕ РєРѕРѕСЂРґРёРЅР°С‚, СЂРµР±СЂРѕ: 2)
 	const Point3D& A = Vector3DByCoords(-1, -1, -1);
 	const Point3D& B = Vector3DByCoords(-1, +1, -1);
 	const Point3D& C = Vector3DByCoords(+1, +1, -1);
@@ -20,18 +20,18 @@ Cube::Cube(const Vector3D &center, const double edgeLength, const Color &color)
 	const Point3D& G = Vector3DByCoords(+1, +1, +1);
 	const Point3D& H = Vector3DByCoords(+1, -1, +1);
 
-	// добавляем грани, вершины каждой грани перечисляем против часовой стрелки, если смотреть извне
-	Add(new Tetragon(A, B, C, D, color)); // нижняя
-	Add(new Tetragon(E, H, G, F, color)); // верхняя
+	// РґРѕР±Р°РІР»СЏРµРј РіСЂР°РЅРё, РІРµСЂС€РёРЅС‹ РєР°Р¶РґРѕР№ РіСЂР°РЅРё РїРµСЂРµС‡РёСЃР»СЏРµРј РїСЂРѕС‚РёРІ С‡Р°СЃРѕРІРѕР№ СЃС‚СЂРµР»РєРё, РµСЃР»Рё СЃРјРѕС‚СЂРµС‚СЊ РёР·РІРЅРµ
+	Add(new Tetragon(A, B, C, D, color)); // РЅРёР¶РЅСЏСЏ
+	Add(new Tetragon(E, H, G, F, color)); // РІРµСЂС…РЅСЏСЏ
 
 	Add(new Tetragon(A, D, H, E, color));
 	Add(new Tetragon(D, C, G, H, color));
 	Add(new Tetragon(C, B, F, G, color));
 	Add(new Tetragon(A, E, F, B, color));
 
-	// стандартный куб построен, масштабируем
+	// СЃС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РєСѓР± РїРѕСЃС‚СЂРѕРµРЅ, РјР°СЃС€С‚Р°Р±РёСЂСѓРµРј
 	Scale(Vector111 * edgeLength * 0.5);
 
-	// переносим его в заданную точку
+	// РїРµСЂРµРЅРѕСЃРёРј РµРіРѕ РІ Р·Р°РґР°РЅРЅСѓСЋ С‚РѕС‡РєСѓ
 	Move(center);	
 }

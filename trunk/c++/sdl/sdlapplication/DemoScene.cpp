@@ -27,7 +27,7 @@ DemoScene::DemoScene(const Vector3D &center)
 	const double PencilRotateY = 0.8;
 	const Color PaperColor = 0xef6010;
 
-	// ëèñò áóìàãè ìîæíî ïðåäñòâèòü êàê ïàðàëëåëåïèïåä èëè ðàñòÿíóòûé êóá âûñîòîé 1 ïèêñåëü
+	// Ð»Ð¸ÑÑ‚ Ð±ÑƒÐ¼Ð°Ð³Ð¸ Ð¼Ð¾Ð¶Ð½Ð¾ Ð¿Ñ€ÐµÐ´ÑÑ‚Ð²Ð¸Ñ‚ÑŒ ÐºÐ°Ðº Ð¿Ð°Ñ€Ð°Ð»Ð»ÐµÐ»ÐµÐ¿Ð¸Ð¿ÐµÐ´ Ð¸Ð»Ð¸ Ñ€Ð°ÑÑ‚ÑÐ½ÑƒÑ‚Ñ‹Ð¹ ÐºÑƒÐ± Ð²Ñ‹ÑÐ¾Ñ‚Ð¾Ð¹ 1 Ð¿Ð¸ÐºÑÐµÐ»ÑŒ
 	const double hh = 1;
 	GraphObject3D* paper = new Cube(Vector000, hh, PaperColor);
 	paper->Scale(Vector3DByCoords(PaperWidth / hh, PaperHeight / hh, 1));

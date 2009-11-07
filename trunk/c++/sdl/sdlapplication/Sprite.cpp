@@ -41,10 +41,10 @@ void Sprite::Draw(const SDLApplication *app, const Vector2D &base) const
 
 void Sprite::Rotate(const double phi)
 {
-	// \todo: вращать спрайт пока хз как
+	// \todo: РІСЂР°С‰Р°С‚СЊ СЃРїСЂР°Р№С‚ РїРѕРєР° С…Р· РєР°Рє
 }
 
 void Sprite::Scale(const Vector2D& coefficients)
 {
-	// \todo: растягивать спрайт пока тоже не умею
+	// \todo: СЂР°СЃС‚СЏРіРёРІР°С‚СЊ СЃРїСЂР°Р№С‚ РїРѕРєР° С‚РѕР¶Рµ РЅРµ СѓРјРµСЋ
 }

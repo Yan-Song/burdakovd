@@ -9,7 +9,7 @@
 #include "CompoundObject.h"
 #include "Scene.h"
 
-// направление координат X - вправо, Y - вперёд сквозь экран, Z - вверх
+// РЅР°РїСЂР°РІР»РµРЅРёРµ РєРѕРѕСЂРґРёРЅР°С‚ X - РІРїСЂР°РІРѕ, Y - РІРїРµСЂС‘Рґ СЃРєРІРѕР·СЊ СЌРєСЂР°РЅ, Z - РІРІРµСЂС…
 
 class PrimitivesApplication : public SDLApplication
 {

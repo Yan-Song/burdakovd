@@ -7,7 +7,7 @@ Pencil::Pencil(const Vector3D& center, const double length, const Color &outside
 {
 	Center = center;
 
-	// делаем всё в абсолютных координатах, потом отмасштабируем и сместим как надо
+	// РґРµР»Р°РµРј РІСЃС‘ РІ Р°Р±СЃРѕР»СЋС‚РЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚Р°С…, РїРѕС‚РѕРј РѕС‚РјР°СЃС€С‚Р°Р±РёСЂСѓРµРј Рё СЃРјРµСЃС‚РёРј РєР°Рє РЅР°РґРѕ
 	const double R1 = 1.5;
 	const double R2 = 7.5;
 
@@ -22,17 +22,17 @@ Pencil::Pencil(const Vector3D& center, const double length, const Color &outside
 	const Vector3D Center2 = Vector3DByCoords(0, 0, H1 + H2 / 2) - corrector;
 	const Vector3D Center3 = Vector3DByCoords(0, 0, H1 + H2 + H3 / 2) - corrector;
 
-	// грифель
+	// РіСЂРёС„РµР»СЊ
 	Pyramid* gr = new Pyramid(Center1, R1, H1, 50, inside);
 	gr->Scale(Vector3DByCoords(1, 1, -1));
 	CompoundObject3D::Add(gr);
 
-	// деревянная часть
+	// РґРµСЂРµРІСЏРЅРЅР°СЏ С‡Р°СЃС‚СЊ
 	CompoundObject3D::Add(new Frustum(Center2, R1, R2, H2, 50, wood));
 
-	// основная часть
+	// РѕСЃРЅРѕРІРЅР°СЏ С‡Р°СЃС‚СЊ
 	CompoundObject3D::Add(new Prism(Center3, R2, H3, 50, outside));
 
-	// и масштаб
+	// Рё РјР°СЃС€С‚Р°Р±
 	Scale(Vector111 * length / H);
 }

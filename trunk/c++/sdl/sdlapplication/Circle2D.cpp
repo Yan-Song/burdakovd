@@ -56,12 +56,12 @@ void Circle2D::Draw(const SDLApplication* app, const Vector& base) const
 
 void Circle2D::Rotate(const double phi)
 {
-	// круг инвариантен относительно вращения вокруг центра
+	// РєСЂСѓРі РёРЅРІР°СЂРёР°РЅС‚РµРЅ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РІСЂР°С‰РµРЅРёСЏ РІРѕРєСЂСѓРі С†РµРЅС‚СЂР°
 }
 
 void Circle2D::Scale(const Vector2D& coefficients)
 {
-	// \todo: растягивать неравномерно круг не не умею, так что растягиваю равномерно во все стороны
+	// \todo: СЂР°СЃС‚СЏРіРёРІР°С‚СЊ РЅРµСЂР°РІРЅРѕРјРµСЂРЅРѕ РєСЂСѓРі РЅРµ РЅРµ СѓРјРµСЋ, С‚Р°Рє С‡С‚Рѕ СЂР°СЃС‚СЏРіРёРІР°СЋ СЂР°РІРЅРѕРјРµСЂРЅРѕ РІРѕ РІСЃРµ СЃС‚РѕСЂРѕРЅС‹
 	double k = 0;
 	for(int i = 0; i < coefficients.Dimensions; ++i)
 		k += abs(coefficients[i]);
