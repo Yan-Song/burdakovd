@@ -167,16 +167,22 @@ void SDLApplication::DrawPixel(const ScreenPoint& point, const Color& color) con
     DrawPixel(point[0], point[1], color);
 }
 
-// http://plg.lrn.ru/doc/sdl/lesson1.html
-void SDLApplication::DrawPixel(const int x, int y, const Color& rgb) const
+void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb) const
 {
-    if(x < 0  || x >= Screen->w || y < 0 || y >= Screen->h) return; // out of bounds
+	Lock();
+	RawDrawPixel(x, y, rgb);
+	Unlock();
+}
+
+// http://plg.lrn.ru/doc/sdl/lesson1.html
+void SDLApplication::RawDrawPixel(const int x, int y, const Color& rgb) const
+{
+    if((x < 0) || (x >= Screen->w) || (y < 0) || (y >= Screen->h)) return; // out of bounds
 
 	y = Screen->h - 1 - y; // чтоб не париться
 
 	Uint32 color = MapColor(rgb);
 
-	Lock();
 	switch (Screen->format->BytesPerPixel){ 
 	   case 1:  // Assuming 8-bpp 
 	   { 
@@ -213,7 +219,6 @@ void SDLApplication::DrawPixel(const int x, int y, const Color& rgb) const
 		 *bufp = color; 
 	   } break; 
 	 }
-	Unlock();
 }
 
 // исключая x

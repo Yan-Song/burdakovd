@@ -31,10 +31,10 @@ void CompoundObject3D::Add(GraphObject3D *const object)
 	objects.push_back(object);
 }
 
-void CompoundObject3D::Draw(const SDLApplication *app, const Vector3D &base, const IProjector* projector) const
+void CompoundObject3D::Draw(const Vector3D& base, ITriangleDrawer* const drawer) const
 {
 	for(ObjectList::const_iterator it = objects.begin(); it != objects.end(); ++it)
-		(*it)->Draw(app, base + Center, projector);
+		(*it)->Draw(base + Center, drawer);
 }
 
 void CompoundObject3D::Rotate(const int axe, const double phi)

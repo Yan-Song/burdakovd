@@ -6,6 +6,7 @@
 #include "Segment.h"
 #include "Circle2D.h"
 #include "GraphObject.h"
+#include "CompoundObject.h"
 #include "Scene.h"
 
 // направление координат X - вправо, Y - вперёд сквозь экран, Z - вверх
@@ -17,9 +18,10 @@ private:
 	static const int ColorDepth = 0, SDLflags = SDL_DOUBLEBUF || SDL_ANYFORMAT || SDL_HWSURFACE;
 	long long lasttime;
 	Scene3D scene;
+	CompoundObject3D* Objects;
 	double ZRotationSpeed, XRotationSpeed;
 	double RotationAccelerating;
-	Vector3D position;
+	Vector3D LightPosition;
 	
 protected:
 	virtual void Main();

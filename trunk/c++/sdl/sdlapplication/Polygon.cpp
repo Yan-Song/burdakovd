@@ -6,6 +6,8 @@
 #include "FillPolygon.h"
 #include <vector>
 #include "Projection.h"
+#include "CompoundObject.h"
+#include "Triangle3D.h"
 
 class PixelDrawer
 {
@@ -74,37 +76,19 @@ void Polygon2D::Rotate(const double phi)
 void Polygon2D::Scale(const Vector2D& coefficients)
 {
 	for(unsigned int i = 0; i < points.size(); ++i)
-		points[i] *= coefficients;
+		points[i] = zipWithMultiplication(points[i], coefficients);
 }
 
-void Polygon3D::Draw(const SDLApplication *app, const Vector3D &base, const IProjector* projector) const
-{
-	unsigned int n = points.size();
-
-	std::vector<ScreenPoint> spoints(n);
-
-	for(unsigned int i = 0; i < n; ++i)
-		spoints[i] = projector->projection(base + Center + points[i]);
-
-	for(unsigned int i = 0; i < n; ++i)
-		app->DrawSegment(spoints[i], spoints[(i+1) % n], color);
-}
-
-void Polygon3D::Rotate(const int axe, const double phi)
-{
-	GenericMatrix<4> rotator = Affine::Rotate3D(axe, phi);
-
-	for(unsigned int i = 0; i < points.size(); ++i)
-		points[i] = rotator * points[i];
-}
-
-void Polygon3D::Scale(const Vector3D &coefficients)
-{
-	for(unsigned int i = 0; i < points.size(); ++i)
-		points[i] *= coefficients;
-}
 
 void Polygon3D::Add(const Point3D& point)
 {
-	points.push_back(point);
+	++vcount;
+
+	if(vcount == 1)
+		first = point;
+
+	if(vcount > 2)
+		CompoundObject3D::Add(new Triangle3D(first, last, point, color));
+
+	last = point;
 }

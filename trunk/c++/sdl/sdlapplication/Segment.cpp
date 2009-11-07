@@ -19,25 +19,6 @@ void Segment2D::Rotate(const double phi)
 
 void Segment2D::Scale(const Vector2D& coefficients)
 {
-	A *= coefficients;
-	B *= coefficients;
-}
-
-
-void Segment3D::Scale(const Vector3D &coefficients)
-{
-	A *= coefficients;
-	B *= coefficients;
-}
-
-void Segment3D::Draw(const SDLApplication *app, const Vector3D &base, const IProjector* projector) const
-{
-	app->DrawSegment(projector->projection(base + A), projector->projection(base + B), color);
-}
-
-void Segment3D::Rotate(const int axe, const double phi)
-{
-	GenericMatrix<4> rotator = Affine::Rotate3D(axe, phi);
-	A = rotator * A;
-	B = rotator * B;
+	A = zipWithMultiplication(A, coefficients);
+	B = zipWithMultiplication(B, coefficients);
 }

@@ -6,7 +6,6 @@
 #include <stdexcept>
 #include "Utils.h"
 
-// Этот вектор пока не содержит обобщенных координат
 template<typename I, int N>
 class GenericVector
 {
@@ -61,73 +60,6 @@ public:
 		return ans;
 	}
 
-	inline GenericVector<I, N> operator +(const GenericVector<I, N>& other) const
-	{
-		GenericVector<I, N> ans;
-		for(int i = 0; i < N; ++i)
-			ans[i] = data[i] + other[i];
-		return ans;
-	}
-
-	inline GenericVector<I, N> operator -(const GenericVector<I, N>& other) const
-	{
-		GenericVector<I, N> ans;
-		for(int i = 0; i < N; ++i)
-			ans[i] = data[i] - other[i];
-		return ans;
-	}
-
-	inline GenericVector<I, N>& operator +=(const GenericVector<I, N>& other)
-	{
-		for(int i = 0; i < N; ++i)
-			data[i] += other[i];
-		return *this;
-	}
-
-	inline GenericVector<I, N>& operator -=(const GenericVector<I, N>& other)
-	{
-		for(int i = 0; i < N; ++i)
-			data[i] -= other[i];
-		return *this;
-	}
-
-	inline GenericVector<I, N> operator *(const I k) const
-	{
-		GenericVector<I, N> ans;
-		for(int i = 0; i < N; ++i)
-			ans[i] = data[i] * k;
-		return ans;
-	}
-
-	inline GenericVector<I, N> operator /(const I k) const
-	{
-		GenericVector<I, N> ans;
-		for(int i = 0; i < N; ++i)
-			ans[i] = data[i] / k;
-		return ans;
-	}
-
-	inline GenericVector<I, N>& operator *=(const I k)
-	{
-		for(int i = 0; i < N; ++i)
-			data[i] *= k;
-	}
-
-	inline GenericVector<I, N>& operator /=(const I k)
-	{
-		for(int i = 0; i < N; ++i)
-			data[i] /= k;
-	}
-
-	// унарный минус
-	inline GenericVector<I, N> operator -() const
-	{
-		GenericVector<I, N> ans;
-		for(int i = 0; i < N; ++i)
-			ans[i] = - data[i];
-		return ans;
-	}
-
 	// Длина вектора
 	inline double Length() const
 	{
@@ -144,41 +76,6 @@ public:
 	}
 };
 
-template<typename I, int N>
-inline GenericVector<I, N> operator *(const I k, const GenericVector<I, N>& v)
-{
-	return v * k;
-}
-
-// евклидово скалярное произведение (попарное произведение соответствующих координат)
-template<typename I, int N>
-inline GenericVector<I, N> operator *(const GenericVector<I, N>& A, const GenericVector<I, N>& B)
-{
-	GenericVector<I, N> C;
-
-	for(int i = 0; i < N; ++i)
-		C[i] = A[i] * B[i];
-
-	return C;
-}
-
-// евклидово скалярное произведение (попарное произведение соответствующих координат)
-template<typename I, int N>
-inline GenericVector<I, N> operator *=(GenericVector<I, N>& A, const GenericVector<I, N>& B)
-{
-	for(int i = 0; i < N; ++i)
-		A[i] *= B[i];
-
-	return A;
-}
-
-// z-координата векторного произведения двумерных векторов, лежащих в плоскости XY
-// вычисляется как будто это трёхмерные вектора, с нулевой третьей координатой
-template<typename I>
-inline I operator ^(const GenericVector<I, 2>& A, const GenericVector<I, 2>& B)
-{
-	return A[0] * B[1] - A[1] * B[0];
-}
 
 // вектор на плоскости, координаты - double
 typedef GenericVector<double, 2> Vector2D;
@@ -189,7 +86,7 @@ typedef Vector2D Point2D;
 // "Точка на экране", координаты - int, работает быстрее чем Vector2D, рекомендуется к использованию если дробные координаты не нужны.
 typedef GenericVector<int, 2> ScreenPoint;
 
-// вектор в пространстве, координаты - double
+// вектор в трёхмерном пространстве, координаты - double
 typedef GenericVector<double, 3> Vector3D;
 typedef Vector3D Point3D;
 
@@ -206,5 +103,151 @@ const Vector3D Vector000 = Vector3DByCoords(0.0, 0.0, 0.0);
 // x = 1.0, y = 1.0
 const Vector2D Vector11 = Vector2DByCoords(1.0, 1.0);
 const Vector3D Vector111 = Vector3DByCoords(1.0, 1.0, 1.0);
+
+// простейшие операции
+
+template<typename I, int N>
+inline GenericVector<I, N> operator +(const GenericVector<I, N>& first, const GenericVector<I, N>& other)
+{
+	GenericVector<I, N> ans;
+	for(int i = 0; i < N; ++i)
+		ans[i] = first[i] + other[i];
+	return ans;
+}
+
+template<typename I, int N>
+inline GenericVector<I, N> operator -(const GenericVector<I, N>& first, const GenericVector<I, N>& other)
+{
+	GenericVector<I, N> ans;
+	for(int i = 0; i < N; ++i)
+		ans[i] = first[i] - other[i];
+	return ans;
+}
+
+template<typename I, int N>
+inline GenericVector<I, N>& operator +=(GenericVector<I, N>& first, const GenericVector<I, N>& other)
+{
+	for(int i = 0; i < N; ++i)
+		first[i] += other[i];
+	return first;
+}
+
+template<typename I, int N>
+inline GenericVector<I, N>& operator -=(GenericVector<I, N>& first, const GenericVector<I, N>& other)
+{
+	for(int i = 0; i < N; ++i)
+		first[i] -= other[i];
+	return *this;
+}
+
+template<typename I, int N>
+inline GenericVector<I, N> operator *(const GenericVector<I, N>& first, const I k)
+{
+	GenericVector<I, N> ans;
+	for(int i = 0; i < N; ++i)
+		ans[i] = first[i] * k;
+	return ans;
+}
+
+template<typename I, int N>
+inline GenericVector<I, N> operator *(const I k, const GenericVector<I, N>& v)
+{
+	return v * k;
+}
+
+template<typename I, int N>
+inline GenericVector<I, N> operator /(const GenericVector<I, N>& first, const I k)
+{
+	GenericVector<I, N> ans;
+	for(int i = 0; i < N; ++i)
+		ans[i] = first[i] / k;
+	return ans;
+}
+
+template<typename I, int N>
+inline GenericVector<I, N>& operator *=(GenericVector<I, N>& first, const I k)
+{
+	for(int i = 0; i < N; ++i)
+		first[i] *= k;
+	return first;
+}
+
+template<typename I, int N>
+inline GenericVector<I, N>& operator /=(GenericVector<I, N>& first, const I k)
+{
+	for(int i = 0; i < N; ++i)
+		first[i] /= k;
+	return first;
+}
+
+// унарный минус
+template<typename I, int N>
+inline GenericVector<I, N> operator -(const GenericVector<I, N>& first)
+{
+	GenericVector<I, N> ans;
+	for(int i = 0; i < N; ++i)
+		ans[i] = - first[i];
+	return ans;
+}
+
+// попарное произведение координат
+template<typename I, int N>
+inline GenericVector<I, N> zipWithMultiplication(const GenericVector<I, N>& A, const GenericVector<I, N>& B)
+{
+	GenericVector<I, N> C;
+
+	for(int i = 0; i < N; ++i)
+		C[i] = A[i] * B[i];
+
+	return C;
+}
+
+// евклидово скалярное произведение (сумма попарных произведений соответствующих координат)
+template<typename I, int N>
+inline I operator *(const GenericVector<I, N>& A, const GenericVector<I, N>& B)
+{
+	I ans = 0;
+	for(int i = 0; i < N; ++i)
+		ans += A[i] * B[i];
+	return ans;
+}
+
+// векторное произведение трёхмерных векторов
+template<typename I>
+inline GenericVector<I, 3> operator ^(const GenericVector<I, 3>& A, const GenericVector<I, 3>& B)
+{
+	GenericVector<I, 3> ans;
+	ans[0] = A[1] * B[2] - A[2] * B[1];
+	ans[1] = A[2] * B[0] - A[0] * B[2];
+	ans[2] = A[0] * B[1] - A[1] * B[0];
+
+	return ans;
+}
+
+// "упрощенное" векторное произведение для двумерных векторов
+// (дополнить их нулевой третьей координатой, перемножить, а затем вернуть третью координату произведения (остальные две нули))
+// вообще это не настоящее векторное произведение, поэтому я его не обозначил значком ^
+template<typename I>
+inline I VectorMultiplication2D(const GenericVector<I, 2>& A, const GenericVector<I, 2>& B)
+{
+	GenericVector<I, 3> a;
+	GenericVector<I, 3> b;
+	for(int i = 0; i < 2; ++i)
+	{
+		a[i] = A[i];
+		b[i] = B[i];
+	}
+	a[2] = 0;
+	b[2] = 0;
+
+	return (a ^ b)[2];
+}
+
+template<typename I>
+inline GenericVector<I, 3> operator ^=(GenericVector<I, 3>& A, const GenericVector<I, 3>& B)
+{
+	A = A ^ B;
+	return A;
+}
 
 #endif
