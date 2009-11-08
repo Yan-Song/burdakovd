@@ -1,8 +1,9 @@
 PROG=./primitives
 
-CPP=g++ -O3
-CPPFLAGS= -W -Wall -I/usr/include/SDL -I../sdlapplication
-LINKFLAGS= -lSDL -lpthread 
+CPP=g++
+COMMONFLAGS= -O3 
+CPPFLAGS= $(COMMONFLAGS) -W -Wall -I/usr/include/SDL -I../sdlapplication 
+LINKFLAGS= $(COMMONFLAGS) -lSDL -lpthread 
 
 SOURCES := $(wildcard *.cpp) $(wildcard ../sdlapplication/*.cpp)
 OBJS := $(patsubst %.cpp, %.o, $(SOURCES))

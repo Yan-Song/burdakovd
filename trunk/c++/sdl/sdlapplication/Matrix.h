@@ -21,6 +21,10 @@ private:
 
 	friend class RowAccessor;
 	friend class ConstRowAccessor;
+	template<int M>
+	friend GenericMatrix<M> operator *(const GenericMatrix<M>&, const GenericMatrix<M>&);
+	template<int M>
+	friend GenericVector<double, M> operator *(const GenericMatrix<M>&, const GenericVector<double, M>&);
     
 public:
 	// экземпляры этого класса содержат ссылку на матрицу,
@@ -108,10 +112,10 @@ GenericMatrix<N> operator *(const GenericMatrix<N>& A, const GenericMatrix<N>& B
 	for(int i = 0; i < N; ++i)
 		for(int j = 0; j < N; ++j)
 		{
-			C[i][j] = 0;
+			C.A[i][j] = 0;
 
 			for(int k = 0; k < N; ++k)
-				C[i][j] += A[i][k] * B[k][j];
+				C.A[i][j] += A.A[i][k] * B.A[k][j];
 		}
 
 	return C;
@@ -128,7 +132,7 @@ GenericVector<double, N> operator *(const GenericMatrix<N>& A, const GenericVect
 		x[i] = 0;
 
 		for(int j = 0; j < N; ++j)
-			x[i] += A[i][j] * v[j];
+			x[i] += A.A[i][j] * v[j];
 	}
 
 	return x;

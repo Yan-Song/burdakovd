@@ -30,8 +30,13 @@ private:
 	SDLApplication* const app;
 	double* WBuffer;
 	Color* PixelBuffer;
+	double* CleanWBuffer;
+	Color* CleanPixelBuffer;
 	friend void DrawPixel(const int, const int, const double, const Color&, Scene3D*);
 	std::vector<std::pair<Point3D, double> > Light;
+
+	void ClearBuffers();
+	void DrawPixelBuffer();
 
 public:
 	Vector3D SpectatorPosition;
