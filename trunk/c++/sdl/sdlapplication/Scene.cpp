@@ -9,16 +9,15 @@
 #include <cmath>
 
 #define W(point) (1.0/((point)[1] - SpectatorPosition[1]))
-const double epsilon = 1e-9;
 
 typedef std::pair<double, double> WPair;
 
 struct Point
 {
-	ScreenPoint p;
+	Point2D p;
 	double w;
 
-	Point(const ScreenPoint& _p, const double _w) : p(_p), w(_w) {}
+	Point(const Point2D& _p, const double _w) : p(_p), w(_w) {}
 };
 
 typedef std::pair<Point, Point> Segment;
@@ -32,28 +31,18 @@ inline void DrawPixel(const int x, const int y, const double w, const Color& col
 {
 	const int index = x + y * scene->ScreenSize[0];
 
-	// условие +epsilon нужно, т.к. иначе даже при практически неподвижной сцене границы объектов "плывут", создавая печальный вид
-	if(w > scene->WBuffer[index] + epsilon)
+	if(w > scene->WBuffer[index])
 	{
 		scene->WBuffer[index] = w;
 		scene->PixelBuffer[index] = color;
 	}
-	// условие -epsilon чтоб не было резких переходов на границах двух соприкасающихся объектов
-	else if(w > scene->WBuffer[index] - epsilon)
-	{
-		scene->WBuffer[index] = w;
-		scene->PixelBuffer[index] = (scene->PixelBuffer[index] + color) / 2;
-	}
 }
 
-inline void DrawPixels(const int x1, const int x2, const double w1, const double w2, const int y, const Color& color, const SDLApplication* app, Scene3D* scene)
+inline void DrawPixels(const double x1, const double x2, const double w1, const double dw_dx, const int y, const Color& color, const SDLApplication* app, Scene3D* scene)
 {
-	assert(x1 <= x2);
+	const int start = std::max(0, static_cast<int>(ceil(x1)));
+	const int finish = std::min(app->Screen->w - 1, static_cast<int>(floor(x2)));
 
-	const int start = std::max(0, x1);
-	const int finish = std::min(app->Screen->w - 1, x2);
-
-	const double dw_dx = (x2 == x1) ? 0 : (w2 - w1) / (x2 - x1);
 	double w = w1 + dw_dx * (start - x1);
 
 	for(int x = start; x <= finish; ++x, w += dw_dx)
@@ -65,27 +54,46 @@ inline void DrawPixels(const int x1, const int x2, const double w1, const double
 // а также p левее q
 inline void FillInside(const Segment& p, const Segment& q, const Color& color, const SDLApplication* app, Scene3D* scene)
 {
-	const int ystart = std::max(0, std::max(p.first.p[1], q.first.p[1]));
-	const int yfinish = std::min(app->Screen->h - 1, std::min(p.second.p[1], q.second.p[1]));
+	const int ystart = std::max(0, static_cast<int>(ceil(std::max(p.first.p[1], q.first.p[1]))));
+	const int yfinish = std::min(app->Screen->h - 1, static_cast<int>(floor(std::min(p.second.p[1], q.second.p[1]))));
 
-	const double dpw_dy = (p.second.w - p.first.w) / (p.second.p[1] - p.first.p[1]);
+	// d##_dy - это производная ## по y (константа, так как эти переменные линейны по x и по y), смысл переменных ## - объяснен ниже
+	// если отрезок p горизонтален, то dpw_dy, dpx_dy не имеет смысла, так что пусть будет 0
+	const double dpw_dy = (p.second.p[1] == p.first.p[1]) ? 0 : (p.second.w - p.first.w) / (p.second.p[1] - p.first.p[1]);
+	const double dpx_dy = (p.second.p[1] == p.first.p[1]) ? 0 : (p.second.p[0] - p.first.p[0]) / (p.second.p[1] - p.first.p[1]);
+	
+	// если отрезок q горизонтален, то dqw_dy, dqx_dy не имеет смысла, так что пусть будет 0
+	const double dqw_dy = (q.second.p[1] == q.first.p[1]) ? 0 : (q.second.w - q.first.w) / (q.second.p[1] - q.first.p[1]);
+	const double dqx_dy = (q.second.p[1] == q.first.p[1]) ? 0 : (q.second.p[0] - q.first.p[0]) / (q.second.p[1] - q.first.p[1]);
+	
+	// нахождение dw_dx
+	// кроме вырожденных случаев, только на одном y выполняется deltax = qx - px == 0 (в точке пересечения)
+	// так как dw_dx не зависит от y, то можно сложить равенства deltaw = deltax * dw_dx, для двух разных y
+	// и получить (deltaw1 + deltaw2) = (deltax1 + deltax2) * dw_dx
+	// dw_dx = (deltaw1 + deltaw2) / (deltax1 + deltax2)
+	// возьмем в качестве двух разных y ystart и yfinish
+	// в знаменателе будет 0 только в вырожденном случае (если ystart = yfinish = ординате точки пересечения)
+	// в этом случае рисуем только одну точку и dw_dx не имеет значения
+	const double deltax1 = (q.first.p[0] + (ystart - q.first.p[1]) * dqx_dy) - (p.first.p[0] + (ystart - p.first.p[1]) * dpx_dy);
+	const double deltax2 = (q.first.p[0] + (yfinish - q.first.p[1]) * dqx_dy) - (p.first.p[0] + (yfinish - p.first.p[1]) * dpx_dy);
+	const double deltaw1 = (q.first.w + (ystart - q.first.p[1]) * dqw_dy) - (p.first.w + (ystart - p.first.p[1]) * dpw_dy);
+	const double deltaw2 = (q.first.w + (yfinish - q.first.p[1]) * dqw_dy) - (p.first.w + (yfinish - p.first.p[1]) * dpw_dy);
+	const double dw_dx = (deltax1 + deltax2 == 0) ? 0 : (deltaw1 + deltaw2) / (deltax1 + deltax2);
+
+	// pw - это значение w в точке пересечения прямой, содержащей отрезок p и прямой Y = y, сейчас Y = ystart
 	double pw = p.first.w + (ystart - p.first.p[1]) * dpw_dy;
-
-	const double dqw_dy = (q.second.w - q.first.w) / (q.second.p[1] - q.first.p[1]);
-	double qw = q.first.w + (ystart - q.first.p[1]) * dqw_dy;
-
+	// px - это значение x в точке пересечения прямой, содержащей отрезок p и прямой Y = y, сейчас Y = ystart
+	double px = p.first.p[0] + (ystart - p.first.p[1]) * dpx_dy;
+	// qx - это значение x в точке пересечения прямой, содержащей отрезок q и прямой Y = y, сейчас Y = ystart
+	double qx = q.first.p[0] + (ystart - q.first.p[1]) * dqx_dy;
+	
 	for(int y = ystart; y <= yfinish; ++y)
 	{
-		const int px = (p.second.p[1] == p.first.p[1]) ? std::min(p.first.p[0], p.second.p[0]) :
-			p.first.p[0] + (y - p.first.p[1]) * (p.second.p[0] - p.first.p[0]) / (p.second.p[1] - p.first.p[1]);
-
-		const int qx = (q.second.p[1] == q.first.p[1]) ? std::max(q.first.p[0], q.second.p[0]) :
-			q.first.p[0] + (y - q.first.p[1]) * (q.second.p[0] - q.first.p[0]) / (q.second.p[1] - q.first.p[1]);
-
-		DrawPixels(px, qx, pw, qw, y, color, app, scene);
+		DrawPixels(px, qx, pw, dw_dx, y, color, app, scene);
 
 		pw += dpw_dy;
-		qw += dqw_dy;
+		px += dpx_dy;
+		qx += dqx_dy;
 	}
 }
 
@@ -151,15 +159,17 @@ void Scene3D::DrawTriangle(const Point3D &A, const Point3D &B, const Point3D &C,
 	// проекция
 	const Projection::Matrix projector = Projection::PerspectiveProjection<1>(SpectatorPosition);
 	
-	const ScreenPoint a = Projection::GetXZ(projector * A);
-	const ScreenPoint b = Projection::GetXZ(projector * B);
-	const ScreenPoint c = Projection::GetXZ(projector * C);
+	// вершины треугольника, спрецированные на экранную плоскость
+	const Point2D a = Projection::GetXZ(projector * A);
+	const Point2D b = Projection::GetXZ(projector * B);
+	const Point2D c = Projection::GetXZ(projector * C);
 
+	// соответствующие им w
 	const double wa = W(A);
 	const double wb = W(B);
 	const double wc = W(C);
 
-	// Отсортировав вершины треугольника по y
+	// Отсортировав вершины треугольника по y, вместе с их значениями w
 	std::vector<Point> v;
 	v.push_back(Point(a, wa));
 	v.push_back(Point(b, wb));
