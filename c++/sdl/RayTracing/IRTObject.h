@@ -11,6 +11,7 @@ namespace RT
 		// проверить пересечение с лучом
 		virtual bool CheckIntersection(const Ray& vector) const = 0;
 
+		virtual ~IRTObject() {}
 	};
 }
 
