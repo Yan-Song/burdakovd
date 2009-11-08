@@ -9,7 +9,7 @@
 template<typename I, int N>
 class GenericVector
 {
-private:
+protected:
 	typedef I dataArray[N];
 	dataArray data;
 	

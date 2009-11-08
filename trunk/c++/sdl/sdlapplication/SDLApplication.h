@@ -10,6 +10,8 @@
 #include "Timer.h"
 #include <string>
 
+#pragma warning (disable: 4100)
+
 struct FrameInfo
 {
 	double ctime;
@@ -84,13 +86,13 @@ protected:
 	
 	virtual void ProcessEvents(); // обработать ввод пользователя
 	
-	virtual void ProcessEvent(SDL_Event Event) = 0;
+	virtual void ProcessEvent(SDL_Event Event) {};
 	
-	virtual void Main() = 0; // основная логика
+	virtual void Main() {}; // основная логика
 	
 	virtual void InitialRender() {};
 	
-	virtual void Render() = 0; // вывести на экран текущую ситуацию
+	virtual void Render() {}; // вывести на экран текущую ситуацию
 	
 	void InitializeSDL(int ScreenHeight, int ScreenWidth, int ColorDepth, int SDLflags); // инициализировать библиотеку SDL
 	
