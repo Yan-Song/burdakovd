@@ -1,11 +1,11 @@
-#ifndef RTOBJECT_H
-#define RTOBJECT_H
+#ifndef IRTOBJECT_H
+#define IRTOBJECT_H
 
 #include "Ray.h"
 
 namespace RT
 {
-	class RTObject
+	class IRTObject
 	{
 	public:
 		// проверить пересечение с лучом
