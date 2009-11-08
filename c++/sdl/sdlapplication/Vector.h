@@ -61,18 +61,28 @@ public:
 	}
 
 	// Длина вектора
+	inline I QLength() const
+	{
+		I s = 0;
+		for(int i = 0; i < N; ++i)
+			s += sqr(data[i]);
+		return s;
+	}
+
 	inline double Length() const
 	{
-		double s = 0;
-		for(int i = 0; i < N; ++i)
-			s += sqr(static_cast<double>(data[i]));
-		return sqrt(s);
+		return sqrt(QLength());
 	}
 
 	// Расстояние между точками
 	inline double Distance(const GenericVector<I, N>& other) const
 	{
 		return (other - *this).Length();
+	}
+
+	inline I QDistance(const GenericVector<I, N>& other) const
+	{
+		return (other - *this).QLength();
 	}
 };
 

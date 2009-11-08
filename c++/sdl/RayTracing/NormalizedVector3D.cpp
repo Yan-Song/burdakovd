@@ -27,3 +27,10 @@ RT::NormalizedVector3D::NormalizedVector3D(const Vector3D &vector)
 	data[1] = y / length;
 	data[2] = z / length;
 }
+
+RT::NormalizedVector3D::NormalizedVector3D()
+{
+	data[0] = 1;
+	data[1] = 0;
+	data[2] = 0;
+}

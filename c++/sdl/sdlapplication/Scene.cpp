@@ -153,7 +153,7 @@ void Scene3D::DrawTriangle(const Point3D &A, const Point3D &B, const Point3D &C,
 	assert(light >= 0.0 && light <= 1.0);
 
 	// на основе освещенности рассчитываем новый цвет грани
-	const Color realcolor = static_cast<DoubleColor>(color) * light;
+	const Color realcolor = static_cast<RealColor>(color) * light;
 
 	// ---------------------------------------------------------------------------------------
 	// проекция

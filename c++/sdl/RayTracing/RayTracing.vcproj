@@ -171,7 +171,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\IRTObject.h"
+				RelativePath=".\IntersectionResult.h"
 				>
 			</File>
 			<File
@@ -179,11 +179,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Polynom.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ray.h"
 				>
 			</File>
 			<File
+				RelativePath=".\RTObject.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Sphere.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SquareEquation.h"
 				>
 			</File>
 		</Filter>
