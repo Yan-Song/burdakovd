@@ -19,6 +19,8 @@ RTDemoApplication::RTDemoApplication()
 
 void RTDemoApplication::InitialRender()
 {
+	const double startTime = GetTime();
+
 	Lock();
 
 	ClearScreen();
@@ -37,7 +39,9 @@ void RTDemoApplication::InitialRender()
 	Unlock();
 	Flip();
 
-	std::cout<<"Initial render complete"<<std::endl;
+	const int elapsed = static_cast<int>((GetTime() - startTime) * 1000);
+
+	std::cout<<"Initial render completed after "<<elapsed<<" ms."<<std::endl;
 }
 
 void RTDemoApplication::Main()
