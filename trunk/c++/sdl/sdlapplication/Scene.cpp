@@ -155,9 +155,9 @@ void Scene3D::DrawTriangle(const Point3D &A, const Point3D &B, const Point3D &C,
 	const ScreenPoint b = Projection::GetXZ(projector * B);
 	const ScreenPoint c = Projection::GetXZ(projector * C);
 
-	const double wa = W(projector * A);
-	const double wb = W(projector * B);
-	const double wc = W(projector * C);
+	const double wa = W(A);
+	const double wb = W(B);
+	const double wc = W(C);
 
 	// Отсортировав вершины треугольника по y
 	std::vector<Point> v;
