@@ -181,44 +181,61 @@ void Scene3D::DrawTriangle(const Point3D &A, const Point3D &B, const Point3D &C,
 	}
 }
 
-void Scene3D::Render()
+void Scene3D::ClearBuffers()
 {
 	const int n = ScreenSize[0] * ScreenSize[1];
-	assert((ScreenSize[0] == app->Screen->w) && (ScreenSize[1] == app->Screen->h));
 
-	for(int i = 0; i < n; ++i)
-	{
-		PixelBuffer[i] = 0;
-		WBuffer[i] = 0;
-	}
+	memcpy(WBuffer, CleanWBuffer, n * sizeof(*WBuffer));
+	memcpy(PixelBuffer, CleanPixelBuffer, n * sizeof(*PixelBuffer));
+}
 
-	app->ClearScreen();
-
-	CompoundObject3D::Draw(Vector000, this);
-
-	const int w = ScreenSize[0];
-
-	app->Lock();
+void Scene3D::DrawPixelBuffer()
+{
+	const int n = ScreenSize[0] * ScreenSize[1];
+	const int xmax = ScreenSize[0], ymax = ScreenSize[1], xmin = 0, ymin = 0;
 
 	if(Smoothing)
 	{
-		const int xmax = ScreenSize[0], ymax = ScreenSize[1], xmin = 0, ymin = 0;
-		for(int x = xmin + 1; x + 1 < xmax; ++x)
-			for(int y = ymin + 1; y + 1 < ymax; ++y)
+		
+		for(int y = ymin + 1; y + 1 < ymax; ++y)
+			for(int x = xmin + 1; x + 1 < xmax; ++x)
 			{
 				const int index = x + y * xmax;
 				const int indexl = index - 1, indexr = index + 1, indext = index + xmax, indexb = index - xmax;
-				app->DrawPixel(x, y,
+
+				if(WBuffer[index] == 0 && WBuffer[indexl] == 0 && WBuffer[indexr] == 0 && WBuffer[indext] == 0 && WBuffer[indexb] == 0)
+					continue;
+	
+				app->RawDrawPixel(x, y,
 					(PixelBuffer[indexl] + PixelBuffer[indexr] + PixelBuffer[indext] + PixelBuffer[indexb] + PixelBuffer[index]) / 5
 					);
 			}
 	}
 	else
 	{
-		for(int i = 0; i < n; ++i)
-			app->RawDrawPixel(i % w, i / w, PixelBuffer[i]);
-	}
+		const int w = ScreenSize[0];
+		for(int y = ymin, index = 0; y < ymax; ++y)
+			for(int x = xmin; x < xmax; ++x)
+				{
+					if(WBuffer[index] != 0)
+						app->RawDrawPixel(x, y, PixelBuffer[index]);
 
+					++index;
+				}
+	}
+}
+
+void Scene3D::Render()
+{
+	assert((ScreenSize[0] == app->Screen->w) && (ScreenSize[1] == app->Screen->h));
+	
+	ClearBuffers();
+	app->ClearScreen();
+	
+	CompoundObject3D::Draw(Vector000, this);
+
+	app->Lock();
+	DrawPixelBuffer();
 	app->Unlock();
 
 	app->Flip();
@@ -227,13 +244,26 @@ void Scene3D::Render()
 Scene3D::Scene3D(const Vector3D& spectatorPosition, const ScreenPoint& _ScreenSize, SDLApplication* const _app)
 : SpectatorPosition(spectatorPosition), ScreenSize(_ScreenSize), app(_app), Smoothing(false)
 {
-	// индекисровать: WBuffer[x + y * ScreenSize[0]]
-	WBuffer = new double[ScreenSize[0] * ScreenSize[1]];
-	PixelBuffer = new Color[ScreenSize[0] * ScreenSize[1]];
+	const int n = ScreenSize[0] * ScreenSize[1];
+
+	// индексировать: [x + y * ScreenSize[0]]
+	WBuffer = new double[n];
+	PixelBuffer = new Color[n];
+
+	CleanWBuffer = new double[n];
+	CleanPixelBuffer = new Color[n];
+
+	for(int i = 0; i < n; ++i)
+		CleanPixelBuffer[i] = 0;
+
+	for(int i = 0; i < n; ++i)
+		CleanWBuffer[i] = 0;
 }
 
 Scene3D::~Scene3D()
 {
 	delete[] WBuffer;
 	delete[] PixelBuffer;
+	delete[] CleanWBuffer;
+	delete[] CleanPixelBuffer;
 }

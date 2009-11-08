@@ -215,7 +215,7 @@ void SDLApplication::RawDrawPixel(const int x, int y, const Color& rgb) const
 	   case 4: // Probably 32-bpp 
 	   { 
 		 Uint32 *bufp; 
-		 bufp = (Uint32 *)Screen->pixels + y*Screen->pitch/4 + x; 
+		 bufp = (Uint32 *)Screen->pixels + y*Screen->pitch/4 + x;
 		 *bufp = color; 
 	   } break; 
 	 }
