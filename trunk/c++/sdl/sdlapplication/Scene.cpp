@@ -191,7 +191,6 @@ void Scene3D::ClearBuffers()
 
 void Scene3D::DrawPixelBuffer()
 {
-	const int n = ScreenSize[0] * ScreenSize[1];
 	const int xmax = ScreenSize[0], ymax = ScreenSize[1], xmin = 0, ymin = 0;
 
 	if(Smoothing)
@@ -213,7 +212,6 @@ void Scene3D::DrawPixelBuffer()
 	}
 	else
 	{
-		const int w = ScreenSize[0];
 		for(int y = ymin, index = 0; y < ymax; ++y)
 			for(int x = xmin; x < xmax; ++x)
 				{
