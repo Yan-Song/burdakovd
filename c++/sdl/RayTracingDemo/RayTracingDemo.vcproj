@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="RayTracing"
-	ProjectGUID="{766D1DA5-0463-45D2-878C-0B31D203DE14}"
-	RootNamespace="RayTracing"
+	Name="RayTracingDemo"
+	ProjectGUID="{F967A9BA-CDCB-4E15-BE54-4046F2FDFCF1}"
+	RootNamespace="RayTracingDemo"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="4"
+			ConfigurationType="1"
 			CharacterSet="1"
 			>
 			<Tool
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\sdlapplication&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				AdditionalIncludeDirectories="../RayTracing;../sdlapplication"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -60,11 +60,19 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
-				LinkLibraryDependencies="true"
+				Name="VCLinkerTool"
+				AdditionalDependencies="SDL.lib SDLmain.lib"
+				LinkIncremental="2"
+				IgnoreDefaultLibraryNames="msvcrt.lib"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -76,6 +84,9 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -83,7 +94,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="4"
+			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -106,8 +117,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;..\sdlapplication&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				AdditionalIncludeDirectories="../RayTracing;../sdlapplication"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -124,11 +135,20 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
-				LinkLibraryDependencies="true"
+				Name="VCLinkerTool"
+				AdditionalDependencies="SDL.lib SDLmain.lib"
+				LinkIncremental="1"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -138,6 +158,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -153,15 +176,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\NormalizedVector3D.cpp"
+				RelativePath=".\Demo.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Ray.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Sphere.cpp"
+				RelativePath=".\main.cpp"
 				>
 			</File>
 		</Filter>
@@ -171,19 +190,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\IRTObject.h"
-				>
-			</File>
-			<File
-				RelativePath=".\NormalizedVector3D.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Ray.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Sphere.h"
+				RelativePath=".\Demo.h"
 				>
 			</File>
 		</Filter>

@@ -9,7 +9,7 @@ namespace RT
 	{
 	public:
 		// проверить пересечение с лучом
-		virtual bool CheckIntersection(const Ray& vector) const = 0;
+		virtual bool CheckIntersection(const Ray& ray) const = 0;
 
 		virtual ~IRTObject() {}
 	};
