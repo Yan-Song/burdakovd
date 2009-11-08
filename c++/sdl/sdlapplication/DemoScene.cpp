@@ -27,8 +27,8 @@ DemoScene::DemoScene(const Vector3D &center)
 	const double PencilRotateY = 0.8;
 	const Color PaperColor = 0xef6010;
 
-	// лист бумаги можно предствить как параллелепипед или растянутый куб высотой 1 пиксель
-	const double hh = 1;
+	// лист бумаги можно предствить как параллелепипед или растянутый куб очень маленькой высоты
+	const double hh = 0.1;
 	GraphObject3D* paper = new Cube(Vector000, hh, PaperColor);
 	paper->Scale(Vector3DByCoords(PaperWidth / hh, PaperHeight / hh, 1));
 	paper->Move(Vector3DByCoords(0, 0, -hh / 2));
