@@ -70,7 +70,7 @@ public:
 	}
 
 	// Расстояние между точками
-	inline double Distance(const GenericVector<I, N>& other)
+	inline double Distance(const GenericVector<I, N>& other) const
 	{
 		return (other - *this).Length();
 	}
