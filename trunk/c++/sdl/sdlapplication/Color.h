@@ -74,7 +74,7 @@ inline GenericColor<I> Gradient(const GenericColor<I>& ColorA, const GenericColo
 но если вдруг понадобится DoubleColor (использует double) то он тоже есть и cast работает в обе стороны
 */
 typedef GenericColor<int> Color;
-typedef GenericColor<double> DoubleColor;
+typedef GenericColor<double> RealColor;
 
 
 // некоторые базовые цвета, хотя кто их будет использовать?)

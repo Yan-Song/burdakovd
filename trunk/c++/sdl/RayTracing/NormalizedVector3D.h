@@ -14,6 +14,9 @@ namespace RT
 
 	public:
 		// в всех своих конструкторах вектор нормируется
+
+		NormalizedVector3D();
+
 		NormalizedVector3D(const double x, const double y, const double z);
 
 		NormalizedVector3D(const Vector3D& vector);
