@@ -3,6 +3,7 @@
 
 #include "CompoundObject.h"
 #include "Shared.h"
+#include "sdlapplication/Vector.h"
 
 class SDLApplication;
 
@@ -10,8 +11,6 @@ namespace RT
 {
 	class Scene : protected CompoundObject
 	{
-	private:
-
 	public:
 		class ICallback
 		{
@@ -19,8 +18,14 @@ namespace RT
 			virtual bool call(const double percent) = 0;
 			virtual ~ICallback() {}
 		};
-
 		typedef shared_ptr<ICallback> SharedCallback;
+
+	public:
+		const Point3D SpectatorPosition;
+
+		Scene(const Point3D& _SpectatorPosition) : SpectatorPosition(_SpectatorPosition)
+		{
+		}
 
 		inline void Add(const CompoundObject::SharedObject& object)
 		{
