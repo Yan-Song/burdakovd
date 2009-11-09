@@ -61,6 +61,12 @@ inline GenericColor<I> operator *(const I k, const GenericColor<I>& color)
 	return color * k;
 }
 
+template<typename I>
+inline GenericColor<I> operator -(const GenericColor<I>& color)
+{
+	return GenericColor<I>(-color.R, -color.G, -color.B);
+}
+
 // градиент работает и для целочисленного случая (Color)
 template<typename I>
 inline GenericColor<I> Gradient(const GenericColor<I>& ColorA, const GenericColor<I>& ColorB, const I WeightA, const I WeightB)

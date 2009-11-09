@@ -35,7 +35,7 @@ inline T max(const T& x, const T& y)
 template<typename T>
 inline T sgn(const T x)
 {
-  if(x==0) return 0; 
+  if(x == 0) return 0; 
   return x < 0 ? -1 : 1;
 }
 

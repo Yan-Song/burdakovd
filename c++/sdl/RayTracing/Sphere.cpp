@@ -2,6 +2,7 @@
 #include "sdlapplication/Vector.h"
 #include "Polynom.h"
 #include "SquareEquation.h"
+#include "ITracer.h"
 
 bool RT::Sphere::PossibleIntersection(const RT::Ray &ray) const
 {
@@ -15,11 +16,30 @@ bool RT::Sphere::PossibleIntersection(const RT::Ray &ray) const
 	return (distance <= R) && ((v * SC > 0) || (Center.Distance(ray.Start) < R));
 }
 
-typedef GenericVector<RT::Polynom, 3> PolyVector;
+class SphereTracer : public RT::ITracer
+{
+private:
+	const RT::Ray ray;
+	const Point3D point;
+	const RealColor color;
+	const Point3D center;
+
+public:
+	SphereTracer(const RT::Ray& _ray, const Point3D& _point, const RealColor& _color, const Point3D& _center)
+		: ray(_ray), point(_point), color(_color), center(_center) {}
+
+	virtual RealColor Trace()
+	{
+		const RT::NormalizedVector3D n = point - center;
+		return - color * (static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector));
+	}
+};
 
 RT::MaybeIntersection RT::Sphere::FindIntersection(const RT::Ray &ray) const
 {
-	// две точки пересечения (с прямой содержащей луч) можно найти, решив уравнение Center.Distance(ray.Start + t * ray.Vector) = R
+	typedef GenericVector<RT::Polynom, 3> PolyVector;
+
+	// две точки пересечения (с прямой, содержащей луч) можно найти, решив уравнение Center.Distance(ray.Start + t * ray.Vector) = R
 	// возвести обе части в квадрат
 	// получится Center.QDistance(start + t * v) - sqr(R) = 0
 
@@ -62,12 +82,8 @@ RT::MaybeIntersection RT::Sphere::FindIntersection(const RT::Ray &ray) const
 
 	const Point3D point = ray.Start + t * static_cast<Vector3D>(ray.Vector);
 
-	const NormalizedVector3D n = point - Center;
+	const SharedTracer tracer = SharedTracer(new SphereTracer(ray, point, color, Center));
 
-	return Intersection(point, n);
+	return Intersection(point, tracer);
 }
 
-RealColor RT::Sphere::Trace(const RT::Ray &ray, const Intersection& intersection) const
-{
-	return RTObject::color * (static_cast<Vector3D>(intersection.n) * Vector3DByCoords(0, 0, -1));
-}

@@ -18,14 +18,10 @@ namespace RT
 		virtual bool PossibleIntersection(const Ray& ray) const = 0;
 
 		// этот метод проверяет, пересекается ли луч с объектом
-		// и если да, то находит точку пересечения и вектор нормали к объекту в этой точке
-		// если нет - false
+		// и если да, то находит точку пересечения, и возвращает объект который в дальнеёшем сможет посчитать цвет точки
 		// он может работать значительно дольше чем PossibleIntersection
 		// поэтому его стоит вызывать только если PossibleIntersection вернул true
 		virtual MaybeIntersection FindIntersection(const Ray& ray) const = 0;
-
-		// вернуть цвет точки пересечения с лучом
-		virtual RealColor Trace(const Ray& ray, const Intersection& intersection) const = 0;
 
 		virtual ~IRTObject() {}
 	};
