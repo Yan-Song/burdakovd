@@ -2,7 +2,7 @@
 #define RAY_H
 
 #include "NormalizedVector3D.h"
-#include "Utils.h"
+#include "sdlapplication/Utils.h"
 
 namespace RT
 {

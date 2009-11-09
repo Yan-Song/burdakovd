@@ -1,7 +1,7 @@
 #ifndef DEMO_H
 #define DEMO_H
 
-#include "SDLApplication.h"
+#include "sdlapplication/SDLApplication.h"
 
 class RTDemoApplication : public SDLApplication
 {

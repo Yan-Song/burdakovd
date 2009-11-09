@@ -3,7 +3,7 @@
 
 #include "RTObject.h"
 #include "IntersectionResult.h"
-#include "Color.h"
+#include "sdlapplication/Color.h"
 
 namespace RT
 {
@@ -17,11 +17,11 @@ namespace RT
 		{
 		}
 
-		virtual bool MaybeIntersection(const Ray& ray) const;
+		virtual bool PossibleIntersection(const Ray& ray) const;
 
-		virtual IntersectionResult FindIntersection(const Ray& ray) const;
+		virtual MaybeIntersection FindIntersection(const Ray& ray) const;
 
-		virtual RealColor Trace(const Ray& ray, const IntersectionResult& result) const;
+		virtual RealColor Trace(const Ray& ray, const Intersection& intersection) const;
 	};
 }
 

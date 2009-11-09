@@ -1,7 +1,7 @@
 #ifndef NORMALIZEDVECTOR3D_H
 #define NORMALIZEDVECTOR3D_H
 
-#include "Vector.h"
+#include "sdlapplication/Vector.h"
 
 namespace RT
 {
