@@ -50,6 +50,7 @@ bool RTDemoApplication::Callback(const double percent)
 
 void RTDemoApplication::InitialRender()
 {
+	SDL_WM_ToggleFullScreen(Screen);
 	const double startTime = GetTime();
 
 	// Наблюдатель находится перед экраном на расстоянии 1000 пикселов
@@ -74,7 +75,8 @@ void RTDemoApplication::InitialRender()
 
 void RTDemoApplication::Main()
 {
-
+	// после того картинка отрисована не грузить комп
+	SDL_WaitEvent(NULL);
 }
 
 void RTDemoApplication::ProcessEvent(SDL_Event Event)
