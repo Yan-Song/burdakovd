@@ -7,7 +7,7 @@ RT::NormalizedVector3D::NormalizedVector3D(const double x, const double y, const
 	const double length = sqrt(sqr(x) + sqr(y) + sqr(z));
 
 	if(length == 0)
-		throw new std::invalid_argument("Can't normalize Vector of length 0.0");
+		throw std::invalid_argument("Can't normalize Vector of length 0.0");
 
 	data[0] = x / length;
 	data[1] = y / length;
@@ -21,7 +21,7 @@ RT::NormalizedVector3D::NormalizedVector3D(const Vector3D &vector)
 	const double length = sqrt(sqr(x) + sqr(y) + sqr(z));
 
 	if(length == 0)
-		throw new std::invalid_argument("Can't normalize Vector of length 0.0");
+		throw std::invalid_argument("Can't normalize Vector of length 0.0");
 
 	data[0] = x / length;
 	data[1] = y / length;

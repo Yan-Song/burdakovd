@@ -67,13 +67,13 @@ namespace RT
 			if(Exists)
 				return Intersection(i);
 			else
-				throw new std::bad_cast();
+				throw std::bad_cast();
 		}
 
 		inline operator NoIntersection() const
 		{
 			if(Exists)
-				throw new std::bad_cast();
+				throw std::bad_cast();
 			else
 				return NoIntersection();
 		}

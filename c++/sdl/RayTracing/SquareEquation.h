@@ -24,7 +24,7 @@ namespace RT
 		{
 			// Линейное bx + c = 0
 			if(b == 0)
-				throw new std::invalid_argument("");
+				throw std::invalid_argument("");
 			else
 			{
 				const double x = - c / b;
@@ -36,7 +36,7 @@ namespace RT
 			const double D = sqr(b) - 4 * a * c;
 
 			if(D < 0)
-				throw new std::exception("");
+				throw std::exception("");
 
 			const double x1 = (- b + sqrt(D)) / 2 / a;
 			const double x2 = (- b - sqrt(D)) / 2 / a;

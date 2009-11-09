@@ -42,7 +42,7 @@ inline T sgn(const T x)
 inline void __assert(const bool x, const std::string& text)
 {
 	if(!x)
-		throw new AssertionException(text);
+		throw AssertionException(text);
 }
 
 #define assert(assertion) __assert(assertion, #assertion)

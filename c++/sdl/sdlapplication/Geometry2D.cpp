@@ -49,6 +49,6 @@ Point2D Geometry2D::Intersection(const Point2D& A, const Point2D& B,  const Poin
 	}
 	else
 	{
-		throw new std::invalid_argument("this segments have not intersection");
+		throw std::invalid_argument("this segments have not intersection");
 	}
 }
