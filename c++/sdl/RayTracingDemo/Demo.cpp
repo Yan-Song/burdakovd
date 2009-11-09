@@ -52,9 +52,18 @@ void RTDemoApplication::InitialRender()
 {
 	const double startTime = GetTime();
 
-	RT::Scene scene;
-	scene.Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(320, 240, 100), 50, Palette::Blue)));
+	// Наблюдатель находится перед экраном на расстоянии 1000 пикселов
+	const Point3D SpectatorPosition = Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2, -1000);
 
+	// создаём сцену
+	RT::Scene scene(SpectatorPosition);
+
+	// наполняем её шарами
+	scene.Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(320, 240, 100), 50, Palette::Blue)));
+	scene.Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(300, 200, 000), 20, Palette::Green)));
+	scene.Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(700, 300, 100), 100, Palette::Red)));
+
+	// рисуем
 	scene.Render(this, RT::Scene::SharedCallback(new ::Callback(this)));
 
 	const int elapsed = static_cast<int>((GetTime() - startTime) * 1000);

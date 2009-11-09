@@ -12,7 +12,7 @@ void RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 	{
 		for(int x = 0; x < app->Screen->w; ++x)
 		{
-			const RT::Ray ray(RT::NormalizedVector3D(0, 0, 1), Vector3DByCoords(x, y, 0));
+			const RT::Ray ray(Vector3DByCoords(x, y, 0) - SpectatorPosition, SpectatorPosition);
 
 			if(RT::CompoundObject::PossibleIntersection(ray))
 			{
