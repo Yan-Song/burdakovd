@@ -10,7 +10,7 @@ namespace RT
 	class ITracer
 	{
 	public:
-		// вернуть цвет точки пересечения с лучом
+		// РІРµСЂРЅСѓС‚СЊ С†РІРµС‚ С‚РѕС‡РєРё РїРµСЂРµСЃРµС‡РµРЅРёСЏ СЃ Р»СѓС‡РѕРј
 		virtual RealColor Trace() = 0;
 
 		virtual ~ITracer() {}

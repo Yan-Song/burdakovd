@@ -1,7 +1,7 @@
 PROG=./primitives
 
 CPP=g++
-COMMONFLAGS= -O3 
+COMMONFLAGS= -O3 -funroll-loops
 CPPFLAGS= $(COMMONFLAGS) -W -Wall -I/usr/include/SDL -I../sdlapplication 
 LINKFLAGS= $(COMMONFLAGS) -lSDL -lpthread 
 

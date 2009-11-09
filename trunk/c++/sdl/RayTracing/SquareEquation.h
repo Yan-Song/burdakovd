@@ -9,8 +9,8 @@
 
 namespace RT
 {
-	// функция, решающая уравнения первой и второй степени
-	// бросает std::invalid_argument если нет корней
+	// С„СѓРЅРєС†РёСЏ, СЂРµС€Р°СЋС‰Р°СЏ СѓСЂР°РІРЅРµРЅРёСЏ РїРµСЂРІРѕР№ Рё РІС‚РѕСЂРѕР№ СЃС‚РµРїРµРЅРё
+	// Р±СЂРѕСЃР°РµС‚ std::invalid_argument РµСЃР»Рё РЅРµС‚ РєРѕСЂРЅРµР№
 	inline std::pair<double, double> SolveSquareEquation(const Polynom& p)
 	{
 		assert(p.Degree() <= 2);
@@ -22,7 +22,7 @@ namespace RT
 
 		if(a == 0)
 		{
-			// Линейное bx + c = 0
+			// Р›РёРЅРµР№РЅРѕРµ bx + c = 0
 			if(b == 0)
 				throw std::invalid_argument("");
 			else
@@ -36,7 +36,7 @@ namespace RT
 			const double D = sqr(b) - 4 * a * c;
 
 			if(D < 0)
-				throw std::exception("");
+				throw std::invalid_argument("");
 
 			const double x1 = (- b + sqrt(D)) / 2 / a;
 			const double x2 = (- b - sqrt(D)) / 2 / a;

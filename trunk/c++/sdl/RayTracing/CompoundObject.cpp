@@ -12,7 +12,7 @@ RT::MaybeIntersection RT::CompoundObject::FindIntersection(const RT::Ray &ray) c
 {
 	typedef std::list<RT::Intersection> IntersectionList;
 
-	// составляем список пересечений дочерних объектов с лучом
+	// СЃРѕСЃС‚Р°РІР»СЏРµРј СЃРїРёСЃРѕРє РїРµСЂРµСЃРµС‡РµРЅРёР№ РґРѕС‡РµСЂРЅРёС… РѕР±СЉРµРєС‚РѕРІ СЃ Р»СѓС‡РѕРј
 	IntersectionList intersections;
 	
 	for(ObjectList::const_iterator it = objects.begin(); it != objects.end(); ++it)
@@ -24,7 +24,7 @@ RT::MaybeIntersection RT::CompoundObject::FindIntersection(const RT::Ray &ray) c
 				intersections.push_back(result);
 		}
 
-	// если список пуст, то пересечения нет, иначе выбираем ближайшее
+	// РµСЃР»Рё СЃРїРёСЃРѕРє РїСѓСЃС‚, С‚Рѕ РїРµСЂРµСЃРµС‡РµРЅРёСЏ РЅРµС‚, РёРЅР°С‡Рµ РІС‹Р±РёСЂР°РµРј Р±Р»РёР¶Р°Р№С€РµРµ
 	if(intersections.empty())
 	{
 		return RT::NoIntersection();

@@ -7,9 +7,9 @@
 #include <sstream>
 #include <Scene.h>
 
-// x - вправо
-// y - вверх
-// z - вперед
+// x - РІРїСЂР°РІРѕ
+// y - РІРІРµСЂС…
+// z - РІРїРµСЂРµРґ
 
 RTDemoApplication::RTDemoApplication()
 {
@@ -36,15 +36,15 @@ public:
 
 bool RTDemoApplication::Callback(const double percent)
 {
-	// вывести прогресс
+	// РІС‹РІРµСЃС‚Рё РїСЂРѕРіСЂРµСЃСЃ
 	std::ostringstream os;
 	os<<"Ray Tracing Demo. Rendered: "<<static_cast<int>(percent)<<"%";
 	SetCaption(os.str());
 	
-	// обработать ввод пользователя
+	// РѕР±СЂР°Р±РѕС‚Р°С‚СЊ РІРІРѕРґ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 	ProcessEvents();
 
-	// прервать процесс если приложение пора закрывать
+	// РїСЂРµСЂРІР°С‚СЊ РїСЂРѕС†РµСЃСЃ РµСЃР»Рё РїСЂРёР»РѕР¶РµРЅРёРµ РїРѕСЂР° Р·Р°РєСЂС‹РІР°С‚СЊ
 	return !(Running);
 }
 

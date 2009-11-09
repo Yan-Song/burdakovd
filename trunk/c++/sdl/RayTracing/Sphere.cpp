@@ -10,9 +10,9 @@ bool RT::Sphere::PossibleIntersection(const RT::Ray &ray) const
 	const Vector3D v = ray.Vector;
 	const double distance = (v ^ SC).Length();
 
-	// луч пересекается со сферой, если
-	// 1) расстояние от центра до него <= R (то есть прямая перескается со сферой) и
-	// 2) вектор направлен в сторону сферы либо 3) начальная точка внутри сферы
+	// Р»СѓС‡ РїРµСЂРµСЃРµРєР°РµС‚СЃСЏ СЃРѕ СЃС„РµСЂРѕР№, РµСЃР»Рё
+	// 1) СЂР°СЃСЃС‚РѕСЏРЅРёРµ РѕС‚ С†РµРЅС‚СЂР° РґРѕ РЅРµРіРѕ <= R (С‚Рѕ РµСЃС‚СЊ РїСЂСЏРјР°СЏ РїРµСЂРµСЃРєР°РµС‚СЃСЏ СЃРѕ СЃС„РµСЂРѕР№) Рё
+	// 2) РІРµРєС‚РѕСЂ РЅР°РїСЂР°РІР»РµРЅ РІ СЃС‚РѕСЂРѕРЅСѓ СЃС„РµСЂС‹ Р»РёР±Рѕ 3) РЅР°С‡Р°Р»СЊРЅР°СЏ С‚РѕС‡РєР° РІРЅСѓС‚СЂРё СЃС„РµСЂС‹
 	return (distance <= R) && ((v * SC > 0) || (Center.Distance(ray.Start) < R));
 }
 
@@ -39,19 +39,19 @@ RT::MaybeIntersection RT::Sphere::FindIntersection(const RT::Ray &ray) const
 {
 	typedef GenericVector<RT::Polynom, 3> PolyVector;
 
-	// две точки пересечения (с прямой, содержащей луч) можно найти, решив уравнение Center.Distance(ray.Start + t * ray.Vector) = R
-	// возвести обе части в квадрат
-	// получится Center.QDistance(start + t * v) - sqr(R) = 0
+	// РґРІРµ С‚РѕС‡РєРё РїРµСЂРµСЃРµС‡РµРЅРёСЏ (СЃ РїСЂСЏРјРѕР№, СЃРѕРґРµСЂР¶Р°С‰РµР№ Р»СѓС‡) РјРѕР¶РЅРѕ РЅР°Р№С‚Рё, СЂРµС€РёРІ СѓСЂР°РІРЅРµРЅРёРµ Center.Distance(ray.Start + t * ray.Vector) = R
+	// РІРѕР·РІРµСЃС‚Рё РѕР±Рµ С‡Р°СЃС‚Рё РІ РєРІР°РґСЂР°С‚
+	// РїРѕР»СѓС‡РёС‚СЃСЏ Center.QDistance(start + t * v) - sqr(R) = 0
 
 	const Polynom _t = Polynom(1, 1);
 	const PolyVector start = ray.Start;
 	const PolyVector v = static_cast<Vector3D>(ray.Vector);
 	const PolyVector center = Center;
 
-	// составляем уравнение
+	// СЃРѕСЃС‚Р°РІР»СЏРµРј СѓСЂР°РІРЅРµРЅРёРµ
 	Polynom equation = center.QDistance(start + _t * v) - Polynom(R * R); // == 0
 
-	// пытаемся решить его
+	// РїС‹С‚Р°РµРјСЃСЏ СЂРµС€РёС‚СЊ РµРіРѕ
 	double t1, t2;
 	try
 	{
@@ -61,14 +61,14 @@ RT::MaybeIntersection RT::Sphere::FindIntersection(const RT::Ray &ray) const
 	}
 	catch(const std::invalid_argument&)
 	{
-		// нет решений
+		// РЅРµС‚ СЂРµС€РµРЅРёР№
 		return NoIntersection();
 	}
 
 	double t;
 
-	// выбираем ближайшую точку пересечения, но с положительным t
-	// отрицательные t - это не интересующая нас полупрямая
+	// РІС‹Р±РёСЂР°РµРј Р±Р»РёР¶Р°Р№С€СѓСЋ С‚РѕС‡РєСѓ РїРµСЂРµСЃРµС‡РµРЅРёСЏ, РЅРѕ СЃ РїРѕР»РѕР¶РёС‚РµР»СЊРЅС‹Рј t
+	// РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рµ t - СЌС‚Рѕ РЅРµ РёРЅС‚РµСЂРµСЃСѓСЋС‰Р°СЏ РЅР°СЃ РїРѕР»СѓРїСЂСЏРјР°СЏ
 	if(t1 < 0)
 		if(t2 < 0)
 			return NoIntersection();
