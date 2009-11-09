@@ -45,7 +45,7 @@ public:
 			if(index >= 0 && index < N)
 				return matrix.A[row][index];
 			else
-				throw new std::out_of_range("second matrix index is out of range (RowAccessor)");
+				throw std::out_of_range("second matrix index is out of range (RowAccessor)");
 		}
 	};
 
@@ -65,7 +65,7 @@ public:
 			if(index >= 0 && index < N)
 				return matrix.A[row][index];
 			else
-				throw new std::out_of_range("second matrix index is out of range (ConstRowAccessor)");
+				throw std::out_of_range("second matrix index is out of range (ConstRowAccessor)");
 		}
 	};
 
@@ -91,7 +91,7 @@ public:
         if(index >= 0 || index < N)
 			return RowAccessor(*this, index);
 		else
-			throw new std::out_of_range("first matrix index is out of range (operator [])");
+			throw std::out_of_range("first matrix index is out of range (operator [])");
     }
 
     inline ConstRowAccessor operator [](const int index) const
@@ -99,7 +99,7 @@ public:
         if(index >= 0 || index < N)
 			return ConstRowAccessor(*this, index);
 		else
-			throw new std::out_of_range("first matrix index is out of range (operator [] const)");
+			throw std::out_of_range("first matrix index is out of range (operator [] const)");
     }
 };
 

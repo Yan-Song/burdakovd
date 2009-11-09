@@ -38,7 +38,7 @@ public:
 	inline I& operator [](const int index)
 	{
 		if(index < 0 || index >= N)
-			throw new std::out_of_range("Index out of range in I& Vector::operator[]");
+			throw std::out_of_range("Index out of range in I& Vector::operator[]");
 		else
 			return data[index];
 	}
@@ -46,7 +46,7 @@ public:
 	inline const I& operator [](const int index) const
 	{
 		if(index < 0 || index >= N)
-			throw new std::out_of_range("Index out of range in const I& Vector::operator[]");
+			throw std::out_of_range("Index out of range in const I& Vector::operator[]");
 		else
 			return data[index];
 	}

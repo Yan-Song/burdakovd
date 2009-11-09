@@ -29,7 +29,7 @@ namespace RT
 		inline double operator[](const int index) const
 		{
 			if(index < 0 || index >= 3)
-				throw new std::out_of_range("Index out of range in NormalizedVector::operator[]");
+				throw std::out_of_range("Index out of range in NormalizedVector::operator[]");
 			else
 				return data[index];
 		}

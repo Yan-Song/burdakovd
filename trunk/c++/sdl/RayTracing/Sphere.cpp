@@ -59,7 +59,7 @@ RT::MaybeIntersection RT::Sphere::FindIntersection(const RT::Ray &ray) const
 		t1 = roots.first;
 		t2 = roots.second;
 	}
-	catch(std::invalid_argument)
+	catch(const std::invalid_argument&)
 	{
 		// нет решений
 		return NoIntersection();

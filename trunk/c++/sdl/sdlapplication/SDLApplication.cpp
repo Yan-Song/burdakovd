@@ -92,7 +92,7 @@ void SDLApplication::InitializeSDL(int ScreenHeight, int ScreenWidth, int ColorD
 	Screen = SDL_SetVideoMode(ScreenWidth, ScreenHeight, ColorDepth, SDLflags);
 	if (!Screen)
 	{
-		throw new SDLException();
+		throw SDLException();
 	}
 
 	KeyState = SDL_GetKeyState(NULL);

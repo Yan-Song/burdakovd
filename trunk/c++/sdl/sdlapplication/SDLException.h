@@ -24,7 +24,7 @@ public:
 inline void SDLCheck(int code)
 {
 	if(code < 0)
-		throw new SDLException();
+		throw SDLException();
 }
 
 class NotImplementedException : public std::runtime_error

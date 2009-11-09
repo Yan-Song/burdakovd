@@ -11,14 +11,14 @@ Sprite::Sprite(const std::string &BMPFile, const Vector2D& center) : image(NULL)
 	SDL_Surface* raw = SDL_LoadBMP(BMPFile.c_str());
 
 	if(raw == NULL)
-		throw new SDLException();
+		throw SDLException();
 
 	image = SDL_DisplayFormat(raw);
 
 	SDL_FreeSurface(raw);
 
 	if(image == NULL)
-		throw new SDLException();	
+		throw SDLException();	
 }
 
 Sprite::~Sprite()
