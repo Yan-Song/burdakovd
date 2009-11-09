@@ -20,8 +20,6 @@ namespace RT
 		virtual bool PossibleIntersection(const Ray& ray) const;
 
 		virtual MaybeIntersection FindIntersection(const Ray& ray) const;
-
-		virtual RealColor Trace(const Ray& ray, const Intersection& intersection) const;
 	};
 }
 

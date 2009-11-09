@@ -5,6 +5,7 @@
 #include "IntersectionResult.h"
 #include <iostream>
 #include <sstream>
+#include <Scene.h>
 
 // x - вправо
 // y - вверх
@@ -19,45 +20,46 @@ RTDemoApplication::RTDemoApplication()
 	SDL_WM_SetCaption("Ray Tracing Demo", NULL);
 }
 
+class Callback : public RT::Scene::ICallback
+{
+private:
+	RTDemoApplication* const app;
+
+public:
+	Callback(RTDemoApplication* const _app) : app(_app) {}
+
+	virtual bool call(const double percent)
+	{
+		return app->Callback(percent);
+	}
+};
+
+bool RTDemoApplication::Callback(const double percent)
+{
+	// вывести прогресс
+	std::ostringstream os;
+	os<<"Ray Tracing Demo. Rendered: "<<static_cast<int>(percent)<<"%";
+	SetCaption(os.str());
+	
+	// обработать ввод пользователя
+	ProcessEvents();
+
+	// прервать процесс если приложение пора закрывать
+	return !(Running);
+}
+
 void RTDemoApplication::InitialRender()
 {
 	const double startTime = GetTime();
 
-	ClearScreen();
-	Lock();
+	RT::Scene scene;
+	scene.Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(320, 240, 100), 50, Palette::Blue)));
 
-	const RT::Sphere sphere(Vector3DByCoords(320, 240, 500), 100, Palette::Blue);
-
-	const int updateInterval = 1000;
-
-	for(int y = 0; y < ScreenHeight; ++y)
-	{
-		for(int x = 0; x < ScreenWidth; ++x)
-		{
-			const RT::Ray ray(RT::NormalizedVector3D(0, 0, 1), Vector3DByCoords(x, y, 0));
-			if(sphere.PossibleIntersection(ray))
-			{
-				const RT::MaybeIntersection result = sphere.FindIntersection(ray);
-
-				if(result.Exists)
-				{
-					RawDrawPixel(x, y, sphere.Trace(ray, result));
-				}
-			}
-		}
-
-		const int percent = 100 * (y + 1) / ScreenHeight;
-		std::ostringstream caption;
-		caption<<"Ray Tracing Demo. Rendered: "<<percent<<"%";
-		SetCaption(caption.str());
-	}
+	scene.Render(this, RT::Scene::SharedCallback(new ::Callback(this)));
 
 	const int elapsed = static_cast<int>((GetTime() - startTime) * 1000);
 
-	std::cout<<"Initial render completed after "<<elapsed<<" ms."<<std::endl;
-
-	Unlock();
-	Flip();
+	std::cout<<"Initial render "<<(Running ? "completed" : "interrupted")<<" after "<<elapsed<<" ms."<<std::endl;
 }
 
 void RTDemoApplication::Main()

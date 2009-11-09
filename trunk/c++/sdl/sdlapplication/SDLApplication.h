@@ -28,6 +28,9 @@ class SDLApplication
 {
 public:
 	SDLApplication();
+
+	// установить заголовок окна
+	void SetCaption(const std::string& text);
 	
 	void Lock() const ; // Заблокировать экран чтобы можно было рисовать
 	
@@ -113,21 +116,19 @@ protected:
 	
 	// обновить dt, FPS и прочую информацию
 	void UpdateStats();
-	
-	// установить заголовок окна
-	void SetCaption(const std::string& text);
 
 	Uint8* KeyState;
 
-private:
 	bool Running;
-	
+
+private:
 	// нельзя копировать
 	SDLApplication(const SDLApplication&) {};
 	SDLApplication& operator=(const SDLApplication&) { return *this; };
 	
 	inline Uint32 MapColor(const Color& rgb) const
 	{
+		assert(rgb.R >= 0 && rgb.B >=0 && rgb.G >= 0 && rgb.R < 256 && rgb.G < 256 && rgb.B < 256);
 		return SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.R), static_cast<Uint8>(rgb.G), static_cast<Uint8>(rgb.B));
 	}
 	

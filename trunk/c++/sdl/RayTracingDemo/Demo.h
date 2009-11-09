@@ -17,6 +17,8 @@ protected:
 public:
 	RTDemoApplication();
 
+	bool Callback(const double percent);
+
 	virtual ~RTDemoApplication();
 	
 };

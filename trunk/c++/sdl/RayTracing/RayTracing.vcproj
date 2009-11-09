@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\sdlapplication&quot;"
+				AdditionalIncludeDirectories="&quot;..&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -165,6 +165,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Scene.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Sphere.cpp"
 				>
 			</File>
@@ -183,6 +187,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ITracer.h"
+				>
+			</File>
+			<File
 				RelativePath=".\NormalizedVector3D.h"
 				>
 			</File>
@@ -196,6 +204,14 @@
 			</File>
 			<File
 				RelativePath=".\RTObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Scene.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Shared.h"
 				>
 			</File>
 			<File
