@@ -1,5 +1,5 @@
 #include "NormalizedVector3D.h"
-#include "Utils.h"
+#include "sdlapplication/Utils.h"
 #include <cmath>
 
 RT::NormalizedVector3D::NormalizedVector3D(const double x, const double y, const double z)

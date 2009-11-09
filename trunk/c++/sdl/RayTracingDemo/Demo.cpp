@@ -4,6 +4,7 @@
 #include "Ray.h"
 #include "IntersectionResult.h"
 #include <iostream>
+#include <sstream>
 
 // x - вправо
 // y - вверх
@@ -22,20 +23,22 @@ void RTDemoApplication::InitialRender()
 {
 	const double startTime = GetTime();
 
+	ClearScreen();
 	Lock();
 
-	ClearScreen();
-
 	const RT::Sphere sphere(Vector3DByCoords(320, 240, 500), 100, Palette::Blue);
-	
-	for(int x = 0; x < ScreenWidth; ++x)
-		for(int y = 0; y < ScreenHeight; ++y)
+
+	const int updateInterval = 1000;
+
+	for(int y = 0; y < ScreenHeight; ++y)
+	{
+		for(int x = 0; x < ScreenWidth; ++x)
 		{
 			const RT::Ray ray(RT::NormalizedVector3D(0, 0, 1), Vector3DByCoords(x, y, 0));
-
-			if(sphere.MaybeIntersection(ray))
+			if(sphere.PossibleIntersection(ray))
 			{
-				const RT::IntersectionResult result = sphere.FindIntersection(ray);
+				const RT::MaybeIntersection result = sphere.FindIntersection(ray);
+
 				if(result.Exists)
 				{
 					RawDrawPixel(x, y, sphere.Trace(ray, result));
@@ -43,12 +46,18 @@ void RTDemoApplication::InitialRender()
 			}
 		}
 
-	Unlock();
-	Flip();
+		const int percent = 100 * (y + 1) / ScreenHeight;
+		std::ostringstream caption;
+		caption<<"Ray Tracing Demo. Rendered: "<<percent<<"%";
+		SetCaption(caption.str());
+	}
 
 	const int elapsed = static_cast<int>((GetTime() - startTime) * 1000);
 
 	std::cout<<"Initial render completed after "<<elapsed<<" ms."<<std::endl;
+
+	Unlock();
+	Flip();
 }
 
 void RTDemoApplication::Main()

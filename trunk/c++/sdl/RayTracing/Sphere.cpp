@@ -1,9 +1,9 @@
 #include "Sphere.h"
-#include "Vector.h"
+#include "sdlapplication/Vector.h"
 #include "Polynom.h"
 #include "SquareEquation.h"
 
-bool RT::Sphere::MaybeIntersection(const RT::Ray &ray) const
+bool RT::Sphere::PossibleIntersection(const RT::Ray &ray) const
 {
 	const Vector3D SC = Center - ray.Start;
 	const Vector3D v = ray.Vector;
@@ -17,7 +17,7 @@ bool RT::Sphere::MaybeIntersection(const RT::Ray &ray) const
 
 typedef GenericVector<RT::Polynom, 3> PolyVector;
 
-RT::IntersectionResult RT::Sphere::FindIntersection(const RT::Ray &ray) const
+RT::MaybeIntersection RT::Sphere::FindIntersection(const RT::Ray &ray) const
 {
 	// две точки пересечения (с прямой содержащей луч) можно найти, решив уравнение Center.Distance(ray.Start + t * ray.Vector) = R
 	// возвести обе части в квадрат
@@ -42,7 +42,7 @@ RT::IntersectionResult RT::Sphere::FindIntersection(const RT::Ray &ray) const
 	catch(std::invalid_argument)
 	{
 		// нет решений
-		return IntersectionResult();
+		return NoIntersection();
 	}
 
 	double t;
@@ -51,7 +51,7 @@ RT::IntersectionResult RT::Sphere::FindIntersection(const RT::Ray &ray) const
 	// отрицательные t - это не интересующая нас полупрямая
 	if(t1 < 0)
 		if(t2 < 0)
-			return IntersectionResult();
+			return NoIntersection();
 		else
 			t = t2;
 	else
@@ -64,10 +64,10 @@ RT::IntersectionResult RT::Sphere::FindIntersection(const RT::Ray &ray) const
 
 	const NormalizedVector3D n = point - Center;
 
-	return IntersectionResult(point, n);
+	return Intersection(point, n);
 }
 
-RealColor RT::Sphere::Trace(const RT::Ray &ray, const IntersectionResult& result) const
+RealColor RT::Sphere::Trace(const RT::Ray &ray, const Intersection& intersection) const
 {
-	return RTObject::color * (static_cast<Vector3D>(result.n) * Vector3DByCoords(0, 0, -1));
+	return RTObject::color * (static_cast<Vector3D>(intersection.n) * Vector3DByCoords(0, 0, -1));
 }
