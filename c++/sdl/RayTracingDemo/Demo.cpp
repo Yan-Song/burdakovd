@@ -59,9 +59,10 @@ void RTDemoApplication::InitialRender()
 	RT::Scene scene(SpectatorPosition);
 
 	// наполняем её шарами
-	scene.Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(320, 240, 100), 50, Palette::Blue)));
-	scene.Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(300, 200, 000), 20, Palette::Green)));
-	scene.Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(700, 300, 100), 100, Palette::Red)));
+	scene.Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(320, 240, 600), 50, Palette::Blue)));
+	scene.Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(300, 200, 500), 20, Palette::Green)));
+	scene.Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(400, 200, 000), 20, Palette::Green)));
+	scene.Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(700, 300, 600), 100, Palette::Red)));
 
 	// рисуем
 	scene.Render(this, RT::Scene::SharedCallback(new ::Callback(this)));
