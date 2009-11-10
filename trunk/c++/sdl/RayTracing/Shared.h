@@ -3,8 +3,8 @@
 
 #include <memory>
 
-// если старый компилятор и в нём нет std::tr1::shared_ptr
-// то можно поставить boost, и:
+// РµСЃР»Рё СЃС‚Р°СЂС‹Р№ РєРѕРјРїРёР»СЏС‚РѕСЂ Рё РІ РЅС‘Рј РЅРµС‚ std::tr1::shared_ptr
+// С‚Рѕ РјРѕР¶РЅРѕ РїРѕСЃС‚Р°РІРёС‚СЊ boost, Рё:
 // #include <boost/shared_ptr.hpp>
 // using boost::shared_ptr
 
