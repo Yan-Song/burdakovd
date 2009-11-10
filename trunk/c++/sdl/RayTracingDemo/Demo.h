@@ -29,7 +29,7 @@ protected:
 public:
 	RTDemoApplication();
 
-	bool Callback(const double percent);
+	bool Callback(const double percent, const bool AllowBreak);
 
 	virtual ~RTDemoApplication();
 	

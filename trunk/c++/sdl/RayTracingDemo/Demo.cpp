@@ -47,16 +47,16 @@ public:
 	virtual bool call(const double percent)
 	{
 		if(AllowBreak)
-			return app->Callback(percent);
+			return app->Callback(percent, true);
 		else
 		{
-			app->Callback(percent);
+			app->Callback(percent, false);
 			return false;
 		}
 	}
 };
 
-bool RTDemoApplication::Callback(const double percent)
+bool RTDemoApplication::Callback(const double percent, const bool AllowBreak)
 {
 	// вывести прогресс
 	std::ostringstream os;
@@ -64,13 +64,19 @@ bool RTDemoApplication::Callback(const double percent)
 	os<<"Quality: "<<Quality;
 	SetCaption(os.str());
 	
-	UpdateStats();
-	// обработать ввод пользователя
-	ProcessEvents();
-	Navigate();
-
-	// прервать процесс если приложение пора закрывать или картинка уже устарела
-	return (!(Running)) || Dirty;
+	if(AllowBreak)
+	{
+		UpdateStats();
+		// обработать ввод пользователя
+		ProcessEvents();
+		Navigate();
+		// прервать процесс если приложение пора закрывать или картинка уже устарела
+		return (!(Running)) || Dirty;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void RTDemoApplication::InitialRender()
@@ -82,14 +88,14 @@ void RTDemoApplication::Navigate()
 {
 	if(isPressed(SDLK_RIGHT))
 	{
-		Dirty = true;
 		container->Rotate(Affine::Y, Vector3DByCoords(ScreenWidth / 2, 0, 500), dt);
+		Dirty = true;
 	}
 
 	if(isPressed(SDLK_LEFT))
 	{
-		Dirty = true;
 		container->Rotate(Affine::Y, Vector3DByCoords(ScreenWidth / 2, 0, 500), -dt);
+		Dirty = true;
 	}
 }
 
