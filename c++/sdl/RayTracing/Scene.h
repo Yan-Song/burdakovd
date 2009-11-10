@@ -37,7 +37,8 @@ namespace RT
 		// и если он вернет true то Render будет прерван
 		// Quality - качество прорисовки, 1 - максимальное, чем больше  тем ниже качество
 		// возвращается true если сцена успела отрендериться до конца, и false если её прервал callback
-		bool Render(SDLApplication* const app, const SharedCallback& callback, const int Quality = 1);
+		bool Render(SDLApplication* const app, const SharedCallback& callback, const int Quality = 1,
+			const bool rectangles = true);
 	};
 }
 

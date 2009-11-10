@@ -58,7 +58,7 @@ public:
 	void DrawSegment(const ScreenPoint& A, const ScreenPoint& B, const Color& color);
 	
 	// нарисовать закрашенный прямоугольник
-	void FillRectangle(const ScreenPoint& LeftTop, const ScreenPoint& RightBottom, const Color& color) const;
+	void FillRectangle(const ScreenPoint& A, const ScreenPoint& B, const Color& color) const;
 	
 	// очистить экран
 	void ClearScreen(const Color& color = Palette::Black) const;

@@ -2,10 +2,56 @@
 #include "sdlapplication/SDLApplication.h"
 #include <vector>
 
-bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallback &callback, const int Quality)
-{	
-	typedef std::vector<RealColor> ColorContainer;
+typedef std::vector<RealColor> ColorContainer;
 
+void DrawBuffer(SDLApplication* const app, const bool rectangles, const int Quality, const ColorContainer& buffer)
+{
+	const int n = app->Screen->h * app->Screen->w;
+	const int qh = (app->Screen->h + Quality - 1) / Quality;
+	const int qw = (app->Screen->w + Quality - 1) / Quality;
+	const int qn = qh * qw;
+	const int w = app->Screen->w;
+	const int h = app->Screen->h;
+
+	app->ClearScreen();
+
+	// если Quality == 1 то прямоугольники вырождаются в точки
+	if(rectangles && Quality > 1)
+	{
+		int index = 0;
+		for(int y = 0; y < h; y += Quality)
+			for(int x = 0; x < w; x += Quality)
+			{
+				const int baseX = x - Quality / 2;
+				const int baseY = y - Quality / 2;
+
+				app->FillRectangle(ScreenPointByCoords(baseX, baseY), ScreenPointByCoords(baseX + Quality, baseY + Quality), buffer[index]);
+
+				++index;
+			}
+		assert(index == qn);
+	}
+	else
+	{
+		app->Lock();
+
+		int index = 0;
+		for(int y = 0; y < h; y += Quality)
+			for(int x = 0; x < w; x += Quality)
+			{
+				app->RawDrawPixel(x, y, buffer[index]);
+				++index;
+			}
+		assert(index == qn);
+
+		app->Unlock();
+	}
+	app->Flip();
+}
+
+bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallback &callback, const int Quality, 
+					   const bool rectangles)
+{	
 	const int n = app->Screen->h * app->Screen->w;
 	const int qh = (app->Screen->h + Quality - 1) / Quality;
 	const int qw = (app->Screen->w + Quality - 1) / Quality;
@@ -50,26 +96,10 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 
 	// остался последний процент, перенести всё это на экран
 	
-	const int w = app->Screen->w;
-	const int h = app->Screen->h;
-
-	index = 0;
-
-	app->ClearScreen();
-	app->Lock();
-
-	for(int y = 0; y < h; y += Quality)
-		for(int x = 0; x < w; x += Quality)
-		{
-			app->RawDrawPixel(x, y, buffer[index]);
-			++index;
-		}
-	assert(index == qn);
-
-	app->Unlock();
-	app->Flip();
+	DrawBuffer(app, rectangles, Quality, buffer);
 
 	callback->call(100);
 
 	return true;
 }
+
