@@ -69,9 +69,9 @@ public:
 	virtual void Draw(const Vector3D& base, ITriangleDrawer* const drawer) const = 0;
 
 	// повращать вокруг заданной оси, так чтоб Center остался неподвижным
-	virtual void Rotate(const int axe, const double phi) = 0;
+	virtual void Rotate(const Affine::Axe axe, const double phi) = 0;
 
-	inline void RotateRelative(const int axe, const double phi, const Vector3D& center)
+	inline void RotateRelative(const Affine::Axe axe, const double phi, const Vector3D& center)
 	{
 		// повращать центр
 		Center = Affine::Rotate3D(axe, phi, center) * Center;
@@ -82,17 +82,17 @@ public:
 	// Вообще говоря у параметра center здесь значимы только координаты y и z
 	inline void RotateX(const double phi)
 	{
-		Rotate(0, phi);
+		Rotate(Affine::X, phi);
 	}
 
 	inline void RotateY(const double phi)
 	{
-		Rotate(1, phi);
+		Rotate(Affine::Y, phi);
 	}
 
 	inline void RotateZ(const double phi)
 	{
-		Rotate(2, phi);
+		Rotate(Affine::Z, phi);
 	}
 };
 

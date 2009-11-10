@@ -37,7 +37,7 @@ void CompoundObject3D::Draw(const Vector3D& base, ITriangleDrawer* const drawer)
 		(*it)->Draw(base + Center, drawer);
 }
 
-void CompoundObject3D::Rotate(const int axe, const double phi)
+void CompoundObject3D::Rotate(const Affine::Axe axe, const double phi)
 {
 	const GenericMatrix<4> rotator = Affine::Rotate3D(axe, phi);
 

@@ -24,7 +24,7 @@ void Triangle3D::Draw(const Vector3D &base, ITriangleDrawer * const drawer) cons
 	drawer->DrawTriangle(base + Center + A, base + Center + B, base + Center + C, color);
 }
 
-void Triangle3D::Rotate(const int axe, const double phi)
+void Triangle3D::Rotate(const Affine::Axe axe, const double phi)
 {
 	GenericMatrix<4> rotator = Affine::Rotate3D(axe, phi);
 

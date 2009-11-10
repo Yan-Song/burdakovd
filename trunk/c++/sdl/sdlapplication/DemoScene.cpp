@@ -4,6 +4,7 @@
 #include "Tetragon.h"
 #include "Cube.h"
 #include "CompoundObject.h"
+#include "Affine.h"
 #include <cmath>
 
 DemoScene::DemoScene(const Vector3D &center)
@@ -35,8 +36,8 @@ DemoScene::DemoScene(const Vector3D &center)
 	CompoundObject3D::Add(paper);
 	
 	GraphObject3D* pencil = new Pencil(PencilCenter, PencilHeight, 0x30D5C8, 0xffff7f, 0x3f3f3f);
-	pencil->RotateRelative(0, PencilRotateX, PencilBase);
-	pencil->RotateRelative(1, PencilRotateY, PencilBase);
+	pencil->RotateRelative(Affine::X, PencilRotateX, PencilBase);
+	pencil->RotateRelative(Affine::Y, PencilRotateY, PencilBase);
 	CompoundObject3D::Add(pencil);
 
 	const double CubeXOffset = 120;
