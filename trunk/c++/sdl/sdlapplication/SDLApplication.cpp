@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Timer.h"
 #include "Utils.h"
+#include <algorithm>
 
 SDLApplication::SDLApplication() : startTime(time(NULL)), _locked(false)
 {
@@ -241,13 +242,13 @@ int SDLApplication::Rand(int x, int y)
     return x > y ? Rand(y, x) : x + Rand(y - x + 1);
 }
 
-void SDLApplication::FillRectangle(const ScreenPoint& LeftTop, const ScreenPoint& RightBottom, const Color& color) const
+void SDLApplication::FillRectangle(const ScreenPoint& A, const ScreenPoint& B, const Color& color) const
 {
 	SDL_Rect rect;
-	rect.x = static_cast<Sint16>(LeftTop[0]);
-	rect.y = static_cast<Sint16>(LeftTop[1]);
-	rect.w = static_cast<Uint16>(RightBottom[0] - rect.x);
-	rect.h = static_cast<Uint16>(RightBottom[1] - rect.y);
+	rect.x = static_cast<Sint16>(std::min(A[0], B[0]));
+	rect.y = static_cast<Sint16>(Screen->h - 1 - std::max(A[1], B[1]));
+	rect.w = static_cast<Uint16>(abs(A[0] - B[0]));
+	rect.h = static_cast<Uint16>(abs(A[1] - B[1]));
 	SDL_FillRect(Screen, &rect, MapColor(color));
 }
 
