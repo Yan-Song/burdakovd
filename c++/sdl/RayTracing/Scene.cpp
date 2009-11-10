@@ -15,7 +15,7 @@ void DrawBuffer(SDLApplication* const app, const bool rectangles, const int Qual
 
 	app->ClearScreen();
 
-	// если Quality == 1 то прямоугольники вырождаются в точки
+	// РµСЃР»Рё Quality == 1 С‚Рѕ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРё РІС‹СЂРѕР¶РґР°СЋС‚СЃСЏ РІ С‚РѕС‡РєРё
 	if(rectangles && Quality > 1)
 	{
 		int index = 0;
@@ -94,7 +94,7 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 	}
 	assert(index == qn);
 
-	// остался последний процент, перенести всё это на экран
+	// РѕСЃС‚Р°Р»СЃСЏ РїРѕСЃР»РµРґРЅРёР№ РїСЂРѕС†РµРЅС‚, РїРµСЂРµРЅРµСЃС‚Рё РІСЃС‘ СЌС‚Рѕ РЅР° СЌРєСЂР°РЅ
 	
 	DrawBuffer(app, rectangles, Quality, buffer);
 
