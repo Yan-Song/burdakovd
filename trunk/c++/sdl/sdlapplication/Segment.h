@@ -15,7 +15,7 @@ public:
 
 	Segment2D(const Point2D& a, const Point2D& b, const Color& c = Palette::White): A(a), B(b), color(c) { }
 
-	virtual void Draw(const SDLApplication*, const Vector& base) const;
+	virtual void Draw(SDLApplication* const, const Vector& base) const;
 
 	virtual void Rotate(const double phi);
 

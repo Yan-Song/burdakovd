@@ -12,15 +12,15 @@
 class PixelDrawer
 {
 private:
-	const SDLApplication* app;
+	const SDLApplication* const app;
 	const Color& color;
 
 public:
-	PixelDrawer(const SDLApplication* _app, const Color& _color) : app(_app), color(_color) {};
+	PixelDrawer(const SDLApplication* const _app, const Color& _color) : app(_app), color(_color) {};
 
 	inline void operator ()(const int x, const int y) const
 	{
-		app->DrawPixel(x, y, color);
+		app->RawDrawPixel(x, y, color);
 	}
 };
 
@@ -38,14 +38,18 @@ public:
 	}
 };
 
-void Polygon2D::Draw(const SDLApplication *app, const Vector& base) const
+void Polygon2D::Draw(SDLApplication* const app, const Vector& base) const
 {
 	if(Filled)
 	{
+		app->Lock();
+
 		std::vector<ScreenPoint> spoints(points.size());
 		// переводим их в абсолютные координаты и заодно в целочисленные
 		std::transform(points.begin(), points.end(), spoints.begin(), PointsTransformer(base + Center));
 		FillPolygon(spoints, ScreenPointByCoords(app->Screen->w, app->Screen->h), PixelDrawer(app, color));
+		
+		app->Unlock();
 	}
 	else
 	{

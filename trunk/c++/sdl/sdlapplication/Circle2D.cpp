@@ -7,18 +7,20 @@ void Circle2D::circlePoints(const SDLApplication* app, const Vector2D& center, c
 {
 	const int xCenter = static_cast<int>(center[0]), yCenter = static_cast<int>(center[1]);
 
-	app->DrawPixel(xCenter + x, yCenter + y, color);
-	app->DrawPixel(xCenter + y, yCenter + x, color);
-	app->DrawPixel(xCenter + y, yCenter - x, color);
-	app->DrawPixel(xCenter + x, yCenter - y, color);
-	app->DrawPixel(xCenter - x, yCenter - y, color);
-	app->DrawPixel(xCenter - y, yCenter - x, color);
-	app->DrawPixel(xCenter - y, yCenter + x, color);
-	app->DrawPixel(xCenter - x, yCenter + y, color);
+	app->RawDrawPixel(xCenter + x, yCenter + y, color);
+	app->RawDrawPixel(xCenter + y, yCenter + x, color);
+	app->RawDrawPixel(xCenter + y, yCenter - x, color);
+	app->RawDrawPixel(xCenter + x, yCenter - y, color);
+	app->RawDrawPixel(xCenter - x, yCenter - y, color);
+	app->RawDrawPixel(xCenter - y, yCenter - x, color);
+	app->RawDrawPixel(xCenter - y, yCenter + x, color);
+	app->RawDrawPixel(xCenter - x, yCenter + y, color);
 }
 
-void Circle2D::Draw(const SDLApplication* app, const Vector& base) const
+void Circle2D::Draw(SDLApplication* const app, const Vector& base) const
 {
+	app->Lock();
+
 	Vector2D center = base + Center;
 
 	int r = static_cast<int>(R);
@@ -52,6 +54,8 @@ void Circle2D::Draw(const SDLApplication* app, const Vector& base) const
 		}
 		circlePoints(app, center, x, y, color);
 	}
+
+	app->Unlock();
 }
 
 void Circle2D::Rotate(const double phi)

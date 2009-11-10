@@ -19,7 +19,7 @@ protected:
 	void Add(GraphObject2D* const object);
 
 public:
-	virtual void Draw(const SDLApplication* app, const Vector& base) const;
+	virtual void Draw(SDLApplication* const app, const Vector& base) const;
 
 	virtual void Rotate(const double phi);
 

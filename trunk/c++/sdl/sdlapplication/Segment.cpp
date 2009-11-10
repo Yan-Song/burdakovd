@@ -5,7 +5,7 @@
 #include "Affine.h"
 #include "Projection.h"
 
-void Segment2D::Draw(const SDLApplication* app, const Vector& base) const
+void Segment2D::Draw(SDLApplication* const app, const Vector& base) const
 {
 	app->DrawSegment(base + Center + A, base + Center + B, color);
 }
