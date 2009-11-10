@@ -44,8 +44,15 @@ namespace Affine
 
 	// Flip() - отражение - частный случай растяжения с коэффициентом -1
 
+	enum Axe
+	{
+		X = 0,
+		Y = 1,
+		Z = 2
+	};
+
 	// Матрица вращения вокруг заданной оси
-	GenericMatrix<4> Rotate3D(const int axe, const double phi, const Vector3D& center = Vector000);
+	GenericMatrix<4> Rotate3D(const Axe axe, const double phi, const Vector3D& center = Vector000);
 };
 
 #endif

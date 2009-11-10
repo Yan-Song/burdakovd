@@ -19,7 +19,7 @@ public:
 
 	virtual void Draw(const Vector3D& base, ITriangleDrawer* const drawer) const;
 
-	virtual void Rotate(const int axe, const double phi);
+	virtual void Rotate(const Affine::Axe axe, const double phi);
 };
 
 #endif
