@@ -87,6 +87,9 @@ void RTDemoApplication::ProcessEvent(SDL_Event Event)
 
 		if(sym == SDLK_ESCAPE || sym == SDLK_q)
 			Stop();
+
+		if(sym == SDLK_PRINT)
+			MakeScreenshot();
 	}
 }
 

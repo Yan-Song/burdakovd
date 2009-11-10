@@ -4,10 +4,11 @@
 #include <ctime>
 #include <iostream>
 #include "Timer.h"
+#include "Utils.h"
 
-SDLApplication::SDLApplication()
+SDLApplication::SDLApplication() : startTime(time(NULL)), _locked(false)
 {
-    srand(static_cast<unsigned int>(time(NULL)));
+    srand(static_cast<unsigned int>(startTime));
 	std::cout<<"Random number generator initialized"<<std::endl;
 	dt = 0;
 	frames = 0;
@@ -145,16 +146,23 @@ void SDLApplication::Stop()
 	std::cout<<"Stop()"<<std::endl;
 }
 
-void SDLApplication::Lock() const
+void SDLApplication::Lock()
 {
 	if(SDL_MUSTLOCK(Screen))
+	{
 		SDLCheck(SDL_LockSurface(Screen));
+		++_locked;
+	}
 }
 
-void SDLApplication::Unlock() const
+void SDLApplication::Unlock()
 {
 	if(SDL_MUSTLOCK(Screen))
+	{
 		SDL_UnlockSurface(Screen);
+		--_locked;
+		assert(_locked >= 0);
+	}
 }
 
 void SDLApplication::Flip() const
@@ -162,12 +170,12 @@ void SDLApplication::Flip() const
 	SDLCheck(SDL_Flip(Screen));
 }
 
-void SDLApplication::DrawPixel(const ScreenPoint& point, const Color& color) const
+void SDLApplication::DrawPixel(const ScreenPoint& point, const Color& color)
 {
     DrawPixel(point[0], point[1], color);
 }
 
-void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb) const
+void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb)
 {
 	Lock();
 	RawDrawPixel(x, y, rgb);
@@ -254,8 +262,10 @@ void SDLApplication::ClearScreen(const Color& color) const
 // http://ru.wikipedia.org/wiki/Алгоритм_Брезенхэма
 // Шикин, Боресков, Компьютерная графика. Полигональные модели. с. 161
 // нарисовать отрезок (или точку) бывает нужно очень часто, поэтому я сделал отдельные методы для этого
-void SDLApplication::DrawSegment(const ScreenPoint& A, const ScreenPoint& B, const Color& color) const
+void SDLApplication::DrawSegment(const ScreenPoint& A, const ScreenPoint& B, const Color& color)
 {
+	Lock();
+
 	int x1 = static_cast<int>(A[0]);
     int y1 = static_cast<int>(A[1]);
     int x2 = static_cast<int>(B[0]);
@@ -272,7 +282,7 @@ void SDLApplication::DrawSegment(const ScreenPoint& A, const ScreenPoint& B, con
 		int d1 = dy << 1;
 		int d2 = (dy - dx) << 1;
 
-		DrawPixel(A, color);
+		RawDrawPixel(A[0], A[1], color);
 
 		for(int x = x1 + sx, y = y1, i = 1; i <= dx; ++i, x += sx)
 		{
@@ -285,7 +295,7 @@ void SDLApplication::DrawSegment(const ScreenPoint& A, const ScreenPoint& B, con
             {
                 d += d1;
             }
-            DrawPixel(x, y, color);
+            RawDrawPixel(x, y, color);
 		}
 	}
     else
@@ -294,7 +304,7 @@ void SDLApplication::DrawSegment(const ScreenPoint& A, const ScreenPoint& B, con
 		int d1 = dx << 1;
 		int d2 = (dx - dy) << 1;
 
-		DrawPixel(A, color);
+		RawDrawPixel(A[0], A[1], color);
 
 		for(int x = x1, y = y1 + sy, i = 1; i <= dy; ++i, y += sy)
 		{
@@ -307,9 +317,11 @@ void SDLApplication::DrawSegment(const ScreenPoint& A, const ScreenPoint& B, con
             {
                 d += d1;
             }
-            DrawPixel(x, y, color);
+            RawDrawPixel(x, y, color);
 		}
 	}
+
+	Unlock();
 }
 
 void SDLApplication::SetCaption(const std::string& text)

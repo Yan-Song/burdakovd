@@ -9,6 +9,9 @@
 #include <list>
 #include "Timer.h"
 #include <string>
+#include <sstream>
+#include <ctime>
+#include <iostream>
 
 #pragma warning (disable: 4100)
 
@@ -32,22 +35,27 @@ public:
 	// установить заголовок окна
 	void SetCaption(const std::string& text);
 	
-	void Lock() const ; // Заблокировать экран чтобы можно было рисовать
+	void Lock(); // Заблокировать экран чтобы можно было рисовать
+
+	inline bool isLocked() const
+	{
+		return _locked > 0;
+	}
 	
-	void Unlock() const ; // Разблокировать экран
+	void Unlock(); // Разблокировать экран
 	
 	void Flip() const ; // SDL_Flip
 
 	// координаты Декартовы, направление осей нормальное (X - вправо, Y - вверх)
-	void DrawPixel(const int x, int y, const Color& color) const;
+	void DrawPixel(const int x, int y, const Color& color);
 
 	// не блокирует экран (предполагается что он уже заблокирован)
 	void RawDrawPixel(const int x, int y, const Color& color) const;
 	
-	void DrawPixel(const ScreenPoint& point, const Color& color) const;
+	void DrawPixel(const ScreenPoint& point, const Color& color);
 	
 	// нарисовать отрезок
-	void DrawSegment(const ScreenPoint& A, const ScreenPoint& B, const Color& color) const;
+	void DrawSegment(const ScreenPoint& A, const ScreenPoint& B, const Color& color);
 	
 	// нарисовать закрашенный прямоугольник
 	void FillRectangle(const ScreenPoint& LeftTop, const ScreenPoint& RightBottom, const Color& color) const;
@@ -75,9 +83,35 @@ public:
 		return stats.size();
 	}
 
-	inline bool isPressed(const SDLKey key) const
+	inline bool isPressed(const SDLKey& key) const
 	{
 		return KeyState[key] != 0;
+	}
+
+	inline void MakeScreenshot(const std::string& path) const
+	{
+		if(isLocked())
+		{
+			std::cout<<"Failed to make screenshot: Screen is locked"<<std::endl;
+		}
+		else
+		{
+			if(SDL_SaveBMP(Screen, path.c_str()) == 0)
+				std::cout<<"Screenshot saved to "<<path<<std::endl;
+			else
+				std::cout<<"Failed to save screenshot to "<<path<<": "<<SDL_GetError()<<std::endl;
+		}
+	}
+
+	inline void MakeScreenshot()
+	{
+		std::ostringstream path;
+
+		path<<"./Screenshots/Screenshot-";
+		path<<startTime<<"-"<<GetTime();
+		path<<".bmp";
+
+		MakeScreenshot(path.str());
 	}
 
 	SDL_Surface* Screen;
@@ -122,6 +156,9 @@ protected:
 	bool Running;
 
 private:
+	time_t startTime;
+	int _locked;
+
 	// нельзя копировать
 	SDLApplication(const SDLApplication&) {};
 	SDLApplication& operator=(const SDLApplication&) { return *this; };

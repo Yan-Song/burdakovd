@@ -45,7 +45,7 @@ class GraphObject2D : public GenericGraphObject<2>
 {
 public:
 	// отрисовать себя, относительно заданной точки
-	virtual void Draw(const SDLApplication* app, const Vector& base) const = 0;
+	virtual void Draw(SDLApplication* const app, const Vector& base) const = 0;
 
 	// вращение относительно центра объекта
 	virtual void Rotate(const double phi) = 0;
