@@ -20,7 +20,7 @@ public:
 	inline GenericVector()
 	{
 		for(int i = 0; i < N; ++i)
-			data[i] = 0;
+			data[i] = static_cast<I>(0);
 	}
 
 	inline GenericVector(const dataArray& dt)
@@ -63,9 +63,11 @@ public:
 	// Длина вектора
 	inline I QLength() const
 	{
-		I s = 0;
+		I s = static_cast<I>(0);
+
 		for(int i = 0; i < N; ++i)
 			s += sqr(data[i]);
+
 		return s;
 	}
 
@@ -120,8 +122,10 @@ template<typename I, int N>
 inline GenericVector<I, N> operator +(const GenericVector<I, N>& first, const GenericVector<I, N>& other)
 {
 	GenericVector<I, N> ans;
+
 	for(int i = 0; i < N; ++i)
 		ans[i] = first[i] + other[i];
+
 	return ans;
 }
 
@@ -129,8 +133,10 @@ template<typename I, int N>
 inline GenericVector<I, N> operator -(const GenericVector<I, N>& first, const GenericVector<I, N>& other)
 {
 	GenericVector<I, N> ans;
+
 	for(int i = 0; i < N; ++i)
 		ans[i] = first[i] - other[i];
+
 	return ans;
 }
 
@@ -139,6 +145,7 @@ inline GenericVector<I, N>& operator +=(GenericVector<I, N>& first, const Generi
 {
 	for(int i = 0; i < N; ++i)
 		first[i] += other[i];
+
 	return first;
 }
 
@@ -147,6 +154,7 @@ inline GenericVector<I, N>& operator -=(GenericVector<I, N>& first, const Generi
 {
 	for(int i = 0; i < N; ++i)
 		first[i] -= other[i];
+
 	return first;
 }
 
@@ -154,8 +162,10 @@ template<typename I, int N>
 inline GenericVector<I, N> operator *(const GenericVector<I, N>& first, const I k)
 {
 	GenericVector<I, N> ans;
+
 	for(int i = 0; i < N; ++i)
 		ans[i] = first[i] * k;
+
 	return ans;
 }
 
@@ -169,8 +179,10 @@ template<typename I, int N>
 inline GenericVector<I, N> operator /(const GenericVector<I, N>& first, const I k)
 {
 	GenericVector<I, N> ans;
+
 	for(int i = 0; i < N; ++i)
 		ans[i] = first[i] / k;
+
 	return ans;
 }
 
@@ -179,6 +191,7 @@ inline GenericVector<I, N>& operator *=(GenericVector<I, N>& first, const I k)
 {
 	for(int i = 0; i < N; ++i)
 		first[i] *= k;
+
 	return first;
 }
 
@@ -187,6 +200,7 @@ inline GenericVector<I, N>& operator /=(GenericVector<I, N>& first, const I k)
 {
 	for(int i = 0; i < N; ++i)
 		first[i] /= k;
+
 	return first;
 }
 
@@ -195,8 +209,10 @@ template<typename I, int N>
 inline GenericVector<I, N> operator -(const GenericVector<I, N>& first)
 {
 	GenericVector<I, N> ans;
+
 	for(int i = 0; i < N; ++i)
 		ans[i] = - first[i];
+
 	return ans;
 }
 
@@ -216,9 +232,11 @@ inline GenericVector<I, N> zipWithMultiplication(const GenericVector<I, N>& A, c
 template<typename I, int N>
 inline I operator *(const GenericVector<I, N>& A, const GenericVector<I, N>& B)
 {
-	I ans = 0;
+	I ans = static_cast<I>(0);
+
 	for(int i = 0; i < N; ++i)
 		ans += A[i] * B[i];
+
 	return ans;
 }
 
@@ -227,6 +245,7 @@ template<typename I>
 inline GenericVector<I, 3> operator ^(const GenericVector<I, 3>& A, const GenericVector<I, 3>& B)
 {
 	GenericVector<I, 3> ans;
+	
 	ans[0] = A[1] * B[2] - A[2] * B[1];
 	ans[1] = A[2] * B[0] - A[0] * B[2];
 	ans[2] = A[0] * B[1] - A[1] * B[0];
@@ -242,6 +261,7 @@ inline I VectorMultiplication2D(const GenericVector<I, 2>& A, const GenericVecto
 {
 	GenericVector<I, 3> a;
 	GenericVector<I, 3> b;
+	
 	for(int i = 0; i < 2; ++i)
 	{
 		a[i] = A[i];
