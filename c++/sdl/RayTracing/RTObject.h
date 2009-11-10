@@ -4,10 +4,12 @@
 #include "Ray.h"
 #include "sdlapplication/Color.h"
 #include "IntersectionResult.h"
+#include "Object3D.h"
+#include "sdlapplication/Vector.h"
 
 namespace RT
 {
-	class IRTObject
+	class IRayTraceable
 	{
 	public:
 		// проверить может ли луч пересекаться с объектом
@@ -23,15 +25,20 @@ namespace RT
 		// поэтому его стоит вызывать только если PossibleIntersection вернул true
 		virtual MaybeIntersection FindIntersection(const Ray& ray) const = 0;
 
-		virtual ~IRTObject() {}
+		virtual ~IRayTraceable() {}
+	};
+
+	class IRTObject : public IRayTraceable, public IObject3D
+	{
 	};
 
 	class RTObject : public IRTObject
 	{
-	public:
+	protected:
+		Point3D Center;
 		RealColor color;
 
-		RTObject(const RealColor& _color) : color(_color) {}
+		RTObject(const Point3D& center, const RealColor& _color) : Center(center), color(_color) {}
 	};
 }
 

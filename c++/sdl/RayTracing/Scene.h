@@ -35,7 +35,9 @@ namespace RT
 		// в данном случае callback это такой функтор
 		// который Render будет дергать несколько раз в секунду и передавать процент отрендеренного
 		// и если он вернет true то Render будет прерван
-		void Render(SDLApplication* const app, const SharedCallback& callback);
+		// Quality - качество прорисовки, 1 - максимальное, чем больше  тем ниже качество
+		// возвращается true если сцена успела отрендериться до конца, и false если её прервал callback
+		bool Render(SDLApplication* const app, const SharedCallback& callback, const int Quality = 1);
 	};
 }
 
