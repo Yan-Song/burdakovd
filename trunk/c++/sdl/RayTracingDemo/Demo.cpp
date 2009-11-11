@@ -33,12 +33,20 @@ RTDemoApplication::RTDemoApplication() :
 	container->Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(700, 300, 600), 100, Palette::Red)));
 	container->Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(ScreenWidth / 2, 0, 500), 10, Palette::White)));
 	
-	/*container->Add(RT::CompoundObject::SharedObject(
+	container->Add(RT::CompoundObject::SharedObject(
+		new RT::Triangle(
+		Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2, 100),
+		Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2 + 100, 100), 
+		Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2 + 50, 150),
+		Palette::Yellow)));
+
+
+	container->Add(RT::CompoundObject::SharedObject(
 		new RT::Triangle(
 		Vector3DByCoords(0, 0, 0),
 		Vector3DByCoords(ScreenWidth, 0, 1000), 
 		Vector3DByCoords(0, 0, 1000),
-		Palette::Gray)));*/
+		Palette::Gray)));
 
 	// добавляем его в сцену
 	scene->Add(container);
