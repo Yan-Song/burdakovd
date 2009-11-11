@@ -44,6 +44,20 @@ namespace RT
 			return std::pair<double, double>(x1, x2);
 		}
 	}
+
+	// ax + b = 0
+	inline double SolveLinearEquation(const Polynom& p)
+	{
+		assert(p.Degree() == 1);
+
+		const double a = p.GetCoefficient(1);
+		const double b = p.GetCoefficient(0);
+
+		if(a == 0)
+			throw std::invalid_argument("");
+		else
+			return - b / a;
+	}
 };
 
 #endif

@@ -4,6 +4,8 @@
 #include "CompoundObject.h"
 #include "Shared.h"
 #include "sdlapplication/Vector.h"
+#include "sdlapplication/Color.h"
+#include <vector>
 
 class SDLApplication;
 
@@ -11,6 +13,13 @@ namespace RT
 {
 	class Scene : protected CompoundObject
 	{
+	private:
+		typedef std::vector<RealColor> ColorContainer;
+
+		ColorContainer buffer;
+
+		void DrawBuffer(SDLApplication* const app, const bool rectangles, const int Quality);
+
 	public:
 		class ICallback
 		{

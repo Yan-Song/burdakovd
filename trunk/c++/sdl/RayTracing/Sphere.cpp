@@ -1,16 +1,16 @@
 #include "Sphere.h"
 #include "sdlapplication/Vector.h"
 #include "Polynom.h"
-#include "SquareEquation.h"
+#include "Equation.h"
 #include "ITracer.h"
 #include "sdlapplication/Utils.h"
+#include <cmath>
 
 bool RT::Sphere::PossibleIntersection(const RT::Ray &ray) const
 {
 	const Vector3D SC = Center - ray.Start;
 	const Vector3D v = ray.Vector;
 	const double qdistance = (v ^ SC).QLength();
-	const double QR = sqr(R);
 
 	// луч пересекается со сферой, если
 	// 1) расстояние от центра до него <= R (то есть прямая перескается со сферой) и
@@ -18,7 +18,7 @@ bool RT::Sphere::PossibleIntersection(const RT::Ray &ray) const
 	return (qdistance <= QR) && ((v * SC > 0) || (Center.QDistance(ray.Start) < QR));
 }
 
-class SphereTracer : public RT::ITracer
+class RT::Sphere::Tracer : public RT::ITracer
 {
 private:
 	const RT::Ray ray;
@@ -27,13 +27,13 @@ private:
 	const Point3D center;
 
 public:
-	SphereTracer(const RT::Ray& _ray, const Point3D& _point, const RealColor& _color, const Point3D& _center)
+	Tracer(const RT::Ray& _ray, const Point3D& _point, const RealColor& _color, const Point3D& _center)
 		: ray(_ray), point(_point), color(_color), center(_center) {}
 
 	virtual RealColor Trace()
 	{
 		const RT::NormalizedVector3D n = point - center;
-		return - color * (static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector));
+		return color * abs(static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector));
 	}
 };
 
@@ -84,7 +84,7 @@ RT::MaybeIntersection RT::Sphere::FindIntersection(const RT::Ray &ray) const
 
 	const Point3D point = ray.Start + t * static_cast<Vector3D>(ray.Vector);
 
-	const SharedTracer tracer = SharedTracer(new SphereTracer(ray, point, color, Center));
+	const SharedTracer tracer = SharedTracer(new Tracer(ray, point, color, Center));
 
 	return Intersection(point, tracer);
 }

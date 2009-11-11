@@ -8,6 +8,7 @@
 #include <Scene.h>
 #include <CompoundObject.h>
 #include "sdlapplication/Affine.h"
+#include "Triangle.h"
 
 // x - вправо
 // y - вверх
@@ -25,11 +26,19 @@ RTDemoApplication::RTDemoApplication() :
 
 	SDL_WM_SetCaption("Ray Tracing Demo", NULL);
 
-	// наполняем контейнер шарами
+	// наполняем контейнер чем-то
 	container->Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(320, 240, 600), 50, Palette::Blue)));
 	container->Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(300, 200, 500), 20, Palette::Green)));
 	container->Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(400, 200, 000), 20, Palette::Green)));
 	container->Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(700, 300, 600), 100, Palette::Red)));
+	container->Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(ScreenWidth / 2, 0, 500), 10, Palette::White)));
+	
+	/*container->Add(RT::CompoundObject::SharedObject(
+		new RT::Triangle(
+		Vector3DByCoords(0, 0, 0),
+		Vector3DByCoords(ScreenWidth, 0, 1000), 
+		Vector3DByCoords(0, 0, 1000),
+		Palette::Gray)));*/
 
 	// добавляем его в сцену
 	scene->Add(container);
@@ -116,7 +125,7 @@ void RTDemoApplication::Main()
 
 	const double startTime = GetTime();
 
-	const int startQuality = 8;
+	const int startQuality = 16;
 
 	// рисовать, постепенно наращивая качество
 	for(Quality = startQuality; Quality > 0; Quality /= 2)

@@ -172,6 +172,10 @@
 				RelativePath=".\Sphere.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\Triangle.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Заголовочные файлы"
@@ -180,6 +184,10 @@
 			>
 			<File
 				RelativePath=".\CompoundObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Equation.h"
 				>
 			</File>
 			<File
@@ -223,7 +231,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SquareEquation.h"
+				RelativePath=".\Triangle.h"
 				>
 			</File>
 		</Filter>

@@ -1,10 +1,8 @@
 #include "Scene.h"
 #include "sdlapplication/SDLApplication.h"
-#include <vector>
+#include "sdlapplication/Color.h"
 
-typedef std::vector<RealColor> ColorContainer;
-
-void DrawBuffer(SDLApplication* const app, const bool rectangles, const int Quality, const ColorContainer& buffer)
+void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, const int Quality)
 {
 	const int n = app->Screen->h * app->Screen->w;
 	const int qh = (app->Screen->h + Quality - 1) / Quality;
@@ -15,34 +13,38 @@ void DrawBuffer(SDLApplication* const app, const bool rectangles, const int Qual
 
 	app->ClearScreen();
 
-	// РµСЃР»Рё Quality == 1 С‚Рѕ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРё РІС‹СЂРѕР¶РґР°СЋС‚СЃСЏ РІ С‚РѕС‡РєРё
+	// если Quality == 1 то прямоугольники вырождаются в точки
 	if(rectangles && Quality > 1)
 	{
-		int index = 0;
+		ColorContainer::const_iterator buffer_iterator = buffer.begin();
+
 		for(int y = 0; y < h; y += Quality)
 			for(int x = 0; x < w; x += Quality)
 			{
 				const int baseX = x - Quality / 2;
 				const int baseY = y - Quality / 2;
 
-				app->FillRectangle(ScreenPointByCoords(baseX, baseY), ScreenPointByCoords(baseX + Quality, baseY + Quality), buffer[index]);
+				app->FillRectangle(ScreenPointByCoords(baseX, baseY), ScreenPointByCoords(baseX + Quality, baseY + Quality), *buffer_iterator);
 
-				++index;
+				++buffer_iterator;
 			}
-		assert(index == qn);
+
+		assert(buffer_iterator == buffer.end());
 	}
 	else
 	{
 		app->Lock();
 
-		int index = 0;
+		ColorContainer::const_iterator buffer_iterator = buffer.begin();
+
 		for(int y = 0; y < h; y += Quality)
 			for(int x = 0; x < w; x += Quality)
 			{
-				app->RawDrawPixel(x, y, buffer[index]);
-				++index;
+				app->RawDrawPixel(x, y, *buffer_iterator);
+				++buffer_iterator;
 			}
-		assert(index == qn);
+
+		assert(buffer_iterator == buffer.end());
 
 		app->Unlock();
 	}
@@ -57,17 +59,24 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 	const int qw = (app->Screen->w + Quality - 1) / Quality;
 	const int qn = qh * qw;
 
-	ColorContainer buffer(qn, Palette::Black);
+	// по идее реальное выделение памяти будет происходить только в первый раз
+	// резервируем памяти для максимального качества
+	buffer.reserve(n);
 
-	const int updateInterval = 1000;
+	// реально используем для текущего
+	buffer.clear();
+	buffer.resize(qn, Palette::Black);
 
-	int index = 0;
-	for(int y = 0; y < app->Screen->h; y += Quality)
+	const int updateInterval = std::max(qn / 100, 1);
+
+	ColorContainer::iterator buffer_iterator = buffer.begin();
+
+	for(int y = 0, i = 0; y < app->Screen->h; y += Quality)
 	{
-		for(int x = 0; x < app->Screen->w; x += Quality)
+		for(int x = 0; x < app->Screen->w; x += Quality, ++i)
 		{
 			const RT::Ray ray(Vector3DByCoords(x, y, 0) - SpectatorPosition, SpectatorPosition);
-
+			
 			if(RT::CompoundObject::PossibleIntersection(ray))
 			{
 				const RT::MaybeIntersection result = RT::CompoundObject::FindIntersection(ray);
@@ -76,14 +85,18 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 				{
 					const RT::SharedTracer tracer = static_cast<RT::Intersection>(result).Tracer;
 
-					buffer[index] = tracer->Trace();
+					*buffer_iterator = tracer->Trace();
+
+					// проверяем что не получился отрицательный цвет
+					assert(buffer_iterator->R >= 0 && buffer_iterator->G >= 0 && buffer_iterator->B >= 0);
 				}
 			}
-			++index;
 
-			if(index % updateInterval == 0)
+			++buffer_iterator;
+			
+			if(i % updateInterval == 0)
 			{
-				const int percent = 99 * (y + 1) / app->Screen->h;
+				const int percent = 90 * (y + 1) / app->Screen->h;
 
 				if(callback->call(percent))
 				{
@@ -92,11 +105,17 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 			}
 		}
 	}
-	assert(index == qn);
+	assert(buffer_iterator == buffer.end());
 
-	// РѕСЃС‚Р°Р»СЃСЏ РїРѕСЃР»РµРґРЅРёР№ РїСЂРѕС†РµРЅС‚, РїРµСЂРµРЅРµСЃС‚Рё РІСЃС‘ СЌС‚Рѕ РЅР° СЌРєСЂР°РЅ
+	// тут можно делать tonemapping
+	// ...
+
+	if(callback->call(95))
+		return false;
+
+	// остался последний шаг, перенести всё это на экран
 	
-	DrawBuffer(app, rectangles, Quality, buffer);
+	DrawBuffer(app, rectangles, Quality);
 
 	callback->call(100);
 
