@@ -11,9 +11,6 @@
 RT::Triangle::Triangle(const Point3D &pa, const Point3D &pb, const Point3D &pc, const RealColor &_color) :
 RTObject(Vector000, _color), A(pa), B(pb), C(pc)
 {
-	// ����� �����, ��������� ����� ������������ ����� � ����� ����������� ���������� ���������������
-	// http://ru.wikipedia.org/wiki/���������_����������
-
 	const double a = B.Distance(C);
 	const double b = A.Distance(C);
 	const double c = A.Distance(B);
@@ -44,9 +41,6 @@ bool RT::Triangle::PossibleIntersection(const RT::Ray& ray) const
 	const Vector3D v = ray.Vector;
 	const double qdistance = (v ^ SC).QLength();
 
-	// ��� ������������ �� ������, ����
-	// 1) ���������� �� ������ �� ���� <= R (�� ���� ������ ����������� �� ������) �
-	// 2) ������ ��������� � ������� ����� ���� 3) ��������� ����� ������ �����
 	return (qdistance <= QR) && ((v * SC > 0) || (Center.QDistance(ray.Start) < QR));
 }
 
@@ -85,12 +79,9 @@ RT::MaybeIntersection RT::Triangle::FindIntersection(const RT::Ray& ray) const
 
 	if(t > 0)
 	{
-		// ����� � ���������� ������������ �������, �������� ���������, ����������� �� ��� ������������
 		const Point3D p = ray.Start + t * v;
 		
 		const Vector3D n = (B - A) ^ (C - A);
-
-		// ��� ����������� ���� ������� ������������� ABC, pBC, ApC, ABp ������������
 
 		if( ((B - p) ^ (C - p)) * n > 0
 			&&
