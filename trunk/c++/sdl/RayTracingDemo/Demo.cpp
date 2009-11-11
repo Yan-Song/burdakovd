@@ -9,6 +9,8 @@
 #include <CompoundObject.h>
 #include "sdlapplication/Affine.h"
 #include "Triangle.h"
+#include "Frustum.h"
+#include "SierpinskiPyramide.h"
 
 // x - вправо
 // y - вверх
@@ -16,9 +18,9 @@
 
 RTDemoApplication::RTDemoApplication() : 
 	// Наблюдатель находится перед экраном на расстоянии 1000 пикселов
-	scene(RT::shared_ptr<RT::Scene>(new RT::Scene(Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2, -1000)))),
+	scene(RT::shared_ptr<RT::Scene>(new RT::Scene(Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2, -500)))),
 		container(new RT::CompoundObject()),
-		Rendered(false), Dirty(false)
+		Rendered(false), Dirty(false), Center(Vector3DByCoords(ScreenWidth / 2 + 0.1, 200.1, 400.1))
 {
 	const int SDLflags = SDL_DOUBLEBUF || SDL_ANYFORMAT || SDL_HWSURFACE;
 
@@ -27,26 +29,11 @@ RTDemoApplication::RTDemoApplication() :
 	SDL_WM_SetCaption("Ray Tracing Demo", NULL);
 
 	// наполняем контейнер чем-то
-	container->Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(320, 240, 600), 50, Palette::Blue)));
-	container->Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(300, 200, 500), 20, Palette::Green)));
-	container->Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(400, 200, 000), 20, Palette::Green)));
-	container->Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(700, 300, 600), 100, Palette::Red)));
-	container->Add(RT::CompoundObject::SharedObject(new RT::Sphere(Vector3DByCoords(ScreenWidth / 2, 0, 500), 10, Palette::White)));
-	
-	container->Add(RT::CompoundObject::SharedObject(
-		new RT::Triangle(
-		Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2, 100),
-		Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2 + 100, 100), 
-		Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2 + 50, 150),
-		Palette::Yellow)));
+	RT::CompoundObject::SharedObject s = RT::CompoundObject::SharedObject(new RT::SierpinskiPyramide(Center, 700, 10, Palette::Green));
 
+	s->Rotate(Affine::X, Center, - Pi / 2);
 
-	container->Add(RT::CompoundObject::SharedObject(
-		new RT::Triangle(
-		Vector3DByCoords(0, 0, 0),
-		Vector3DByCoords(ScreenWidth, 0, 1000), 
-		Vector3DByCoords(0, 0, 1000),
-		Palette::Gray)));
+	container->Add(s);
 
 	// добавляем его в сцену
 	scene->Add(container);
@@ -105,13 +92,25 @@ void RTDemoApplication::Navigate()
 {
 	if(isPressed(SDLK_RIGHT))
 	{
-		container->Rotate(Affine::Y, Vector3DByCoords(ScreenWidth / 2, 0, 500), dt);
+		container->Rotate(Affine::Y, Center, dt);
 		Dirty = true;
 	}
 
 	if(isPressed(SDLK_LEFT))
 	{
-		container->Rotate(Affine::Y, Vector3DByCoords(ScreenWidth / 2, 0, 500), -dt);
+		container->Rotate(Affine::Y, Center, -dt);
+		Dirty = true;
+	}
+
+	if(isPressed(SDLK_UP))
+	{
+		container->Rotate(Affine::X, Center, dt);
+		Dirty = true;
+	}
+
+	if(isPressed(SDLK_DOWN))
+	{
+		container->Rotate(Affine::X, Center, -dt);
 		Dirty = true;
 	}
 }

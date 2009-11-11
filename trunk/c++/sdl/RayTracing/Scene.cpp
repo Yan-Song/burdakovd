@@ -107,8 +107,24 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 	}
 	assert(buffer_iterator == buffer.end());
 
+
 	// тут можно делать tonemapping
-	// ...
+	// найти максимум
+	double mx = 0;
+	for(ColorContainer::const_iterator it = buffer.begin(); it != buffer.end(); ++it)
+	{
+		mx = std::max(mx, std::max(it->R, std::max(it->G, it->B)));
+	}
+	// нормирую цвет
+	if(mx != 0)
+	{
+		const double n = 255.0 / mx;
+		for(ColorContainer::iterator it = buffer.begin(); it != buffer.end(); ++it)
+		{
+			*it = *it * n;
+		}
+	}
+
 
 	if(callback->call(95))
 		return false;
