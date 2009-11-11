@@ -8,8 +8,8 @@ namespace RT
 	class Triangle : public RTObject
 	{
 	private:
-		double QR; // квадрат радиуса
-		double R; // радиус сферы, описанной около треугольника
+		double QR; // РєРІР°РґСЂР°С‚ СЂР°РґРёСѓСЃР°
+		double R; // СЂР°РґРёСѓСЃ СЃС„РµСЂС‹, РѕРїРёСЃР°РЅРЅРѕР№ РѕРєРѕР»Рѕ С‚СЂРµСѓРіРѕР»СЊРЅРёРєР°
 		Point3D A, B, C;
 
 	public:

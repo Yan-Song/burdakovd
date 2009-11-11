@@ -11,8 +11,8 @@
 RT::Triangle::Triangle(const Point3D &pa, const Point3D &pb, const Point3D &pc, const RealColor &_color) :
 RTObject(Vector000, _color), A(pa), B(pb), C(pc)
 {
-	// центр сферы, описанной около треугольника лежит в точке пересечения серединных перпендикуляров
-	// http://ru.wikipedia.org/wiki/Описанная_окружность
+	// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	// http://ru.wikipedia.org/wiki/пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ_пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 	const double a = B.Distance(C);
 	const double b = A.Distance(C);
@@ -44,9 +44,9 @@ bool RT::Triangle::PossibleIntersection(const RT::Ray& ray) const
 	const Vector3D v = ray.Vector;
 	const double qdistance = (v ^ SC).QLength();
 
-	// луч пересекается со сферой, если
-	// 1) расстояние от центра до него <= R (то есть прямая перескается со сферой) и
-	// 2) вектор направлен в сторону сферы либо 3) начальная точка внутри сферы
+	// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ
+	// 1) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ <= R (пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅ
+	// 2) пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ 3) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 	return (qdistance <= QR) && ((v * SC > 0) || (Center.QDistance(ray.Start) < QR));
 }
 
@@ -70,40 +70,27 @@ public:
 
 RT::MaybeIntersection RT::Triangle::FindIntersection(const RT::Ray& ray) const
 {
-	// Уравнение плоскости, содержащей треугольник: (B - A, C - A, p - A) = 0
-	// p = start + t * v
+	const Vector3D v = static_cast<Vector3D>(ray.Vector);
 
-	typedef GenericVector<Polynom, 3> PolyVector;
+	const Vector3D n = (B - A) ^ (C - A);
+
+	const double distance = (A - ray.Start) * n;
+
+	const double ddistance_dt = v * n;
 	
-	const Polynom _t(1, 1);
-
-	const PolyVector start = ray.Start;
-	const PolyVector v = static_cast<Vector3D>(ray.Vector);
-	const PolyVector _p = start + _t * v;
-
-	PolyVector p_A = _p - static_cast<PolyVector>(A);
-
-	const Polynom equation = static_cast<PolyVector>((B - A) ^ (C - A)) * p_A;
-
-	double t;
-
-	try
-	{
-		t = RT::SolveLinearEquation(equation);
-	}
-	catch(const std::invalid_argument&)
-	{
+	if(ddistance_dt == 0)
 		return RT::NoIntersection();
-	}
+
+	const double t = distance / ddistance_dt;
 
 	if(t > 0)
 	{
-		// точка с плоскостью треугольника найдена, осталось проверить, принадлежит ли она треугольнику
-		const Point3D p = ray.Start + t * static_cast<Vector3D>(ray.Vector);
+		// пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+		const Point3D p = ray.Start + t * v;
 		
 		const Vector3D n = (B - A) ^ (C - A);
 
-		// она принадлежит если нормали треугольников ABC, pBC, ApC, ABp сонаправлены
+		// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ABC, pBC, ApC, ABp пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 		if( ((B - p) ^ (C - p)) * n > 0
 			&&

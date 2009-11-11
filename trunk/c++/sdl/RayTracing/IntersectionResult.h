@@ -60,7 +60,7 @@ namespace RT
 
 		MaybeIntersection(const Intersection& intersection) : i(intersection), Exists(true) {}
 
-		MaybeIntersection(const NoIntersection& n) : Exists(false) {}
+		MaybeIntersection(const NoIntersection& ) : Exists(false) {}
 
 		inline operator Intersection() const
 		{

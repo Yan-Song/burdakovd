@@ -1,7 +1,7 @@
 #ifndef SHARED_H
 #define SHARED_H
 
-#include <memory>
+#include <tr1/memory>
 
 // если старый компилятор и в нём нет std::tr1::shared_ptr
 // то можно поставить boost, и:
