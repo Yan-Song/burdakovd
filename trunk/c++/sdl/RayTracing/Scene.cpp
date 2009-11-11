@@ -67,7 +67,7 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 	buffer.clear();
 	buffer.resize(qn, Palette::Black);
 
-	const int updateInterval = std::max(qn / 100, 1);
+	const int updateInterval = std::max(qn / 100, 100);
 
 	ColorContainer::iterator buffer_iterator = buffer.begin();
 
@@ -96,7 +96,7 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 			
 			if(i % updateInterval == 0)
 			{
-				const int percent = 90 * (y + 1) / app->Screen->h;
+				const int percent = 100 * (buffer_iterator - buffer.begin()) / qn;
 
 				if(callback->call(percent))
 				{
