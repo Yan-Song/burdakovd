@@ -33,7 +33,7 @@ public:
 	virtual RealColor Trace()
 	{
 		const RT::NormalizedVector3D n = point - center;
-		return color * abs(static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector));
+		return color * abs(static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector)) / point.QDistance(ray.Start);
 	}
 };
 

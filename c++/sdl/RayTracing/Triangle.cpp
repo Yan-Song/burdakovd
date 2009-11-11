@@ -47,18 +47,20 @@ bool RT::Triangle::PossibleIntersection(const RT::Ray& ray) const
 class TriangleTracer : public RT::ITracer
 {
 private:
+	const Point3D point;
 	const RT::NormalizedVector3D n;
 	const RealColor color;
 	const RT::Ray ray;
 
 public:
-	TriangleTracer(const RT::NormalizedVector3D& _n, const RealColor& _color, const RT::Ray& _ray) : n(_n), color(_color), ray(_ray)
+	TriangleTracer(const Point3D& _p, const RT::NormalizedVector3D& _n, const RealColor& _color, const RT::Ray& _ray) :
+	  point(_p), n(_n), color(_color), ray(_ray)
 	{
 	}
 
 	virtual RealColor Trace()
 	{
-		return color * abs(static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector));
+		return color * abs(static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector)) / point.QDistance(ray.Start);
 	}
 };
 
@@ -90,7 +92,7 @@ RT::MaybeIntersection RT::Triangle::FindIntersection(const RT::Ray& ray) const
 			((B - A) ^ (p - A)) * n > 0
 			)
 		{
-			return RT::Intersection(p, RT::SharedTracer(new TriangleTracer(n, color, ray)));
+			return RT::Intersection(p, RT::SharedTracer(new TriangleTracer(p, n, color, ray)));
 		}
 		else
 		{

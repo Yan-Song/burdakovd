@@ -2,6 +2,7 @@
 #define DEMO_H
 
 #include "sdlapplication/SDLApplication.h"
+#include "sdlapplication/Vector.h"
 #include "Scene.h"
 #include "CompoundObject.h"
 #include "Shared.h"
@@ -13,6 +14,7 @@ private:
 	bool Rendered;
 	const RT::shared_ptr<RT::Scene> scene;
 	const RT::shared_ptr<RT::CompoundObject> container;
+	Point3D Center;
 	int Quality;
 
 protected:

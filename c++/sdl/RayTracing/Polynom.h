@@ -54,6 +54,17 @@ namespace RT
 
 			coefficients[degree] = value;
 		}
+
+		inline double Evaluate(const double value) const
+		{
+			double ans = 0;
+
+			for(int i = coefficients.size() - 1; i >= 0; --i)
+				ans = ans * value + coefficients[i];
+
+			return ans;
+		}
+
 	};
 
 	inline Polynom operator +(const Polynom& a, const Polynom& b)

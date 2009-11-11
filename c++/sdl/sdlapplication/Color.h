@@ -82,8 +82,6 @@ inline GenericColor<I> Gradient(const GenericColor<I>& ColorA, const GenericColo
 typedef GenericColor<int> Color;
 typedef GenericColor<double> RealColor;
 
-
-// некоторые базовые цвета, хотя кто их будет использовать?)
 namespace Palette
 {
 	const Color Black(0x000000),
@@ -92,7 +90,8 @@ namespace Palette
 				Green(0x00ff00),
 				Blue(0x0000ff),
 				Yellow(0xffff00),
-				Gray(0x808080);
+				Gray(0x808080),
+				Orange(0xff7f00);
 };
 
 template<typename I>
