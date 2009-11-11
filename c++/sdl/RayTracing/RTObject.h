@@ -36,7 +36,7 @@ namespace RT
 	{
 	protected:
 		Point3D Center;
-		RealColor color;
+		const RealColor color;
 
 		RTObject(const Point3D& center, const RealColor& _color) : Center(center), color(_color) {}
 	};

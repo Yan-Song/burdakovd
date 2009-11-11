@@ -5,15 +5,20 @@
 #include "IntersectionResult.h"
 #include "sdlapplication/Color.h"
 #include "sdlapplication/Affine.h"
+#include "sdlapplication/Utils.h"
 
 namespace RT
 {
 	class Sphere : public RTObject
 	{
+	private:
+		class Tracer;
+		const double QR;
+
 	public:
 		const double R;
 
-		Sphere(const Vector3D& center, const double r, const RealColor& _color) : RTObject(center, _color), R(r)
+		Sphere(const Vector3D& center, const double r, const RealColor& _color) : RTObject(center, _color), QR(sqr(r)), R(r)
 		{
 		}
 
