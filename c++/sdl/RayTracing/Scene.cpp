@@ -13,7 +13,7 @@ void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, con
 
 	app->ClearScreen();
 
-	// если Quality == 1 то прямоугольники вырождаются в точки
+	// РµСЃР»Рё Quality == 1 С‚Рѕ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРєРё РІС‹СЂРѕР¶РґР°СЋС‚СЃСЏ РІ С‚РѕС‡РєРё
 	if(rectangles && Quality > 1)
 	{
 		ColorContainer::const_iterator buffer_iterator = buffer.begin();
@@ -59,11 +59,11 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 	const int qw = (app->Screen->w + Quality - 1) / Quality;
 	const int qn = qh * qw;
 
-	// по идее реальное выделение памяти будет происходить только в первый раз
-	// резервируем памяти для максимального качества
+	// РїРѕ РёРґРµРµ СЂРµР°Р»СЊРЅРѕРµ РІС‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё Р±СѓРґРµС‚ РїСЂРѕРёСЃС…РѕРґРёС‚СЊ С‚РѕР»СЊРєРѕ РІ РїРµСЂРІС‹Р№ СЂР°Р·
+	// СЂРµР·РµСЂРІРёСЂСѓРµРј РїР°РјСЏС‚Рё РґР»СЏ РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ РєР°С‡РµСЃС‚РІР°
 	buffer.reserve(n);
 
-	// реально используем для текущего
+	// СЂРµР°Р»СЊРЅРѕ РёСЃРїРѕР»СЊР·СѓРµРј РґР»СЏ С‚РµРєСѓС‰РµРіРѕ
 	buffer.clear();
 	buffer.resize(qn, Palette::Black);
 
@@ -87,7 +87,7 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 
 					*buffer_iterator = tracer->Trace();
 
-					// проверяем что не получился отрицательный цвет
+					// РїСЂРѕРІРµСЂСЏРµРј С‡С‚Рѕ РЅРµ РїРѕР»СѓС‡РёР»СЃСЏ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Р№ С†РІРµС‚
 					assert(buffer_iterator->R >= 0 && buffer_iterator->G >= 0 && buffer_iterator->B >= 0);
 				}
 			}
@@ -107,13 +107,13 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 	}
 	assert(buffer_iterator == buffer.end());
 
-	// тут можно делать tonemapping
+	// С‚СѓС‚ РјРѕР¶РЅРѕ РґРµР»Р°С‚СЊ tonemapping
 	// ...
 
 	if(callback->call(95))
 		return false;
 
-	// остался последний шаг, перенести всё это на экран
+	// РѕСЃС‚Р°Р»СЃСЏ РїРѕСЃР»РµРґРЅРёР№ С€Р°Рі, РїРµСЂРµРЅРµСЃС‚Рё РІСЃС‘ СЌС‚Рѕ РЅР° СЌРєСЂР°РЅ
 	
 	DrawBuffer(app, rectangles, Quality);
 

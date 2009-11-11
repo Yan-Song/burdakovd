@@ -47,6 +47,13 @@ namespace RT
 
 			return degree <= Degree() ? coefficients[degree] : 0.0;
 		}
+
+		inline void SetCoefficient(const int degree, const double value)
+		{
+			assert(degree >= 0 && degree <= Degree());
+
+			coefficients[degree] = value;
+		}
 	};
 
 	inline Polynom operator +(const Polynom& a, const Polynom& b)
@@ -61,6 +68,7 @@ namespace RT
 			((i < an) ? a.coefficients[i] : 0)
 			+
 			((i < bn) ? b.coefficients[i] : 0);
+		
 		return ans;
 	}
 
@@ -76,6 +84,7 @@ namespace RT
 			((i < an) ? a.coefficients[i] : 0)
 			-
 			((i < bn) ? b.coefficients[i] : 0);
+		
 		return ans;
 	}
 
@@ -105,7 +114,6 @@ namespace RT
 	{
 		const int an = a.Degree() + 1, bn = b.Degree() + 1;
 		const int degree = a.Degree() + b.Degree();
-		const int n = degree + 1;
 
 		Polynom ans(0, degree);
 

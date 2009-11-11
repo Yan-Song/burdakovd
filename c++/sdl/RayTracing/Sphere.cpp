@@ -44,14 +44,16 @@ RT::MaybeIntersection RT::Sphere::FindIntersection(const RT::Ray &ray) const
 	// две точки пересечения (с прямой, содержащей луч) можно найти, решив уравнение Center.Distance(ray.Start + t * ray.Vector) = R
 	// возвести обе части в квадрат
 	// получится Center.QDistance(start + t * v) - sqr(R) = 0
+	// (Center - start).QDistance(t * v) - sqr(R)
+	// (SC - t * v, SC - t * v) - sqr(R) = (SC, SC) - sqr(R) - 2 * t * (SC, v) + (v, v) * t * t, (v, v) == 1
 
-	const Polynom _t = Polynom(1, 1);
-	const PolyVector start = ray.Start;
-	const PolyVector v = static_cast<Vector3D>(ray.Vector);
-	const PolyVector center = Center;
-
+	const Vector3D SC = Center - ray.Start;	
+	const Vector3D v = ray.Vector;
+	
 	// составляем уравнение
-	Polynom equation = center.QDistance(start + _t * v) - Polynom(R * R); // == 0
+	Polynom equation(1.0, 2);
+	equation.SetCoefficient(1, - 2 * (SC * v));
+	equation.SetCoefficient(0, SC * SC - QR);
 
 	// пытаемся решить его
 	double t1, t2;
@@ -82,7 +84,7 @@ RT::MaybeIntersection RT::Sphere::FindIntersection(const RT::Ray &ray) const
 		else
 			t = std::min(t1, t2);
 
-	const Point3D point = ray.Start + t * static_cast<Vector3D>(ray.Vector);
+	const Point3D point = ray.Start + t * v;
 
 	const SharedTracer tracer = SharedTracer(new Tracer(ray, point, color, Center));
 
