@@ -103,7 +103,7 @@ RT::MaybeIntersection RT::Triangle::FindIntersection(const RT::Ray& ray) const
 		
 		const Vector3D n = (B - A) ^ (C - A);
 
-		// она принадлежит если нормали треуголников ABC, pBC, ApC, ABp сонаправлены
+		// она принадлежит если нормали треугольников ABC, pBC, ApC, ABp сонаправлены
 
 		if( ((B - p) ^ (C - p)) * n > 0
 			&&
