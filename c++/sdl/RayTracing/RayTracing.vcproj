@@ -207,6 +207,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Cube.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Equation.h"
 				>
 			</File>

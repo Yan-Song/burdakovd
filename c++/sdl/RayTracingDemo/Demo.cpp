@@ -13,6 +13,7 @@
 #include "SierpinskiPyramide.h"
 #include "Tetragon.h"
 #include "Texture.h"
+#include "Cube.h"
 #include "Material.h"
 
 // x - вправо
@@ -31,19 +32,18 @@ RTDemoApplication::RTDemoApplication() :
 
 	SDL_WM_SetCaption("Ray Tracing Demo", NULL);
 
-	RT::shared_ptr<RT::Texture> tex(new RT::Texture("Textures/wood.bmp"));
+	const double R = 300;
+	RT::shared_ptr<RT::Texture> tex(new RT::Texture("Textures/azeroth.bmp"));
 	RT::Material mat;
-	mat.SetTexture(tex, Vector2DByCoords(0, 0), Vector2DByCoords(1, 0), Vector2DByCoords(0, 1));
+	mat.SetTexture(tex, Vector2DByCoords(0, 0), Vector2DByCoords(tex->GetWidth() / 2.0 / Pi / R, 0), Vector2DByCoords(0, -tex->GetHeight() / Pi / R));
 
 	// наполняем контейнер чем-то
 	RT::CompoundObject::SharedObject t(
-		new RT::Tetragon(
-		Vector3DByCoords(-200, -100, -200),
-		Vector3DByCoords(-200, -100, 200), 
-		Vector3DByCoords(200, -100, 200), 
-		Vector3DByCoords(200, -100, -200), mat));
+		new RT::Sphere(Center, R, mat));
 
-	t->Move(Center);
+	//t->Move(Center);
+	t->Rotate(Affine::X, Center, Pi /4);
+	//t->Rotate(Affine::Y, Center, Pi);
 
 	container->Add(t);
 
