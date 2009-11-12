@@ -8,8 +8,9 @@
 #include "Polynom.h"
 #include "Triangle.h"
 #include "Sphere.h"
+#include "Material.h"
 
-RT::Frustum::Frustum(const Vector3D &CenterBottom, const double RBottom, const double RTop, const double H, const int count, const RealColor &color)
+RT::Frustum::Frustum(const Vector3D &CenterBottom, const double RBottom, const double RTop, const double H, const int count, const Material &material)
 {
 	assert(count > 1);
 	assert(RTop >= 0);
@@ -39,17 +40,17 @@ RT::Frustum::Frustum(const Vector3D &CenterBottom, const double RBottom, const d
 		if(RBottom > 0)
 		{
 			if(i != 0 && next != 0)
-				CompoundObject::Add(RT::CompoundObject::SharedObject(new Triangle(CurrentBottom, NextBottom, FirstBottom, color)));
+				CompoundObject::Add(RT::CompoundObject::SharedObject(new Triangle(CurrentBottom, NextBottom, FirstBottom, material)));
 
-			CompoundObject::Add(RT::CompoundObject::SharedObject(new Triangle(CurrentBottom, NextBottom, CurrentTop, color)));
+			CompoundObject::Add(RT::CompoundObject::SharedObject(new Triangle(CurrentBottom, NextBottom, CurrentTop, material)));
 		}
 
 		if(RTop > 0)
 		{
 			if(i != 0 && next != 0)
-				CompoundObject::Add(RT::CompoundObject::SharedObject(new Triangle(CurrentTop, NextTop, FirstTop, color)));
+				CompoundObject::Add(RT::CompoundObject::SharedObject(new Triangle(CurrentTop, NextTop, FirstTop, material)));
 
-			CompoundObject::Add(RT::CompoundObject::SharedObject(new Triangle(CurrentTop, NextTop, NextBottom, color)));
+			CompoundObject::Add(RT::CompoundObject::SharedObject(new Triangle(CurrentTop, NextTop, NextBottom, material)));
 		}
 	}
 	
@@ -66,7 +67,7 @@ RT::Frustum::Frustum(const Vector3D &CenterBottom, const double RBottom, const d
 
 		const double R = sqrt(sqr(h) + sqr(RBottom));
 
-		sphere = shared_ptr<RT::Sphere>(new Sphere(Center, R, 0));
+		sphere = shared_ptr<RT::Sphere>(new Sphere(Center, R, RT::Material()));
 
 		has_sphere = true;
 	}

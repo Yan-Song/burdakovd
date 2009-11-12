@@ -3,7 +3,7 @@
 #include "sdlapplication/Vector.h"
 #include <cmath>
 
-RT::SierpinskiPyramide::SierpinskiPyramide(const Point3D &center, const double edgeLength, const int iterations, const Color &color)
+RT::SierpinskiPyramide::SierpinskiPyramide(const Point3D &center, const double edgeLength, const int iterations, const Material &material)
 {
 	assert(edgeLength > 0);
 	
@@ -19,23 +19,23 @@ RT::SierpinskiPyramide::SierpinskiPyramide(const Point3D &center, const double e
 	const Point3D C = O + Vector3DByCoords(r * cos(4 * Pi / 3.0), r * sin(4 * Pi / 3.0), -h);
 	const Point3D D = O + Vector3DByCoords(0, 0, H - h);
 
-	sphere = RT::shared_ptr<RT::Sphere>(new RT::Sphere(center, R, color));
+	sphere = RT::shared_ptr<RT::Sphere>(new RT::Sphere(center, R, material));
 
 	if(iterations == 0)
 	{
 		// конец рекурсии, строим тетраэдр из четырёх треугольников
-		CompoundObject::Add(CompoundObject::SharedObject(new RT::Triangle(A, B, C, color)));
-		CompoundObject::Add(CompoundObject::SharedObject(new RT::Triangle(A, B, D, color)));
-		CompoundObject::Add(CompoundObject::SharedObject(new RT::Triangle(A, D, C, color)));
-		CompoundObject::Add(CompoundObject::SharedObject(new RT::Triangle(D, B, C, color)));
+		CompoundObject::Add(CompoundObject::SharedObject(new RT::Triangle(A, B, C, material)));
+		CompoundObject::Add(CompoundObject::SharedObject(new RT::Triangle(A, B, D, material)));
+		CompoundObject::Add(CompoundObject::SharedObject(new RT::Triangle(A, D, C, material)));
+		CompoundObject::Add(CompoundObject::SharedObject(new RT::Triangle(D, B, C, material)));
 	}
 	else
 	{
 		// делаем четыре таких же объекта но меньше размером
-		CompoundObject::Add(CompoundObject::SharedObject(new SierpinskiPyramide((O + A) / 2.0, edgeLength / 2, iterations - 1, color)));
-		CompoundObject::Add(CompoundObject::SharedObject(new SierpinskiPyramide((O + B) / 2.0, edgeLength / 2, iterations - 1, color)));
-		CompoundObject::Add(CompoundObject::SharedObject(new SierpinskiPyramide((O + C) / 2.0, edgeLength / 2, iterations - 1, color)));
-		CompoundObject::Add(CompoundObject::SharedObject(new SierpinskiPyramide((O + D) / 2.0, edgeLength / 2, iterations - 1, color)));
+		CompoundObject::Add(CompoundObject::SharedObject(new SierpinskiPyramide((O + A) / 2.0, edgeLength / 2, iterations - 1, material)));
+		CompoundObject::Add(CompoundObject::SharedObject(new SierpinskiPyramide((O + B) / 2.0, edgeLength / 2, iterations - 1, material)));
+		CompoundObject::Add(CompoundObject::SharedObject(new SierpinskiPyramide((O + C) / 2.0, edgeLength / 2, iterations - 1, material)));
+		CompoundObject::Add(CompoundObject::SharedObject(new SierpinskiPyramide((O + D) / 2.0, edgeLength / 2, iterations - 1, material)));
 	}
 }
 

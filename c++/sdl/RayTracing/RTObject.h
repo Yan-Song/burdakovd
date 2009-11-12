@@ -6,6 +6,7 @@
 #include "IntersectionResult.h"
 #include "Object3D.h"
 #include "sdlapplication/Vector.h"
+#include "Material.h"
 
 namespace RT
 {
@@ -36,9 +37,9 @@ namespace RT
 	{
 	protected:
 		Point3D Center;
-		const RealColor color;
+		const Material material;
 
-		RTObject(const Point3D& center, const RealColor& _color) : Center(center), color(_color) {}
+		RTObject(const Point3D& center, const Material& _material) : Center(center), material(_material) {}
 	};
 }
 
