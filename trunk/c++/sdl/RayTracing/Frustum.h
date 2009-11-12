@@ -14,7 +14,7 @@ namespace RT
 		bool has_sphere;
 
 	public:
-		Frustum(const Vector3D &CenterBottom, const double RBottom, const double RTop, const double H, const int count, const RealColor &color);
+		Frustum(const Vector3D &CenterBottom, const double RBottom, const double RTop, const double H, const int count, const Material &material);
 
 		virtual bool PossibleIntersection(const Ray& ray) const;
 

@@ -14,7 +14,7 @@ namespace RT
 		shared_ptr<Sphere> sphere;
 
 	public:
-		SierpinskiPyramide(const Point3D& center, const double edgeLength, const int iterations, const Color& color);
+		SierpinskiPyramide(const Point3D& center, const double edgeLength, const int iterations, const Material& material);
 
 		virtual bool PossibleIntersection(const Ray& ray) const;
 

@@ -2,6 +2,7 @@
 #define TRIANGLE_H
 
 #include "RTObject.h"
+#include "Material.h"
 
 namespace RT
 {
@@ -13,7 +14,8 @@ namespace RT
 		Point3D A, B, C;
 
 	public:
-		Triangle(const Point3D& pa, const Point3D& pb, const Point3D& pc, const RealColor& _color);
+		// dx - ab, dy - ac, base - a
+		Triangle(const Point3D& pa, const Point3D& pb, const Point3D& pc, const Material& _material);
 
 		virtual bool PossibleIntersection(const Ray& ray) const;
 

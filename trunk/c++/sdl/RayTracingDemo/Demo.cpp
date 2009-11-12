@@ -11,6 +11,9 @@
 #include "Triangle.h"
 #include "Frustum.h"
 #include "SierpinskiPyramide.h"
+#include "Tetragon.h"
+#include "Texture.h"
+#include "Material.h"
 
 // x - вправо
 // y - вверх
@@ -18,7 +21,7 @@
 
 RTDemoApplication::RTDemoApplication() : 
 	// Наблюдатель находится перед экраном на расстоянии 1000 пикселов
-	scene(RT::shared_ptr<RT::Scene>(new RT::Scene(Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2, -500)))),
+	scene(RT::shared_ptr<RT::Scene>(new RT::Scene(Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2, -1000)))),
 		container(new RT::CompoundObject()),
 		Rendered(false), Dirty(false), Center(Vector3DByCoords(ScreenWidth / 2 + 0.1, 200.1, 400.1))
 {
@@ -28,12 +31,21 @@ RTDemoApplication::RTDemoApplication() :
 
 	SDL_WM_SetCaption("Ray Tracing Demo", NULL);
 
+	RT::shared_ptr<RT::Texture> tex(new RT::Texture("Textures/wood.bmp"));
+	RT::Material mat;
+	mat.SetTexture(tex, Vector2DByCoords(0, 0), Vector2DByCoords(1, 0), Vector2DByCoords(0, 1));
+
 	// наполняем контейнер чем-то
-	RT::CompoundObject::SharedObject s = RT::CompoundObject::SharedObject(new RT::SierpinskiPyramide(Center, 700, 10, Palette::Green));
+	RT::CompoundObject::SharedObject t(
+		new RT::Tetragon(
+		Vector3DByCoords(-200, -100, -200),
+		Vector3DByCoords(-200, -100, 200), 
+		Vector3DByCoords(200, -100, 200), 
+		Vector3DByCoords(200, -100, -200), mat));
 
-	s->Rotate(Affine::X, Center, - Pi / 2);
+	t->Move(Center);
 
-	container->Add(s);
+	container->Add(t);
 
 	// добавляем его в сцену
 	scene->Add(container);

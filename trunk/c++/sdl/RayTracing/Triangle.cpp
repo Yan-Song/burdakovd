@@ -7,9 +7,10 @@
 #include "Equation.h"
 #include "ITracer.h"
 #include "sdlapplication/Affine.h"
+#include "Material.h"
 
-RT::Triangle::Triangle(const Point3D &pa, const Point3D &pb, const Point3D &pc, const RealColor &_color) :
-RTObject(Vector000, _color), A(pa), B(pb), C(pc)
+RT::Triangle::Triangle(const Point3D &pa, const Point3D &pb, const Point3D &pc, const Material &_material) :
+RTObject(Vector000, _material), A(pa), B(pb), C(pc)
 {
 	const double a = B.Distance(C);
 	const double b = A.Distance(C);
@@ -49,18 +50,29 @@ class TriangleTracer : public RT::ITracer
 private:
 	const Point3D point;
 	const RT::NormalizedVector3D n;
-	const RealColor color;
+	const RT::Material material;
 	const RT::Ray ray;
+	const Point3D A, B, C;
 
 public:
-	TriangleTracer(const Point3D& _p, const RT::NormalizedVector3D& _n, const RealColor& _color, const RT::Ray& _ray) :
-	  point(_p), n(_n), color(_color), ray(_ray)
+	TriangleTracer(const Point3D& a, const Point3D& b, const Point3D& c, const Point3D& _p, const RT::NormalizedVector3D& _n,
+		const RT::Material& _material, const RT::Ray& _ray) :
+	A(a), B(b), C(c),
+	  point(_p), n(_n), material(_material), ray(_ray)
 	{
 	}
 
 	virtual RealColor Trace()
 	{
-		return color * abs(static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector)) / point.QDistance(ray.Start);
+		const RT::NormalizedVector3D dx = B - A;
+		const RT::NormalizedVector3D dy = C - A;
+
+		const double z = (static_cast<Vector3D>(dx) ^ static_cast<Vector3D>(dy)).Length();
+
+		const double u = ((point - A) ^ static_cast<Vector3D>(dy)).Length() / z;
+		const double v = ((point - A) ^ static_cast<Vector3D>(dx)).Length() / z;
+
+		return material.Trace(point, Vector2DByCoords(u, v), n, ray);
 	}
 };
 
@@ -92,7 +104,7 @@ RT::MaybeIntersection RT::Triangle::FindIntersection(const RT::Ray& ray) const
 			((B - A) ^ (p - A)) * n > 0
 			)
 		{
-			return RT::Intersection(p, RT::SharedTracer(new TriangleTracer(p, n, color, ray)));
+			return RT::Intersection(p, RT::SharedTracer(new TriangleTracer(A, B, C, p, n, material, ray)));
 		}
 		else
 		{
