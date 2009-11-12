@@ -194,6 +194,26 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\Textures\azeroth.bmp"
+			>
+		</File>
+		<File
+			RelativePath=".\Textures\board.bmp"
+			>
+		</File>
+		<File
+			RelativePath=".\Textures\smile.bmp"
+			>
+		</File>
+		<File
+			RelativePath=".\Textures\wood-small.bmp"
+			>
+		</File>
+		<File
+			RelativePath=".\Textures\wood.bmp"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
