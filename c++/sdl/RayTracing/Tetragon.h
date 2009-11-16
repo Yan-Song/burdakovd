@@ -9,8 +9,8 @@ namespace RT
 	class Tetragon : public CompoundObject
 	{
 	public:
-		// текстура будет наложена так, что dx будет направлен вдоль ab
-		// dy - вдоль ad
+		// С‚РµРєСЃС‚СѓСЂР° Р±СѓРґРµС‚ РЅР°Р»РѕР¶РµРЅР° С‚Р°Рє, С‡С‚Рѕ dx Р±СѓРґРµС‚ РЅР°РїСЂР°РІР»РµРЅ РІРґРѕР»СЊ ab
+		// dy - РІРґРѕР»СЊ ad
 		Tetragon(const Point3D& a, const Point3D& b, const Point3D& c, const Point3D& d, const Material& material);
 	};
 }

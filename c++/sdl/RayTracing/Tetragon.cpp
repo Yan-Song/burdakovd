@@ -1,14 +1,14 @@
 #include "Tetragon.h"
 #include "NormalizedVector3D.h"
 
-// Это будет работать только если a, b, c, d в одной плоскости
+// Р­С‚Рѕ Р±СѓРґРµС‚ СЂР°Р±РѕС‚Р°С‚СЊ С‚РѕР»СЊРєРѕ РµСЃР»Рё a, b, c, d РІ РѕРґРЅРѕР№ РїР»РѕСЃРєРѕСЃС‚Рё
 RT::Tetragon::Tetragon(const Point3D& a, const Point3D& b, const Point3D& c, const Point3D& d, const Material& material)
 {
-	// первый треугольник, для него материал менять не надо (ab - dx, ad - dy)
+	// РїРµСЂРІС‹Р№ С‚СЂРµСѓРіРѕР»СЊРЅРёРє, РґР»СЏ РЅРµРіРѕ РјР°С‚РµСЂРёР°Р» РјРµРЅСЏС‚СЊ РЅРµ РЅР°РґРѕ (ab - dx, ad - dy)
 	CompoundObject::Add(CompoundObject::SharedObject(new Triangle(a, b, d, material)));
 
-	// второй треугольник bcd
-	// для него bc - dx, bd - dy, b - база
+	// РІС‚РѕСЂРѕР№ С‚СЂРµСѓРіРѕР»СЊРЅРёРє bcd
+	// РґР»СЏ РЅРµРіРѕ bc - dx, bd - dy, b - Р±Р°Р·Р°
 	const RT::NormalizedVector3D dx = b - a;
 	const RT::NormalizedVector3D dy = d - a;
 

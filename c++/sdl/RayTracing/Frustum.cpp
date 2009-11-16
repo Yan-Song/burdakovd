@@ -36,7 +36,7 @@ RT::Frustum::Frustum(const Vector3D &CenterBottom, const double RBottom, const d
 		const Point3D NextBottom = CenterBottom + Vector3DByCoords(RBottom * cos(nextphi), RBottom * sin(nextphi), 0);
 		const Point3D NextTop = CenterTop + Vector3DByCoords(RTop * cos(nextphi), RTop * sin(nextphi), 0);
 
-		// âîçìîæíî åñòü ñìûñë òóò ãðóïïèðîâàòü ãðàíè, ÷òîá îíè ñîäåðæàëèñü â îäíîé êàêîé-òî ñôåðå
+		// Ð²Ð¾Ð·Ð¼Ð¾Ð¶Ð½Ð¾ ÐµÑÑ‚ÑŒ ÑÐ¼Ñ‹ÑÐ» Ñ‚ÑƒÑ‚ Ð³Ñ€ÑƒÐ¿Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ Ð³Ñ€Ð°Ð½Ð¸, Ñ‡Ñ‚Ð¾Ð± Ð¾Ð½Ð¸ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ð»Ð¸ÑÑŒ Ð² Ð¾Ð´Ð½Ð¾Ð¹ ÐºÐ°ÐºÐ¾Ð¹-Ñ‚Ð¾ ÑÑ„ÐµÑ€Ðµ
 		if(RBottom > 0)
 		{
 			if(i != 0 && next != 0)
