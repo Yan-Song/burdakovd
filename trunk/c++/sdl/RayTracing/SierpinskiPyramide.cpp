@@ -23,7 +23,7 @@ RT::SierpinskiPyramide::SierpinskiPyramide(const Point3D &center, const double e
 
 	if(iterations == 0)
 	{
-		// конец рекурсии, строим тетраэдр из четырёх треугольников
+		// РєРѕРЅРµС† СЂРµРєСѓСЂСЃРёРё, СЃС‚СЂРѕРёРј С‚РµС‚СЂР°СЌРґСЂ РёР· С‡РµС‚С‹СЂС‘С… С‚СЂРµСѓРіРѕР»СЊРЅРёРєРѕРІ
 		CompoundObject::Add(CompoundObject::SharedObject(new RT::Triangle(A, B, C, material)));
 		CompoundObject::Add(CompoundObject::SharedObject(new RT::Triangle(A, B, D, material)));
 		CompoundObject::Add(CompoundObject::SharedObject(new RT::Triangle(A, D, C, material)));
@@ -31,7 +31,7 @@ RT::SierpinskiPyramide::SierpinskiPyramide(const Point3D &center, const double e
 	}
 	else
 	{
-		// делаем четыре таких же объекта но меньше размером
+		// РґРµР»Р°РµРј С‡РµС‚С‹СЂРµ С‚Р°РєРёС… Р¶Рµ РѕР±СЉРµРєС‚Р° РЅРѕ РјРµРЅСЊС€Рµ СЂР°Р·РјРµСЂРѕРј
 		CompoundObject::Add(CompoundObject::SharedObject(new SierpinskiPyramide((O + A) / 2.0, edgeLength / 2, iterations - 1, material)));
 		CompoundObject::Add(CompoundObject::SharedObject(new SierpinskiPyramide((O + B) / 2.0, edgeLength / 2, iterations - 1, material)));
 		CompoundObject::Add(CompoundObject::SharedObject(new SierpinskiPyramide((O + C) / 2.0, edgeLength / 2, iterations - 1, material)));
