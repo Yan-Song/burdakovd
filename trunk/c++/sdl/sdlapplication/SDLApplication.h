@@ -13,8 +13,6 @@
 #include <ctime>
 #include <iostream>
 
-#pragma warning (disable: 4100)
-
 struct FrameInfo
 {
 	double ctime;
@@ -123,7 +121,7 @@ protected:
 	
 	virtual void ProcessEvents(); // обработать ввод пользователя
 	
-	virtual void ProcessEvent(SDL_Event Event) {};
+	virtual void ProcessEvent(SDL_Event ) {};
 	
 	virtual void Main() {}; // основная логика
 	

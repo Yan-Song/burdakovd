@@ -1,8 +1,6 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#pragma warning (disable : 4100)
-
 #include "GraphObject.h"
 #include "Vector.h"
 #include "SDLApplication.h"

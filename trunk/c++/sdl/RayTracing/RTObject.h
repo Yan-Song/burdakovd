@@ -37,7 +37,7 @@ namespace RT
 	{
 	protected:
 		Point3D Center;
-		const Material material;
+		Material material;
 
 		RTObject(const Point3D& center, const Material& _material) : Center(center), material(_material) {}
 	};

@@ -42,13 +42,9 @@ RT::MaybeIntersection RT::CompoundObject::FindIntersection(const RT::Ray &ray) c
 	}
 }
 
-bool RT::CompoundObject::PossibleIntersection(const RT::Ray &ray) const
+bool RT::CompoundObject::PossibleIntersection(const RT::Ray& ) const
 {
-	for(ObjectList::const_iterator it = objects.begin(); it != objects.end(); ++it)
-		if((*it)->PossibleIntersection(ray))
-			return true;
-
-	return false;
+	return true;
 }
 
 void RT::CompoundObject::Rotate(const Affine::Axe axe, const Point3D &base, const double phi)

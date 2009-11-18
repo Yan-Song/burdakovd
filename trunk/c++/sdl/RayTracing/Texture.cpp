@@ -53,7 +53,15 @@ RealColor RT::Texture::GetPixel(const int _x, const int _y) const
 		 bufp = (Uint32 *)surface->pixels + y * surface->pitch / 4 + x;
 
 		 color = *bufp;
-	   } break; 
+	   } break;
+	   default:
+	   {
+		 if(SDL_MUSTLOCK(surface))
+		   SDL_UnlockSurface(surface);
+
+		 throw NotImplementedException();
+	   }
+
 	 }
 
 	if(SDL_MUSTLOCK(surface))
