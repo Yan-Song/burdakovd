@@ -30,7 +30,7 @@ namespace RT
 		typedef shared_ptr<ICallback> SharedCallback;
 
 	public:
-		const Point3D SpectatorPosition;
+		Point3D SpectatorPosition;
 
 		Scene(const Point3D& _SpectatorPosition) : SpectatorPosition(_SpectatorPosition)
 		{

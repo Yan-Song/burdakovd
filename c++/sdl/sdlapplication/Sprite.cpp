@@ -2,8 +2,6 @@
 #include <string>
 #include <SDL.h>
 
-#pragma warning (disable : 4100)
-
 Sprite::Sprite(const std::string &BMPFile, const Vector2D& center) : image(NULL)
 {
 	Center = center;
@@ -39,12 +37,12 @@ void Sprite::Draw(const SDLApplication *app, const Vector2D &base) const
 	SDLCheck(SDL_BlitSurface(image, NULL, app->Screen, &dst));
 }
 
-void Sprite::Rotate(const double phi)
+void Sprite::Rotate(const double )
 {
 	// \todo: вращать спрайт пока хз как
 }
 
-void Sprite::Scale(const Vector2D& coefficients)
+void Sprite::Scale(const Vector2D& )
 {
 	// \todo: растягивать спрайт пока тоже не умею
 }

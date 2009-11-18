@@ -1,7 +1,7 @@
 #include "Demo.h"
 #include "SDL.h"
 
-int main(int argc, char** argv)
+int main(int, char**)
 {
 	RTDemoApplication app;
 	app.Run();

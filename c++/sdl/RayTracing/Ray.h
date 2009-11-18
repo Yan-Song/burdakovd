@@ -9,8 +9,8 @@ namespace RT
 	class Ray
 	{
 	public:
-		const NormalizedVector3D Vector;
-		const Point3D Start;
+		NormalizedVector3D Vector;
+		Point3D Start;
 
 		Ray(const NormalizedVector3D& _Vector, const Point3D& _Start) : Vector(_Vector), Start(_Start)
 		{

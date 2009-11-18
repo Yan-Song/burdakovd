@@ -1,8 +1,6 @@
 #include "Circle2D.h"
 #include "Affine.h"
 
-#pragma warning(disable : 4100)
-
 void Circle2D::circlePoints(const SDLApplication* app, const Vector2D& center, const int x, const int y, const Color& color) const
 {
 	const int xCenter = static_cast<int>(center[0]), yCenter = static_cast<int>(center[1]);

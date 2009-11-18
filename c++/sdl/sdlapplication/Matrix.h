@@ -1,8 +1,6 @@
 #ifndef GENERICMATRIX_H
 #define GENERICMATRIX_H
 
-#pragma warning(disable : 4512)
-
 #include "Vector.h"
 
 // Просто матрица NxN, с умножением на себя и вектор, без особых конструкторов

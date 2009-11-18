@@ -56,7 +56,7 @@ namespace RT
 		Intersection i;
 
 	public:
-		const bool Exists;
+		bool Exists;
 
 		MaybeIntersection(const Intersection& intersection) : i(intersection), Exists(true) {}
 

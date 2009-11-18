@@ -22,11 +22,11 @@ bool RT::Sphere::PossibleIntersection(const RT::Ray &ray) const
 class RT::Sphere::Tracer : public RT::ITracer
 {
 private:
-	const RT::Ray ray;
-	const Point3D point;
-	const Material material;
-	const Point3D center;
-	const Vector3D rx, ry, rz;
+	RT::Ray ray;
+	Point3D point;
+	Material material;
+	Point3D center;
+	Vector3D rx, ry, rz;
 
 public:
 	Tracer(const RT::Ray& _ray, const Point3D& _point, const Material& _material, const Point3D& _center,

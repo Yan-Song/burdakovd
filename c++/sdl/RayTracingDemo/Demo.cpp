@@ -33,7 +33,9 @@ RTDemoApplication::RTDemoApplication() :
 	SDL_WM_SetCaption("Ray Tracing Demo", NULL);
 
 	const double R = 300;
-	RT::shared_ptr<RT::Texture> tex(new RT::Texture("Textures/azeroth.bmp"));
+
+	const RT::Material::SharedTexture tex(new RT::Texture("Textures/azeroth.bmp"));
+
 	RT::Material mat;
 	mat.SetTexture(tex, Vector2DByCoords(0, 0), Vector2DByCoords(tex->GetWidth() / 2.0 / Pi / R, 0), Vector2DByCoords(0, -tex->GetHeight() / Pi / R));
 
@@ -51,14 +53,14 @@ RTDemoApplication::RTDemoApplication() :
 	scene->Add(container);
 }
 
-template<bool AllowBreak>
 class Callback : public RT::Scene::ICallback
 {
 private:
-	RTDemoApplication* const app;
+	RTDemoApplication* app;
+	bool AllowBreak;
 
 public:
-	Callback(RTDemoApplication* const _app) : app(_app) {}
+	Callback(RTDemoApplication* const _app, const bool _AllowBreak) : app(_app), AllowBreak(_AllowBreak) {}
 
 	virtual bool call(const double percent)
 	{
@@ -152,7 +154,7 @@ void RTDemoApplication::Main()
 		// первый этап не прерывать
 		if(Quality == startQuality)
 		{
-			scene->Render(this, RT::Scene::SharedCallback(new ::Callback<false>(this)), Quality);
+			scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, false)), Quality);
 
 			if(Dirty)
 				return;
@@ -160,7 +162,7 @@ void RTDemoApplication::Main()
 		else
 		{
 			// в более высоком качестве рисовать не обязательно, можно прерваться не дорендерив
-			if(!scene->Render(this, RT::Scene::SharedCallback(new ::Callback<true>(this)), Quality))
+			if(!scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, true)), Quality))
 				return;
 		}
 	}

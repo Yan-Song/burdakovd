@@ -48,11 +48,11 @@ bool RT::Triangle::PossibleIntersection(const RT::Ray& ray) const
 class TriangleTracer : public RT::ITracer
 {
 private:
-	const Point3D point;
-	const RT::NormalizedVector3D n;
-	const RT::Material material;
-	const RT::Ray ray;
-	const Point3D A, B, C;
+	Point3D point;
+	RT::NormalizedVector3D n;
+	RT::Material material;
+	RT::Ray ray;
+	Point3D A, B, C;
 
 public:
 	TriangleTracer(const Point3D& a, const Point3D& b, const Point3D& c, const Point3D& _p, const RT::NormalizedVector3D& _n,

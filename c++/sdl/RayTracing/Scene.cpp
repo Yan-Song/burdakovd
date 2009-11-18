@@ -4,10 +4,6 @@
 
 void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, const int Quality)
 {
-	const int n = app->Screen->h * app->Screen->w;
-	const int qh = (app->Screen->h + Quality - 1) / Quality;
-	const int qw = (app->Screen->w + Quality - 1) / Quality;
-	const int qn = qh * qw;
 	const int w = app->Screen->w;
 	const int h = app->Screen->h;
 
