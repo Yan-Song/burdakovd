@@ -16,13 +16,13 @@ SOURCES := $(wildcard *.cpp) $(wildcard ../sdlapplication/*.cpp) $(wildcard ../R
 OBJS := $(patsubst %.cpp, %.o, $(SOURCES))
 DEPS := $(patsubst %.o, %.d, $(OBJS))
 
-.PHONY: all clean
+.PHONY: all clean run
 
 all: $(PROG)
 
 run: $(PROG)
 	$(PROG)
- 
+
 $(PROG): $(OBJS) $(DEPS)
 	$(CPP) $(LINKFLAGS) $(OBJS) -o $@
  
