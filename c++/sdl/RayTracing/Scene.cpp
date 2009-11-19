@@ -1,6 +1,8 @@
+#include <sdlapplication/Color.h>
+#include <sdlapplication/SDLApplication.h>
+#include "IntersectionResult.h"
+#include "Ray.h"
 #include "Scene.h"
-#include "sdlapplication/SDLApplication.h"
-#include "sdlapplication/Color.h"
 
 void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, const unsigned int Quality)
 {
@@ -84,7 +86,7 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 				{
 					const RT::SharedTracer tracer = static_cast<RT::Intersection>(result).Tracer;
 
-					*buffer_iterator = tracer->Trace();
+					*buffer_iterator = tracer->Trace(this);
 
 					// проверяем что не получился отрицательный цвет
 					assert(buffer_iterator->R >= 0 && buffer_iterator->G >= 0 && buffer_iterator->B >= 0);
@@ -95,8 +97,8 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 			
 			if(i % updateInterval == 0)
 			{
-				const unsigned int percent = 100 * static_cast<unsigned int>(\
-					buffer_iterator - buffer.begin()) / qn;
+				const unsigned int percent = 90 *
+					static_cast<unsigned int>(buffer_iterator - buffer.begin()) / qn;
 
 				if(callback->call(percent))
 				{
@@ -138,3 +140,42 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 	return true;
 }
 
+RealColor RT::Scene::CalculateLightness(const Point3D &point, const RT::NormalizedVector3D &n) const
+{
+	const double epsilon = 1e-9; // сколько брать???
+
+	RealColor sum(ambient);
+
+	for(LightContainer::const_iterator it = lights.begin(); it != lights.end(); ++it)
+	{
+		const double cosphi = static_cast<Vector3D>(n) * ((*it)->Position() - point) / point.Distance((*it)->Position());
+
+		if(cosphi > 0)
+		{
+			const double QDistance = point.QDistance((*it)->Position());
+			// источник света с нужной стороны
+			// испускаем луч из источника света в направлении нужной точки,
+			// если он ни с чем не пересечется по пути, то точка освещена этим источником
+
+			RT::Ray ray(point - (*it)->Position(), (*it)->Position());
+
+			RT::MaybeIntersection result = CompoundObject::FindIntersection(ray);
+
+			if(result.Exists)
+			{
+				RT::Intersection intersection(result);
+
+				if((*it)->Position().QDistance(intersection.Point) < QDistance * (1 - epsilon))
+				{
+					// свет заслонён
+					continue;
+				}
+			}
+
+			// свет не заслонён
+			sum += (*it)->Color() * cosphi / QDistance;
+		}
+	}
+
+	return sum;
+}

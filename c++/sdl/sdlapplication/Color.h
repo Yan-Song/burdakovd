@@ -21,7 +21,7 @@ public:
 		{};
 
 	// конструктор от представления одним числом: 0xRRGGBB
-	GenericColor(int color) :
+	explicit GenericColor(int color) :
 		R(color>>16 & 255),
 		G(color>>8 & 255),
 		B(color & 255)
@@ -59,6 +59,18 @@ template<typename I>
 inline GenericColor<I> operator *(const I k, const GenericColor<I>& color)
 {
 	return color * k;
+}
+
+template<typename I>
+inline GenericColor<I> operator *(const GenericColor<I>& a, const GenericColor<I>& b)
+{
+	return GenericColor<I>(a.R * b.R, a.G * b.G, a.B * b.B);
+}
+
+template<typename I>
+inline GenericColor<I> operator +=(GenericColor<I>& a, const GenericColor<I>& b)
+{
+	return a = a + b;
 }
 
 template<typename I>

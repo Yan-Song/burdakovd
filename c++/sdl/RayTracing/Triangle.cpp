@@ -1,13 +1,14 @@
 #ifndef TRIANGLE_CPP
 #define TRIANGLE_CPP
 
-#include "Triangle.h"
-#include "sdlapplication/Utils.h"
-#include "sdlapplication/Vector.h"
+#include <sdlapplication/Affine.h>
+#include <sdlapplication/Utils.h>
+#include <sdlapplication/Vector.h>
 #include "Equation.h"
+#include "IEngine.h"
 #include "ITracer.h"
-#include "sdlapplication/Affine.h"
 #include "Material.h"
+#include "Triangle.h"
 
 RT::Triangle::Triangle(const Point3D &pa, const Point3D &pb, const Point3D &pc, const Material &_material) :
 RTObject(Vector000, _material), QR(), R(), A(pa), B(pb), C(pc)
@@ -62,7 +63,7 @@ public:
 	{
 	}
 
-	virtual RealColor Trace()
+	virtual RealColor Trace(const RT::IEngine* engine)
 	{
 		const RT::NormalizedVector3D dx = B - A;
 		const RT::NormalizedVector3D dy = C - A;
@@ -72,7 +73,7 @@ public:
 		const double u = ((point - A) ^ static_cast<Vector3D>(dy)).Length() / z;
 		const double v = ((point - A) ^ static_cast<Vector3D>(dx)).Length() / z;
 
-		return material.Trace(point, Vector2DByCoords(u, v), n, ray);
+		return material.Trace(point, Vector2DByCoords(u, v), n, ray, engine);
 	}
 };
 

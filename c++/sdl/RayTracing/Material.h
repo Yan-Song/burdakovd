@@ -1,17 +1,18 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "Texture.h"
-#include "sdlapplication/Shared.h"
-#include "sdlapplication/Vector.h"
-#include "sdlapplication/Color.h"
+#include <map>
+#include <sdlapplication/Color.h>
+#include <sdlapplication/Shared.h>
+#include <sdlapplication/Vector.h>
+#include "IEngine.h"
 #include "NormalizedVector3D.h"
 #include "Ray.h"
-#include <map>
+#include "Texture.h"
 
 namespace RT
 {
-	// Материал - некок обобщение текстуры.
+	// Материал - некое обобщение текстуры.
 	// в дальнеёшем тут возможно будут и другие парметры, типа степень отражения/прозрачность
 	class Material
 	{
@@ -54,7 +55,8 @@ namespace RT
 		// внутри метода они будут переведены в текстурные
 		Material Cut(const Point2D& base, const Vector2D& dx, const Vector2D& dy) const;
 
-		RealColor Trace(const Point3D& point, const Point2D& MaterialPoint, const NormalizedVector3D& n, const Ray& ray) const;
+		RealColor Trace(const Point3D& point, const Point2D& MaterialPoint, \
+			const NormalizedVector3D& n, const Ray& ray, const RT::IEngine* engine) const;
 	};
 }
 
