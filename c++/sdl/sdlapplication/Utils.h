@@ -1,10 +1,10 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <map>
 #include <cmath>
-#include "SDLException.h"
 #include <cstring>
+#include <map>
+#include "SDLException.h"
 
 #define mset(x, v) memset(x, v, sizeof(x))
 
@@ -43,6 +43,10 @@ inline void __assert(const bool x, const std::string& text)
 {
 	if(!x)
 		throw AssertionException(text);
+}
+
+inline int round(const double num) {
+    return static_cast<int>((num > 0.0) ? floor(num + 0.5) : ceil(num - 0.5));
 }
 
 #define assert(assertion) __assert(assertion, #assertion)

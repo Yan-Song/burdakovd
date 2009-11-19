@@ -14,6 +14,8 @@ class PixelDrawer
 private:
 	const SDLApplication* const app;
 	const Color& color;
+	
+	PixelDrawer operator=(const PixelDrawer& );
 
 public:
 	PixelDrawer(const SDLApplication* const _app, const Color& _color) : app(_app), color(_color) {};

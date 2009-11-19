@@ -38,9 +38,9 @@ RealColor RT::Material::GetPixel(const Point2D& MaterialPoint) const
 {
 	if(has_texture)
 	{
-		const ScreenPoint tPoint = static_cast<ScreenPoint>(TexturePoint(MaterialPoint));
+		const Point2D tPoint = TexturePoint(MaterialPoint);
 	
-		return Texture->GetPixel(tPoint[0], tPoint[1]);
+		return Texture->GetPixel(round(tPoint[0]), round(tPoint[1]));
 	}
 	else
 	{

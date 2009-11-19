@@ -37,6 +37,8 @@ public:
 
 		friend class GenericMatrix;
 
+		RowAccessor operator=(const RowAccessor& );
+
 	public:
 		inline Element& operator [](const int index) const
 		{
