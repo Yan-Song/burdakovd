@@ -21,6 +21,9 @@ namespace
 	// сравнивает две точки по их Y координате, получая на вход номера тих точек
 	class YComparatorByIndex
 	{
+	private:
+		YComparatorByIndex operator=(const YComparatorByIndex& );
+
 	public:
 		const std::vector<ScreenPoint>& vertices;
 
@@ -35,6 +38,9 @@ namespace
 	// проверяет, заканчивается ли данное ребро в текущей строке
 	class SARRemovePredicate
 	{
+	private:
+		SARRemovePredicate operator=(const SARRemovePredicate& );
+
 	public:
 		const std::vector<ScreenPoint>& vertices;
 		const int currentY;
@@ -52,6 +58,9 @@ namespace
 	// находит абсциссу точки пересечения ребра с текущей строкой
 	class Intersector
 	{
+	private:
+		Intersector operator=(const Intersector& );
+
 	public:
 		const std::vector<ScreenPoint>& vertices;
 		const int currentY;
