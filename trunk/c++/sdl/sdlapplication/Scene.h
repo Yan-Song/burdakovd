@@ -8,7 +8,7 @@
 #include "Color.h"
 #include <vector>
 #include <map>
-#include "sdlapplication/Shared.h"
+#include "Shared.h"
 
 class Scene2D : public CompoundObject2D
 {
