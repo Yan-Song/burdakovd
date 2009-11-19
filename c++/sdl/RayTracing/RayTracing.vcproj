@@ -255,10 +255,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Shared.h"
-				>
-			</File>
-			<File
 				RelativePath=".\SierpinskiPyramide.h"
 				>
 			</File>

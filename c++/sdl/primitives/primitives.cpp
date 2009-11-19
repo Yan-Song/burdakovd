@@ -24,10 +24,13 @@
 #include "Pencil.h"
 #include "DemoScene.h"
 
-const int PrimitivesApplication::ScreenWidth;
-const int PrimitivesApplication::ScreenHeight;
-const int PrimitivesApplication::ColorDepth;
-const int PrimitivesApplication::SDLflags;
+namespace
+{
+	const int ScreenWidth = 800;
+	const int ScreenHeight = 600;
+	const int ColorDepth = 0;
+	const int SDLflags = SDL_DOUBLEBUF || SDL_ANYFORMAT || SDL_HWSURFACE;
+}
 
 PrimitivesApplication::PrimitivesApplication() :
 	lasttime(time(NULL)),
