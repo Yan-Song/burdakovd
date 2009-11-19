@@ -45,7 +45,7 @@ class AssertionException : public std::runtime_error
 {
 public:
 	AssertionException(const std::string& message)
-		: std::runtime_error("Assert failed: " + message)
+		: std::runtime_error("Assertion failed: " + message)
 	{
 	};
 };

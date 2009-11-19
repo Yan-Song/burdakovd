@@ -27,7 +27,7 @@ namespace RT
 	class Intersection
 	{
 	private:
-		Intersection() {}
+		Intersection() : Point(), Tracer() {}
 		friend class MaybeIntersection;
 
 	public:
@@ -60,7 +60,7 @@ namespace RT
 
 		MaybeIntersection(const Intersection& intersection) : i(intersection), Exists(true) {}
 
-		MaybeIntersection(const NoIntersection& ) : Exists(false) {}
+		MaybeIntersection(const NoIntersection& ) : i(), Exists(false) {}
 
 		inline operator Intersection() const
 		{

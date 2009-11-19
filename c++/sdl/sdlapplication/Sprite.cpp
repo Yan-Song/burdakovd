@@ -26,7 +26,7 @@ Sprite::~Sprite()
 }
 
 // http://sdl.beuc.net/sdl.wiki/SDL_BlitSurface
-void Sprite::Draw(const SDLApplication *app, const Vector2D &base) const
+void Sprite::Draw(SDLApplication * const app, const Vector2D &base) const
 {
 	SDL_Rect dst;
 	// Only the position is used in the dstrect (the width and height are ignored).

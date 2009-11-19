@@ -24,29 +24,26 @@
 #include "Pencil.h"
 #include "DemoScene.h"
 
-#pragma warning(disable: 4355)
-
-double f(const double x, const double y)
-{
-	return x * x * x + x * y;
-	// x * y - седло
-	// x * x + y * y - какая-то штука (параболоид?)
-	// sqrt(x * x + y * y) - конус
-	// x * x - типа параболы но плоскость
-}
+const int PrimitivesApplication::ScreenWidth;
+const int PrimitivesApplication::ScreenHeight;
+const int PrimitivesApplication::ColorDepth;
+const int PrimitivesApplication::SDLflags;
 
 PrimitivesApplication::PrimitivesApplication() :
-	ZRotationSpeed(0), XRotationSpeed(0), RotationAccelerating(2),
+	lasttime(time(NULL)),
+
 	// наблюдатель примерно на расстоянии около 1200 пикселей от центра экрана, перпендикулярно его плоскости
-	scene(Vector3DByCoords(ScreenWidth / 2, -1200, ScreenHeight / 2), ScreenPointByCoords(ScreenWidth, ScreenHeight), this),
-	LightPosition(Vector3DByCoords(20000, -10000, 10000))
+	scene(Vector3DByCoords(ScreenWidth / 2, -1200, ScreenHeight / 2), \
+		ScreenPointByCoords(ScreenWidth, ScreenHeight), this),
+	Objects(new CompoundObject3D()),
+	LightPosition(Vector3DByCoords(20000, -10000, 10000)),
+
+	ZRotationSpeed(0), XRotationSpeed(0), RotationAccelerating(2)	
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
-	lasttime = time(NULL);
 
 	// создаём некоторый набор объектов и добавляем его в сцену
-	Objects = new CompoundObject3D();
 	scene.Add(Objects);
 
 	// центр где-то посредине экрана, на глубине в 400 пикселей...

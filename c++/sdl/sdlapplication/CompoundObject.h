@@ -36,6 +36,8 @@ protected:
 	ObjectList objects;
 
 public:
+	CompoundObject3D() : objects() {}
+
 	// добавить объект
 	// объект, указатель на который передан, будет удалён в деструкторе, вызывыющая сторона не должна этим заниматься
 	void Add(GraphObject3D* const object);

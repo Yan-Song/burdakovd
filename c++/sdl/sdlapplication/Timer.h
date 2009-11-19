@@ -7,6 +7,7 @@ class Timer
 {
 private:
 	Uint32 startTicks;
+
 public:
 	Timer(void);
 	~Timer(void);

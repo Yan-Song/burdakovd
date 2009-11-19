@@ -13,13 +13,16 @@ namespace RT
 	{
 	private:
 		class Tracer;
-		double QR;
+		
+		double R, QR;
 		Vector3D rx, ry, rz;
-		double R;
 
 	public:
-		Sphere(const Vector3D& center, const double r, const Material& _material) : RTObject(center, _material), QR(sqr(r)), R(r),
-			rx(Vector3DByCoords(r, 0, 0)), ry(Vector3DByCoords(0, r, 0)), rz(Vector3DByCoords(0, 0, r))
+		Sphere(const Vector3D& center, const double r, const Material& _material) :
+			RTObject(center, _material), R(r), QR(sqr(r)),
+			rx(Vector3DByCoords(r, 0, 0)),
+			ry(Vector3DByCoords(0, r, 0)),
+			rz(Vector3DByCoords(0, 0, r))
 		{
 		}
 

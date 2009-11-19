@@ -2,7 +2,7 @@
 #define SCENE_H
 
 #include "CompoundObject.h"
-#include "Shared.h"
+#include "sdlapplication/Shared.h"
 #include "sdlapplication/Vector.h"
 #include "sdlapplication/Color.h"
 #include <vector>
@@ -18,7 +18,7 @@ namespace RT
 
 		ColorContainer buffer;
 
-		void DrawBuffer(SDLApplication* const app, const bool rectangles, const int Quality);
+		void DrawBuffer(SDLApplication* const app, const bool rectangles, const unsigned int Quality);
 
 	public:
 		class ICallback
@@ -27,12 +27,12 @@ namespace RT
 			virtual bool call(const double percent) = 0;
 			virtual ~ICallback() {}
 		};
-		typedef shared_ptr<ICallback> SharedCallback;
+		typedef Shared::shared_ptr<ICallback> SharedCallback;
 
 	public:
 		Point3D SpectatorPosition;
 
-		Scene(const Point3D& _SpectatorPosition) : SpectatorPosition(_SpectatorPosition)
+		Scene(const Point3D& _SpectatorPosition) : buffer(), SpectatorPosition(_SpectatorPosition)
 		{
 		}
 
@@ -46,7 +46,7 @@ namespace RT
 		// и если он вернет true то Render будет прерван
 		// Quality - качество прорисовки, 1 - максимальное, чем больше  тем ниже качество
 		// возвращается true если сцена успела отрендериться до конца, и false если её прервал callback
-		bool Render(SDLApplication* const app, const SharedCallback& callback, const int Quality = 1,
+		bool Render(SDLApplication* const app, const SharedCallback& callback, const unsigned int Quality = 1,
 			const bool rectangles = true);
 	};
 }

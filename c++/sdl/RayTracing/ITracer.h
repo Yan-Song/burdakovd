@@ -3,7 +3,7 @@
 
 #include "sdlapplication/Color.h"
 #include "Ray.h"
-#include "Shared.h"
+#include "sdlapplication/Shared.h"
 
 namespace RT
 {
@@ -16,7 +16,7 @@ namespace RT
 		virtual ~ITracer() {}
 	};
 
-	typedef shared_ptr<ITracer> SharedTracer;
-};
+	typedef Shared::shared_ptr<ITracer> SharedTracer;
+}
 
 #endif

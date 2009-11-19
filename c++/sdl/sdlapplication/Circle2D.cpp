@@ -56,7 +56,7 @@ void Circle2D::Draw(SDLApplication* const app, const Vector& base) const
 	app->Unlock();
 }
 
-void Circle2D::Rotate(const double phi)
+void Circle2D::Rotate(const double)
 {
 	// круг инвариантен относительно вращения вокруг центра
 }

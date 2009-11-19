@@ -2,10 +2,10 @@
 #include "sdlapplication/SDLApplication.h"
 #include "sdlapplication/Color.h"
 
-void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, const int Quality)
+void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, const unsigned int Quality)
 {
-	const int w = app->Screen->w;
-	const int h = app->Screen->h;
+	const unsigned int w = static_cast<unsigned int>(app->Screen->w);
+	const unsigned int h = static_cast<unsigned int>(app->Screen->h);
 
 	app->ClearScreen();
 
@@ -14,13 +14,17 @@ void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, con
 	{
 		ColorContainer::const_iterator buffer_iterator = buffer.begin();
 
-		for(int y = 0; y < h; y += Quality)
-			for(int x = 0; x < w; x += Quality)
+		for(unsigned int y = 0; y < h; y += Quality)
+			for(unsigned int x = 0; x < w; x += Quality)
 			{
-				const int baseX = x - Quality / 2;
-				const int baseY = y - Quality / 2;
+				const int baseX = static_cast<int>(x) - static_cast<int>(Quality / 2);
+				const int baseY = static_cast<int>(y) - static_cast<int>(Quality / 2);
 
-				app->FillRectangle(ScreenPointByCoords(baseX, baseY), ScreenPointByCoords(baseX + Quality, baseY + Quality), *buffer_iterator);
+				const int baseX2 = static_cast<int>(x + Quality / 2);
+				const int baseY2 = static_cast<int>(y + Quality / 2);
+
+				app->FillRectangle(ScreenPointByCoords(baseX, baseY), \
+					ScreenPointByCoords(baseX2, baseY2), *buffer_iterator);
 
 				++buffer_iterator;
 			}
@@ -33,10 +37,10 @@ void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, con
 
 		ColorContainer::const_iterator buffer_iterator = buffer.begin();
 
-		for(int y = 0; y < h; y += Quality)
-			for(int x = 0; x < w; x += Quality)
+		for(unsigned int y = 0; y < h; y += Quality)
+			for(unsigned int x = 0; x < w; x += Quality)
 			{
-				app->RawDrawPixel(x, y, *buffer_iterator);
+				app->RawDrawPixel(static_cast<int>(x), static_cast<int>(y), *buffer_iterator);
 				++buffer_iterator;
 			}
 
@@ -47,13 +51,12 @@ void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, con
 	app->Flip();
 }
 
-bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallback &callback, const int Quality, 
-					   const bool rectangles)
+bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallback &callback, const unsigned int Quality, const bool rectangles)
 {	
-	const int n = app->Screen->h * app->Screen->w;
-	const int qh = (app->Screen->h + Quality - 1) / Quality;
-	const int qw = (app->Screen->w + Quality - 1) / Quality;
-	const int qn = qh * qw;
+	const size_t n = static_cast<size_t>(app->Screen->h * app->Screen->w);
+	const size_t qh = (static_cast<size_t>(app->Screen->h) + Quality - 1) / Quality;
+	const size_t qw = (static_cast<size_t>(app->Screen->w) + Quality - 1) / Quality;
+	const size_t qn = qh * qw;
 
 	// по идее реальное выделение памяти будет происходить только в первый раз
 	// резервируем памяти для максимального качества
@@ -63,13 +66,13 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 	buffer.clear();
 	buffer.resize(qn, Palette::Black);
 
-	const int updateInterval = std::max(qn / 100, 100);
+	const unsigned int updateInterval = std::max<unsigned int>(qn / 100, 100);
 
 	ColorContainer::iterator buffer_iterator = buffer.begin();
 
-	for(int y = 0, i = 0; y < app->Screen->h; y += Quality)
+	for(unsigned int y = 0, i = 0; y < static_cast<unsigned int>(app->Screen->h); y += Quality)
 	{
-		for(int x = 0; x < app->Screen->w; x += Quality, ++i)
+		for(unsigned int x = 0; x < static_cast<unsigned int>(app->Screen->w); x += Quality, ++i)
 		{
 			const RT::Ray ray(Vector3DByCoords(x, y, 0) - SpectatorPosition, SpectatorPosition);
 			
@@ -92,7 +95,8 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 			
 			if(i % updateInterval == 0)
 			{
-				const int percent = 100 * (buffer_iterator - buffer.begin()) / qn;
+				const unsigned int percent = 100 * static_cast<unsigned int>(\
+					buffer_iterator - buffer.begin()) / qn;
 
 				if(callback->call(percent))
 				{

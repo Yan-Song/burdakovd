@@ -58,6 +58,6 @@ namespace RT
 		else
 			return - b / a;
 	}
-};
+}
 
 #endif

@@ -3,7 +3,8 @@
 #include "sdlapplication/Vector.h"
 #include <cmath>
 
-RT::SierpinskiPyramide::SierpinskiPyramide(const Point3D &center, const double edgeLength, const int iterations, const Material &material)
+RT::SierpinskiPyramide::SierpinskiPyramide(const Point3D &center, const double edgeLength, const int iterations, const Material &material) :
+	sphere()
 {
 	assert(edgeLength > 0);
 	
@@ -19,7 +20,7 @@ RT::SierpinskiPyramide::SierpinskiPyramide(const Point3D &center, const double e
 	const Point3D C = O + Vector3DByCoords(r * cos(4 * Pi / 3.0), r * sin(4 * Pi / 3.0), -h);
 	const Point3D D = O + Vector3DByCoords(0, 0, H - h);
 
-	sphere = RT::shared_ptr<RT::Sphere>(new RT::Sphere(center, R, material));
+	sphere = CompoundObject::SharedObject(new RT::Sphere(center, R, material));
 
 	if(iterations == 0)
 	{

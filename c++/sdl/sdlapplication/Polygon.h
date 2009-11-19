@@ -18,11 +18,12 @@ public:
 	Color color;
 	bool Filled;
 
-	Polygon2D(const Color& c = Palette::White, const bool filled = false) : color(c), Filled(filled)
+	Polygon2D(const Color& c = Palette::White, const bool filled = false) : points(), color(c), Filled(filled)
 	{
 	};
 
-	Polygon2D(const Points& v, const Color& c = Palette::White, const bool filled = false) : points(v), color(c), Filled(filled)
+	Polygon2D(const Points& v, const Color& c = Palette::White, const bool filled = false) :
+		points(v), color(c), Filled(filled)
 	{
 	};
 
@@ -48,7 +49,7 @@ private:
 public:
 	Color color;
 
-	Polygon3D(const Color& _color = Palette::White) : vcount(0), color(_color)
+	Polygon3D(const Color& _color = Palette::White) : first(), last(), vcount(0), color(_color)
 	{
 	};
 

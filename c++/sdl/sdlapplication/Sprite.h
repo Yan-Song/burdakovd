@@ -17,13 +17,13 @@ class Sprite : public GraphObject2D
 private:
 	SDL_Surface* image;
 
-	Sprite(const Sprite& other) {}
-	void operator =(const Sprite& other) {}
+	Sprite(const Sprite& );
+	Sprite operator =(const Sprite& );
 
 public:
 	Sprite(const std::string& BMPFile, const Vector2D& center = Vector00);
 
-	virtual void Draw(const SDLApplication* app, const Vector2D& base) const;
+	virtual void Draw(SDLApplication* const app, const Vector2D& base) const;
 
 	virtual void Rotate(const double phi);
 

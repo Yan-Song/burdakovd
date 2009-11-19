@@ -22,9 +22,10 @@
 
 RTDemoApplication::RTDemoApplication() : 
 	// Наблюдатель находится перед экраном на расстоянии 1000 пикселов
-	scene(RT::shared_ptr<RT::Scene>(new RT::Scene(Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2, -1000)))),
-		container(new RT::CompoundObject()),
-		Rendered(false), Dirty(false), Center(Vector3DByCoords(ScreenWidth / 2 + 0.1, 200.1, 400.1))
+	scene(new RT::Scene(Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2, -1000))),
+	container(new RT::CompoundObject()),
+	Center(Vector3DByCoords(ScreenWidth / 2 + 0.1, 200.1, 400.1)),
+	Rendered(false), Dirty(false)
 {
 	const int SDLflags = SDL_DOUBLEBUF || SDL_ANYFORMAT || SDL_HWSURFACE;
 
@@ -58,23 +59,28 @@ class Callback : public RT::Scene::ICallback
 private:
 	RTDemoApplication* app;
 	bool AllowBreak;
+	unsigned int Quality;
+
+	Callback(const Callback& );
+	Callback operator=(const Callback&);
 
 public:
-	Callback(RTDemoApplication* const _app, const bool _AllowBreak) : app(_app), AllowBreak(_AllowBreak) {}
+	Callback(RTDemoApplication* const _app, const bool _AllowBreak, const unsigned int _Quality) :
+	app(_app), AllowBreak(_AllowBreak), Quality(_Quality) {}
 
 	virtual bool call(const double percent)
 	{
 		if(AllowBreak)
-			return app->Callback(percent, true);
+			return app->Callback(percent, true, Quality);
 		else
 		{
-			app->Callback(percent, false);
+			app->Callback(percent, false, Quality);
 			return false;
 		}
 	}
 };
 
-bool RTDemoApplication::Callback(const double percent, const bool AllowBreak)
+bool RTDemoApplication::Callback(const double percent, const bool AllowBreak, const unsigned int Quality)
 {
 	// вывести прогресс
 	std::ostringstream os;
@@ -146,15 +152,15 @@ void RTDemoApplication::Main()
 
 	const double startTime = GetTime();
 
-	const int startQuality = 16;
+	const unsigned int startQuality = 16;
 
 	// рисовать, постепенно наращивая качество
-	for(Quality = startQuality; Quality > 0; Quality /= 2)
+	for(unsigned int Quality = startQuality; Quality > 0; Quality /= 2)
 	{
 		// первый этап не прерывать
 		if(Quality == startQuality)
 		{
-			scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, false)), Quality);
+			scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, false, Quality)), Quality);
 
 			if(Dirty)
 				return;
@@ -162,7 +168,7 @@ void RTDemoApplication::Main()
 		else
 		{
 			// в более высоком качестве рисовать не обязательно, можно прерваться не дорендерив
-			if(!scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, true)), Quality))
+			if(!scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, true, Quality)), Quality))
 				return;
 		}
 	}

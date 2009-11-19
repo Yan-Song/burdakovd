@@ -12,6 +12,7 @@
 #include <sstream>
 #include <ctime>
 #include <iostream>
+#include "Shared.h"
 
 struct FrameInfo
 {
@@ -73,12 +74,12 @@ public:
 	// До вызова InitializeSDL результат вызова функции не определён.
 	inline double GetTime() const
 	{
-		return timer.GetTime();
+		return timer->GetTime();
 	}
 
-	inline int FPS() const
+	inline unsigned int FPS() const
 	{
-		return stats.size();
+		return static_cast<unsigned int>(stats.size());
 	}
 
 	inline bool isPressed(const SDLKey& key) const
@@ -129,10 +130,10 @@ protected:
 	
 	virtual void Render() {}; // вывести на экран текущую ситуацию
 	
-	void InitializeSDL(int ScreenHeight, int ScreenWidth, int ColorDepth, int SDLflags); // инициализировать библиотеку SDL
+	void InitializeSDL(size_t ScreenHeight, size_t ScreenWidth, int ColorDepth, size_t SDLflags); // инициализировать библиотеку SDL
 	
 	// количество кадров всего
-	long long frames;
+	unsigned int frames;
 	
 	// минимальный dt за последнюю секунду, мс
 	int dtMin() const;
@@ -158,7 +159,7 @@ private:
 	int _locked;
 
 	// нельзя копировать
-	SDLApplication(const SDLApplication&) {};
+	SDLApplication(const SDLApplication&);
 	SDLApplication& operator=(const SDLApplication&) { return *this; };
 	
 	inline Uint32 MapColor(const Color& rgb) const
@@ -172,7 +173,7 @@ private:
 	// статистика за последнюю секунду
 	FrameInfoList stats;
 	
-	Timer timer;
+	Shared::shared_ptr<Timer> timer;
 };
 
 #endif

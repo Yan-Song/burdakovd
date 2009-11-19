@@ -1,13 +1,20 @@
 PROG=./primitives
 
 CPP=g++
-COMMONFLAGS= -O3 -funroll-loops
-CPPFLAGS= $(COMMONFLAGS) -W -Wall -I/usr/include/SDL -I../sdlapplication 
+
+OPTIMIZATIONFLAGS= -O3 -funit-at-a-time -funswitch-loops -Wdisabled-optimization
+
+WARNINGFLAGS= -W -Wall -Wextra -pedantic -Weffc++ -Woverloaded-virtual -Wctor-dtor-privacy \
+	-Wnon-virtual-dtor -Wold-style-cast -Wconversion -Wsign-conversion -Winit-self \
+	-Werror 
+
+COMMONFLAGS= $(OPTIMIZATIONFLAGS) $(WARNINGFLAGS)
+CPPFLAGS= $(COMMONFLAGS) -I/usr/include/SDL -I../sdlapplication -I.. -DTR1_PREFIX
 LINKFLAGS= $(COMMONFLAGS) -lSDL -lpthread 
 
 SOURCES := $(wildcard *.cpp) $(wildcard ../sdlapplication/*.cpp)
 OBJS := $(patsubst %.cpp, %.o, $(SOURCES))
-DEPS := $(patsubst %.o,%.d,$(OBJS))
+DEPS := $(patsubst %.o, %.d, $(OBJS))
 
 .PHONY: all clean
 
