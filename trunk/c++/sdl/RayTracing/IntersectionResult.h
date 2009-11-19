@@ -1,12 +1,12 @@
 #ifndef INTERSECTIONRESULT_H
 #define INTERSECTIONRESULT_H
 
-#include "sdlapplication/Vector.h"
-#include "NormalizedVector3D.h"
-#include "sdlapplication/Utils.h"
 #include <stdexcept>
 #include <memory>
+#include <sdlapplication/Utils.h>
+#include <sdlapplication/Vector.h>
 #include "ITracer.h"
+#include "NormalizedVector3D.h"
 
 namespace RT
 {

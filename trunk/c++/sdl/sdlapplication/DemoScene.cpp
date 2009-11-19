@@ -26,7 +26,7 @@ DemoScene::DemoScene(const Vector3D &center)
 
 	const double PencilRotateX = -0.2;
 	const double PencilRotateY = 0.8;
-	const Color PaperColor = 0xef6010;
+	const Color PaperColor(0xef6010);
 
 	// лист бумаги можно предствить как параллелепипед или растянутый куб очень маленькой высоты
 	const double hh = 0.1;
@@ -35,7 +35,7 @@ DemoScene::DemoScene(const Vector3D &center)
 	paper->Move(Vector3DByCoords(0, 0, -hh / 2));
 	CompoundObject3D::Add(paper);
 	
-	GraphObject3D* pencil = new Pencil(PencilCenter, PencilHeight, 0x30D5C8, 0xffff7f, 0x3f3f3f);
+	GraphObject3D* pencil = new Pencil(PencilCenter, PencilHeight, Color(0x30D5C8), Color(0xffff7f), Color(0x3f3f3f));
 	pencil->RotateRelative(Affine::X, PencilRotateX, PencilBase);
 	pencil->RotateRelative(Affine::Y, PencilRotateY, PencilBase);
 	CompoundObject3D::Add(pencil);
@@ -50,9 +50,9 @@ DemoScene::DemoScene(const Vector3D &center)
 	const Vector3D Cube4Center = CubeCenter + Vector3DByCoords(0, CubeHeight, 0);
 	const Vector3D Cube5Center = CubeCenter + Vector3DByCoords(CubeHeight / 2, CubeHeight / 2, CubeHeight);
 
-	CompoundObject3D::Add(new Cube(CubeCenter, CubeHeight, 0xd0d0d0));
-	CompoundObject3D::Add(new Cube(Cube2Center, CubeHeight, 0x000080));
-	CompoundObject3D::Add(new Cube(Cube3Center, CubeHeight, 0x008000));
-	CompoundObject3D::Add(new Cube(Cube4Center, CubeHeight, 0x808000));
-	CompoundObject3D::Add(new Cube(Cube5Center, CubeHeight, 0x800080));
+	CompoundObject3D::Add(new Cube(CubeCenter, CubeHeight, Color(0xd0d0d0)));
+	CompoundObject3D::Add(new Cube(Cube2Center, CubeHeight, Color(0x000080)));
+	CompoundObject3D::Add(new Cube(Cube3Center, CubeHeight, Color(0x008000)));
+	CompoundObject3D::Add(new Cube(Cube4Center, CubeHeight, Color(0x808000)));
+	CompoundObject3D::Add(new Cube(Cube5Center, CubeHeight, Color(0x800080)));
 }

@@ -1,7 +1,7 @@
-#include "Material.h"
 #include <algorithm>
 #include <cmath>
-#include "sdlapplication/Utils.h"
+#include <sdlapplication/Utils.h>
+#include "Material.h"
 
 RT::Material::Material(const RealColor& _color) : has_texture(false), base(), dx(), dy(), Texture(), color(_color)
 {
@@ -53,9 +53,14 @@ Point2D RT::Material::TexturePoint(const Point2D &MaterialPoint) const
 	return base + MaterialPoint[0] * dx + MaterialPoint[1] * dy;
 }
 
-RealColor RT::Material::Trace(const Point3D &point, const Point2D &MaterialPoint, const RT::NormalizedVector3D &n, const RT::Ray &ray) const
+RealColor RT::Material::Trace(const Point3D &point, const Point2D &MaterialPoint, const RT::NormalizedVector3D &n, \
+							  const RT::Ray &ray, const RT::IEngine* engine) const
 {
 	const RealColor PointColor = GetPixel(MaterialPoint);
 
-	return PointColor * std::abs(static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector)) / point.QDistance(ray.Start);
+	// находим из двух нормалей ту, которая направлена к зрителю
+	const NormalizedVector3D zn = static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector) > 0 ?
+		NormalizedVector3D(-static_cast<Vector3D>(n)) : n;
+
+	return PointColor * engine->CalculateLightness(point, zn);
 }

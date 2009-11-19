@@ -1,11 +1,12 @@
-#include "Sphere.h"
-#include "sdlapplication/Vector.h"
-#include "Polynom.h"
-#include "Equation.h"
-#include "ITracer.h"
-#include "sdlapplication/Utils.h"
 #include <cmath>
+#include <sdlapplication/Utils.h>
+#include <sdlapplication/Vector.h>
+#include "Equation.h"
+#include "IEngine.h"
+#include "ITracer.h"
 #include "Material.h"
+#include "Polynom.h"
+#include "Sphere.h"
 
 bool RT::Sphere::PossibleIntersection(const RT::Ray &ray) const
 {
@@ -33,7 +34,7 @@ public:
 		const Vector3D& _rx, const Vector3D& _ry, const Vector3D& _rz)
 		: ray(_ray), point(_point), material(_material), center(_center), rx(_rx), ry(_ry), rz(_rz) {}
 
-	virtual RealColor Trace()
+	virtual RealColor Trace(const RT::IEngine* engine)
 	{
 		const double R = center.Distance(point);
 		const Vector3D rv = point - center;
@@ -48,7 +49,7 @@ public:
 		const double phi = y < 0  ?  2 * Pi - phi_  :  phi_;
 		
 
-		return material.Trace(point, Vector2DByCoords(phi * R, teta * R), n, ray);
+		return material.Trace(point, Vector2DByCoords(phi * R, teta * R), n, ray, engine);
 	}
 };
 

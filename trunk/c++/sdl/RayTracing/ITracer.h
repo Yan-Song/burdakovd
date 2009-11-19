@@ -1,9 +1,10 @@
 #ifndef ITRACER_H
 #define ITRACER_H
 
-#include "sdlapplication/Color.h"
+#include <sdlapplication/Color.h>
+#include <sdlapplication/Shared.h>
+#include "IEngine.h"
 #include "Ray.h"
-#include "sdlapplication/Shared.h"
 
 namespace RT
 {
@@ -11,7 +12,7 @@ namespace RT
 	{
 	public:
 		// вернуть цвет точки пересечения с лучом
-		virtual RealColor Trace() = 0;
+		virtual RealColor Trace(const IEngine* engine) = 0;
 
 		virtual ~ITracer() {}
 	};

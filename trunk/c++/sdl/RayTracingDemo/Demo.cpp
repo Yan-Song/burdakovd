@@ -1,20 +1,22 @@
-#include "Demo.h"
-#include "SDL.h"
-#include "Sphere.h"
-#include "Ray.h"
-#include "IntersectionResult.h"
 #include <iostream>
 #include <sstream>
-#include <Scene.h>
+#include <SDL.h>
+#include <sdlapplication/Affine.h>
 #include <CompoundObject.h>
-#include "sdlapplication/Affine.h"
-#include "Triangle.h"
-#include "Frustum.h"
-#include "SierpinskiPyramide.h"
-#include "Tetragon.h"
-#include "Texture.h"
-#include "Cube.h"
-#include "Material.h"
+#include <Cube.h>
+#include <Frustum.h>
+#include <IntersectionResult.h>
+#include <Light.h>
+#include <Material.h>
+#include <Plane.h>
+#include <Ray.h>
+#include <Scene.h>
+#include <SierpinskiPyramide.h>
+#include <Sphere.h>
+#include <Tetragon.h>
+#include <Texture.h>
+#include <Triangle.h>
+#include "Demo.h"
 
 // x - вправо
 // y - вверх
@@ -22,7 +24,7 @@
 
 RTDemoApplication::RTDemoApplication() : 
 	// Наблюдатель находится перед экраном на расстоянии 1000 пикселов
-	scene(new RT::Scene(Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2, -1000))),
+	scene(new RT::Scene(Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2 + 100, -1000))),
 	container(new RT::CompoundObject()),
 	Center(Vector3DByCoords(ScreenWidth / 2 + 0.1, 200.1, 400.1)),
 	Rendered(false), Dirty(false)
@@ -35,23 +37,32 @@ RTDemoApplication::RTDemoApplication() :
 
 	const double R = 300;
 
-	const RT::Material::SharedTexture tex(new RT::Texture("Textures/azeroth.bmp"));
+	const RT::Material::SharedTexture woodtex(new RT::Texture("Textures/wood.bmp"));
+	const RT::Material::SharedTexture smiletex(new RT::Texture("Textures/smile.bmp"));
 
-	RT::Material mat;
-	mat.SetTexture(tex, Vector2DByCoords(0, 0), Vector2DByCoords(tex->GetWidth() / 2.0 / Pi / R, 0), Vector2DByCoords(0, -tex->GetHeight() / Pi / R));
+	RT::Material woodmat;
+	woodmat.SetTexture(woodtex, Vector2DByCoords(0, 0), Vector2DByCoords(1, 0), Vector2DByCoords(0, 1));
+
+	RT::Material smilemat;
+	smilemat.SetTexture(smiletex, Vector2DByCoords(0, 0), Vector2DByCoords(1, 0), Vector2DByCoords(0, 1));
 
 	// наполняем контейнер чем-то
-	RT::CompoundObject::SharedObject t(
-		new RT::Sphere(Center, R, mat));
+	RT::CompoundObject::SharedObject c(new RT::Cube(Center, R, woodmat));
+	RT::CompoundObject::SharedObject p(new RT::Plane(Vector000, Vector3DByCoords(1, 0, 0), \
+		Vector3DByCoords(0, 0, 1), smilemat));
 
-	//t->Move(Center);
-	t->Rotate(Affine::X, Center, Pi /4);
-	//t->Rotate(Affine::Y, Center, Pi);
-
-	container->Add(t);
+	container->Add(c);
+	container->Add(p);
 
 	// добавляем его в сцену
 	scene->Add(container);
+
+	// добавить в сцену источник света
+	RT::Scene::SharedLight light(new RT::Light(Vector3DByCoords(-1000, 1000, -1000), static_cast<RealColor>(Palette::White)));
+	scene->AddLight(light);
+
+	// а также рассеянное освещение
+	scene->SetAmbient(static_cast<RealColor>(Palette::White) * 0.0000001);
 }
 
 class Callback : public RT::Scene::ICallback

@@ -169,6 +169,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Plane.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Ray.cpp"
 				>
 			</File>
@@ -219,11 +223,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IEngine.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IntersectionResult.h"
 				>
 			</File>
 			<File
 				RelativePath=".\ITracer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Light.h"
 				>
 			</File>
 			<File
@@ -236,6 +248,10 @@
 			</File>
 			<File
 				RelativePath=".\Object3D.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Plane.h"
 				>
 			</File>
 			<File
