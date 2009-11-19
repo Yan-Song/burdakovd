@@ -10,7 +10,7 @@ namespace RT
 	class Frustum : public CompoundObject
 	{
 	private:
-		shared_ptr<Sphere> sphere; // Ограничивающая сфера
+		CompoundObject::SharedObject sphere; // Ограничивающая сфера
 		bool has_sphere;
 
 	public:

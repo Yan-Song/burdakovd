@@ -1,9 +1,8 @@
 #include "Timer.h"
 #include "SDL.h"
 
-Timer::Timer(void)
+Timer::Timer(void) : startTicks(SDL_GetTicks())
 {
-	Reset();
 }
 
 void Timer::Reset(void)
@@ -13,11 +12,10 @@ void Timer::Reset(void)
 
 Timer::~Timer(void)
 {
-
 }
 
 double Timer::GetTime() const
 {
-	return static_cast<double>(SDL_GetTicks() - startTicks) * 1e-3;
+	return static_cast<double>(SDL_GetTicks() - startTicks) * 0.001;
 }
 

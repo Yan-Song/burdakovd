@@ -11,7 +11,7 @@ namespace RT
 	class SierpinskiPyramide : public CompoundObject
 	{
 	private:
-		shared_ptr<Sphere> sphere;
+		CompoundObject::SharedObject sphere;
 
 	public:
 		SierpinskiPyramide(const Point3D& center, const double edgeLength, const int iterations, const Material& material);

@@ -14,9 +14,11 @@ class GenericGraphObject
 {
 public:
 	typedef GenericVector<double, Dimensions> Vector;
-
 	// центр этого объекта относительно центра родительского
 	Vector Center;
+
+	GenericGraphObject() :
+		Center(Vector()) {}
 
 	// параллельный перенос
 	inline void Move(const Vector& v)

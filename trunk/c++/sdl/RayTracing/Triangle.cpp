@@ -10,7 +10,7 @@
 #include "Material.h"
 
 RT::Triangle::Triangle(const Point3D &pa, const Point3D &pb, const Point3D &pc, const Material &_material) :
-RTObject(Vector000, _material), A(pa), B(pb), C(pc)
+RTObject(Vector000, _material), QR(), R(), A(pa), B(pb), C(pc)
 {
 	const double a = B.Distance(C);
 	const double b = A.Distance(C);
@@ -48,11 +48,11 @@ bool RT::Triangle::PossibleIntersection(const RT::Ray& ray) const
 class TriangleTracer : public RT::ITracer
 {
 private:
+	Point3D A, B, C;
 	Point3D point;
 	RT::NormalizedVector3D n;
 	RT::Material material;
 	RT::Ray ray;
-	Point3D A, B, C;
 
 public:
 	TriangleTracer(const Point3D& a, const Point3D& b, const Point3D& c, const Point3D& _p, const RT::NormalizedVector3D& _n,

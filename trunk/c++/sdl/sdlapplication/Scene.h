@@ -8,6 +8,7 @@
 #include "Color.h"
 #include <vector>
 #include <map>
+#include "sdlapplication/Shared.h"
 
 class Scene2D : public CompoundObject2D
 {
@@ -27,16 +28,24 @@ public:
 
 private:
 	const ScreenPoint ScreenSize;
+
 	SDLApplication* const app;
-	double* WBuffer;
-	Color* PixelBuffer;
-	double* CleanWBuffer;
-	Color* CleanPixelBuffer;
-	friend void DrawPixel(const int, const int, const double, const Color&, Scene3D*);
+	size_t n;
+	std::vector<double> WBuffer;
+	std::vector<double> CleanWBuffer;
+	std::vector<Color> PixelBuffer;
+	std::vector<Color> CleanPixelBuffer;
 	std::vector<std::pair<Point3D, double> > Light;
 
 	void ClearBuffers();
 	void DrawPixelBuffer();
+
+	Scene3D(const Scene3D& );
+	Scene3D operator=(const Scene3D& );
+
+	class Util;
+	friend class Util;
+
 
 public:
 	Vector3D SpectatorPosition;

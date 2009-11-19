@@ -53,6 +53,6 @@ namespace Affine
 
 	// Матрица вращения вокруг заданной оси
 	GenericMatrix<4> Rotate3D(const Axe axe, const double phi, const Vector3D& center = Vector000);
-};
+}
 
 #endif

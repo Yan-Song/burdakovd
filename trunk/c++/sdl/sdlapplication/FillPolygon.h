@@ -9,8 +9,10 @@
 #include <list>
 #include "Utils.h"
 
-namespace __FillPolygonUtils
+namespace
 {
+	typedef std::pair<size_t, size_t> pss;
+
 	inline bool YComparatorByValue(const ScreenPoint& a, const ScreenPoint& b)
 	{
 		return a[1] < b[1];
@@ -24,7 +26,7 @@ namespace __FillPolygonUtils
 
 		YComparatorByIndex(const std::vector<ScreenPoint>& _vertices) : vertices(_vertices) {};
 
-		inline bool operator ()(const int i, const int j) const
+		inline bool operator ()(size_t i, size_t j) const
 		{
 			return vertices[i][1] < vertices[j][1];
 		}
@@ -39,7 +41,7 @@ namespace __FillPolygonUtils
 
 		SARRemovePredicate(const std::vector<ScreenPoint>& _vertices, const int _currentY) : vertices(_vertices), currentY(_currentY) {};
 
-		inline bool operator ()(const pii& edge) const
+		inline bool operator ()(const pss& edge) const
 		{
 			// то что не пропустили какое-то ребро раньше
 			assert(vertices[edge.second][1] >= currentY);
@@ -56,7 +58,7 @@ namespace __FillPolygonUtils
 
 		Intersector(const std::vector<ScreenPoint>& _vertices, const int _currentY) : vertices(_vertices), currentY(_currentY) {};
 
-		inline int operator ()(const pii& edge) const
+		inline int operator ()(const pss& edge) const
 		{
 			const ScreenPoint& first = vertices[edge.first];
 			const ScreenPoint& second = vertices[edge.second];
@@ -84,30 +86,30 @@ namespace __FillPolygonUtils
 template<class DrawPixelFunction>
 void FillPolygon(const std::vector<ScreenPoint>& vertices, const ScreenPoint& ScreenSize, const DrawPixelFunction& DrawPixel)
 {
-	int n = vertices.size();
+	size_t n = vertices.size();
 	
 	if (n == 0) return;
 
 	// 1) нижняя граница для y
-	int minY = (*std::min_element(vertices.begin(), vertices.end(), __FillPolygonUtils::YComparatorByValue))[1];
+	int minY = (*std::min_element(vertices.begin(), vertices.end(), YComparatorByValue))[1];
 
 	// 2) верхняя граница для y
-	int maxY = (*std::max_element(vertices.begin(), vertices.end(), __FillPolygonUtils::YComparatorByValue))[1];
+	int maxY = (*std::max_element(vertices.begin(), vertices.end(), YComparatorByValue))[1];
 
 	// если мы дошли до последней строки экрана, то дальше рисовать нет смысла
 	maxY = std::min(maxY, ScreenSize[1]);
 
 	// 3) создаём вектор номеров вершин, отсортированный по ординате
-	std::vector<int> ys(n);
-	for(int i = 0; i < n; ++i)
+	std::vector<size_t> ys(n);
+	for(size_t i = 0; i < n; ++i)
 		ys[i] = i;
 
-	std::sort(ALL(ys), __FillPolygonUtils::YComparatorByIndex(vertices));
+	std::sort(ALL(ys), YComparatorByIndex(vertices));
 
 	// 4) начинаем с минимального y, с пустым САР - списком активных ребер
 	// 5) далее закрашиваем в цикле пока не дойдём до последней строки
-	std::list<pii> SAR;
-	std::vector<int>::const_iterator nextVertice = ys.begin();
+	std::list<pss> SAR;
+	std::vector<size_t>::const_iterator nextVertice = ys.begin();
 
 	for(int currentY = minY; currentY <= maxY; )
 	{
@@ -117,23 +119,23 @@ void FillPolygon(const std::vector<ScreenPoint>& vertices, const ScreenPoint& Sc
 		// если они горизонтальные, то не добавлять а просто нарисовать
 		while(nextVertice != ys.end() && vertices[*nextVertice][1] == currentY) // ищем вершины на этой строке
 		{
-			int cur = *nextVertice;
+			size_t cur = *nextVertice;
 			++nextVertice;
-			int prev = (cur + n - 1) % n;
-			int next = (cur + 1) % n;
+			size_t prev = (cur + n - 1) % n;
+			size_t next = (cur + 1) % n;
 			
 			if(vertices[prev][1] > currentY)
-				SAR.push_back(pii(cur, prev));
+				SAR.push_back(pss(cur, prev));
 			else if(vertices[prev][1] == currentY)
-				__FillPolygonUtils::DrawPixels(vertices[prev][0], vertices[cur][0], currentY, ScreenSize, DrawPixel);
+				DrawPixels(vertices[prev][0], vertices[cur][0], currentY, ScreenSize, DrawPixel);
 
 			if(vertices[next][1] > currentY)
-				SAR.push_back(pii(cur, next));
+				SAR.push_back(pss(cur, next));
 			// здесь нет нужды проверять на равенство, т.к. все пары точек с равным y уже прорисованы выше
 		}
 
 		// 7) удалить из САР ребра, заканчивающиеся на этой строке
-		SAR.remove_if(__FillPolygonUtils::SARRemovePredicate(vertices, currentY));
+		SAR.remove_if(SARRemovePredicate(vertices, currentY));
 
 		assert(SAR.size() % 2 == 0); // каждую строку пересекает четное число ребер
 
@@ -159,14 +161,14 @@ void FillPolygon(const std::vector<ScreenPoint>& vertices, const ScreenPoint& Sc
 			{
 				std::vector<int> intersections(SAR.size());
 
-				std::transform(SAR.begin(), SAR.end(), intersections.begin(), __FillPolygonUtils::Intersector(vertices, currentY));
+				std::transform(SAR.begin(), SAR.end(), intersections.begin(), Intersector(vertices, currentY));
 
 				std::sort(intersections.begin(), intersections.end());
 
 				assert(intersections.size() % 2 == 0);
 
 				for(unsigned int i = 0; i < intersections.size(); i += 2)
-					__FillPolygonUtils::DrawPixels(intersections[i], intersections[i+1], currentY, ScreenSize, DrawPixel);
+					DrawPixels(intersections[i], intersections[i+1], currentY, ScreenSize, DrawPixel);
 			}
 
 			--currentY; // возвращаемся к последней закрашенной строке

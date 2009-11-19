@@ -10,7 +10,8 @@
 #include "Sphere.h"
 #include "Material.h"
 
-RT::Frustum::Frustum(const Vector3D &CenterBottom, const double RBottom, const double RTop, const double H, const int count, const Material &material)
+RT::Frustum::Frustum(const Vector3D &CenterBottom, const double RBottom, const double RTop, const double H, const int count, const Material &material) :
+	sphere(), has_sphere(false)
 {
 	assert(count > 1);
 	assert(RTop >= 0);
@@ -67,7 +68,7 @@ RT::Frustum::Frustum(const Vector3D &CenterBottom, const double RBottom, const d
 
 		const double R = sqrt(sqr(h) + sqr(RBottom));
 
-		sphere = shared_ptr<RT::Sphere>(new Sphere(Center, R, RT::Material()));
+		sphere = CompoundObject::SharedObject(new Sphere(Center, R, RT::Material()));
 
 		has_sphere = true;
 	}

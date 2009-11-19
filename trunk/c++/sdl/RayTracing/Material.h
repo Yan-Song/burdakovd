@@ -2,7 +2,7 @@
 #define MATERIAL_H
 
 #include "Texture.h"
-#include "Shared.h"
+#include "sdlapplication/Shared.h"
 #include "sdlapplication/Vector.h"
 #include "sdlapplication/Color.h"
 #include "NormalizedVector3D.h"
@@ -16,7 +16,7 @@ namespace RT
 	class Material
 	{
 	public:
-		typedef shared_ptr<const RT::Texture> SharedTexture;
+		typedef Shared::shared_ptr<const RT::Texture> SharedTexture;
 
 	private:
 		bool has_texture;

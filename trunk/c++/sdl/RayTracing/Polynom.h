@@ -11,6 +11,7 @@ namespace RT
 	{
 	private:
 		std::vector<double> coefficients;
+
 		friend const Polynom& operator /=(Polynom& a, const double b);
 		friend Polynom operator /(const Polynom& a, const double b);
 		friend const Polynom& operator *=(Polynom& a, const Polynom& b);
@@ -22,35 +23,29 @@ namespace RT
 		friend Polynom operator +(const Polynom& a, const Polynom& b);
 
 	public:
-		Polynom(const double k, const int degree)
+		Polynom(const double k, const unsigned int degree) : coefficients(degree + 1, 0)
 		{
-			assert(degree >= 0);
-			coefficients.resize(degree + 1);
 			coefficients[degree] = k;
 		}
 
-		Polynom(const double c = 0)
+		Polynom(const double c = 0) : coefficients(1, c)
 		{
-			coefficients.resize(1);
-			coefficients[0] = c;
 		}
 
 		// степень полинома (оценка сверху, так как старшие коэффициенты могут быть равны нулю)
-		inline int Degree() const
+		inline unsigned int Degree() const
 		{
 			return coefficients.size() - 1;
 		}
 
-		inline double GetCoefficient(const int degree) const
+		inline double GetCoefficient(const unsigned int degree) const
 		{
-			assert(degree >= 0);
-
 			return degree <= Degree() ? coefficients[degree] : 0.0;
 		}
 
-		inline void SetCoefficient(const int degree, const double value)
+		inline void SetCoefficient(const unsigned int degree, const double value)
 		{
-			assert(degree >= 0 && degree <= Degree());
+			assert(degree <= Degree());
 
 			coefficients[degree] = value;
 		}
@@ -59,8 +54,8 @@ namespace RT
 		{
 			double ans = 0;
 
-			for(int i = coefficients.size() - 1; i >= 0; --i)
-				ans = ans * value + coefficients[i];
+			for(std::vector<double>::const_reverse_iterator it = coefficients.rbegin(); it != coefficients.rend(); ++it)
+				ans = ans * value + *it;
 
 			return ans;
 		}
@@ -69,43 +64,37 @@ namespace RT
 
 	inline Polynom operator +(const Polynom& a, const Polynom& b)
 	{
-		const int an = a.Degree() + 1, bn = b.Degree() + 1;
-		const int n = std::max(an, bn);
+		const unsigned int an = a.Degree() + 1, bn = b.Degree() + 1;
+		const unsigned int n = std::max(an, bn);
 
 		Polynom ans(0, n - 1);
 		
-		for(int i = 0; i < n; ++i)
-			ans.coefficients[i] =
-			((i < an) ? a.coefficients[i] : 0)
-			+
-			((i < bn) ? b.coefficients[i] : 0);
+		for(unsigned int i = 0; i < n; ++i)
+			ans.coefficients[i] = a.GetCoefficient(i) + b.GetCoefficient(i);
 		
 		return ans;
 	}
 
 	inline Polynom operator -(const Polynom& a, const Polynom& b)
 	{
-		const int an = a.Degree() + 1, bn = b.Degree() + 1;
-		const int n = std::max(an, bn);
+		const unsigned int an = a.Degree() + 1, bn = b.Degree() + 1;
+		const unsigned int n = std::max(an, bn);
 
 		Polynom ans(0, n - 1);
 		
-		for(int i = 0; i < n; ++i)
-			ans.coefficients[i] =
-			((i < an) ? a.coefficients[i] : 0)
-			-
-			((i < bn) ? b.coefficients[i] : 0);
+		for(unsigned int i = 0; i < n; ++i)
+			ans.coefficients[i] = a.GetCoefficient(i) - b.GetCoefficient(i);
 		
 		return ans;
 	}
 
 	inline Polynom operator -(const Polynom& a)
 	{
-		const int n = a.Degree() + 1;
+		const unsigned int n = a.Degree() + 1;
 
 		Polynom ans(0, n - 1);
 		
-		for(int i = 0; i < n; ++i)
+		for(unsigned int i = 0; i < n; ++i)
 			ans.coefficients[i] = -a.coefficients[i];
 
 		return ans;
@@ -123,13 +112,13 @@ namespace RT
 
 	inline Polynom operator *(const Polynom& a, const Polynom& b)
 	{
-		const int an = a.Degree() + 1, bn = b.Degree() + 1;
-		const int degree = a.Degree() + b.Degree();
+		const unsigned int an = a.Degree() + 1, bn = b.Degree() + 1;
+		const unsigned int degree = a.Degree() + b.Degree();
 
 		Polynom ans(0, degree);
 
-		for(int i = 0; i < an; ++i)
-			for(int j = 0; j < bn; ++j)
+		for(unsigned int i = 0; i < an; ++i)
+			for(unsigned int j = 0; j < bn; ++j)
 				ans.coefficients[i + j] += a.coefficients[i] * b.coefficients[j];
 
 		return ans;
@@ -142,11 +131,11 @@ namespace RT
 
 	inline Polynom operator /(const Polynom& a, const double b)
 	{
-		const int n = a.Degree() + 1;
+		const unsigned int n = a.Degree() + 1;
 
 		Polynom ans(0, n - 1);
 
-		for(int i = 0; i < n; ++i)
+		for(unsigned int i = 0; i < n; ++i)
 			ans.coefficients[i] = a.coefficients[i] / b;
 
 		return ans;

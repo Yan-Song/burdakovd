@@ -12,7 +12,7 @@
 // #include <boost/shared_ptr.hpp>
 // using boost::shared_ptr
 
-namespace RT
+namespace Shared
 {
 	using std::tr1::shared_ptr;
 }

@@ -5,17 +5,15 @@
 #include "sdlapplication/Vector.h"
 #include "Scene.h"
 #include "CompoundObject.h"
-#include "Shared.h"
+#include "sdlapplication/Shared.h"
 
 class RTDemoApplication : public SDLApplication
 {
 private:
-	bool Dirty;
-	bool Rendered;
-	const RT::shared_ptr<RT::Scene> scene;
-	const RT::shared_ptr<RT::CompoundObject> container;
+	const Shared::shared_ptr<RT::Scene> scene;
+	const Shared::shared_ptr<RT::CompoundObject> container;
 	Point3D Center;
-	int Quality;
+	bool Rendered, Dirty;
 
 protected:
 	static const int ScreenWidth = 800, ScreenHeight = 600;
@@ -31,7 +29,7 @@ protected:
 public:
 	RTDemoApplication();
 
-	bool Callback(const double percent, const bool AllowBreak);
+	bool Callback(const double percent, const bool AllowBreak, const unsigned int Quality);
 
 	virtual ~RTDemoApplication();
 	

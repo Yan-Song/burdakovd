@@ -38,7 +38,7 @@ public:
 	}
 
 	// умножение всех компонент цвета на скаляр
-    inline GenericColor<I> operator *(const I k) const
+	inline GenericColor<I> operator *(const I k) const
 	{
 	   return GenericColor<I>(R * k, G * k, B * k);
 	}
@@ -92,7 +92,7 @@ namespace Palette
 				Yellow(0xffff00),
 				Gray(0x808080),
 				Orange(0xff7f00);
-};
+}
 
 template<typename I>
 std::ostream& operator <<(std::ostream& os, const GenericColor<I>& color)

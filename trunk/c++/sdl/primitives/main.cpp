@@ -1,9 +1,7 @@
 #include "SDLApplication.h"
 #include "primitives.h"
 
-#pragma comment(linker, "/STACK:167772160")
-
-int main(int argc, char *argv[]) // argc/argv важны, без них не компилится
+int main(int, char **)
 {
 	PrimitivesApplication app;
 	app.Run();

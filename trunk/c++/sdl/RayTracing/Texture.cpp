@@ -24,33 +24,34 @@ RealColor RT::Texture::GetPixel(const int _x, const int _y) const
 	   case 1:  // Assuming 8-bpp 
 	   { 
 		 Uint8 *bufp; 
-		 bufp = (Uint8 *)surface->pixels + y * surface->pitch + x;
+		 bufp = static_cast<Uint8*>(surface->pixels) + y * surface->pitch + x;
 		 color = *bufp; 
 	   } break; 
 	   case 2: // Probably 15-bpp or 16-bpp 
 	   { 
 		 Uint16 *bufp; 
-		 bufp = (Uint16 *)surface->pixels + y * surface->pitch / 2 + x;
+		 bufp = static_cast<Uint16*>(surface->pixels) + y * surface->pitch / 2 + x;
 		 color = *bufp;
 	   } break; 
 	   case 3: // Slow 24-bpp mode, usually not used 
 	   { 
 		 Uint8 *bufp; 
-		 bufp = (Uint8 *)surface->pixels + y * surface->pitch + x * 3; 
+		 bufp = static_cast<Uint8*>(surface->pixels) + y * surface->pitch + x * 3;
+
 		 #if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
 		 { 
-		   color = bufp[0] + (bufp[1] << 8) + (bufp[2] << 16);
+		   color = static_cast<Uint32>(bufp[0]) + (static_cast<Uint32>(bufp[1]) << 8) + (static_cast<Uint32>(bufp[2]) << 16);
 		 }
 		 #else
 		 { 
-		   color = bufp[2] + (bufp[1] << 8) + (bufp[0] << 16);
+		   color = static_cast<Uint32>(bufp[2]) + (static_cast<Uint32>(bufp[1]) << 8) + (static_cast<Uint32>(bufp[0]) << 16);
 		 } 
 		#endif
 	   } break; 
 	   case 4: // Probably 32-bpp 
 	   { 
 		 Uint32 *bufp; 
-		 bufp = (Uint32 *)surface->pixels + y * surface->pitch / 4 + x;
+		 bufp = static_cast<Uint32*>(surface->pixels) + y * surface->pitch / 4 + x;
 
 		 color = *bufp;
 	   } break;

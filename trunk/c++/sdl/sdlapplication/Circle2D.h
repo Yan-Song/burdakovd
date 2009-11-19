@@ -15,8 +15,6 @@ public:
 	double R;
 	Color color;
 
-	Circle2D(void) {};
-
 	Circle2D(const double r, const Color& c = Palette::White) :
 		R(r), color(c)
 		{
