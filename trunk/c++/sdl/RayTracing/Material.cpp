@@ -2,7 +2,7 @@
 #include <cmath>
 #include <sdlapplication/Utils.h>
 #include "Material.h"
-
+ 
 RT::Material::Material(const RealColor& _color) : has_texture(false), base(), dx(), dy(), Texture(), color(_color)
 {
 }
@@ -40,7 +40,7 @@ RealColor RT::Material::GetPixel(const Point2D& MaterialPoint) const
 	{
 		const Point2D tPoint = TexturePoint(MaterialPoint);
 	
-		return Texture->GetPixel(round(tPoint[0]), round(tPoint[1]));
+		return Texture->GetPixel(iround(tPoint[0]), iround(tPoint[1]));
 	}
 	else
 	{

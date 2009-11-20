@@ -45,7 +45,7 @@ inline void __assert(const bool x, const std::string& text)
 		throw AssertionException(text);
 }
 
-inline int round(const double num) {
+inline int iround(const double num) {
     return static_cast<int>((num > 0.0) ? floor(num + 0.5) : ceil(num - 0.5));
 }
 

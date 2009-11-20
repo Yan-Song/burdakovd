@@ -1,0 +1,7 @@
+include_directories(${SDLApplication_SOURCE_DIR}/sdlapplication)
+
+set(SRC primitives main)
+
+add_executable(primitives ${SRC})
+
+target_link_libraries(primitives sdlapplication)
