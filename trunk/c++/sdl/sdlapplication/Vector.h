@@ -1,8 +1,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 #include <stdexcept>
 #include "Utils.h"
 
@@ -12,15 +12,15 @@ class GenericVector
 protected:
 	typedef I dataArray[N];
 	dataArray data;
-	
+
 public:
 	static const int Dimensions = N;
 
-	// конструктор по умолчанию - нули
-	inline GenericVector()
+	// В конструкторе по умолчанию вектор больше НЕ инициализируется нулями (затратно)
+	// Раньше инициализировался. Надеюсь я нигде этот факт не использовал=)
+	// Если нужно инициализировать нулями то есть константы Vector00, Vector000
+	GenericVector()
 	{
-		for(int i = 0; i < N; ++i)
-			data[i] = static_cast<I>(0);
 	}
 
 	inline GenericVector(const dataArray& dt)
@@ -29,34 +29,33 @@ public:
 			data[i] = dt[i];
 	}
 
-	inline GenericVector(const GenericVector<I, N>& other)
-	{
-		for(int i = 0; i < N; ++i)
-			data[i] = other[i];
-	}
-
 	inline I& operator [](const int index)
 	{
+		#ifndef NDEBUG
 		if(index < 0 || index >= N)
 			throw std::out_of_range("Index out of range in I& Vector::operator[]");
-		else
-			return data[index];
+		#endif
+		return data[index];
 	}
 
 	inline const I& operator [](const int index) const
 	{
+		#ifndef NDEBUG
 		if(index < 0 || index >= N)
 			throw std::out_of_range("Index out of range in const I& Vector::operator[]");
-		else
-			return data[index];
+		#endif
+
+		return data[index];
 	}
 
 	template<typename J>
 	inline operator GenericVector<J, N>() const
 	{
 		GenericVector<J, N> ans;
+
 		for(int i = 0; i < N; ++i)
 			ans[i] = static_cast<J>(data[i]);
+
 		return ans;
 	}
 
@@ -121,10 +120,10 @@ const Vector3D Vector111 = Vector3DByCoords(1.0, 1.0, 1.0);
 template<typename I, int N>
 inline GenericVector<I, N> operator +(const GenericVector<I, N>& first, const GenericVector<I, N>& other)
 {
-	GenericVector<I, N> ans;
+	GenericVector<I, N> ans(first);
 
 	for(int i = 0; i < N; ++i)
-		ans[i] = first[i] + other[i];
+		ans[i] += other[i];
 
 	return ans;
 }
@@ -132,10 +131,10 @@ inline GenericVector<I, N> operator +(const GenericVector<I, N>& first, const Ge
 template<typename I, int N>
 inline GenericVector<I, N> operator -(const GenericVector<I, N>& first, const GenericVector<I, N>& other)
 {
-	GenericVector<I, N> ans;
+	GenericVector<I, N> ans(first);
 
 	for(int i = 0; i < N; ++i)
-		ans[i] = first[i] - other[i];
+		ans[i] -= other[i];
 
 	return ans;
 }
@@ -161,10 +160,10 @@ inline GenericVector<I, N>& operator -=(GenericVector<I, N>& first, const Generi
 template<typename I, int N>
 inline GenericVector<I, N> operator *(const GenericVector<I, N>& first, const I k)
 {
-	GenericVector<I, N> ans;
+	GenericVector<I, N> ans(first);
 
 	for(int i = 0; i < N; ++i)
-		ans[i] = first[i] * k;
+		ans[i] *= k;
 
 	return ans;
 }
@@ -178,10 +177,10 @@ inline GenericVector<I, N> operator *(const I k, const GenericVector<I, N>& v)
 template<typename I, int N>
 inline GenericVector<I, N> operator /(const GenericVector<I, N>& first, const I k)
 {
-	GenericVector<I, N> ans;
+	GenericVector<I, N> ans(first);
 
 	for(int i = 0; i < N; ++i)
-		ans[i] = first[i] / k;
+		ans[i] /= k;
 
 	return ans;
 }
@@ -211,7 +210,7 @@ inline GenericVector<I, N> operator -(const GenericVector<I, N>& first)
 	GenericVector<I, N> ans;
 
 	for(int i = 0; i < N; ++i)
-		ans[i] = - first[i];
+		ans[i] = -first[i];
 
 	return ans;
 }
@@ -220,10 +219,10 @@ inline GenericVector<I, N> operator -(const GenericVector<I, N>& first)
 template<typename I, int N>
 inline GenericVector<I, N> zipWithMultiplication(const GenericVector<I, N>& A, const GenericVector<I, N>& B)
 {
-	GenericVector<I, N> C;
+	GenericVector<I, N> C(A);
 
 	for(int i = 0; i < N; ++i)
-		C[i] = A[i] * B[i];
+		C[i] *= B[i];
 
 	return C;
 }
@@ -245,7 +244,7 @@ template<typename I>
 inline GenericVector<I, 3> operator ^(const GenericVector<I, 3>& A, const GenericVector<I, 3>& B)
 {
 	GenericVector<I, 3> ans;
-	
+
 	ans[0] = A[1] * B[2] - A[2] * B[1];
 	ans[1] = A[2] * B[0] - A[0] * B[2];
 	ans[2] = A[0] * B[1] - A[1] * B[0];
@@ -261,7 +260,7 @@ inline I VectorMultiplication2D(const GenericVector<I, 2>& A, const GenericVecto
 {
 	GenericVector<I, 3> a;
 	GenericVector<I, 3> b;
-	
+
 	for(int i = 0; i < 2; ++i)
 	{
 		a[i] = A[i];

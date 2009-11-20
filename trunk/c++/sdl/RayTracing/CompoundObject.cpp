@@ -1,8 +1,7 @@
+#include <algorithm>
+#include <sdlapplication/Vector.h>
 #include "CompoundObject.h"
 #include "IntersectionResult.h"
-#include <algorithm>
-#include <list>
-#include "sdlapplication/Vector.h"
 
 void RT::CompoundObject::Add(const RT::CompoundObject::SharedObject& object)
 {
@@ -11,34 +10,38 @@ void RT::CompoundObject::Add(const RT::CompoundObject::SharedObject& object)
 
 RT::MaybeIntersection RT::CompoundObject::FindIntersection(const RT::Ray &ray) const
 {
-	typedef std::list<RT::Intersection> IntersectionList;
+	bool found = false;
+	double minqdistance = 1e30;
+	Intersection ans(Vector000, RT::SharedTracer());
 
-	// составляем список пересечений дочерних объектов с лучом
-	IntersectionList intersections;
-	
+	// обходим все объекты, и находим ближайшее пересечение
 	for(ObjectList::const_iterator it = objects.begin(); it != objects.end(); ++it)
 		if((*it)->PossibleIntersection(ray))
 		{
 			RT::MaybeIntersection result = (*it)->FindIntersection(ray);
-			
+
 			if(result.Exists)
-				intersections.push_back(result);
+			{
+				RT::Intersection intersection(result);
+
+				const double qdistance = ray.Start.QDistance(intersection.Point);
+
+				if(qdistance < minqdistance)
+				{
+					minqdistance = qdistance;
+					ans = intersection;
+					found = true;
+				}
+			}
 		}
 
-	// если список пуст, то пересечения нет, иначе выбираем ближайшее
-	if(intersections.empty())
+	if(found)
 	{
-		return RT::NoIntersection();
+		return ans;
 	}
 	else
 	{
-		RT::Intersection ans = *intersections.begin();
-
-		for(IntersectionList::const_iterator it = intersections.begin(); it != intersections.end(); ++it)
-			if(ray.Start.Distance(it->Point) < ray.Start.Distance(ans.Point))
-				ans = *it;
-
-		return ans;
+		return NoIntersection();
 	}
 }
 

@@ -28,7 +28,7 @@ RTObject(Vector000, _material), QR(), R(), A(pa), B(pb), C(pc)
 	{
 		R = a * b * c / 4 / S;
 		QR = sqr(R);
-		
+
 		const double alpha_a = sqr(a) / 8 / sqr(S) * ((A - B) * (A - C));
 		const double alpha_b = sqr(b) / 8 / sqr(S) * ((B - A) * (B - C));
 		const double alpha_c = sqr(c) / 8 / sqr(S) * ((C - A) * (C - B));
@@ -46,7 +46,7 @@ bool RT::Triangle::PossibleIntersection(const RT::Ray& ray) const
 	return (qdistance <= QR) && ((v * SC > 0) || (Center.QDistance(ray.Start) < QR));
 }
 
-class TriangleTracer : public RT::ITracer
+class RT::Triangle::Tracer : public RT::ITracer
 {
 private:
 	Point3D A, B, C;
@@ -56,7 +56,7 @@ private:
 	RT::Ray ray;
 
 public:
-	TriangleTracer(const Point3D& a, const Point3D& b, const Point3D& c, const Point3D& _p, const RT::NormalizedVector3D& _n,
+	Tracer(const Point3D& a, const Point3D& b, const Point3D& c, const Point3D& _p, const RT::NormalizedVector3D& _n,
 		const RT::Material& _material, const RT::Ray& _ray) :
 	A(a), B(b), C(c),
 	  point(_p), n(_n), material(_material), ray(_ray)
@@ -86,7 +86,7 @@ RT::MaybeIntersection RT::Triangle::FindIntersection(const RT::Ray& ray) const
 	const double distance = (A - ray.Start) * n;
 
 	const double ddistance_dt = v * n;
-	
+
 	if(ddistance_dt == 0)
 		return RT::NoIntersection();
 
@@ -95,7 +95,7 @@ RT::MaybeIntersection RT::Triangle::FindIntersection(const RT::Ray& ray) const
 	if(t > 0)
 	{
 		const Point3D p = ray.Start + t * v;
-		
+
 		const Vector3D n = (B - A) ^ (C - A);
 
 		if( ((B - p) ^ (C - p)) * n > 0
@@ -105,14 +105,14 @@ RT::MaybeIntersection RT::Triangle::FindIntersection(const RT::Ray& ray) const
 			((B - A) ^ (p - A)) * n > 0
 			)
 		{
-			return RT::Intersection(p, RT::SharedTracer(new TriangleTracer(A, B, C, p, n, material, ray)));
+			return RT::Intersection(p, RT::SharedTracer(new Tracer(A, B, C, p, n, material, ray)));
 		}
 		else
 		{
 			return RT::NoIntersection();
 		}
 
-		
+
 	}
 	else
 		return RT::NoIntersection();
