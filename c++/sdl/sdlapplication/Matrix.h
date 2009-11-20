@@ -23,8 +23,8 @@ private:
 	friend GenericMatrix<M> operator *(const GenericMatrix<M>&, const GenericMatrix<M>&);
 	template<int M>
 	friend GenericVector<double, M> operator *(const GenericMatrix<M>&, const GenericVector<double, M>&);
-    
-public:
+
+private:
 	// экземпляры этого класса содержат ссылку на матрицу,
 	// поэтому ими нельзя пользоваться после того как матрица будет удалена, но хз как это запретить
 	class RowAccessor
@@ -73,14 +73,18 @@ public:
 	// конструктор по умолчанию, матрица, заполненная нулями
     inline GenericMatrix()
 	{
-		mset(A, 0);
+		for(int i = 0; i < N; ++i)
+			for(int j = 0; j < N; ++j)
+				A[i][j] = 0.0;
 	}
 
 	// матрица, с заданным значением на диагонали, и нулями в остальных клетках
     inline GenericMatrix(const Element& m)
     {
-		mset(A, 0);
- 
+		for(int i = 0; i < N; ++i)
+			for(int j = 0; j < N; ++j)
+				A[i][j] = 0.0;
+
 		for(int i = 0; i < N; ++i)
 			A[i][i] = m;
     }

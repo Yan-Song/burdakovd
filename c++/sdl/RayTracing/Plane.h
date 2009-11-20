@@ -12,6 +12,7 @@ namespace RT
 	class Plane : public RTObject
 	{
 	private:
+		class Tracer;
 		Vector3D du;
 		Vector3D dv;
 

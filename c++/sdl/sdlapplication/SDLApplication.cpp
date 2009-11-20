@@ -9,10 +9,10 @@
 
 SDLApplication::SDLApplication() :
 	Screen(NULL), frames(0), dt(0.0),
-	KeyState(NULL), Running(false), 
-	startTime(time(NULL)), _locked(false), 
+	KeyState(NULL), Running(false),
+	startTime(time(NULL)), _locked(false),
 	lastTime(),
-	stats(), timer()	
+	stats(), timer()
 {
 	srand(static_cast<unsigned int>(startTime));
 	std::cout<<"Random number generator initialized"<<std::endl;
@@ -23,7 +23,7 @@ void SDLApplication::UpdateStats()
 	double ctime = GetTime();
 	dt = ctime - lastTime;
 	lastTime = ctime;
-	
+
 	// добавляем статистику по текущему кадру
 	stats.push_back(FrameInfo(ctime, dt));
 
@@ -40,7 +40,7 @@ int SDLApplication::dtAvg() const
 	if(!stats.empty())
 	{
 		double sum = 0;
-		
+
 		for(FrameInfoList::const_iterator it = stats.begin(); it != stats.end(); ++it)
 			sum += it->dt;
 
@@ -57,7 +57,7 @@ int SDLApplication::dtMax() const
 	if(!stats.empty())
 	{
 		double ans = 0;
-		
+
 		for(FrameInfoList::const_iterator it = stats.begin(); it != stats.end(); ++it)
 			if(it->dt > ans)
 				ans = it->dt;
@@ -75,7 +75,7 @@ int SDLApplication::dtMin() const
 	if(!stats.empty())
 	{
 		double ans = 86400; // сутки
-		
+
 		for(FrameInfoList::const_iterator it = stats.begin(); it != stats.end(); ++it)
 			if(it->dt < ans)
 				ans = it->dt;
@@ -197,43 +197,43 @@ void SDLApplication::RawDrawPixel(const int x, int y, const Color& rgb) const
 
 	Uint32 color = MapColor(rgb);
 
-	switch (Screen->format->BytesPerPixel){ 
-	   case 1:  // Assuming 8-bpp 
-	   { 
-		 Uint8 *bufp; 
+	switch (Screen->format->BytesPerPixel){
+	   case 1:  // Assuming 8-bpp
+	   {
+		 Uint8 *bufp;
 		 bufp = static_cast<Uint8*>(Screen->pixels) + y * Screen->pitch + x;
-		 *bufp = static_cast<Uint8>(color); 
-	   } break; 
-	   case 2: // Probably 15-bpp or 16-bpp 
-	   { 
-		 Uint16 *bufp; 
+		 *bufp = static_cast<Uint8>(color);
+	   } break;
+	   case 2: // Probably 15-bpp or 16-bpp
+	   {
+		 Uint16 *bufp;
 		 bufp = static_cast<Uint16*>(Screen->pixels) + y * Screen->pitch/2 + x;
 		 *bufp = static_cast<Uint16>(color);
-	   } break; 
-	   case 3: // Slow 24-bpp mode, usually not used 
-	   { 
-		 Uint8 *bufp; 
-		 bufp = static_cast<Uint8*>(Screen->pixels) + y * Screen->pitch + x * 3; 
+	   } break;
+	   case 3: // Slow 24-bpp mode, usually not used
+	   {
+		 Uint8 *bufp;
+		 bufp = static_cast<Uint8*>(Screen->pixels) + y * Screen->pitch + x * 3;
 		 #if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
-		 { 
-		   bufp[0] = static_cast<Uint8>(color); 
+		 {
+		   bufp[0] = static_cast<Uint8>(color);
 		   bufp[1] = static_cast<Uint8>(color >> 8);
-		   bufp[2] = static_cast<Uint8>(color >> 16); 
+		   bufp[2] = static_cast<Uint8>(color >> 16);
 		 }
 		 #else
-		 { 
-		   bufp[2] = color; 
-		   bufp[1] = color >> 8; 
-		   bufp[0] = color >> 16; 
-		 } 
+		 {
+		   bufp[2] = color;
+		   bufp[1] = color >> 8;
+		   bufp[0] = color >> 16;
+		 }
 		#endif
-	   } break; 
-	   case 4: // Probably 32-bpp 
-	   { 
-		 Uint32 *bufp; 
+	   } break;
+	   case 4: // Probably 32-bpp
+	   {
+		 Uint32 *bufp;
 		 bufp = static_cast<Uint32*>(Screen->pixels) + y * Screen->pitch/4 + x;
-		 *bufp = color; 
-	   } break; 
+		 *bufp = color;
+	   } break;
 	 }
 }
 
