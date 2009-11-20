@@ -1,17 +1,18 @@
-#include "Frustum.h"
-#include "RTObject.h"
-#include "sdlapplication/Utils.h"
-#include "sdlapplication/Vector.h"
-#include "sdlapplication/Color.h"
-#include "sdlapplication/SDLApplication.h"
+#include <sdlapplication/Color.h>
+#include <sdlapplication/SDLApplication.h>
+#include <sdlapplication/Utils.h>
+#include <sdlapplication/Vector.h>
 #include "CompoundObject.h"
-#include "Polynom.h"
-#include "Triangle.h"
-#include "Sphere.h"
+#include "Frustum.h"
+#include "Invisible.h"
 #include "Material.h"
+#include "Polynom.h"
+#include "RTObject.h"
+#include "Sphere.h"
+#include "Triangle.h"
 
-RT::Frustum::Frustum(const Vector3D &CenterBottom, const double RBottom, const double RTop, const double H, const int count, const Material &material) :
-	sphere(), has_sphere(false)
+RT::Frustum::Frustum(const Vector3D &CenterBottom, const double RBottom, const double RTop, const double H, const int count, \
+					 const Material &material) : sphere(), has_sphere(false)
 {
 	assert(count > 1);
 	assert(RTop >= 0);
@@ -70,6 +71,8 @@ RT::Frustum::Frustum(const Vector3D &CenterBottom, const double RBottom, const d
 
 		sphere = CompoundObject::SharedObject(new Sphere(Center, R, RT::Material()));
 
+		CompoundObject::Add(CompoundObject::SharedObject(new RT::Invisible(sphere)));
+
 		has_sphere = true;
 	}
 }
@@ -77,19 +80,12 @@ RT::Frustum::Frustum(const Vector3D &CenterBottom, const double RBottom, const d
 bool RT::Frustum::PossibleIntersection(const RT::Ray &ray) const
 {
 	if(has_sphere)
+	{
 		return sphere->PossibleIntersection(ray);
+	}
 	else
+	{
 		return CompoundObject::PossibleIntersection(ray);
+	}
 }
 
-void RT::Frustum::Move(const Vector3D &offset)
-{
-	CompoundObject::Move(offset);
-	sphere->Move(offset);
-}
-
-void RT::Frustum::Rotate(const Affine::Axe axe, const Point3D &base, const double phi)
-{
-	CompoundObject::Rotate(axe, base, phi);
-	sphere->Rotate(axe, base, phi);
-}

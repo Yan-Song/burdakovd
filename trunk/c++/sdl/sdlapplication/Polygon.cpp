@@ -1,15 +1,15 @@
-#include "Polygon.h"
-#include "SDLApplication.h"
-#include "Vector.h"
-#include "Affine.h"
-#include "Matrix.h"
-#include "FillPolygon.h"
 #include <vector>
-#include "Projection.h"
+#include "Affine.h"
 #include "CompoundObject.h"
+#include "FillPolygon.h"
+#include "Matrix.h"
+#include "Polygon.h"
+#include "Projection.h"
+#include "SDLApplication.h"
 #include "Triangle3D.h"
+#include "Vector.h"
 
-class PixelDrawer
+class Polygon2D::PixelDrawer
 {
 private:
 	const SDLApplication* const app;
@@ -26,10 +26,12 @@ public:
 	}
 };
 
-class PointsTransformer
+class Polygon2D::PointsTransformer
 {
 private:
 	const Vector2D offset;
+
+	PointsTransformer operator=(const PointsTransformer& );
 
 public:
 	PointsTransformer(const Vector2D& _offset) : offset(_offset) {};

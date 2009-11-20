@@ -1,16 +1,20 @@
 #ifndef POLYGON_H
 #define POLYGON_H
 
-#include "GraphObject.h"
-#include "Vector.h"
-#include "SDLApplication.h"
-#include "Color.h"
 #include <vector>
+#include "Color.h"
 #include "CompoundObject.h"
+#include "GraphObject.h"
+#include "SDLApplication.h"
+#include "Vector.h"
 
 class Polygon2D :
 	public GraphObject2D
 {
+private:
+	class PixelDrawer;
+	class PointsTransformer;
+
 public:
 	typedef std::vector<Point2D> Points;
 

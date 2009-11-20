@@ -231,6 +231,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Invisible.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ITracer.h"
 				>
 			</File>
