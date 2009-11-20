@@ -6,6 +6,7 @@
 #include <Cube.h>
 #include <Frustum.h>
 #include <IntersectionResult.h>
+#include <Invisible.h>
 #include <Light.h>
 #include <Material.h>
 #include <Plane.h>
@@ -35,34 +36,51 @@ RTDemoApplication::RTDemoApplication() :
 
 	SDL_WM_SetCaption("Ray Tracing Demo", NULL);
 
+	RT::Scene::SharedLight light0(new RT::Light(scene->SpectatorPosition, RealColor(Palette::White)));
+	scene->AddLight(light0);
+
+	// добавить в сцену источник света, типа лампа сверху
+	RT::Scene::SharedLight light1(new RT::Light(Vector3DByCoords(-1070, 1000, -1030) + Center, RealColor(Palette::White)));
+	scene->AddLight(light1);
+
+	// и ещё один источник
+	RT::Scene::SharedLight light2(new RT::Light(Vector3DByCoords(-1000, 1000, 1100) + Center, RealColor(Palette::White)));
+	scene->AddLight(light2);
+
+	// и ещё один источник
+	RT::Scene::SharedLight light3(new RT::Light(Vector3DByCoords(1000, 1000, -1100) + Center, RealColor(Palette::White)));
+	scene->AddLight(light3);
+
+	// и ещё один источник
+	RT::Scene::SharedLight light4(new RT::Light(Vector3DByCoords(1080, 1000, 1000) + Center, RealColor(Palette::White)));
+	scene->AddLight(light4);
+
+	// а также рассеянное освещение
+	scene->SetAmbient(static_cast<RealColor>(Palette::White) * 0.0000001);
+
+	// а также добавить лампу в контейнер как невидимый объект, для того чтобы при вращении контейнера источник тоже двигался
+	container->Add(RT::CompoundObject::SharedObject(new RT::Invisible(light1)));
+	container->Add(RT::CompoundObject::SharedObject(new RT::Invisible(light2)));
+	container->Add(RT::CompoundObject::SharedObject(new RT::Invisible(light3)));
+	container->Add(RT::CompoundObject::SharedObject(new RT::Invisible(light4)));
+
 	const double R = 300;
 
 	const RT::Material::SharedTexture woodtex(new RT::Texture("Textures/wood.bmp"));
-	const RT::Material::SharedTexture smiletex(new RT::Texture("Textures/smile.bmp"));
 
 	RT::Material woodmat;
 	woodmat.SetTexture(woodtex, Vector2DByCoords(0, 0), Vector2DByCoords(1, 0), Vector2DByCoords(0, 1));
 
-	RT::Material smilemat;
-	smilemat.SetTexture(smiletex, Vector2DByCoords(0, 0), Vector2DByCoords(1, 0), Vector2DByCoords(0, 1));
-
 	// наполняем контейнер чем-то
 	RT::CompoundObject::SharedObject c(new RT::Cube(Center, R, woodmat));
 	RT::CompoundObject::SharedObject p(new RT::Plane(Vector000, Vector3DByCoords(1, 0, 0), \
-		Vector3DByCoords(0, 0, 1), smilemat));
+		Vector3DByCoords(0, 0, 1), RealColor(Palette::White)));
 
 	container->Add(c);
 	container->Add(p);
 
 	// добавляем его в сцену
 	scene->Add(container);
-
-	// добавить в сцену источник света
-	RT::Scene::SharedLight light(new RT::Light(Vector3DByCoords(-1000, 1000, -1000), static_cast<RealColor>(Palette::White)));
-	scene->AddLight(light);
-
-	// а также рассеянное освещение
-	scene->SetAmbient(static_cast<RealColor>(Palette::White) * 0.0000001);
 }
 
 class Callback : public RT::Scene::ICallback

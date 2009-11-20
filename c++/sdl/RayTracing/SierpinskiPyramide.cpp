@@ -1,7 +1,8 @@
+#include <cmath>
+#include <sdlapplication/Vector.h>
+#include "Invisible.h"
 #include "SierpinskiPyramide.h"
 #include "Triangle.h"
-#include "sdlapplication/Vector.h"
-#include <cmath>
 
 RT::SierpinskiPyramide::SierpinskiPyramide(const Point3D &center, const double edgeLength, const int iterations, const Material &material) :
 	sphere()
@@ -21,6 +22,7 @@ RT::SierpinskiPyramide::SierpinskiPyramide(const Point3D &center, const double e
 	const Point3D D = O + Vector3DByCoords(0, 0, H - h);
 
 	sphere = CompoundObject::SharedObject(new RT::Sphere(center, R, material));
+	CompoundObject::Add(CompoundObject::SharedObject(new RT::Invisible(sphere)));
 
 	if(iterations == 0)
 	{
@@ -43,16 +45,4 @@ RT::SierpinskiPyramide::SierpinskiPyramide(const Point3D &center, const double e
 bool RT::SierpinskiPyramide::PossibleIntersection(const RT::Ray &ray) const
 {
 	return sphere->PossibleIntersection(ray);
-}
-
-void RT::SierpinskiPyramide::Move(const Vector3D &offset)
-{
-	CompoundObject::Move(offset);
-	sphere->Move(offset);
-}
-
-void RT::SierpinskiPyramide::Rotate(const Affine::Axe axe, const Point3D &base, const double phi)
-{
-	CompoundObject::Rotate(axe, base, phi);
-	sphere->Rotate(axe, base, phi);
 }
