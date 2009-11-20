@@ -58,7 +58,7 @@ RealColor RT::Material::Trace(const Point3D &point, const Point2D &MaterialPoint
 {
 	const RealColor PointColor = GetPixel(MaterialPoint);
 
-	// находим из двух нормалей ту, которая направлена к зрителю
+	// РЅР°С…РѕРґРёРј РёР· РґРІСѓС… РЅРѕСЂРјР°Р»РµР№ С‚Сѓ, РєРѕС‚РѕСЂР°СЏ РЅР°РїСЂР°РІР»РµРЅР° Рє Р·СЂРёС‚РµР»СЋ
 	const NormalizedVector3D zn = static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector) > 0 ?
 		NormalizedVector3D(-static_cast<Vector3D>(n)) : n;
 
