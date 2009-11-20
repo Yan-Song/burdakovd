@@ -8,7 +8,7 @@
 
 namespace RT
 {
-	// плоскость, заданная уравнением p = Center + a * du + b * dv
+	// РїР»РѕСЃРєРѕСЃС‚СЊ, Р·Р°РґР°РЅРЅР°СЏ СѓСЂР°РІРЅРµРЅРёРµРј p = Center + a * du + b * dv
 	class Plane : public RTObject
 	{
 	private:

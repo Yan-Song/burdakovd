@@ -2,5 +2,5 @@ set(SRC Affine Circle2D CompoundObject Cube DemoScene Frustum Geometry2D Pencil 
 
 add_library (sdlapplication ${SRC})
 
-target_link_libraries(sdlapplication SDL)
+target_link_libraries(sdlapplication SDL pthread)
 
