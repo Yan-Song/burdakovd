@@ -1,8 +1,8 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include <SDL.h>
 #include <iostream>
+#include <SDL.h>
 
 // I - int/double // как указать в шаблоне допустимые параметры?
 template<typename I>
