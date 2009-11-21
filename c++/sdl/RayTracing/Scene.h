@@ -27,7 +27,7 @@ namespace RT
 		LightContainer lights;
 		RealColor ambient;
 
-		void DrawBuffer(SDLApplication* const app, const bool rectangles, const unsigned int Quality);
+		void DrawBuffer(SDLApplication* const app, const bool rectangles, const unsigned int Step);
 
 	public:
 		class ICallback
@@ -68,10 +68,12 @@ namespace RT
 		// в данном случае callback это такой функтор
 		// который Render будет дергать несколько раз в секунду и передавать процент отрендеренного
 		// и если он вернет true то Render будет прерван
-		// Quality - качество прорисовки, 1 - максимальное, чем больше  тем ниже качество
+		// Step - шаг прорисовки, 1 - наилучшее качество, если больше то быстрее но ниже качество
 		// возвращается true если сцена успела отрендериться до конца, и false если её прервал callback
-		bool Render(SDLApplication* const app, const SharedCallback& callback, const unsigned int Quality = 1,
-			const bool rectangles = true);
+		// extra - для рассчета цвета каждого пикселя испускается extra*extra лучей и затем берётся среднее
+		// чем extra больше - тем меньше ступенчатость, но дольше рендерится, минимальное значение 1
+		bool Render(SDLApplication* const app, const SharedCallback& callback, const unsigned int Step = 1,
+			const bool rectangles = true, const unsigned int extra = 1);
 
 		virtual RealColor CalculateLightness(const Point3D& point, const NormalizedVector3D& n) const;
 	};
