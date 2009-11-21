@@ -1,30 +1,32 @@
+#include <algorithm>
 #include <sdlapplication/Color.h>
 #include <sdlapplication/SDLApplication.h>
+#include <sdlapplication/Vector.h>
 #include "IntersectionResult.h"
 #include "Ray.h"
 #include "Scene.h"
 
-void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, const unsigned int Quality)
+void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, const unsigned int Step)
 {
 	const unsigned int w = static_cast<unsigned int>(app->Screen->w);
 	const unsigned int h = static_cast<unsigned int>(app->Screen->h);
 
 	app->ClearScreen();
 
-	// если Quality == 1 то прямоугольники вырождаются в точки
-	if(rectangles && Quality > 1)
+	// если Step == 1 то прямоугольники вырождаются в точки
+	if(rectangles && Step > 1)
 	{
 		ColorContainer::const_iterator buffer_iterator = buffer.begin();
 
-		for(unsigned int y = 0; y < h; y += Quality)
-			for(unsigned int x = 0; x < w; x += Quality)
+		for(unsigned int y = 0; y < h; y += Step)
+			for(unsigned int x = 0; x < w; x += Step)
 			{
-				const int baseX = static_cast<int>(x) - static_cast<int>(Quality / 2);
-				const int baseY = static_cast<int>(y) - static_cast<int>(Quality / 2);
+				const int baseX = static_cast<int>(x);
+				const int baseY = static_cast<int>(y);
 
-				const int baseX2 = static_cast<int>(x + Quality / 2);
-				const int baseY2 = static_cast<int>(y + Quality / 2);
-
+				const int baseX2 = static_cast<int>(x + Step);
+				const int baseY2 = static_cast<int>(y + Step);
+				
 				app->FillRectangle(ScreenPointByCoords(baseX, baseY), \
 					ScreenPointByCoords(baseX2, baseY2), *buffer_iterator);
 
@@ -39,8 +41,8 @@ void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, con
 
 		ColorContainer::const_iterator buffer_iterator = buffer.begin();
 
-		for(unsigned int y = 0; y < h; y += Quality)
-			for(unsigned int x = 0; x < w; x += Quality)
+		for(unsigned int y = 0; y < h; y += Step)
+			for(unsigned int x = 0; x < w; x += Step)
 			{
 				app->RawDrawPixel(static_cast<int>(x), static_cast<int>(y), *buffer_iterator);
 				++buffer_iterator;
@@ -50,17 +52,18 @@ void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, con
 
 		app->Unlock();
 	}
+
 	app->Flip();
 }
 
-bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallback &callback, const unsigned int Quality, const bool rectangles)
+bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallback &callback, const unsigned int Step, const bool rectangles, \
+					   const unsigned int extra)
 {	
 	const size_t n = static_cast<size_t>(app->Screen->h * app->Screen->w);
-	const size_t qh = (static_cast<size_t>(app->Screen->h) + Quality - 1) / Quality;
-	const size_t qw = (static_cast<size_t>(app->Screen->w) + Quality - 1) / Quality;
+	const size_t qh = (static_cast<size_t>(app->Screen->h) + Step - 1) / Step;
+	const size_t qw = (static_cast<size_t>(app->Screen->w) + Step - 1) / Step;
 	const size_t qn = qh * qw;
 
-	// по идее реальное выделение памяти будет происходить только в первый раз
 	// резервируем памяти для максимального качества
 	buffer.reserve(n);
 
@@ -72,29 +75,47 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 
 	ColorContainer::iterator buffer_iterator = buffer.begin();
 
-	for(unsigned int y = 0, i = 0; y < static_cast<unsigned int>(app->Screen->h); y += Quality)
+	for(unsigned int yt = 0, i = 0; yt < static_cast<unsigned int>(app->Screen->h); yt += Step)
 	{
-		for(unsigned int x = 0; x < static_cast<unsigned int>(app->Screen->w); x += Quality, ++i)
+		for(unsigned int xl = 0; xl < static_cast<unsigned int>(app->Screen->w); xl += Step, ++i)
 		{
-			const RT::Ray ray(Vector3DByCoords(x, y, 0) - SpectatorPosition, SpectatorPosition);
-			
-			if(RT::CompoundObject::PossibleIntersection(ray))
-			{
-				const RT::MaybeIntersection result = RT::CompoundObject::FindIntersection(ray);
+			RealColor SummaryColor(Palette::Black);
 
-				if(result.Exists)
+			// разбиваем окрестность пикселя (x, y)..(x + 1, y + 1) на extra строк и столбцов
+			// для каждой ячейки проводим луч и затем берём среднее
+			for(unsigned int ex = 0; ex < extra; ++ex)
+				for(unsigned int ey = 0; ey < extra; ++ey)
 				{
-					const RT::SharedTracer tracer = static_cast<RT::Intersection>(result).Tracer;
+					// находим центры каждой ячейки
+					const double x = xl + (ex + 0.5) / extra * Step;
+					const double y = yt + (ey + 0.5) / extra * Step;
 
-					*buffer_iterator = tracer->Trace(this);
+					const Point3D RayStart = Vector3DByCoords(x, y, 0);
 
-					// проверяем что не получился отрицательный цвет
-					assert(buffer_iterator->R >= 0 && buffer_iterator->G >= 0 && buffer_iterator->B >= 0);
+					const RT::Ray ray(RayStart - SpectatorPosition, SpectatorPosition);
+			
+					if(RT::CompoundObject::PossibleIntersection(ray))
+					{
+						const RT::MaybeIntersection result = RT::CompoundObject::FindIntersection(ray);
+
+						if(result.Exists)
+						{
+							const RT::SharedTracer tracer = static_cast<RT::Intersection>(result).Tracer;
+							
+							const RealColor current = tracer->Trace(this);
+
+							// проверяем что не получился отрицательный цвет
+							assert(current.R >= 0 && current.G >= 0 && current.B >= 0);
+
+							SummaryColor += current;
+						}
+					}
 				}
-			}
+
+			*buffer_iterator = SummaryColor / double(extra * extra);
 
 			++buffer_iterator;
-			
+
 			if(i % updateInterval == 0)
 			{
 				const unsigned int percent = 90 *
@@ -133,7 +154,7 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 
 	// остался последний шаг, перенести всё это на экран
 	
-	DrawBuffer(app, rectangles, Quality);
+	DrawBuffer(app, rectangles, Step);
 
 	callback->call(100);
 

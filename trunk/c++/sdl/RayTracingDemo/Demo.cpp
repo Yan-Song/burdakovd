@@ -25,7 +25,7 @@
 
 RTDemoApplication::RTDemoApplication() : 
 	// Наблюдатель находится перед экраном на расстоянии 1000 пикселов
-	scene(new RT::Scene(Vector3DByCoords(ScreenWidth / 2, ScreenHeight / 2 + 100, -1000))),
+	scene(new RT::Scene(Vector3DByCoords(ScreenWidth / 2 + 0.3, ScreenHeight / 2 + 107, -1013))),
 	container(new RT::CompoundObject()),
 	Center(Vector3DByCoords(ScreenWidth / 2 + 0.1, 200.1, 400.1)),
 	Rendered(false), Dirty(false)
@@ -36,47 +36,29 @@ RTDemoApplication::RTDemoApplication() :
 
 	SDL_WM_SetCaption("Ray Tracing Demo", NULL);
 
-	RT::Scene::SharedLight light0(new RT::Light(scene->SpectatorPosition, RealColor(Palette::White)));
-	scene->AddLight(light0);
-
 	// добавить в сцену источник света, типа лампа сверху
-	RT::Scene::SharedLight light1(new RT::Light(Vector3DByCoords(-1070, 1000, -1030) + Center, RealColor(Palette::White)));
+	RT::Scene::SharedLight light1(new RT::Light(Vector3DByCoords(ScreenWidth / 2, 3000, -1000) + Center, RealColor(Palette::White)));
 	scene->AddLight(light1);
 
-	// и ещё один источник
-	RT::Scene::SharedLight light2(new RT::Light(Vector3DByCoords(-1000, 1000, 1100) + Center, RealColor(Palette::White)));
-	scene->AddLight(light2);
-
-	// и ещё один источник
-	RT::Scene::SharedLight light3(new RT::Light(Vector3DByCoords(1000, 1000, -1100) + Center, RealColor(Palette::White)));
-	scene->AddLight(light3);
-
-	// и ещё один источник
-	RT::Scene::SharedLight light4(new RT::Light(Vector3DByCoords(1080, 1000, 1000) + Center, RealColor(Palette::White)));
-	scene->AddLight(light4);
-
 	// а также рассеянное освещение
-	scene->SetAmbient(static_cast<RealColor>(Palette::White) * 0.0000001);
+	scene->SetAmbient(static_cast<RealColor>(Palette::White) * 0.00000001);
 
 	// а также добавить лампу в контейнер как невидимый объект, для того чтобы при вращении контейнера источник тоже двигался
 	container->Add(RT::CompoundObject::SharedObject(new RT::Invisible(light1)));
-	container->Add(RT::CompoundObject::SharedObject(new RT::Invisible(light2)));
-	container->Add(RT::CompoundObject::SharedObject(new RT::Invisible(light3)));
-	container->Add(RT::CompoundObject::SharedObject(new RT::Invisible(light4)));
+	
+	//const double R = 300;
 
-	const double R = 300;
+	const RT::Material::SharedTexture checkertex(new RT::Texture("Textures/board.bmp"));
 
-	const RT::Material::SharedTexture woodtex(new RT::Texture("Textures/wood.bmp"));
-
-	RT::Material woodmat;
-	woodmat.SetTexture(woodtex, Vector2DByCoords(0, 0), Vector2DByCoords(1, 0), Vector2DByCoords(0, 1));
+	RT::Material checkermat;
+	checkermat.SetTexture(checkertex, Vector2DByCoords(0, 0), Vector2DByCoords(0.006, 0), Vector2DByCoords(0, 0.006));
 
 	// наполняем контейнер чем-то
-	RT::CompoundObject::SharedObject c(new RT::Cube(Center, R, woodmat));
+	//RT::CompoundObject::SharedObject c(new RT::Cube(Center, R, woodmat));
 	RT::CompoundObject::SharedObject p(new RT::Plane(Vector000, Vector3DByCoords(1, 0, 0), \
-		Vector3DByCoords(0, 0, 1), RealColor(Palette::White)));
+		Vector3DByCoords(0, 0, 1), checkermat));
 
-	container->Add(c);
+	//container->Add(c);
 	container->Add(p);
 
 	// добавляем его в сцену
@@ -88,33 +70,38 @@ class Callback : public RT::Scene::ICallback
 private:
 	RTDemoApplication* app;
 	bool AllowBreak;
-	unsigned int Quality;
+	unsigned int Step;
+	unsigned int extra;
 
 	Callback(const Callback& );
 	Callback operator=(const Callback&);
 
 public:
-	Callback(RTDemoApplication* const _app, const bool _AllowBreak, const unsigned int _Quality) :
-	app(_app), AllowBreak(_AllowBreak), Quality(_Quality) {}
+	Callback(RTDemoApplication* const _app, const bool _AllowBreak, const unsigned int _Quality, \
+		const unsigned int _extra) :
+	app(_app), AllowBreak(_AllowBreak), Step(_Quality), extra(_extra) {}
 
 	virtual bool call(const double percent)
 	{
 		if(AllowBreak)
-			return app->Callback(percent, true, Quality);
+			return app->Callback(percent, true, Step, extra);
 		else
 		{
-			app->Callback(percent, false, Quality);
+			app->Callback(percent, false, Step, extra);
 			return false;
 		}
 	}
 };
 
-bool RTDemoApplication::Callback(const double percent, const bool AllowBreak, const unsigned int Quality)
+bool RTDemoApplication::Callback(const double percent, const bool AllowBreak, const unsigned int Step, \
+								 const unsigned int extra)
 {
 	// вывести прогресс
 	std::ostringstream os;
-	os<<"Ray Tracing Demo. Rendered: "<<static_cast<int>(percent)<<"%. ";
-	os<<"Quality: "<<Quality;
+	os<<"Ray Tracing Demo. ";
+	os<<"Step: "<<Step;
+	os<<"; extra: "<<extra;
+	os<<". Rendered: "<<static_cast<int>(percent)<<"%.";
 	SetCaption(os.str());
 	
 	if(AllowBreak)
@@ -181,15 +168,15 @@ void RTDemoApplication::Main()
 
 	const double startTime = GetTime();
 
-	const unsigned int startQuality = 16;
+	const unsigned int startStep = 16;
 
 	// рисовать, постепенно наращивая качество
-	for(unsigned int Quality = startQuality; Quality > 0; Quality /= 2)
+	for(unsigned int Step = startStep; Step > 0; Step /= 2)
 	{
 		// первый этап не прерывать
-		if(Quality == startQuality)
+		if(Step == startStep)
 		{
-			scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, false, Quality)), Quality);
+			scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, false, Step, 1)), Step);
 
 			if(Dirty)
 				return;
@@ -197,8 +184,17 @@ void RTDemoApplication::Main()
 		else
 		{
 			// в более высоком качестве рисовать не обязательно, можно прерваться не дорендерив
-			if(!scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, true, Quality)), Quality))
+			if(!scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, true, Step, 1)), Step))
 				return;
+
+			// если шаг == 1, то можно ещё нарисовать со сглаживанием
+			if(Step == 1)
+				if(!scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, true, Step, 2)), Step, true, 2))
+					return;
+
+			if(Step == 1)
+				if(!scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, true, Step, 4)), Step, true, 4))
+					return;
 		}
 	}
 
