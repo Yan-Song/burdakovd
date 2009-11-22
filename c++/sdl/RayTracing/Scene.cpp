@@ -71,80 +71,82 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 	buffer.clear();
 	buffer.resize(qn, Palette::Black);
 
-	const unsigned int updateInterval = std::max<unsigned int>(qn / 100, 100);
-
-	ColorContainer::iterator buffer_iterator = buffer.begin();
-
-	for(unsigned int yt = 0, i = 0; yt < static_cast<unsigned int>(app->Screen->h); yt += Step)
+	if(camera)
 	{
-		for(unsigned int xl = 0; xl < static_cast<unsigned int>(app->Screen->w); xl += Step, ++i)
+		const unsigned int updateInterval = std::max<unsigned int>(qn / 100, 100);
+
+		ColorContainer::iterator buffer_iterator = buffer.begin();
+
+		for(unsigned int yt = 0, i = 0; yt < static_cast<unsigned int>(app->Screen->h); yt += Step)
 		{
-			RealColor SummaryColor(Palette::Black);
+			for(unsigned int xl = 0; xl < static_cast<unsigned int>(app->Screen->w); xl += Step, ++i)
+			{
+				RealColor SummaryColor(Palette::Black);
 
-			// разбиваем окрестность пикселя (x, y)..(x + 1, y + 1) на extra строк и столбцов
-			// для каждой ячейки проводим луч и затем берём среднее
-			for(unsigned int ex = 0; ex < extra; ++ex)
-				for(unsigned int ey = 0; ey < extra; ++ey)
-				{
-					// находим центры каждой ячейки
-					const double x = xl + (ex + 0.5) / extra * Step;
-					const double y = yt + (ey + 0.5) / extra * Step;
-
-					const Point3D RayStart = Vector3DByCoords(x, y, 0);
-
-					const RT::Ray ray(RayStart - SpectatorPosition, SpectatorPosition);
-			
-					if(RT::CompoundObject::PossibleIntersection(ray))
+				// разбиваем окрестность пикселя (x, y)..(x + 1, y + 1) на extra строк и столбцов
+				// для каждой ячейки проводим луч и затем берём среднее
+				for(unsigned int ex = 0; ex < extra; ++ex)
+					for(unsigned int ey = 0; ey < extra; ++ey)
 					{
-						const RT::MaybeIntersection result = RT::CompoundObject::FindIntersection(ray);
+						// находим центры каждой ячейки
+						const double x = xl + (ex + 0.5) / extra * Step;
+						const double y = yt + (ey + 0.5) / extra * Step;
 
-						if(result.Exists)
+						const RT::Ray ray = camera->GenerateRay(x, y);
+				
+						if(RT::CompoundObject::PossibleIntersection(ray))
 						{
-							const RT::SharedTracer tracer = static_cast<RT::Intersection>(result).Tracer;
-							
-							const RealColor current = tracer->Trace(this);
+							const RT::MaybeIntersection result = RT::CompoundObject::FindIntersection(ray);
 
-							// проверяем что не получился отрицательный цвет
-							assert(current.R >= 0 && current.G >= 0 && current.B >= 0);
+							if(result.Exists)
+							{
+								const RT::SharedTracer tracer = static_cast<RT::Intersection>(result).Tracer;
+								
+								const RealColor current = tracer->Trace(this);
 
-							SummaryColor += current;
+								// проверяем что не получился отрицательный цвет
+								assert(current.R >= 0 && current.G >= 0 && current.B >= 0);
+
+								SummaryColor += current;
+							}
 						}
 					}
-				}
 
-			*buffer_iterator = SummaryColor / double(extra * extra);
+				*buffer_iterator = SummaryColor / double(extra * extra);
 
-			++buffer_iterator;
+				++buffer_iterator;
 
-			if(i % updateInterval == 0)
-			{
-				const unsigned int percent = 90 *
-					static_cast<unsigned int>(buffer_iterator - buffer.begin()) / qn;
-
-				if(callback->call(percent))
+				if(i % updateInterval == 0)
 				{
-					return false;
+					const unsigned int percent = 90 *
+						static_cast<unsigned int>(buffer_iterator - buffer.begin()) / qn;
+
+					if(callback->call(percent))
+					{
+						return false;
+					}
 				}
 			}
 		}
-	}
-	assert(buffer_iterator == buffer.end());
+		assert(buffer_iterator == buffer.end());
+	
 
-
-	// тут можно делать tonemapping
-	// найти максимум
-	double mx = 0;
-	for(ColorContainer::const_iterator it = buffer.begin(); it != buffer.end(); ++it)
-	{
-		mx = std::max(mx, std::max(it->R, std::max(it->G, it->B)));
-	}
-	// нормирую цвет
-	if(mx != 0)
-	{
-		const double n = 255.0 / mx;
-		for(ColorContainer::iterator it = buffer.begin(); it != buffer.end(); ++it)
+		// тут можно делать tonemapping
+		// найти максимум
+		double mx = 0;
+		for(ColorContainer::const_iterator it = buffer.begin(); it != buffer.end(); ++it)
 		{
-			*it = *it * n;
+			mx = std::max(mx, std::max(it->R, std::max(it->G, it->B)));
+		}
+
+		// нормирую цвет
+		if(mx != 0)
+		{
+			const double n = 255.0 / mx;
+			for(ColorContainer::iterator it = buffer.begin(); it != buffer.end(); ++it)
+			{
+				*it = *it * n;
+			}
 		}
 	}
 

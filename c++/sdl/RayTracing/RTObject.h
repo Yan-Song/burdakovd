@@ -4,7 +4,7 @@
 #include "Ray.h"
 #include "sdlapplication/Color.h"
 #include "IntersectionResult.h"
-#include "Object3D.h"
+#include "IObject3D.h"
 #include "sdlapplication/Vector.h"
 #include "Material.h"
 

@@ -6,6 +6,7 @@
 #include <sdlapplication/Shared.h>
 #include <sdlapplication/Vector.h>
 #include "CompoundObject.h"
+#include "ICamera.h"
 #include "IEngine.h"
 #include "Light.h"
 #include "NormalizedVector3D.h"
@@ -17,7 +18,8 @@ namespace RT
 	class Scene : protected CompoundObject, public IEngine
 	{
 	public:
-		typedef Shared::shared_ptr<Light> SharedLight;
+		typedef Shared::shared_ptr<ILight> SharedLight;
+		typedef Shared::shared_ptr<ICamera> SharedCamera;
 
 	private:
 		typedef std::vector<RealColor> ColorContainer;
@@ -25,6 +27,7 @@ namespace RT
 
 		ColorContainer buffer;
 		LightContainer lights;
+		SharedCamera camera;
 		RealColor ambient;
 
 		void DrawBuffer(SDLApplication* const app, const bool rectangles, const unsigned int Step);
@@ -39,9 +42,7 @@ namespace RT
 		typedef Shared::shared_ptr<ICallback> SharedCallback;
 
 	public:
-		Point3D SpectatorPosition;
-
-		Scene(const Point3D& _SpectatorPosition) : buffer(), lights(), ambient(0.0, 0.0, 0.0), SpectatorPosition(_SpectatorPosition)
+		Scene() : buffer(), lights(), camera(), ambient(0.0, 0.0, 0.0)
 		{
 		}
 
@@ -65,6 +66,11 @@ namespace RT
 			ambient = _ambient;
 		}
 
+		inline void SetCamera(const SharedCamera& _camera)
+		{
+			camera = _camera;
+		}
+
 		// в данном случае callback это такой функтор
 		// который Render будет дергать несколько раз в секунду и передавать процент отрендеренного
 		// и если он вернет true то Render будет прерван
@@ -74,6 +80,9 @@ namespace RT
 		// чем extra больше - тем меньше ступенчатость, но дольше рендерится, минимальное значение 1
 		bool Render(SDLApplication* const app, const SharedCallback& callback, const unsigned int Step = 1,
 			const bool rectangles = true, const unsigned int extra = 1);
+
+
+		// IEngine members
 
 		virtual RealColor CalculateLightness(const Point3D& point, const NormalizedVector3D& n) const;
 	};

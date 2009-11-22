@@ -4,11 +4,11 @@
 #include <sdlapplication/Color.h>
 #include <sdlapplication/Vector.h>
 #include "IntersectionResult.h"
-#include "RTObject.h"
+#include "IObject3D.h"
 
 namespace RT
 {
-	class ILight
+	class ILight : public IObject3D
 	{
 	public:
 		virtual Point3D Position() const = 0;
@@ -17,7 +17,7 @@ namespace RT
 		virtual ~ILight() {}
 	};
 
-	class Light : public IObject3D, public ILight
+	class Light : public ILight
 	{
 	private:
 		Vector3D _Position;
