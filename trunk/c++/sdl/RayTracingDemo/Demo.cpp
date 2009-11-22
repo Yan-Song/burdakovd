@@ -1,7 +1,9 @@
+#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <SDL.h>
 #include <sdlapplication/Affine.h>
+#include <Camera.h>
 #include <CompoundObject.h>
 #include <Cube.h>
 #include <Frustum.h>
@@ -23,10 +25,14 @@
 // y - вверх
 // z - вперед
 
+const double RTDemoApplication::MovementSpeed = 100.0;
+const double RTDemoApplication::RotationSpeed = 1.0;
+
 RTDemoApplication::RTDemoApplication() : 
 	// Наблюдатель находится перед экраном на расстоянии 1000 пикселов
-	scene(new RT::Scene(Vector3DByCoords(ScreenWidth / 2 + 0.3, ScreenHeight / 2 + 107, -1013))),
+	scene(new RT::Scene()),
 	container(new RT::CompoundObject()),
+	camera(new RT::Camera(ScreenWidth, ScreenHeight, 2 * atan(ScreenWidth / 2000.0), 2 * atan(ScreenHeight / 2000.0))),
 	Center(Vector3DByCoords(ScreenWidth / 2 + 0.1, 200.1, 400.1)),
 	Rendered(false), Dirty(false)
 {
@@ -34,34 +40,42 @@ RTDemoApplication::RTDemoApplication() :
 
 	InitializeSDL(ScreenHeight, ScreenWidth, 0, SDLflags);
 
-	SDL_WM_SetCaption("Ray Tracing Demo", NULL);
+	SetCaption("Ray Tracing Demo");
+
+
+	// добавить в сцену камеру
+	scene->SetCamera(camera);
+
 
 	// добавить в сцену источник света, типа лампа сверху
 	RT::Scene::SharedLight light1(new RT::Light(Vector3DByCoords(ScreenWidth / 2, 3000, -1000) + Center, RealColor(Palette::White)));
 	scene->AddLight(light1);
 
 	// а также рассеянное освещение
-	scene->SetAmbient(static_cast<RealColor>(Palette::White) * 0.00000001);
+	scene->SetAmbient(static_cast<RealColor>(Palette::White) * 0.00000002);
 
 	// а также добавить лампу в контейнер как невидимый объект, для того чтобы при вращении контейнера источник тоже двигался
 	container->Add(RT::CompoundObject::SharedObject(new RT::Invisible(light1)));
 	
-	//const double R = 300;
 
 	const RT::Material::SharedTexture checkertex(new RT::Texture("Textures/board.bmp"));
 
 	RT::Material checkermat;
 	checkermat.SetTexture(checkertex, Vector2DByCoords(0, 0), Vector2DByCoords(0.006, 0), Vector2DByCoords(0, 0.006));
 
+
 	// наполняем контейнер чем-то
-	//RT::CompoundObject::SharedObject c(new RT::Cube(Center, R, woodmat));
+
+	RT::CompoundObject::SharedObject c(new RT::Sphere(Center, 200, static_cast<RealColor>(Palette::Red)));
+
 	RT::CompoundObject::SharedObject p(new RT::Plane(Vector000, Vector3DByCoords(1, 0, 0), \
 		Vector3DByCoords(0, 0, 1), checkermat));
 
-	//container->Add(c);
+	container->Add(c);
 	container->Add(p);
 
-	// добавляем его в сцену
+
+	// добавляем контейнер в сцену
 	scene->Add(container);
 }
 
@@ -128,25 +142,23 @@ void RTDemoApplication::Navigate()
 {
 	if(isPressed(SDLK_RIGHT))
 	{
-		container->Rotate(Affine::Y, Center, dt);
-		Dirty = true;
+		
 	}
 
 	if(isPressed(SDLK_LEFT))
 	{
-		container->Rotate(Affine::Y, Center, -dt);
+		
+	}
+
+	if(isPressed(SDLK_UP) || isPressed(SDLK_w))
+	{
+		camera->Move(static_cast<Vector3D>(camera->GetDirection()) * MovementSpeed * dt);
 		Dirty = true;
 	}
 
-	if(isPressed(SDLK_UP))
+	if(isPressed(SDLK_DOWN) || isPressed(SDLK_s))
 	{
-		container->Rotate(Affine::X, Center, dt);
-		Dirty = true;
-	}
-
-	if(isPressed(SDLK_DOWN))
-	{
-		container->Rotate(Affine::X, Center, -dt);
+		camera->Move(-static_cast<Vector3D>(camera->GetDirection()) * MovementSpeed * dt);
 		Dirty = true;
 	}
 }
