@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <SDL.h>
@@ -112,10 +113,14 @@ bool RTDemoApplication::Callback(const double percent, const bool AllowBreak, co
 {
 	// вывести прогресс
 	std::ostringstream os;
+
 	os<<"Ray Tracing Demo. ";
-	os<<"Step: "<<Step;
-	os<<"; extra: "<<extra;
-	os<<". Rendered: "<<static_cast<int>(percent)<<"%.";
+	os<<"Camera position: "<<std::setprecision(0)<<camera->GetPosition()<<"; ";
+	os<<"direction: "<<std::setprecision(2)<<camera->GetDirection()<<". ";
+	os<<"Step: "<<Step<<"; ";
+	os<<"extra: "<<extra<<". ";
+	os<<"Rendered: "<<static_cast<int>(percent)<<"%.";
+
 	SetCaption(os.str());
 	
 	if(AllowBreak)
@@ -140,25 +145,27 @@ void RTDemoApplication::InitialRender()
 
 void RTDemoApplication::Navigate()
 {
-	if(isPressed(SDLK_RIGHT))
+	if(isPressed(SDLK_RIGHT) || isPressed(SDLK_d))
 	{
-		
+		camera->RotateHorizontal(-RotationSpeed * dt);
+		Dirty = true;
 	}
 
-	if(isPressed(SDLK_LEFT))
+	if(isPressed(SDLK_LEFT) || isPressed(SDLK_a))
 	{
-		
+		camera->RotateHorizontal(RotationSpeed * dt);
+		Dirty = true;
 	}
 
 	if(isPressed(SDLK_UP) || isPressed(SDLK_w))
 	{
-		camera->Move(static_cast<Vector3D>(camera->GetDirection()) * MovementSpeed * dt);
+		camera->MoveForward(MovementSpeed * dt);
 		Dirty = true;
 	}
 
 	if(isPressed(SDLK_DOWN) || isPressed(SDLK_s))
 	{
-		camera->Move(-static_cast<Vector3D>(camera->GetDirection()) * MovementSpeed * dt);
+		camera->MoveForward(-MovementSpeed * dt);
 		Dirty = true;
 	}
 }

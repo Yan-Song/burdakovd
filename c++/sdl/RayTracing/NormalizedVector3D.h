@@ -1,7 +1,8 @@
 #ifndef NORMALIZEDVECTOR3D_H
 #define NORMALIZEDVECTOR3D_H
 
-#include "sdlapplication/Vector.h"
+#include <iostream>
+#include <sdlapplication/Vector.h>
 
 namespace RT
 {
@@ -45,6 +46,12 @@ namespace RT
 
 		inline double z() const { return data[2]; }
 	};
+
+	inline std::ostream& operator <<(std::ostream& os, const NormalizedVector3D& n)
+	{
+		os<<"("<<n.x()<<"; "<<n.y()<<"; "<<n.z()<<")";
+		return os;
+	}
 }
 
 #endif

@@ -279,4 +279,13 @@ inline GenericVector<I, 3> operator ^=(GenericVector<I, 3>& A, const GenericVect
 	return A;
 }
 
+template<typename I, int N>
+inline std::ostream& operator <<(std::ostream& os, const GenericVector<I, N>& v)
+{
+	for(int i = 0; i < N; ++i)
+		os << (i == 0 ? "(" : "; ") << v[i];
+	os << ")";
+	return os;
+}
+
 #endif

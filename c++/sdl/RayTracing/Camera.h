@@ -41,7 +41,13 @@ namespace RT
 
 		virtual void Rotate(const Affine::Axe axe, const Point3D& base, const double phi);
 
-		RT::Ray GenerateRay(const double sx, const double sy) const;
+		virtual RT::Ray GenerateRay(const double sx, const double sy) const;
+
+		virtual void MoveForward(const double distance);
+
+		virtual void RotateHorizontal(const double phi);
+
+		virtual void RotateVertical(const double phi);
 	};
 }
 
