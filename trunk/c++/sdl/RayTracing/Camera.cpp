@@ -114,3 +114,34 @@ void RT::Camera::Rotate(const Affine::Axe axe, const Point3D& base, const double
 	dsy = r_rotator * dsy;
 	direction = static_cast<NormalizedVector3D>(r_rotator * static_cast<Vector3D>(direction));
 }
+
+void RT::Camera::MoveForward(const double distance)
+{
+	Move(distance * static_cast<Vector3D>(direction));
+}
+
+void RT::Camera::RotateHorizontal(const double phi)
+{
+	// вращаем вокруг оси dsy
+
+	const Vector3D x = dsx * cos(phi) + static_cast<Vector3D>(direction) * sin(phi) * dsx.Length();
+	const Vector3D z = static_cast<Vector3D>(direction) * cos(phi) - dsx * sin(phi) / dsx.Length();
+
+	dsx = x;
+	direction = static_cast<NormalizedVector3D>(z);
+
+	ScreenCenter = Util::ScreenCenter(Position, direction);
+}
+
+void RT::Camera::RotateVertical(const double phi)
+{
+	// вращаем вокруг оси dsx
+
+	const Vector3D y = dsy * cos(phi) - static_cast<Vector3D>(direction) * sin(phi) * dsy.Length();
+	const Vector3D z = static_cast<Vector3D>(direction) * cos(phi) + dsy * sin(phi) / dsy.Length();
+
+	dsy = y;
+	direction = static_cast<NormalizedVector3D>(z);
+
+	ScreenCenter = Util::ScreenCenter(Position, direction);
+}

@@ -109,7 +109,7 @@ namespace Palette
 template<typename I>
 std::ostream& operator <<(std::ostream& os, const GenericColor<I>& color)
 {
-	os<<"Color("<<color.R<<"; "<<color.G<<"; "<<color.B<<")";
+	os<<"(R = "<<color.R<<"; G = "<<color.G<<"; B = "<<color.B<<")";
 	return os;
 }
 
