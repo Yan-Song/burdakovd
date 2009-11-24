@@ -13,7 +13,7 @@
 namespace RT
 {
 	// Материал - некое обобщение текстуры.
-	// в дальнеёшем тут возможно будут и другие парметры, типа степень отражения/прозрачность
+	// в дальнейшем тут возможно будут и другие парметры, типа степень отражения/прозрачность
 	class Material
 	{
 	public:
@@ -25,6 +25,7 @@ namespace RT
 		Vector2D dx, dy;
 		SharedTexture Texture;
 		RealColor color;
+		double Reflection;
 		
 	private:
 		RealColor GetPixel(const Point2D& MaterialPoint) const;
@@ -38,6 +39,9 @@ namespace RT
 
 		// установить цвет, если раньше была использована текстура - она удалится
 		void SetColor(const RealColor& _color);
+
+		// установить коэффициент отражения, строго меньше 1.0, во избежание зацикливание
+		void SetReflection(const double reflection);
 
 		// установить текстуру
 		// base, dx, dy будут в дальнейшем использоваться в Trace
