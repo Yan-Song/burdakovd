@@ -5,7 +5,7 @@
 
 Vector2D Vector2DByCoords(const double x, const double y)
 {
-	Vector2D ans;
+	Vector2D ans(false);
 	ans[0] = x;
 	ans[1] = y;
 	return ans;
@@ -13,7 +13,7 @@ Vector2D Vector2DByCoords(const double x, const double y)
 
 Vector3D Vector3DByCoords(const double x, const double y, const double z)
 {
-	Vector3D ans;
+	Vector3D ans(false);
 	ans[0] = x;
 	ans[1] = y;
 	ans[2] = z;
@@ -22,7 +22,7 @@ Vector3D Vector3DByCoords(const double x, const double y, const double z)
 
 ScreenPoint ScreenPointByCoords(const int x, const int y)
 {
-	ScreenPoint ans;
+	ScreenPoint ans(false);
 	ans[0] = x;
 	ans[1] = y;
 	return ans;

@@ -11,8 +11,7 @@ SDLApplication::SDLApplication() :
 	Screen(NULL), frames(0), dt(0.0),
 	KeyState(NULL), Running(false),
 	startTime(time(NULL)), _locked(false),
-	lastTime(),
-	stats(), timer()
+	stats(), timer(), fps()
 {
 	srand(static_cast<unsigned int>(startTime));
 	std::cout<<"Random number generator initialized"<<std::endl;
@@ -20,19 +19,22 @@ SDLApplication::SDLApplication() :
 
 void SDLApplication::UpdateStats()
 {
-	double ctime = GetTime();
-	dt = ctime - lastTime;
-	lastTime = ctime;
+	Uint32 cticks = timer.GetTicks();
+
+	// Замерить сколько рендерился предыдущий кадр
+	dt = fps.GetTime();
+
+	// сбросить таймер
+	fps.Start();
 
 	// добавляем статистику по текущему кадру
-	stats.push_back(FrameInfo(ctime, dt));
+	stats.push_back(FrameInfo(cticks, dt));
 
 	// удаляем статистику старее одной секунды, кроме того не хранить более 1000 элементов
-	while((!stats.empty() && ctime - stats.front().ctime > 1) || stats.size() > 1000)
+	while((!stats.empty() && cticks > stats.front().cticks + 1000) || stats.size() > 1000)
 		stats.pop_front();
 
 	++frames;
-
 }
 
 int SDLApplication::dtAvg() const
@@ -103,17 +105,17 @@ void SDLApplication::InitializeSDL(size_t ScreenHeight, size_t ScreenWidth, int 
 
 	KeyState = SDL_GetKeyState(NULL);
 
-	timer = Shared::shared_ptr<Timer>(new Timer());
-	lastTime = GetTime();
+	timer.Start();
+	fps.Start();
 
 	std::cout<<"SDL initialized"<<std::endl;
 }
 
 SDLApplication::~SDLApplication()
 {
+	stats.clear();
 	SDL_Quit();
 	std::cout<<"SDL unloaded"<<std::endl;
-	stats.clear();
 }
 
 void SDLApplication::ProcessEvents()
@@ -261,7 +263,7 @@ void SDLApplication::FillRectangle(const ScreenPoint& A, const ScreenPoint& B, c
 
 void SDLApplication::ClearScreen(const Color& color) const
 {
-	ScreenPoint LeftTop, RightBottom;
+	ScreenPoint LeftTop(true, 0), RightBottom(false);
 	RightBottom[0] = Screen->w;
 	RightBottom[1] = Screen->h;
 	FillRectangle(LeftTop, RightBottom, color);

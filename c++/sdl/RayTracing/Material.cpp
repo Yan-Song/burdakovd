@@ -3,7 +3,7 @@
 #include <sdlapplication/Utils.h>
 #include "Material.h"
  
-RT::Material::Material(const RealColor& _color) : has_texture(false), base(), dx(), dy(), Texture(), color(_color)
+RT::Material::Material(const RealColor& _color) : has_texture(false), base(false), dx(false), dy(false), Texture(), color(_color)
 {
 }
 

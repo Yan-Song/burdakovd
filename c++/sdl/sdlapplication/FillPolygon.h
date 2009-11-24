@@ -22,7 +22,7 @@ namespace
 	class YComparatorByIndex
 	{
 	private:
-		YComparatorByIndex operator=(const YComparatorByIndex& );
+		YComparatorByIndex operator =(const YComparatorByIndex& );
 
 	public:
 		const std::vector<ScreenPoint>& vertices;
@@ -39,7 +39,7 @@ namespace
 	class SARRemovePredicate
 	{
 	private:
-		SARRemovePredicate operator=(const SARRemovePredicate& );
+		SARRemovePredicate operator =(const SARRemovePredicate& );
 
 	public:
 		const std::vector<ScreenPoint>& vertices;
@@ -59,7 +59,7 @@ namespace
 	class Intersector
 	{
 	private:
-		Intersector operator=(const Intersector& );
+		Intersector operator =(const Intersector& );
 
 	public:
 		const std::vector<ScreenPoint>& vertices;

@@ -16,10 +16,10 @@
 
 struct FrameInfo
 {
-	double ctime;
+	double cticks;
 	double dt;
 
-	FrameInfo(double c, double d) : ctime(c), dt(d)
+	FrameInfo(Uint32 c, double d) : cticks(c), dt(d)
 	{
 	};
 };
@@ -74,7 +74,12 @@ public:
 	// До вызова InitializeSDL результат вызова функции не определён.
 	inline double GetTime() const
 	{
-		return timer->GetTime();
+		return timer.GetTime();
+	}
+
+	inline double GetTicks() const
+	{
+		return timer.GetTicks();
 	}
 
 	inline unsigned int FPS() const
@@ -168,12 +173,10 @@ private:
 		return SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.R), static_cast<Uint8>(rgb.G), static_cast<Uint8>(rgb.B));
 	}
 	
-	double lastTime;
-	
 	// статистика за последнюю секунду
 	FrameInfoList stats;
 	
-	Shared::shared_ptr<Timer> timer;
+	Timer timer, fps;
 };
 
 #endif

@@ -33,15 +33,13 @@ namespace
 }
 
 PrimitivesApplication::PrimitivesApplication() :
-	lasttime(time(NULL)),
-
 	// наблюдатель примерно на расстоянии около 1200 пикселей от центра экрана, перпендикулярно его плоскости
 	scene(Vector3DByCoords(ScreenWidth / 2, -1200, ScreenHeight / 2), \
 		ScreenPointByCoords(ScreenWidth, ScreenHeight), this),
 	Objects(new CompoundObject3D()),
 	LightPosition(Vector3DByCoords(20000, -10000, 10000)),
-
-	ZRotationSpeed(0), XRotationSpeed(0), RotationAccelerating(2)	
+	statsTimer(),
+	ZRotationSpeed(0.0), XRotationSpeed(0.0), RotationAccelerating(2.0)	
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SDL_WM_SetCaption("Demo", NULL);
@@ -62,13 +60,15 @@ PrimitivesApplication::PrimitivesApplication() :
 
 	// добавить освещенность
 	scene.AddLight(LightPosition, 1);
+
+	statsTimer.Start();
 }
 
 void PrimitivesApplication::Main()
 {
-	if(lasttime != time(NULL)) // прошла секунда
+	if(statsTimer.Elapsed(1000)) // прошла секунда
 	{
-		lasttime = time(NULL);
+		statsTimer.Start();
 		std::cout<<"Time: "<<GetTime()<<"; FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
 	}
 

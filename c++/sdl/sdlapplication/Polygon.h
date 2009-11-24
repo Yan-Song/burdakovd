@@ -53,7 +53,7 @@ private:
 public:
 	Color color;
 
-	Polygon3D(const Color& _color = Palette::White) : first(), last(), vcount(0), color(_color)
+	Polygon3D(const Color& _color = Palette::White) : first(false), last(false), vcount(0), color(_color)
 	{
 	};
 

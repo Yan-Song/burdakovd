@@ -27,7 +27,7 @@ namespace RT
 	class Intersection
 	{
 	private:
-		Intersection() : Point(), Tracer() {}
+		Intersection() : Point(false), Tracer() {}
 		friend class MaybeIntersection;
 
 	public:

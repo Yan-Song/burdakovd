@@ -1,24 +1,25 @@
 #ifndef PRIMITIVES_H
 #define PRIMITIVES_H
 
-#include "SDLApplication.h"
 #include <vector>
-#include "Segment.h"
-#include "Circle2D.h"
-#include "GraphObject.h"
-#include "CompoundObject.h"
-#include "Scene.h"
+#include <Circle2D.h>
+#include <CompoundObject.h>
+#include <GraphObject.h>
+#include <Scene.h>
+#include <SDLApplication.h>
+#include <Segment.h>
+#include <Timer.h>
 
 // направление координат X - вправо, Y - вперёд сквозь экран, Z - вверх
 
 class PrimitivesApplication : public SDLApplication
 {
 private:
-	time_t lasttime;
-
 	Scene3D scene;
 	CompoundObject3D* Objects;
 	Vector3D LightPosition;
+
+	Timer statsTimer;
 
 	double ZRotationSpeed, XRotationSpeed;
 	double RotationAccelerating;
