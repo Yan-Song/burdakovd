@@ -31,11 +31,10 @@ const double RTDemoApplication::RotationSpeed = 1.0;
 const double RTDemoApplication::MouseSensitivity = 0.002;
 
 RTDemoApplication::RTDemoApplication() : 
-	// Наблюдатель находится перед экраном на расстоянии 1000 пикселов
 	scene(new RT::Scene()),
 	container(new RT::CompoundObject()),
-	camera(new RT::Camera(ScreenWidth, ScreenHeight, 2 * atan(ScreenWidth / 2000.0), 2 * atan(ScreenHeight / 2000.0))),
-	Center(Vector3DByCoords(ScreenWidth / 2 + 0.1, 200.1, 400.1)),
+	camera(new RT::Camera(ScreenWidth, ScreenHeight, 2 * atan(ScreenWidth / 1200.0), 2 * atan(ScreenHeight / 1200.0))),
+	Center(Vector3DByCoords(ScreenWidth / 2, 0, 400)),
 	Rendered(false), Dirty(false)
 {
 	const int SDLflags = SDL_DOUBLEBUF || SDL_ANYFORMAT || SDL_HWSURFACE;
@@ -50,35 +49,51 @@ RTDemoApplication::RTDemoApplication() :
 
 
 	// добавить в сцену источник света, типа лампа сверху
-	RT::Scene::SharedLight light1(new RT::Light(Vector3DByCoords(ScreenWidth / 2, 3000, -1000) + Center, RealColor(Palette::White)));
+	RT::Scene::SharedLight light1(new RT::Light(Vector3DByCoords(0, 2000, 2000), RealColor(Palette::White)));
 	scene->AddLight(light1);
 
 	// а также рассеянное освещение
-	scene->SetAmbient(static_cast<RealColor>(Palette::White) * 0.00000002);
+	scene->SetAmbient(static_cast<RealColor>(Palette::White) * 0.00000003);
 
 	// а также добавить лампу в контейнер как невидимый объект, для того чтобы при вращении контейнера источник тоже двигался
 	container->Add(RT::CompoundObject::SharedObject(new RT::Invisible(light1)));
 	
-
-	const RT::Material::SharedTexture checkertex(new RT::Texture("Textures/board.bmp"));
+	const double R = 300.0;
+	const double PlaneReflection = 0.3;
 
 	RT::Material checkermat;
-	checkermat.SetTexture(checkertex, Vector2DByCoords(0, 0), Vector2DByCoords(0.006, 0), Vector2DByCoords(0, 0.006));
-
+	const RT::Material::SharedTexture checkertex(new RT::Texture("Textures/board.bmp"));
+	checkermat.SetTexture(checkertex, Vector2DByCoords(0, 0), Vector2DByCoords(0.01, 0), Vector2DByCoords(0, 0.01));
+	checkermat.SetReflection(PlaneReflection);
 
 	// наполняем контейнер чем-то
 
-	RT::CompoundObject::SharedObject c(new RT::Sphere(Center, 200, static_cast<RealColor>(Palette::Red)));
+	RT::Material RedMaterial(static_cast<RealColor>(Palette::Red));
+	RedMaterial.SetReflection(0.4);
+
+	RT::Material GreenMaterial(static_cast<RealColor>(Palette::Green));
+	GreenMaterial.SetReflection(0.6);
+
+	RT::Material BlueMaterial(static_cast<RealColor>(Palette::Blue));
+	BlueMaterial.SetReflection(0.8);
+
+	RT::CompoundObject::SharedObject rs(new RT::Sphere(Vector3DByCoords(-700, R, -200), R, RedMaterial));
+	RT::CompoundObject::SharedObject gs(new RT::Sphere(Vector3DByCoords(0, R, -100), R, GreenMaterial));
+	RT::CompoundObject::SharedObject bs(new RT::Sphere(Vector3DByCoords(650, R, 0), R, BlueMaterial));
 
 	RT::CompoundObject::SharedObject p(new RT::Plane(Vector000, Vector3DByCoords(1, 0, 0), \
 		Vector3DByCoords(0, 0, 1), checkermat));
 
-	container->Add(c);
+	container->Add(rs);
+	container->Add(gs);
+	container->Add(bs);
 	container->Add(p);
-
 
 	// добавляем контейнер в сцену
 	scene->Add(container);
+
+	camera->Locate(Vector3DByCoords(200, 400, 2000));
+	camera->PickTarget(Vector000);
 }
 
 class Callback : public RT::Scene::ICallback
@@ -116,8 +131,8 @@ bool RTDemoApplication::Callback(const double percent, const bool AllowBreak, co
 	std::ostringstream os;
 
 	os<<"Ray Tracing Demo. ";
-	os<<"Camera position: "<<std::setprecision(0)<<camera->GetPosition()<<"; ";
-	os<<"direction: "<<std::setprecision(2)<<camera->GetDirection()<<". ";
+	os<<"Camera position: "<<std::setprecision(0)<<std::fixed<<camera->GetPosition()<<"; ";
+	os<<"direction: "<<std::setprecision(2)<<std::fixed<<camera->GetDirection()<<". ";
 	os<<"Step: "<<Step<<"; ";
 	os<<"extra: "<<extra<<". ";
 	os<<"Rendered: "<<static_cast<int>(percent)<<"%.";
@@ -197,6 +212,8 @@ void RTDemoApplication::Main()
 
 	const unsigned int startStep = 16;
 
+	scene->SetMinimumRayPower(1.0);
+
 	// рисовать, постепенно наращивая качество
 	for(unsigned int Step = startStep; Step > 0; Step /= 2)
 	{
@@ -216,12 +233,15 @@ void RTDemoApplication::Main()
 
 			// если шаг == 1, то можно ещё нарисовать со сглаживанием
 			if(Step == 1)
+			{
+				scene->SetMinimumRayPower(0.001);
+
 				if(!scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, true, Step, 2)), Step, true, 2))
 					return;
 
-			if(Step == 1)
 				if(!scene->Render(this, RT::Scene::SharedCallback(new ::Callback(this, true, Step, 4)), Step, true, 4))
 					return;
+			}
 		}
 	}
 

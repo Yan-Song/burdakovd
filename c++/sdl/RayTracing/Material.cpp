@@ -3,7 +3,8 @@
 #include <sdlapplication/Utils.h>
 #include "Material.h"
  
-RT::Material::Material(const RealColor& _color) : has_texture(false), base(false), dx(false), dy(false), Texture(), color(_color)
+RT::Material::Material(const RealColor& _color) : has_texture(false), base(false), \
+dx(false), dy(false), Texture(), color(_color), Reflection(0.0)
 {
 }
 
@@ -12,6 +13,12 @@ void RT::Material::SetColor(const RealColor &_color)
 	color = _color;
 	has_texture = false;
 	Texture.reset();
+}
+
+void RT::Material::SetReflection(const double reflection)
+{
+	assert(reflection < 1);
+	Reflection = reflection;
 }
 
 void RT::Material::SetTexture(const RT::Material::SharedTexture &texture, const Point2D &_base, const Vector2D &_dx, const Vector2D &_dy)
@@ -62,5 +69,24 @@ RealColor RT::Material::Trace(const Point3D &point, const Point2D &MaterialPoint
 	const NormalizedVector3D zn = static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector) > 0 ?
 		NormalizedVector3D(-static_cast<Vector3D>(n)) : n;
 
-	return PointColor * engine->CalculateLightness(point, zn);
+	const RealColor AmbientColor = PointColor * engine->CalculateLightness(point, zn);
+
+	if(Reflection > 0)
+	{
+		const Vector3D v = static_cast<Vector3D>(ray.Vector);
+		const Vector3D znv = static_cast<Vector3D>(zn);
+
+		const Vector3D ReflectedVector = v - 2.0 * znv * (znv * v);
+		const Vector3D eps = ReflectedVector / ReflectedVector.Length() * 1e-6;
+
+		const RT::Ray ReflectedRay = RT::Ray(ReflectedVector, point + eps, Reflection * ray.Power);
+
+		const RealColor ReflectionColor = Reflection * engine->Trace(ReflectedRay);
+
+		return AmbientColor + ReflectionColor;
+	}
+	else
+	{
+		return AmbientColor;
+	}
 }

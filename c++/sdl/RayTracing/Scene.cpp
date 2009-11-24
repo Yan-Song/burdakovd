@@ -94,22 +94,7 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 
 						const RT::Ray ray = camera->GenerateRay(x, y);
 				
-						if(RT::CompoundObject::PossibleIntersection(ray))
-						{
-							const RT::MaybeIntersection result = RT::CompoundObject::FindIntersection(ray);
-
-							if(result.Exists)
-							{
-								const RT::SharedTracer tracer = static_cast<RT::Intersection>(result).Tracer;
-								
-								const RealColor current = tracer->Trace(this);
-
-								// проверяем что не получился отрицательный цвет
-								assert(current.R >= 0 && current.G >= 0 && current.B >= 0);
-
-								SummaryColor += current;
-							}
-						}
+						SummaryColor += Trace(ray);
 					}
 
 				*buffer_iterator = SummaryColor / double(extra * extra);
@@ -201,4 +186,26 @@ RealColor RT::Scene::CalculateLightness(const Point3D &point, const RT::Normaliz
 	}
 
 	return sum;
+}
+
+RealColor RT::Scene::Trace(const RT::Ray &ray) const
+{
+	if(ray.Power >= MinimumRayPower && RT::CompoundObject::PossibleIntersection(ray))
+	{
+		const RT::MaybeIntersection result = RT::CompoundObject::FindIntersection(ray);
+
+		if(result.Exists)
+		{
+			const RT::SharedTracer tracer = static_cast<RT::Intersection>(result).Tracer;
+			
+			const RealColor result = tracer->Trace(this);
+
+			// проверяем что не получился отрицательный цвет
+			assert(result.R >= 0 && result.G >= 0 && result.B >= 0);
+
+			return result;
+		}
+	}
+
+	return static_cast<RealColor>(Palette::Black);
 }

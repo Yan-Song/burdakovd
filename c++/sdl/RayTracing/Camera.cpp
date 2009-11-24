@@ -57,11 +57,13 @@ void RT::Camera::SetDirection(const RT::NormalizedVector3D& _direction)
 	dsy = Util::ds_(dsy_dest, VerticalPhi_, ScreenHeight_);
 
 	// dsx направлен так чтобы быть перпендикул€рным dsy и v, а также быть повернутым вправо
-	const Vector3D dsx_dest_ = v ^ dsy_dest_;
+	const Vector3D dsx_dest_ = dsy_dest_ ^ v;
 
 	const NormalizedVector3D dsx_dest = static_cast<RT::NormalizedVector3D>(dsx_dest_);
 
 	dsx = Util::ds_(dsx_dest, HorizontalPhi_, ScreenWidth_);
+
+	ScreenCenter = Util::ScreenCenter(Position, direction);
 }
 
 RT::Ray RT::Camera::GenerateRay(const double sx, const double sy) const
