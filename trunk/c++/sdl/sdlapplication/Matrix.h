@@ -129,12 +129,10 @@ GenericMatrix<N> operator *(const GenericMatrix<N>& A, const GenericMatrix<N>& B
 template<int N>
 GenericVector<double, N> operator *(const GenericMatrix<N>& A, const GenericVector<double, N>& v)
 {
-	GenericVector<double, N> x;
+	GenericVector<double, N> x(true);
 
 	for(int i = 0; i < N; ++i)
 	{
-		x[i] = 0;
-
 		for(int j = 0; j < N; ++j)
 			x[i] += A.A[i][j] * v[j];
 	}
@@ -147,7 +145,7 @@ template<int N>
 GenericVector<double, N> operator *(const GenericMatrix<N+1>& A, const GenericVector<double, N>& v)
 {
 	// 1)
-	GenericVector<double, N+1> homo;
+	GenericVector<double, N+1> homo(false);
 
 	for(int i = 0; i < N; ++i)
 		homo[i] = v[i];
@@ -158,7 +156,7 @@ GenericVector<double, N> operator *(const GenericMatrix<N+1>& A, const GenericVe
 	homo = A * homo;
 
 	// 3)
-	GenericVector<double, N> ans;
+	GenericVector<double, N> ans(false);
 
 	for(int i = 0; i < N; ++i)
 		ans[i] = homo[i] / homo[N];

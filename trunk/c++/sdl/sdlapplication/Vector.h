@@ -2,6 +2,7 @@
 #define VECTOR_H
 
 #include <cmath>
+#include <algorithm>
 #include <iostream>
 #include <stdexcept>
 #include "Utils.h"
@@ -16,11 +17,11 @@ protected:
 public:
 	static const int Dimensions = N;
 
-	// В конструкторе по умолчанию вектор больше НЕ инициализируется нулями (затратно)
-	// Раньше инициализировался. Надеюсь я нигде этот факт не использовал=)
-	// Если нужно инициализировать нулями то есть константы Vector00, Vector000
-	GenericVector()
+public:
+	GenericVector(const bool initialize = false, const I& value = 0)
 	{
+		if(initialize)
+			std::fill_n(data, N, value);
 	}
 
 	inline GenericVector(const dataArray& dt)
@@ -51,7 +52,7 @@ public:
 	template<typename J>
 	inline operator GenericVector<J, N>() const
 	{
-		GenericVector<J, N> ans;
+		GenericVector<J, N> ans(false);
 
 		for(int i = 0; i < N; ++i)
 			ans[i] = static_cast<J>(data[i]);
@@ -108,12 +109,12 @@ Vector3D Vector3DByCoords(const double x, const double y, const double zs);
 ScreenPoint ScreenPointByCoords(const int x, const int y);
 
 // вектор, соответствующий началу координат
-const Vector2D Vector00 = Vector2DByCoords(0.0, 0.0);
-const Vector3D Vector000 = Vector3DByCoords(0.0, 0.0, 0.0);
+const Vector2D Vector00(true, 0.0);
+const Vector3D Vector000(true, 0.0);
 
 // x = 1.0, y = 1.0
-const Vector2D Vector11 = Vector2DByCoords(1.0, 1.0);
-const Vector3D Vector111 = Vector3DByCoords(1.0, 1.0, 1.0);
+const Vector2D Vector11(true, 1.0);
+const Vector3D Vector111(true, 1.0);
 
 // простейшие операции
 
@@ -207,7 +208,7 @@ inline GenericVector<I, N>& operator /=(GenericVector<I, N>& first, const I k)
 template<typename I, int N>
 inline GenericVector<I, N> operator -(const GenericVector<I, N>& first)
 {
-	GenericVector<I, N> ans;
+	GenericVector<I, N> ans(false);
 
 	for(int i = 0; i < N; ++i)
 		ans[i] = -first[i];
@@ -243,7 +244,7 @@ inline I operator *(const GenericVector<I, N>& A, const GenericVector<I, N>& B)
 template<typename I>
 inline GenericVector<I, 3> operator ^(const GenericVector<I, 3>& A, const GenericVector<I, 3>& B)
 {
-	GenericVector<I, 3> ans;
+	GenericVector<I, 3> ans(false);
 
 	ans[0] = A[1] * B[2] - A[2] * B[1];
 	ans[1] = A[2] * B[0] - A[0] * B[2];
@@ -258,8 +259,8 @@ inline GenericVector<I, 3> operator ^(const GenericVector<I, 3>& A, const Generi
 template<typename I>
 inline I VectorMultiplication2D(const GenericVector<I, 2>& A, const GenericVector<I, 2>& B)
 {
-	GenericVector<I, 3> a;
-	GenericVector<I, 3> b;
+	GenericVector<I, 3> a(false);
+	GenericVector<I, 3> b(false);
 
 	for(int i = 0; i < 2; ++i)
 	{

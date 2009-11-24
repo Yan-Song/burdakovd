@@ -17,8 +17,7 @@ public:
 	// центр этого объекта относительно центра родительского
 	Vector Center;
 
-	GenericGraphObject() :
-		Center(Vector()) {}
+	GenericGraphObject() : Center(true, 0.0) {}
 
 	// параллельный перенос
 	inline void Move(const Vector& v)
