@@ -21,6 +21,7 @@ protected:
 	static const int ScreenWidth = 800, ScreenHeight = 600;
 	static const double MovementSpeed;
 	static const double RotationSpeed;
+	static const double MouseSensitivity;
 
 	virtual void Main();
 

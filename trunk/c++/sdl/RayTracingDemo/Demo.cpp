@@ -26,8 +26,9 @@
 // y - вверх
 // z - вперед
 
-const double RTDemoApplication::MovementSpeed = 100.0;
+const double RTDemoApplication::MovementSpeed = 1000.0;
 const double RTDemoApplication::RotationSpeed = 1.0;
+const double RTDemoApplication::MouseSensitivity = 0.002;
 
 RTDemoApplication::RTDemoApplication() : 
 	// Наблюдатель находится перед экраном на расстоянии 1000 пикселов
@@ -157,7 +158,8 @@ void RTDemoApplication::Navigate()
 		Dirty = true;
 	}
 
-	if(isPressed(SDLK_UP) || isPressed(SDLK_w))
+	// вперёд можно идти стрелкой, w, или  зажав среднюю кнопку мыши
+	if(isPressed(SDLK_UP) || isPressed(SDLK_w) || (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_MMASK))
 	{
 		camera->MoveForward(MovementSpeed * dt);
 		Dirty = true;
@@ -166,6 +168,12 @@ void RTDemoApplication::Navigate()
 	if(isPressed(SDLK_DOWN) || isPressed(SDLK_s))
 	{
 		camera->MoveForward(-MovementSpeed * dt);
+		Dirty = true;
+	}
+
+	if(isPressed(SDLK_SPACE))
+	{
+		camera->Move(Vector3DByCoords(0, MovementSpeed * dt * 0.2, 0));
 		Dirty = true;
 	}
 }
@@ -236,6 +244,33 @@ void RTDemoApplication::ProcessEvent(SDL_Event Event)
 
 		if(sym == SDLK_PRINT)
 			MakeScreenshot();
+	}
+
+	if(Event.type == SDL_MOUSEBUTTONDOWN)
+	{
+		SDL_ShowCursor(false);
+		SDL_WM_GrabInput(SDL_GRAB_ON);
+	}
+
+	if(Event.type == SDL_MOUSEBUTTONUP)
+	{
+		SDL_ShowCursor(true);
+		SDL_WM_GrabInput(SDL_GRAB_OFF);
+	}
+
+	if(Event.type == SDL_MOUSEMOTION)
+	{	
+		// вращать камеру мышью можно с зажатой правой либо левой кнопкой
+		if(Event.motion.state & (SDL_BUTTON_LMASK | SDL_BUTTON_RMASK))
+		{
+			camera->RotateHorizontal(- static_cast<double>(Event.motion.xrel) * MouseSensitivity);
+			camera->RotateVertical(- static_cast<double>(Event.motion.yrel) * MouseSensitivity);
+
+			// а это нужно чтоб камера выровняла горизонт, так как крутя мышкой можно наклонить камеру по третmей оси, что не нужно
+			camera->SetDirection(camera->GetDirection());
+
+			Dirty = true;
+		}
 	}
 }
 
