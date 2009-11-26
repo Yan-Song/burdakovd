@@ -23,7 +23,7 @@ namespace RT
 		friend Polynom operator +(const Polynom& a, const Polynom& b);
 
 	public:
-		Polynom(const double k, const unsigned int degree) : coefficients(degree + 1, 0)
+		Polynom(const double k, const size_t degree) : coefficients(degree + 1, 0)
 		{
 			coefficients[degree] = k;
 		}
@@ -33,17 +33,17 @@ namespace RT
 		}
 
 		// степень полинома (оценка сверху, так как старшие коэффициенты могут быть равны нулю)
-		inline unsigned int Degree() const
+		inline size_t Degree() const
 		{
 			return coefficients.size() - 1;
 		}
 
-		inline double GetCoefficient(const unsigned int degree) const
+		inline double GetCoefficient(const size_t degree) const
 		{
 			return degree <= Degree() ? coefficients[degree] : 0.0;
 		}
 
-		inline void SetCoefficient(const unsigned int degree, const double value)
+		inline void SetCoefficient(const size_t degree, const double value)
 		{
 			assert(degree <= Degree());
 
@@ -64,37 +64,37 @@ namespace RT
 
 	inline Polynom operator +(const Polynom& a, const Polynom& b)
 	{
-		const unsigned int an = a.Degree() + 1, bn = b.Degree() + 1;
-		const unsigned int n = std::max(an, bn);
+		const size_t an = a.Degree() + 1, bn = b.Degree() + 1;
+		const size_t n = std::max(an, bn);
 
 		Polynom ans(0, n - 1);
-		
-		for(unsigned int i = 0; i < n; ++i)
+
+		for(size_t i = 0; i < n; ++i)
 			ans.coefficients[i] = a.GetCoefficient(i) + b.GetCoefficient(i);
-		
+
 		return ans;
 	}
 
 	inline Polynom operator -(const Polynom& a, const Polynom& b)
 	{
-		const unsigned int an = a.Degree() + 1, bn = b.Degree() + 1;
-		const unsigned int n = std::max(an, bn);
+		const size_t an = a.Degree() + 1, bn = b.Degree() + 1;
+		const size_t n = std::max(an, bn);
 
 		Polynom ans(0, n - 1);
-		
-		for(unsigned int i = 0; i < n; ++i)
+
+		for(size_t i = 0; i < n; ++i)
 			ans.coefficients[i] = a.GetCoefficient(i) - b.GetCoefficient(i);
-		
+
 		return ans;
 	}
 
 	inline Polynom operator -(const Polynom& a)
 	{
-		const unsigned int n = a.Degree() + 1;
+		const size_t n = a.Degree() + 1;
 
 		Polynom ans(0, n - 1);
-		
-		for(unsigned int i = 0; i < n; ++i)
+
+		for(size_t i = 0; i < n; ++i)
 			ans.coefficients[i] = -a.coefficients[i];
 
 		return ans;
@@ -112,13 +112,13 @@ namespace RT
 
 	inline Polynom operator *(const Polynom& a, const Polynom& b)
 	{
-		const unsigned int an = a.Degree() + 1, bn = b.Degree() + 1;
-		const unsigned int degree = a.Degree() + b.Degree();
+		const size_t an = a.Degree() + 1, bn = b.Degree() + 1;
+		const size_t degree = a.Degree() + b.Degree();
 
 		Polynom ans(0, degree);
 
-		for(unsigned int i = 0; i < an; ++i)
-			for(unsigned int j = 0; j < bn; ++j)
+		for(size_t i = 0; i < an; ++i)
+			for(size_t j = 0; j < bn; ++j)
 				ans.coefficients[i + j] += a.coefficients[i] * b.coefficients[j];
 
 		return ans;
@@ -131,11 +131,11 @@ namespace RT
 
 	inline Polynom operator /(const Polynom& a, const double b)
 	{
-		const unsigned int n = a.Degree() + 1;
+		const size_t n = a.Degree() + 1;
 
 		Polynom ans(0, n - 1);
 
-		for(unsigned int i = 0; i < n; ++i)
+		for(size_t i = 0; i < n; ++i)
 			ans.coefficients[i] = a.coefficients[i] / b;
 
 		return ans;

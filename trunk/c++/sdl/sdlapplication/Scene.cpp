@@ -19,7 +19,7 @@ namespace
 	{
 		Point2D p;
 		double w;
-	
+
 		Point(const Point2D& _p, const double _w) : p(_p), w(_w) {}
 	};
 
@@ -37,7 +37,7 @@ private:
 	inline static void DrawPixel(const int x, const int y, const double w, const Color& color, Scene3D* scene)
 	{
 		const size_t index = static_cast<unsigned int>(x + y * scene->ScreenSize[0]);
-	
+
 		if(w > scene->WBuffer[index])
 		{
 			scene->WBuffer[index] = w;
@@ -49,9 +49,9 @@ private:
 	{
 		const int start = std::max(0, static_cast<int>(ceil(x1)));
 		const int finish = std::min(app->Screen->w - 1, static_cast<int>(floor(x2)));
-	
+
 		double w = w1 + dw_dx * (start - x1);
-	
+
 		for(int x = start; x <= finish; ++x, w += dw_dx)
 			DrawPixel(x, y, w, color, scene);
 	}
@@ -64,16 +64,16 @@ public:
 	{
 		const int ystart = std::max(0, static_cast<int>(ceil(std::max(p.first.p[1], q.first.p[1]))));
 		const int yfinish = std::min(app->Screen->h - 1, static_cast<int>(floor(std::min(p.second.p[1], q.second.p[1]))));
-	
+
 		// d##_dy - это производная ## по y (константа, так как эти переменные линейны по x и по y), смысл переменных ## - объяснен ниже
 		// если отрезок p горизонтален, то dpw_dy, dpx_dy не имеет смысла, так что пусть будет 0
 		const double dpw_dy = (p.second.p[1] == p.first.p[1]) ? 0 : (p.second.w - p.first.w) / (p.second.p[1] - p.first.p[1]);
 		const double dpx_dy = (p.second.p[1] == p.first.p[1]) ? 0 : (p.second.p[0] - p.first.p[0]) / (p.second.p[1] - p.first.p[1]);
-		
+
 		// если отрезок q горизонтален, то dqw_dy, dqx_dy не имеет смысла, так что пусть будет 0
 		const double dqw_dy = (q.second.p[1] == q.first.p[1]) ? 0 : (q.second.w - q.first.w) / (q.second.p[1] - q.first.p[1]);
 		const double dqx_dy = (q.second.p[1] == q.first.p[1]) ? 0 : (q.second.p[0] - q.first.p[0]) / (q.second.p[1] - q.first.p[1]);
-		
+
 		// нахождение dw_dx
 		// кроме вырожденных случаев, только на одном y выполняется deltax = qx - px == 0 (в точке пересечения)
 		// так как dw_dx не зависит от y, то можно сложить равенства deltaw = deltax * dw_dx, для двух разных y
@@ -94,7 +94,7 @@ public:
 		double px = p.first.p[0] + (ystart - p.first.p[1]) * dpx_dy;
 		// qx - это значение x в точке пересечения прямой, содержащей отрезок q и прямой Y = y, сейчас Y = ystart
 		double qx = q.first.p[0] + (ystart - q.first.p[1]) * dqx_dy;
-	
+
 		for(int y = ystart; y <= yfinish; ++y)
 		{
 			DrawPixels(px, qx, pw, dw_dx, y, color, app, scene);
@@ -142,10 +142,10 @@ void Scene3D::DrawTriangle(const Point3D &A, const Point3D &B, const Point3D &C,
 	// плюс сумма мощностей источников света, умноженных на косинусы углов падения света на грань
 	// и в конце нормирую эту сумму, чтобы вместе с ambient она могла дать максимум 1.0
 	const double ambient = 0.6;
-	const unsigned int nlight = Light.size(); // количество источников
+	const size_t nlight = Light.size(); // количество источников
 	double sumpower = 0; // сумма мощностей
 	double lightness = 0; // освещенность, без учета ambient и не нормированная
-	
+
 	for(unsigned int i = 0; i < nlight; ++i)
 	{
 		const double power = Light[i].second;
@@ -167,7 +167,7 @@ void Scene3D::DrawTriangle(const Point3D &A, const Point3D &B, const Point3D &C,
 	// ---------------------------------------------------------------------------------------
 	// проекция
 	const Projection::Matrix projector = Projection::PerspectiveProjection<1>(SpectatorPosition);
-	
+
 	// вершины треугольника, спрецированные на экранную плоскость
 	const Point2D a = Projection::GetXZ(projector * A);
 	const Point2D b = Projection::GetXZ(projector * B);
@@ -216,7 +216,7 @@ void Scene3D::DrawPixelBuffer()
 
 	if(Smoothing)
 	{
-		
+
 		for(size_t y = ymin + 1; y + 1 < ymax; ++y)
 			for(size_t x = xmin + 1; x + 1 < xmax; ++x)
 			{
@@ -225,7 +225,7 @@ void Scene3D::DrawPixelBuffer()
 
 				if(WBuffer[index] == 0 && WBuffer[indexl] == 0 && WBuffer[indexr] == 0 && WBuffer[indext] == 0 && WBuffer[indexb] == 0)
 					continue;
-	
+
 				app->RawDrawPixel(static_cast<int>(x), static_cast<int>(y),
 					(PixelBuffer[indexl] + PixelBuffer[indexr] + PixelBuffer[indext] + PixelBuffer[indexb] + PixelBuffer[index]) / 5
 					);
@@ -247,10 +247,10 @@ void Scene3D::DrawPixelBuffer()
 void Scene3D::Render()
 {
 	assert((ScreenSize[0] == app->Screen->w) && (ScreenSize[1] == app->Screen->h));
-	
+
 	ClearBuffers();
 	app->ClearScreen();
-	
+
 	CompoundObject3D::Draw(Vector000, this);
 
 	app->Lock();

@@ -33,7 +33,7 @@ namespace RT
 		RealColor ambient;
 		double MinimumRayPower;
 
-		void DrawBuffer(SDLApplication* const app, const bool rectangles, const unsigned int Step);
+		void DrawBuffer(SDLApplication* const app, const bool rectangles, const size_t Step);
 
 	public:
 		class ICallback
@@ -91,8 +91,8 @@ namespace RT
 		// возвращается true если сцена успела отрендериться до конца, и false если её прервал callback
 		// extra - для рассчета цвета каждого пикселя испускается extra * extra лучей и затем берётся среднее
 		// чем extra больше - тем меньше ступенчатость, но дольше рендерится, минимальное значение 1
-		bool Render(SDLApplication* const app, const SharedCallback& callback, const unsigned int Step = 1,
-			const bool rectangles = true, const unsigned int extra = 1);
+		bool Render(SDLApplication* const app, const SharedCallback& callback, const size_t Step = 1,
+			const bool rectangles = true, const size_t extra = 1);
 
 
 		// IEngine members

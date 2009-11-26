@@ -1,11 +1,11 @@
+#include <ctime>
+#include <algorithm>
+#include <iostream>
 #include <SDL.h>
 #include "SDLApplication.h"
 #include "SDLException.h"
-#include <ctime>
-#include <iostream>
 #include "Timer.h"
 #include "Utils.h"
-#include <algorithm>
 
 SDLApplication::SDLApplication() :
 	Screen(NULL), frames(0), dt(0.0),
@@ -46,7 +46,7 @@ int SDLApplication::dtAvg() const
 		for(FrameInfoList::const_iterator it = stats.begin(); it != stats.end(); ++it)
 			sum += it->dt;
 
-		return static_cast<int>(sum * 1000 / stats.size());
+		return static_cast<int>(sum * 1000 / static_cast<double>(stats.size()));
 	}
 	else
 	{
@@ -90,7 +90,7 @@ int SDLApplication::dtMin() const
 	}
 }
 
-void SDLApplication::InitializeSDL(size_t ScreenHeight, size_t ScreenWidth, int ColorDepth, size_t SDLflags)
+void SDLApplication::InitializeSDL(size_t ScreenHeight, size_t ScreenWidth, int ColorDepth, Uint32 SDLflags)
 {
 	// Load SDL
 	SDLCheck(SDL_Init(SDL_INIT_EVERYTHING));
