@@ -70,7 +70,7 @@ public:
 		Light.clear();
 	}
 
-	inline unsigned int LightCount() const
+	inline size_t LightCount() const
 	{
 		return Light.size();
 	}

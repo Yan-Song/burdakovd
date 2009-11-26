@@ -6,7 +6,7 @@
 #include "Ray.h"
 #include "Scene.h"
 
-void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, const unsigned int Step)
+void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, const size_t Step)
 {
 	const unsigned int w = static_cast<unsigned int>(app->Screen->w);
 	const unsigned int h = static_cast<unsigned int>(app->Screen->h);
@@ -18,15 +18,15 @@ void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, con
 	{
 		ColorContainer::const_iterator buffer_iterator = buffer.begin();
 
-		for(unsigned int y = 0; y < h; y += Step)
-			for(unsigned int x = 0; x < w; x += Step)
+		for(size_t y = 0; y < h; y += Step)
+			for(size_t x = 0; x < w; x += Step)
 			{
 				const int baseX = static_cast<int>(x);
 				const int baseY = static_cast<int>(y);
 
 				const int baseX2 = static_cast<int>(x + Step);
 				const int baseY2 = static_cast<int>(y + Step);
-				
+
 				app->FillRectangle(ScreenPointByCoords(baseX, baseY), \
 					ScreenPointByCoords(baseX2, baseY2), *buffer_iterator);
 
@@ -41,8 +41,8 @@ void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, con
 
 		ColorContainer::const_iterator buffer_iterator = buffer.begin();
 
-		for(unsigned int y = 0; y < h; y += Step)
-			for(unsigned int x = 0; x < w; x += Step)
+		for(size_t y = 0; y < h; y += Step)
+			for(size_t x = 0; x < w; x += Step)
 			{
 				app->RawDrawPixel(static_cast<int>(x), static_cast<int>(y), *buffer_iterator);
 				++buffer_iterator;
@@ -56,12 +56,12 @@ void RT::Scene::DrawBuffer(SDLApplication* const app, const bool rectangles, con
 	app->Flip();
 }
 
-bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallback &callback, const unsigned int Step, const bool rectangles, \
-					   const unsigned int extra)
-{	
+bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallback &callback, \
+		const size_t Step, const bool rectangles, const size_t extra)
+{
 	const size_t n = static_cast<size_t>(app->Screen->h * app->Screen->w);
-	const size_t qh = (static_cast<size_t>(app->Screen->h) + Step - 1) / Step;
-	const size_t qw = (static_cast<size_t>(app->Screen->w) + Step - 1) / Step;
+	const size_t qh = (static_cast<size_t>(static_cast<unsigned int>(app->Screen->h)) + Step - 1) / Step;
+	const size_t qw = (static_cast<size_t>(static_cast<unsigned int>(app->Screen->w)) + Step - 1) / Step;
 	const size_t qn = qh * qw;
 
 	// резервируем памяти для максимального качества
@@ -73,27 +73,36 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 
 	if(camera)
 	{
-		const unsigned int updateInterval = std::max<unsigned int>(qn / 100, 100);
+		const size_t updateInterval = std::max<size_t>(qn / 100, 100);
 
 		ColorContainer::iterator buffer_iterator = buffer.begin();
 
-		for(unsigned int yt = 0, i = 0; yt < static_cast<unsigned int>(app->Screen->h); yt += Step)
+		for(size_t yt = 0, i = 0; yt < static_cast<size_t>(app->Screen->h); yt += Step)
 		{
-			for(unsigned int xl = 0; xl < static_cast<unsigned int>(app->Screen->w); xl += Step, ++i)
+			for(size_t xl = 0; xl < static_cast<size_t>(app->Screen->w); xl += Step, ++i)
 			{
 				RealColor SummaryColor(Palette::Black);
 
 				// разбиваем окрестность пикселя (x, y)..(x + 1, y + 1) на extra строк и столбцов
 				// для каждой ячейки проводим луч и затем берём среднее
-				for(unsigned int ex = 0; ex < extra; ++ex)
-					for(unsigned int ey = 0; ey < extra; ++ey)
+				for(size_t ex = 0; ex < extra; ++ex)
+					for(size_t ey = 0; ey < extra; ++ey)
 					{
 						// находим центры каждой ячейки
-						const double x = xl + (ex + 0.5) / extra * Step;
-						const double y = yt + (ey + 0.5) / extra * Step;
+						const double x = \
+								static_cast<double>(xl) + \
+								(static_cast<double>(ex) + 0.5) \
+								/ static_cast<double>(extra) \
+								* static_cast<double>(Step);
+
+						const double y = \
+								static_cast<double>(yt) + \
+								(static_cast<double>(ey) + 0.5) \
+								/ static_cast<double>(extra) \
+								* static_cast<double>(Step);
 
 						const RT::Ray ray = camera->GenerateRay(x, y);
-				
+
 						SummaryColor += Trace(ray);
 					}
 
@@ -103,10 +112,10 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 
 				if(i % updateInterval == 0)
 				{
-					const unsigned int percent = 90 *
-						static_cast<unsigned int>(buffer_iterator - buffer.begin()) / qn;
+					const size_t percent = 90 *
+						static_cast<size_t>(buffer_iterator - buffer.begin()) / qn;
 
-					if(callback->call(percent))
+					if(callback->call(static_cast<double>(percent)))
 					{
 						return false;
 					}
@@ -114,7 +123,7 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 			}
 		}
 		assert(buffer_iterator == buffer.end());
-	
+
 
 		// тут можно делать tonemapping
 		// найти максимум
@@ -140,7 +149,7 @@ bool RT::Scene::Render(SDLApplication *const app, const RT::Scene::SharedCallbac
 		return false;
 
 	// остался последний шаг, перенести всё это на экран
-	
+
 	DrawBuffer(app, rectangles, Step);
 
 	callback->call(100);
@@ -197,7 +206,7 @@ RealColor RT::Scene::Trace(const RT::Ray &ray) const
 		if(result.Exists)
 		{
 			const RT::SharedTracer tracer = static_cast<RT::Intersection>(result).Tracer;
-			
+
 			const RealColor result = tracer->Trace(this);
 
 			// проверяем что не получился отрицательный цвет

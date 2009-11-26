@@ -6,7 +6,7 @@ include_directories(/usr/include/SDL)
 add_definitions(-DTR1_PREFIX -W -Wall -Wextra -pedantic -Weffc++ -Woverloaded-virtual -Wctor-dtor-privacy -Wnon-virtual-dtor -Wold-style-cast -Wconversion -Wsign-conversion -Winit-self -Werror)
 
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -funit-at-a-time -funswitch-loops -Wdisabled-optimization")
-set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_PROFILE} -g -pg")
+set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_PROFILE} -g -pg -O0")
 
 add_subdirectory(sdlapplication)
 add_subdirectory(primitives)
