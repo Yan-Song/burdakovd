@@ -11,7 +11,7 @@ import time
 #### some html helpers
 
 htmldir = "html"
-dbversion = "2.11"
+dbversion = "2.12"
 transactionsperpage = 500
 topprofitlimit = 5000
 onmainpagecountlimit = 200
