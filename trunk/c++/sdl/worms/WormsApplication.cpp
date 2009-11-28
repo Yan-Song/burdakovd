@@ -120,7 +120,7 @@ void WormsApplication::Render()
 	// тут ничего нет, т.к. картинка не рендерится на каждом кадре заново, а по мере движения червей в Main() прорисовываются изменения
 }
 
-void WormsApplication::DrawCell(const SimplePoint& position, const CellType type) const
+void WormsApplication::DrawCell(const SimplePoint& position, const CellType type)
 {
 	if(type == CellEmpty)
 		DrawCell(position, EmptyColor);
@@ -133,12 +133,12 @@ void WormsApplication::DrawCell(const SimplePoint& position, const CellType type
 }
 
 // возможно index будет использоваться если мы будем к примеру рисовать голову червя другим цветом/текстурой чем остальное тело
-void WormsApplication::DrawWormCell(const SimplePoint &position, const ISomeWorm *worm, const int index) const
+void WormsApplication::DrawWormCell(const SimplePoint &position, const ISomeWorm *worm, const int index)
 {
 	DrawCell(position, worm->GetColor());
 }
 
-void WormsApplication::DrawCell(const SimplePoint &position, const Color &color) const
+void WormsApplication::DrawCell(const SimplePoint &position, const Color &color)
 {
 	/*FillRectangle(
 		ScreenPointByCoords(position.X * 10, ScreenHeight - position.Y * 10 - 10),
