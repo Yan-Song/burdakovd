@@ -18,9 +18,9 @@ public:
 	WormsApplication();
 	BattleField Map;
 	static const int FieldWidth, FieldHeight;
-	void DrawCell(const SimplePoint& position, const CellType type) const;
-	void DrawWormCell(const SimplePoint& position, const ISomeWorm* worm, const int index) const;
-	void DrawCell(const SimplePoint& position, const Color& color) const;
+	void DrawCell(const SimplePoint& position, const CellType type);
+	void DrawWormCell(const SimplePoint& position, const ISomeWorm* worm, const int index);
+	void DrawCell(const SimplePoint& position, const Color& color);
 	static const Color EmptyColor, WallColor, FoodColor;
 	// создать нового червя заданного класса, добавить его в список, и вернуть указатель на него
 	// вызывающая сторона не должна делать delete для этого указателя
