@@ -11,7 +11,7 @@ import time
 #### some html helpers
 
 htmldir = "html"
-dbversion = "2.12"
+dbversions = ["2.11", "2.12"]
 transactionsperpage = 500
 topprofitlimit = 5000
 onmainpagecountlimit = 200
@@ -406,11 +406,11 @@ for realm in realms:
         
         # check db version
         cversion = data[realm][char]["version"]
-        if cversion != dbversion:
+        if not(cversion in dbversions):
             write(char+"-data", u"История торговли %s" % char, \
                 p(u"""База, полученная от BeanCounter для %s имеет версию "%s", а этот
-                скрипт умеет работать только с базами версии "%s".""" % \
-                (char, cversion, dbversion)))
+                скрипт умеет работать только с базами версии %s.""" % \
+                (char, cversion, ", ".join(dbversions))))
             continue
         
         # raw data
