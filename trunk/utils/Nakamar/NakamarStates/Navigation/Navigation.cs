@@ -308,7 +308,7 @@ namespace NakamarStates
         {
             string command = m.Argument(0);
             if (command == null)
-                LogError("нужно указать субкоманду");
+                LogError("нужно указать субкоманду add|info");
             else if (command == "add")
                 AddDestination(m);
             else if (command == "info")
