@@ -7,7 +7,7 @@ using System.Resources;
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 [assembly: AssemblyTitle("Nakamar")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Nakamar trading software for WoW 3.3.0")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MSU")]
 [assembly: AssemblyProduct("Nakamar")]
@@ -33,7 +33,7 @@ using System.Resources;
 // Можно задать все значения или принять номер построения и номер редакции по умолчанию, 
 // используя "*", как показано ниже:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.1.330.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("TestNakamar")]
