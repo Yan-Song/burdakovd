@@ -359,6 +359,7 @@ function private.everySecond()
 		
 		-- если в банке делать нечего...
 		print("Хм... а зачем я в пришёл в банк?")
+		CloseBankFrame()
 		private.changeState("THINKING")
 		return
 	end
@@ -705,11 +706,16 @@ function lib.OnLoad()
 	private.frame:SetScript("OnUpdate", private.OnUpdate)
 	private.frame:SetScript("OnEvent", private.OnEvent)
 	private.frame:Show()
-	RegisterEvent("BANKFRAME_OPENED", function() bankAvailable = true; private.updateBankStats(); NCurrentState("Банк") end)
-	RegisterEvent("BANKFRAME_CLOSED", function() bankAvailable = nil; NCurrentState("хз"); end)
-	RegisterEvent("MAIL_INBOX_UPDATE", function() if mailboxOpened then mailboxAvailable = true end end)
-	RegisterEvent("MAIL_SHOW", function() mailboxOpenedTime = private.GameTime; mailboxOpened = true; NCurrentState("Почта") end)
-	RegisterEvent("MAIL_CLOSED", function() mailboxAvailable = false; mailboxOpened = false; NCurrentState("хз") end)
+	RegisterEvent("BANKFRAME_OPENED",
+		function() bankAvailable = true; private.updateBankStats(); NCurrentState("Банк") end)
+	RegisterEvent("BANKFRAME_CLOSED",
+		function() bankAvailable = nil; NCurrentState("хз"); end)
+	RegisterEvent("MAIL_INBOX_UPDATE",
+		function() if mailboxOpened then mailboxAvailable = true end end)
+	RegisterEvent("MAIL_SHOW",
+		function() mailboxOpenedTime = private.GameTime; mailboxOpened = true; NCurrentState("Почта") end)
+	RegisterEvent("MAIL_CLOSED",
+		function() mailboxAvailable = false; mailboxOpened = false; NCurrentState("хз") end)
 	AucAdvanced.Settings.SetDefault("util.nakamar.printwindow", 1)
 	RegisterEvent("CHAT_MSG_WHISPER", private.Chat)
 end
@@ -858,9 +864,34 @@ function lib.filter(f, t)
 	return ans
 end
 
-function lib.isBatch(link,bag,slot)
+function lib.tryBatch(link)
+	local name, link, _, _, _, _, _, stack = GetItemInfo(link)
 	local sig = AucAdvanced.API.GetSigFromLink(link)
-	return AucAdvanced.Post.IsAuctionable(bag, slot) and AucAdvanced.Settings.GetSetting('util.appraiser.item.'..sig..'.bulk')
+	
+	if stack == 1 then
+		print(
+			string.format("Новый предмет: %s, не стекается, поэтому автоматически выкладываем по одному", 
+			link))
+		AucAdvanced.Settings.SetSetting('util.appraiser.item.'..sig..'.bulk', true)
+	end
+end
+
+local isBatch = function(link)
+	local sig = AucAdvanced.API.GetSigFromLink(link)
+	
+	return AucAdvanced.Settings.GetSetting('util.appraiser.item.'..sig..'.bulk')
+end
+
+function lib.isBatch(link, bag, slot)
+	if AucAdvanced.Post.IsAuctionable(bag, slot) then
+		if isBatch(link) then
+			return true
+		end
+		lib.tryBatch(link)
+		return isBatch(link)
+	else
+		return false
+	end
 end
 
 function lib.batchItems()
