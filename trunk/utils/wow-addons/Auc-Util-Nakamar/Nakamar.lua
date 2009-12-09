@@ -26,44 +26,70 @@
 
 
 local libType, libName = "Util", "Nakamar"
-local lib,parent,private = AucAdvanced.NewModule(libType, libName)
+local lib, parent, private = AucAdvanced.NewModule(libType, libName)
 if not lib then return end
 lib.API = {}
-
-
-
-private.state = "LOADING"
-private.last_change = 0
-private.bankSlots = true
-private.bankTime = -10000.0
-private.lastToBank = -1000.0
-private.nextMailTime = 0.0 -- когда в следующий раз можно будет зайти на почту
-private.lastscan = 0
 
 local frames = 0
 local ipairs = ipairs
 local pairs = pairs
-local _time=0.0
-private.gtime=0.0
+local tinsert = table.insert
+local GetFaction = AucAdvanced.GetFaction
+
+private.state = "LOADING"
+private.lastStateChangeTime = 0
+private.hasFreeBankSlots = true
+private.lastBankInfoUpdateTime = -10000.0
+private.nextMailTime = 0.0 -- когда в следующий раз можно будет зайти на почту
+
+local everySecondTimer = 0.0
+-- уже не помню, зачем он нужен, если есть GetTime()
+-- возможно я тогда не знал про GetTime(), но сейчас исправлять не могу
+-- кроме того gtime не совсем совпадает с GetTime() но кажется разницы нет
+private.GameTime = 0.0
+-- открыто ли окно банка
 local bankAvailable = nil
-local mailboxAvailable = nil
+-- открыта ли почта
 local mailboxOpened = false
+-- можно ли уже работать с почтой (загрузилась ли)
+local mailboxAvailable = nil
+-- открыто ли уже окно аукциона
 local auctionAvailable = nil
-local handlers = {}
-local lastnotification = -1000.0
+local eventHandlers = {}
+local lastMovementRequest = -1000.0
 local mailboxOpenedTime = 0
-local oldItemsCount = 0
-local prevItemsCount = 0
-local prevICTime = 0
-local freshnessforposting = 7200 -- 2h
-local KeepFreeBagSlots = 1
+-- количество предметов и голда в сумке перед каким-либо действием
+-- используется чтобы сравнить с текущим, узнать, удалось ли что-то собрать
+local oldAssets = 0
+-- количество --/-- несколько секунд назад
+-- используется чтобы сравнить с текущим и узнать,
+-- удалось ли что-то собрать за последние несколько секунд
+local prevAssets = 0
+-- время последнего обновления prevAssets
+local prevAssetsTime = 0
+-- на сколько секунд скан может устареть, чтобы его ещё можно было считать действительным
+local maxScanAge = 7200 -- 2h
+local keepFreeBagSlots = 1
+
+local max = function(x, y)
+	if x > y then
+		return x
+	else
+		return y
+	end
+end
+
+-- количество предметов и денег в сумке
+local assets = function()
+	return GBM:InBagsItemCount() + GetMoney()
+end
 
 local RegisterEvent = function(event, f)
 	private.frame:RegisterEvent(event)
-	if handlers[event] == nil then
-		handlers[event] = {}
+	if eventHandlers[event] == nil then
+		eventHandlers[event] = {}
 	end
-	table.insert(handlers[event], f)
+	tinsert(eventHandlers[event], f)
 end
 
 local print = function(s)
@@ -76,7 +102,7 @@ local print = function(s)
 	local prefix = date("[%H:%M:%S] ")
 	frameReference:AddMessage(prefix..tostring(s), 1.0, 1.0, 1.0)
 	if not Nakamar.logs then Nakamar.logs = {} end
-	table.insert(Nakamar.logs, {time(), tostring(s)})
+	tinsert(Nakamar.logs, {time(), tostring(s)})
 end
 private.print = print
 
@@ -84,26 +110,52 @@ function lib.isBankAvailable()
 	return bankAvailable
 end
 
-function private.updateBankStats()
-	if not bankAvailable then return end -- return if bank window is not open
-	local old = private.bankSlots
-	private.bankSlots = not not GBM:FindFreeBankSlot() -- convert to boolean
-	private.bankTime = private.gtime
-	if private.bankSlots ~= old then
-		if private.bankSlots then print("Обнаружено что в банке ещё есть место.")
-		else print("Обнаружено что в банке нет места.")
+function private.updateFreeBankSlots()
+	-- проверка на наличие пустых слотов в банке
+	local old = private.hasFreeBankSlots
+	private.hasFreeBankSlots = not not GBM:FindFreeBankSlot() -- convert to boolean
+	
+	if private.hasFreeBankSlots ~= old then
+		if private.hasFreeBankSlots then
+			print("Оказывается в банке ещё есть свободные ячейки... Буду иметь в виду")
+		else
+			print("В банке закончилось место... Печаль")
 		end
 	end
 end
 
-function private.ERROR()
+function private.updateAuctionableBankItems()
+	-- проверка на наличие Auctionable вещей в банке
+	local old = private.hasAuctionableBankItems
+	private.hasAuctionableBankItems = #(lib.batchBankItems()) > 0
+	
+	if private.hasAuctionableBankItems ~= old then
+		if private.hasAuctionableBankItems then
+			print("В банке есть товары на продажу")
+		else
+			print("В банке нет товаров на продажу")
+		end
+	end
+end
+
+function private.updateBankStats()
+	if not bankAvailable then return end -- return if bank window is not open
+	private.lastBankInfoUpdateTime = private.GameTime
+	
+	private.updateFreeBankSlots()
+	private.updateAuctionableBankItems()
+end
+
+function private.ERROR(reason)
+	local text = reason or "причина неизвестна"
 	private.playSound("ERROR")
-	print("что-то не так..")
+	print("Ошибка: "..text)
 	if(AucAdvanced.Settings.GetSetting("util.nakamar.quit_on_error")) then
 		print("Quit через "..tostring(private.waitbeforequitseconds).." секунд")
 		private.changeState("QUIT")
-		NDoNotRestart("что-то не так...")
+		NDoNotRestart(text)
 	else
+		-- странный код...
 		private.changeState("ERROR")
 		private.changeState("THINKING")
 	end
@@ -112,15 +164,16 @@ end
 
 local updateNextMailTime = function()
 	local wait
-	local cur = GBM:InBagsItemCount() + GetMoney()
-	if cur == oldItemsCount then
-		print("В этот раз ничего с почты собрать не удалось, так что вернусь сюда не скоро")
-		wait = random(5000,10000)
+	
+	if oldAssets == assets() then
+		wait = random(5000, 10000)
+		local minutes = ceil(wait / 60)
+		print("Похоже я собрал всю почту, следующая проверка через "..tostring(minutes).." минут")
 	else
-		print("что-то с почты собрано, так что скоро можно будет проверить её ещё раз")
-		wait = random(60,100)
+		print("Жду минуту пока обновится ящик")
+		wait = random(60, 100)
 	end
-	private.nextMailTime = private.gtime + wait
+	private.nextMailTime = private.GameTime + wait
 end
 
 function lib.CancelQuit()
@@ -133,26 +186,38 @@ function lib.CancelQuit()
 	end
 end
 
+function private.GoTo(destination)
+	lastMovementRequest = private.GameTime
+	private.destination = destination
+	NGoTo(destination)
+end
+
 function private.GoToAuction()
 	CloseAuctionHouse()
-	NGoTo("Аукцион")
+	private.GoTo("Аукцион")
 end
 
 function private.GoToMail()
 	CloseMail()
-	NGoTo("Почта")
+	private.GoTo("Почта")
 end
 
 function private.GoToBank()
 	CloseBankFrame()
-	NGoTo("Банк")
+	private.GoTo("Банк")
 end
 
-local saidBank = false
+local freshBankInfo = function()
+	return private.lastBankInfoUpdateTime > private.GameTime - 3600
+end
+
+local saidAboutFullBank = false
 function private.everySecond()
 	NKeepAlive()
 	
-	-- первые 100 фреймов ничего не делаем,  в надежде что за это время wow успеет нормально запуститься и перестанет лагать
+	-- первые 100 фреймов ничего не делаем,
+	-- в надежде что за это время wow успеет нормально запуститься
+	-- и перестанет лагать
 	if private.state == "LOADING" then
 		if frames > 100 then
 			private.state = "THINKING"
@@ -162,11 +227,11 @@ function private.everySecond()
 	end
 	
 	NNeedPurchaseConfirmation(lib.NeedPurchaseConfirmation())
-	
 	private.updateBankStats()
+	
 	local allowedResume = private.allowedResume()
 	
-	if private.state == "QUIT" and private.stateTime()>private.waitbeforequitseconds then
+	if private.state == "QUIT" and private.stateTime() > private.waitbeforequitseconds then
 		print("QUIT NOW")
 		Screenshot()
 		private.changeState("QUITED")
@@ -181,70 +246,96 @@ function private.everySecond()
 	
 	if not AucAdvanced.Settings.GetSetting('util.nakamar.enabled') then return end
 	
+	-- строки ниже этой будут выполнены только если аддон включён
+	
+	-- будем ли в ближайшие две минуты проверять почту
+	local needWaitForMail = (private.nextMailTime - private.GameTime < 120) and 
+		lib.FreeBagSlots() > keepFreeBagSlots
+	
+	local hasNonAuctionableItems = #lib.nonbatchItems() > 0
+	local possiblyHasFreeBankSlots = not freshBankInfo() or private.hasFreeBankSlots
+	
+	local hasFreeBagSlots = lib.FreeBagSlots() > 0
+	local possiblyHasAuctionableBankItems = not(freshBankInfo()) or private.hasAuctionableBankItems
+	
 	-------- THINKING
-    if private.state == "THINKING" and #lib.nonbatchItems()>0 then
-		if private.bankSlots or private.bankTime<private.gtime-3600 then
-			print(string.format("В сумках есть %d итемов, которые не выставляются на аукцион, надо отнести их в банк", #lib.nonbatchItems()))
+    if private.state == "THINKING" then
+		
+		-- если есть что положить в банк
+		if hasNonAuctionableItems then
+			if possiblyHasFreeBankSlots then
+				print(string.format(
+					"В сумках есть %d итемов, которые не выставляются на аукцион, надо отнести их в банк",
+					#lib.nonbatchItems()))
+				private.GoToBank()
+				private.changeState("WAITING_FOR_BANK")
+				return
+			else
+				if not saidAboutFullBank then
+					print(string.format(
+						"В сумках есть %d итемов, которые не выставляются на аукцион, но в банке нет места.",
+						#lib.nonbatchItems()))
+					saidAboutFullBank = true
+				end
+			end
+		end
+		
+		-- если есть что взять из банка
+		if hasFreeBagSlots and possiblyHasAuctionableBankItems then
+			print("Надо забрать в банке товар на продажу")
 			private.GoToBank()
 			private.changeState("WAITING_FOR_BANK")
 			return
-		else
-			if not saidBank then
-				print(string.format("В сумках есть %d итемов, которые не выставляются на аукцион, но в банке места уже нет.", #lib.nonbatchItems()))
-				saidBank = true
-			end
+		end
+		
+		-- если не будем и есть что выложить - идти на аук выкладывать
+		local hasAuctionableItems = #lib.batchItems() > 0
+		if not needWaitForMail and hasAuctionableItems then
+			print(string.format("В сумках есть %d итемов на продажу, надо идти на аукцион", #lib.batchItems()))
+			private.GoToAuction()
+			private.changeState("WAITING_FOR_AUCTION")
+			return
 		end
 	end
 	
 	if private.state ~= "THINKING" then
-		saidBank = false
+		saidAboutFullBank = false
 	end
 	
-	if private.state=="WAITING_FOR_BANK" and (#lib.nonbatchItems()==0 or not (private.bankSlots or private.bankTime<private.gtime-3600)) then
-		CloseBankFrame()
-		private.changeState("THINKING")
-	return end
+	local busy = private.state ~= "THINKING" and private.state ~= "SCANNING"
+	local needCheckMail = private.GameTime > private.nextMailTime and
+		lib.FreeBagSlots() > keepFreeBagSlots
 	
-	local needWaitForMail = (private.nextMailTime - private.gtime < 120) and lib.FreeBagSlots() > KeepFreeBagSlots
-	
-	if private.state == "THINKING" and not needWaitForMail and #lib.batchItems()>0 then
-		print(string.format("В сумках есть %d итемов на продажу, надо идти на аукцион", #lib.batchItems()))
-		private.GoToAuction()
-		private.changeState("WAITING_FOR_AUCTION")
-		return
-	end
-	
-	if (private.state == "THINKING" or private.state == "SCANNING") and private.gtime > private.nextMailTime and
-		lib.FreeBagSlots() > KeepFreeBagSlots then
+	if not busy and needCheckMail then
 		-- пора идти на почту
 		if AucAdvanced.Settings.GetSetting('util.nakamar.close_ah_when_scanning') then
 			CloseAuctionHouse()
 		end
 		print("Надо проверить почтовый ящик")
 		private.GoToMail()
-		private.changeState("WAITING_FOR_MAILBOX")		
-		return
-	end
-	if private.state=="WAITING_FOR_MAILBOX" and lib.FreeBagSlots() <= KeepFreeBagSlots then
-		private.changeState("THINKING");
+		private.changeState("WAITING_FOR_MAILBOX")
 		return
 	end
 	
+	-- если в ближайшее время надо будет проверить почту то просто ждём
 	if private.state == "THINKING" and needWaitForMail then
 		return
 	end
 	
+	-- иначе
 	if private.state == "THINKING" then
-		print("Делать пока нечего, но можно пойти посканировать аукцион")
+		print("Делать пока нечего, пойду сканировать аукцион")
 		private.GoToAuction()
 		private.changeState("WAITING_FOR_AUCTION")
 		return
 	end
 	
-	-------- по ситуации
-	if bankAvailable and private.state ~= "WAITING_FOR_BAGS2BANK" and #lib.nonbatchItems()>0 
-		and private.bankSlots and private.lastToBank<private.gtime-10 then
-			private.lastToBank = private.gtime
+	-- Если пришли в банк
+	if bankAvailable and private.state == "WAITING_FOR_BANK" then
+		
+		-- если хотим положить что-то в банк
+		if hasNonAuctionableItems and possiblyHasFreeBankSlots then
+			print("Складываю в банк всё что нельзя продать")
 			private.changeState("WAITING_FOR_BAGS2BANK")
 			local t = lib.nonbatchItems()
 			for i,v in ipairs(t) do
@@ -252,72 +343,136 @@ function private.everySecond()
 			end
 			GBM:SomeItemsToBank(t)
 			return
+		end
+		
+		-- если хотим взять что-то из банка
+		if hasFreeBagSlots and possiblyHasAuctionableBankItems then
+			print("Забираю из банка всё что можно продать")
+			private.changeState("WAITING_FOR_BANK2BAGS")
+			local t = lib.batchBankItems()
+			for i,v in ipairs(t) do
+				table.remove(v,1)
+			end
+			GBM:SomeItemsFromBank(t)
+			return
+		end
+		
+		-- если в банке делать нечего...
+		print("Хм... а зачем я в пришёл в банк?")
+		private.changeState("THINKING")
+		return
 	end
 	
+	-- процесс складывания хлама в банк
 	if private.state == "WAITING_FOR_BAGS2BANK" then
-		if #lib.nonbatchItems()==0 then
+		if not hasNonAuctionableItems then
 			print("Все итемы которые нельзя продать сложены в банк")
 			CloseBankFrame()
 			private.changeState("THINKING")
 			return
-		elseif not private.bankSlots then
+			
+		elseif not private.hasFreeBankSlots then
 			print("Закончилось место в банке")
 			CloseBankFrame()
 			private.changeState("THINKING")
 			return
+			
 		elseif not bankAvailable then
-			print("Неожиданно закрыто окно банка")
-			private.ERROR()
+			local msg = "Неожиданно закрыто окно банка"
+			private.ERROR(msg)
 			return
-		elseif private.stateTime()>30 then
-			print("что-то с банком пошло не так")
-			private.ERROR()
+			
+		elseif private.stateTime() > 30 then
+			local msg = "Что-то с банком пошло не так"
+			private.ERROR(msg)
 			CloseBankFrame()
 			return
+			
 		else
 			return
+			
 		end
 	end
 	
-	if mailboxAvailable and InboxFrame:IsVisible() and private.gtime-mailboxOpenedTime>3 and private.state~="WAITING_FOR_POSTAL" then
+	-- процесс сбора хлама из банка
+	if private.state == "WAITING_FOR_BANK2BAGS" then
+		if not possiblyHasAuctionableBankItems then
+			print("Все итемы которые можно продать собраны из банка")
+			CloseBankFrame()
+			private.changeState("THINKING")
+			return
+			
+		elseif not hasFreeBagSlots then
+			print("Закончилось место в сумке")
+			CloseBankFrame()
+			private.changeState("THINKING")
+			return
+			
+		elseif not bankAvailable then
+			local msg = "Неожиданно закрыто окно банка"
+			private.ERROR(msg)
+			return
+			
+		elseif private.stateTime() > 30 then
+			local msg = "Что-то с банком пошло не так"
+			private.ERROR(msg)
+			CloseBankFrame()
+			return
+			
+		else
+			return
+			
+		end
+	end
+	
+	local mayGatherMail = mailboxAvailable and
+		InboxFrame:IsVisible() and private.GameTime - mailboxOpenedTime > 5
+		and private.state == "WAITING_FOR_MAILBOX"
+	
+	if mayGatherMail then
 		print("Начинаю собирать почту")
 		private.changeState("WAITING_FOR_POSTAL")
-		oldItemsCount = GBM:InBagsItemCount() + GetMoney()
-		prevItemsCount = oldItemsCount
-		prevICTime = private.gtime
+		oldAssets = assets()
+		prevAssets = assets()
+		prevAssetsTime = private.GameTime
 		Postal.modules.OpenAll:OpenAll()
 	end
 	
+	-- процесс сбора почты
 	if private.state == "WAITING_FOR_POSTAL" then
 		if lib.FreeBagSlots() <= 1 then
 			-- Postal надо настроить оставлять один слот пустым, можно 0, но не больше
 			print("В сумке один или менее свободный слот, прекращаю сбор почты")
 			CloseMail()
 			updateNextMailTime()
-			private.changeState("THINKING")		
+			private.changeState("THINKING")
 			return
+			
 		elseif not mailboxAvailable then
-			print("Неожиданно закрыто окно почты")
-			private.ERROR()
+			private.ERROR("Неожиданно закрыто окно почты")
 			updateNextMailTime()
 			return
-		elseif private.gtime - prevICTime > 15 then
-			prevICTime = private.gtime
-			local cur = GBM:InBagsItemCount() + GetMoney()
-			if cur == prevItemsCount then
-				print("Похоже больше с почты собрать нечего")
+			
+		elseif private.GameTime - prevAssetsTime > 15 then
+			prevAssetsTime = private.GameTime
+			local cur = assets()
+			if cur == prevAssets then
+				print("Похоже за этот сеанс собрать больше нечего")
 				CloseMail()
 				updateNextMailTime()
-				private.changeState("THINKING")		
+				private.changeState("THINKING")
 			else
-				prevItemsCount = cur
+				prevAssets = cur
 			end
 			return
+			
 		else
 			return
+			
 		end
 	end
 	
+	-- включить RealTime search если не включен
 	if auctionAvailable and AucAdvanced.Modules.Util.SearchUI.Private.SearcherRealTime 
 			and not AucAdvanced.Modules.Util.SearchUI.Private.SearcherRealTime.IsScanning then
 		-- чтоб это работало нужен патч в SearchMain.lua: lib.NewSearcher()
@@ -327,6 +482,7 @@ function private.everySecond()
 		AucAdvanced.Modules.Util.SearchUI.Private.SearcherRealTime.ButtonPressed(nil, "LeftButton")
 	end
 	
+	-- запустить скан если не запущен
 	if auctionAvailable then
 		if private.allowedScan() then
 			print("Похоже сейчас ничего не запущено.. Запускаю полный скан")
@@ -337,9 +493,9 @@ function private.everySecond()
 		end
 	end
 	
+	-- проверить что аукцион не закрыт
 	if (private.state == "SCANNING" or private.state == "SCAN_BEFORE_POSTING" or private.state == "POSTING") and not auctionAvailable then
-		print("Неожиданно закрыто окно аукциона")
-		private.ERROR()
+		private.ERROR("Неожиданно закрыто окно аукциона")
 		return
 	end
 	
@@ -349,45 +505,44 @@ function private.everySecond()
 			return
 			
 		elseif private.state == "SCAN_BEFORE_POSTING" then
-			private.lastscan = private.lastscan or 0
-			if time() - private.lastscan < freshnessforposting then
+			Nakamar.ScanCompletedTime[GetFaction()] = Nakamar.ScanCompletedTime[GetFaction()] or 0
+			if time() - Nakamar.ScanCompletedTime[GetFaction()] < maxScanAge then
 				private.doPosting()
-			elseif private.stateTime()>7200 then
-				print("сканирую уже больше двух часов, но до сих пор нет свежего скана")
-				private.ERROR()
+			elseif private.stateTime() > 7200 then
+				private.ERROR("сканирую уже больше двух часов, но до сих пор нет свежего скана")
 			end
 			return
 			
 		elseif private.state == "POSTING" then
 			local left = #AucAdvanced.Post.Private.postRequests	
-			if left==0 then
+
+			if left == 0 then
 				local postable = #lib.batchItems()
 				if postable == 0 then
 					print("весь товар выложен на аукцион")
 					private.doScanning()
 				else
-					print("часть товара не удалось выложить на аукцион")
-					private.ERROR()
+					private.ERROR("часть товара не удалось выложить на аукцион")
 				end
-			elseif private.gtime - prevICTime > 300 then
-				prevICTime = private.gtime
-				local cur = GBM:InBagsItemCount()
-				if cur == prevItemsCount then
-					print("за 5 минут ни один предмет не исчез из сумок")
-					private.ERROR()
+
+			elseif private.GameTime - prevAssetsTime > 300 then
+				prevAssetsTime = private.GameTime
+				local cur = assets()
+				if cur == prevAssets then
+					private.ERROR("за 5 минут ни один предмет не исчез из сумок")
 				else
-					prevItemsCount = cur
+					prevAssets = cur
 				end
-			elseif private.stateTime()>10800 then
-				print("прошёл уже три часа, а всё ещё не весь товар выложен")
-				private.ERROR()
+				
+			elseif private.stateTime() > 3*3600 then
+				private.ERROR("прошло уже три часа, а всё ещё не весь товар выложен")
 			end
 			return
 		
 		else -- state ~= "POSTING" | "SCAN_BEFORE_POSTING" | "SCANNING" and auctionframe opened
 			local postable = #lib.batchItems()
-			local fresh = (time() - private.lastscan < freshnessforposting)
-			if postable>0 then
+			local fresh = time() - Nakamar.ScanCompletedTime[GetFaction()] < maxScanAge
+			if postable > 0 then
 				if fresh then
 					private.doPosting()
 				else
@@ -402,32 +557,31 @@ function private.everySecond()
 		
 	end
 
-
-	if AucAdvanced.Settings.GetSetting("util.nakamar.allow_long_scans") and auctionAvailable and private.state=="WAITING_FOR_MAILBOX" then
-		private.last_change = private.gtime
+	if AucAdvanced.Settings.GetSetting("util.nakamar.allow_long_scans") and
+			auctionAvailable and private.state == "WAITING_FOR_MAILBOX" then
+		private.lastStateChangeTime = private.GameTime
 		return
 	end
 	
-	if private.state == "WAITING_FOR_AUCTION" or private.state == "WAITING_FOR_MAILBOX" or private.state == "WAITING_FOR_BANK" then
-		local msgs = { WAITING_FOR_AUCTION="Аукцион", 
-			WAITING_FOR_MAILBOX="Почта", WAITING_FOR_BANK="Банк" }
-		local destination = msgs[private.state]
-		if private.last_change>lastnotification	then lastnotification = private.last_change end
+	if private.state == "WAITING_FOR_AUCTION" or
+			private.state == "WAITING_FOR_MAILBOX" or
+			private.state == "WAITING_FOR_BANK" then
+		
+		local destination = private.destination
+		
 		local delta = private.stateTime()
-		if private.gtime - lastnotification > 300 then
+		if private.GameTime - lastMovementRequest > 300 then
 			print(("Жду %s уже %d минут, повторяю запрос"):format(destination, private.stateTime() / 60))
-			NGoTo(destination)
-			lastnotification = private.gtime
-			if delta>3600 then
+			private.GoTo(destination)
+			if delta > 3600 then
 				print("Прошло более часа")
-				private.ERROR()
+				private.ERROR("проблемы с движением")
 			end
 		end
 		return
 	end
 	
-	print(string.format("я хз чо делать (%s)",private.state))
-	private.ERROR()
+	private.ERROR(string.format("я хз чо делать, текущее состояние: %s", private.state))
 end
 
 function private.doScanBeforePosting()
@@ -447,8 +601,8 @@ function private.doPosting()
 		return
 	end
 	private.changeState("POSTING")
-	prevICTime = private.gtime
-	prevItemsCount = GBM:InBagsItemCount()
+	prevAssetsTime = private.GameTime
+	prevAssets = assets()
 	print("Выкладываю всё из сумок на аукцион")
 	local items = lib.batchItems();
 	local stage1 = {}
@@ -464,7 +618,7 @@ function private.doPosting()
 		stage1[sig] = (stage1[sig] or 0)
 		if itemCount <= postedStack then
 			-- it is not guaranteed that auc-advanced can post this item
-			-- example: have two stack of 15, and posting in stacks of 20, and other bag slots are  full with something else
+			-- example: have two stack of 15, and posting in stacks of 20, and other bag slots are full with something else
 			stage1[sig] = stage1[sig] + 1
 		end
 		counts[sig] = (counts[sig] or 0) + itemCount
@@ -478,7 +632,7 @@ function private.doPosting()
 			_, _, _, _, _, _, _, postedStack = GetItemInfo(hyperlink)
 		end
 		local firstPost = counts[sig] % postedStack
-		if firstPost==0 then
+		if firstPost == 0 then
 			firstPost = postedStack
 		end
 		if itemCount <= firstPost then
@@ -488,10 +642,10 @@ function private.doPosting()
 	end
 	local stage2 = {}
 	for sig, count in pairs(stage1) do
-		table.insert(stage2, {sig, stage1[sig]})
+		tinsert(stage2, {sig, stage1[sig]})
 	end
 	table.sort(stage2, function(x,y) return x[2]>y[2] end)
-	if stage2[1][2]==0 and not GBM:FindFreeBagSlot() then
+	if stage2[1][2] == 0 and not GBM:FindFreeBagSlot() then
 		-- выложить не получится, так как во всех слотах больше чем надо итемов
 		-- а свободных ячеек, чтоб разделить - нет
 		return
@@ -502,24 +656,24 @@ function private.doPosting()
 	end
 end
 
-function private.OnUpdate(me,elapsed)
+function private.OnUpdate(me, elapsed)
 	frames = frames + 1
-    _time = _time + elapsed
-	private.gtime = private.gtime + elapsed
-    if (_time > 1.0) then
+    everySecondTimer = everySecondTimer + elapsed
+	private.GameTime = private.GameTime + elapsed
+    if (everySecondTimer > 1.0) then
         private:everySecond()
-        _time = 0.0
+        everySecondTimer = 0.0
     end
 end
 
 function private.OnEvent(self, event, ...)
-	for i, f in ipairs(handlers[event]) do
+	for i, f in ipairs(eventHandlers[event]) do
 		f(...)
 	end
 end
 
 function private.stateTime()
-	return private.gtime - private.last_change
+	return private.GameTime - private.lastStateChangeTime
 end
 
 function private.playSound(s)
@@ -535,7 +689,7 @@ function private.changeState(s)
 	end
 	private.playSound(s)
 	private.state = s
-	private.last_change = private.gtime
+	private.lastStateChangeTime = private.GameTime
 end
 
 function lib.OnLoad()
@@ -554,7 +708,7 @@ function lib.OnLoad()
 	RegisterEvent("BANKFRAME_OPENED", function() bankAvailable = true; private.updateBankStats(); NCurrentState("Банк") end)
 	RegisterEvent("BANKFRAME_CLOSED", function() bankAvailable = nil; NCurrentState("хз"); end)
 	RegisterEvent("MAIL_INBOX_UPDATE", function() if mailboxOpened then mailboxAvailable = true end end)
-	RegisterEvent("MAIL_SHOW", function() mailboxOpenedTime = private.gtime; mailboxOpened = true; NCurrentState("Почта") end)
+	RegisterEvent("MAIL_SHOW", function() mailboxOpenedTime = private.GameTime; mailboxOpened = true; NCurrentState("Почта") end)
 	RegisterEvent("MAIL_CLOSED", function() mailboxAvailable = false; mailboxOpened = false; NCurrentState("хз") end)
 	AucAdvanced.Settings.SetDefault("util.nakamar.printwindow", 1)
 	RegisterEvent("CHAT_MSG_WHISPER", private.Chat)
@@ -587,7 +741,8 @@ function private.allowedScan()
 end
 
 local lastScanningTime = time()
--- возвращает true если в течение последних была аукцион был открыт но ничего не сканировал и не стоял на паузе
+-- возвращает true если в течение последних была аукцион был открыт 
+-- но ничего не сканировал и не стоял на паузе
 -- нужно запускать эту функцию каждый фрейм даже если аукцион закрыт
 function private.allowedResume()
 	if not auctionAvailable or AucAdvanced.Scan.IsPaused() or AucAdvanced.Scan.IsScanning() or AucAdvanced.Buy.Private.Prompt:IsVisible() then
@@ -614,7 +769,7 @@ function private.processScan(stats)
 		--print(string.format("%d из %d лотов соответствует запросу", matched, #scandata.image))
 		if matched == #scandata.image then
 			print("Завершен полный скан")
-			private.lastscan = time()
+			Nakamar.ScanCompletedTime[GetFaction()] = time()
 		else
 			--print("Это был неполный скан")
 		end
@@ -641,9 +796,11 @@ function private.SetupConfigGui(gui)
     local id = gui:AddTab(lib.libName, lib.libType.." Modules")
 	gui:AddControl(id, "Checkbox", 0, 1, "util.nakamar.enabled", "Включить")
 	gui:AddControl(id, "Checkbox", 0, 1, "util.nakamar.close_ah_when_scanning", "Закрывать аукцион во время скана")
-	gui:AddTip(id, [[Если включено, то когда аддон сканирует аукцион, но понадобилось сделать что-нибудь более важное,
-					 к примеру проверить почту - то он автоматически закроет окно аукциона. Но такое поведение может иногда мешать.]])
-	gui:AddControl(id, "Subhead",     0,	"Окно чата")
+	gui:AddTip(id, [[Если включено, то когда аддон сканирует аукцион,
+		но понадобилось сделать что-нибудь более важное,
+		к примеру проверить почту - то он автоматически закроет окно аукциона.
+		Но такое поведение может иногда мешать.]])
+	gui:AddControl(id, "Subhead",     0, "Окно чата")
 	gui:AddControl(id, "Selectbox", 0, 1, AucAdvanced.configFramesList, "util.nakamar.printwindow")
 	gui:AddTip(id, "выберите, куда Накамар будет выводить свои сообщения")
 	gui:AddControl(id, "Checkbox", 0, 1, "util.nakamar.quit_on_error", "Закрывать WoW если что-нибудь идёт не так")
@@ -655,10 +812,28 @@ end
 function lib.bagItems(filter)
 	local items = {}
 	for bag = NUM_BAG_FRAMES, 0, -1 do
-		for slot = GetContainerNumSlots(bag), 1, -1 do
-			local link = GetContainerItemLink(bag, slot)
-			if link and filter(link,bag,slot) then
-				table.insert(items,{link, bag, slot} )
+		if GBM:IsNormalBag(bag) then
+			for slot = GetContainerNumSlots(bag), 1, -1 do
+				local link = GetContainerItemLink(bag, slot)
+				if link and filter(link,bag,slot) then
+					tinsert(items,{link, bag, slot} )
+				end
+			end
+		end
+	end
+	return items
+end
+
+function lib.bankItems(filter)
+	local bankSlots = { -1, 5, 6, 7, 8, 9, 10, 11 } -- from BankMover.lua
+	local items = {}
+	for i, bag in ipairs(bankSlots) do
+		if GBM:IsBankBag(bag) then
+			for slot = GetContainerNumSlots(bag), 1, -1 do
+				local link = GetContainerItemLink(bag, slot)
+				if link and filter(link,bag,slot) then
+					tinsert(items,{link, bag, slot} )
+				end
 			end
 		end
 	end
@@ -668,7 +843,7 @@ end
 function lib.map(f, t)
 	local ans = {}
 	for i,v in ipairs(t) do
-		table.insert(ans, f(v))
+		tinsert(ans, f(v))
 	end
 	return ans
 end
@@ -677,7 +852,7 @@ function lib.filter(f, t)
 	local ans = {}
 	for i,v in ipairs(t) do
 		if f(v) then
-			table.insert(ans,v)
+			tinsert(ans,v)
 		end
 	end
 	return ans
@@ -692,14 +867,17 @@ function lib.batchItems()
 	return lib.bagItems(lib.isBatch)
 end
 
+function lib.batchBankItems()
+	return lib.bankItems(lib.isBatch)
+end
+
 function lib.nonbatchItems()
 	return lib.bagItems(function(...) return not lib.isBatch(...) end)
 end
 
 function private.Chat()
 	if not AucAdvanced.Settings.GetSetting('util.nakamar.enabled') then return end
-	print("получен whisper")
-	private.ERROR()
+	private.ERROR("получен whisper")
 end
 
 function lib.NeedPurchaseConfirmation()
