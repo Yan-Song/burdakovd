@@ -162,6 +162,22 @@ function GBM:SomeItemsToBank(t)
 	slotLocks = {}
 end
 
+-- gets a list of (bankbag, item) and moves them to local bag
+function GBM:SomeItemsFromBank(t)
+	for i, v in ipairs(t) do
+		bag, slot = v[1], v[2]
+		local link = GetContainerItemLink(bag, slot)
+		if link then
+			result = self:BankItemMove2Bags(bag, slot)
+			if result ~= true then
+				self:Print(result)
+				return
+			end
+		end
+	end
+	slotLocks = {}
+end
+
 function GBM:BankToBags()
 	for i, fromBagId in ipairs(bankSlots) do
 		if self:IsBankBag(fromBagId) then
