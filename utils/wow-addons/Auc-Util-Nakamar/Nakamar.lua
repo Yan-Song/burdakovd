@@ -607,13 +607,13 @@ function private.doPosting()
 	local items = lib.batchItems();
 	local stage1 = {}
 	local counts = {}
-	for i,v in ipairs(items) do
+	for i, v in ipairs(items) do
 		local link, bag, slot = unpack(v)
 		local _, itemCount = GetContainerItemInfo(bag, slot)
 		local sig = AucAdvanced.API.GetSigFromLink(link)
 		local postedStack = AucAdvanced.Settings.GetSetting("util.appraiser.item."..sig..".stack") or AucAdvanced.Settings.GetSetting("util.appraiser.stack")
 		if postedStack == "max" then
-			_, _, _, _, _, _, _, postedStack = GetItemInfo(hyperlink)
+			_, _, _, _, _, _, _, postedStack = GetItemInfo(link)
 		end
 		stage1[sig] = (stage1[sig] or 0)
 		if itemCount <= postedStack then
@@ -629,7 +629,7 @@ function private.doPosting()
 		local sig = AucAdvanced.API.GetSigFromLink(link)
 		local postedStack = AucAdvanced.Settings.GetSetting("util.appraiser.item."..sig..".stack") or AucAdvanced.Settings.GetSetting("util.appraiser.stack")
 		if postedStack == "max" then
-			_, _, _, _, _, _, _, postedStack = GetItemInfo(hyperlink)
+			_, _, _, _, _, _, _, postedStack = GetItemInfo(link)
 		end
 		local firstPost = counts[sig] % postedStack
 		if firstPost == 0 then
@@ -648,6 +648,9 @@ function private.doPosting()
 	if stage2[1][2] == 0 and not GBM:FindFreeBagSlot() then
 		-- выложить не получится, так как во всех слотах больше чем надо итемов
 		-- а свободных ячеек, чтоб разделить - нет
+		print("выложить не получится, так как во всех слотах больше чем надо итемов")
+		print("а свободных ячеек, чтоб разделить - нет")
+		private.ERROR("неудачник")
 		return
 	end
 	for i, v in ipairs(stage2) do
