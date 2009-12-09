@@ -73,8 +73,8 @@ namespace WoWMemoryManager.WoWObject
             PlayerBaseOffset1 = 0x34, // 3.2.0
             PlayerBaseOffset2 = 0x24; // 3.2.0
 
-        private BlackMagic Reader;
-        public uint BaseAddress;               // the address off the object manager
+        private MemoryManager Memory;
+        public uint BaseAddress;               // the address of the object manager
         public IEnumerable<GameObject> GameObjects { get; private set; }
         public IEnumerable<WoWObject> Objects { get; private set; }
         public IEnumerable<NpcObject> NpcObjects { get; private set; }
@@ -83,28 +83,29 @@ namespace WoWMemoryManager.WoWObject
         {
             get
             {
-                uint p = Reader.ReadUInt(Patterns.PlayerBase);
-                p = Reader.ReadUInt(p + PlayerBaseOffset1);
-                p = Reader.ReadUInt(p + PlayerBaseOffset2);
-                return new PlayerObject(Reader, p);
+                uint p = Memory.pPlayerBase;
+                p = Memory.BM.ReadUInt(p + PlayerBaseOffset1);
+                p = Memory.BM.ReadUInt(p + PlayerBaseOffset2);
+                return new PlayerObject(Memory.BM, p);
             }
         }
 
         public WoWObject ByGuid(ulong guid)
         {
-            foreach(WoWObject w in new ObjectList<WoWObject>(Reader, BaseAddress))
+            foreach(WoWObject w in new ObjectList<WoWObject>(Memory.BM, BaseAddress))
                 if(w.Guid == guid)
                     return w;
+
             throw new KeyNotFoundException("guid " + guid + " not found");
         }
 
-        public ObjectManager(BlackMagic reader, uint objectManagerBaseAddress)
+        public ObjectManager(MemoryManager memory, uint objectManagerBaseAddress)
         {
-            Reader = reader;
+            Memory = memory;
             BaseAddress = objectManagerBaseAddress;
-            GameObjects = new ObjectList<GameObject>(Reader, BaseAddress);
-            NpcObjects = new ObjectList<NpcObject>(Reader, BaseAddress);
-            Objects = new ObjectList<WoWObject>(Reader, BaseAddress);
+            GameObjects = new ObjectList<GameObject>(Memory.BM, BaseAddress);
+            NpcObjects = new ObjectList<NpcObject>(Memory.BM, BaseAddress);
+            Objects = new ObjectList<WoWObject>(Memory.BM, BaseAddress);
         }
     }
 }

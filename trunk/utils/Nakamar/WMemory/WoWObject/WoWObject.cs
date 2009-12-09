@@ -115,7 +115,8 @@ namespace WoWMemoryManager.WoWObject
         { }
 
         protected const uint
-            NameOffset1 = 0x968, // 3.2.0
+            // http://www.mmowned.com/forums/wow-memory-editing/271736-wow-3-3-0-info-dump-thread.html#post1754547
+            NameOffset1 = 0x964, // 3.2.0
             NameOffset2 = 0x5c; // 3.2.0
 
         public virtual string Name

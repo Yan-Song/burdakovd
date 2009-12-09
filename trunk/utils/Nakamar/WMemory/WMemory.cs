@@ -82,7 +82,7 @@ namespace WoWMemoryManager
         {
             get
             {
-                return new ObjectManager(BM, pObjectManager);
+                return new ObjectManager(this, pObjectManager);
             }
         }
 
@@ -106,6 +106,11 @@ namespace WoWMemoryManager
         public uint pObjectManager
         {
             get { return BM.ReadUInt(pClientConnection + BM.ReadUInt(FindPattern(Patterns.ObjectManagerOffset))); }
+        }
+
+        public uint pPlayerBase
+        {
+            get { return BM.ReadUInt(BM.ReadUInt(FindPattern(Patterns.PlayerBase))); }
         }
 
         #endregion
