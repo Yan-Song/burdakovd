@@ -506,7 +506,6 @@ function private.everySecond()
 			return
 			
 		elseif private.state == "SCAN_BEFORE_POSTING" then
-			Nakamar.ScanCompletedTime[GetFaction()] = Nakamar.ScanCompletedTime[GetFaction()] or 0
 			if time() - Nakamar.ScanCompletedTime[GetFaction()] < maxScanAge then
 				private.doPosting()
 			elseif private.stateTime() > 7200 then
@@ -535,7 +534,7 @@ function private.everySecond()
 					prevAssets = cur
 				end
 				
-			elseif private.stateTime() > 3*3600 then
+			elseif private.stateTime() > 3 * 3600 then
 				private.ERROR("прошло уже три часа, а всё ещё не весь товар выложен")
 			end
 			return
@@ -694,7 +693,7 @@ function private.changeState(s)
 end
 
 function lib.OnLoad()
-	if not Nakamar then Nakamar = {} end
+	Nakamar = Nakamar or {}
 
 	private.waitbeforequitseconds = random(30,60)
 	private.changeState("LOADING")
@@ -718,6 +717,9 @@ function lib.OnLoad()
 		function() mailboxAvailable = false; mailboxOpened = false; NCurrentState("хз") end)
 	AucAdvanced.Settings.SetDefault("util.nakamar.printwindow", 1)
 	RegisterEvent("CHAT_MSG_WHISPER", private.Chat)
+	
+	Nakamar.ScanCompletedTime = Nakamar.ScanCompletedTime or {}
+	Nakamar.ScanCompletedTime[GetFaction()] = Nakamar.ScanCompletedTime[GetFaction()] or 0
 end
 
 function private.HookAH()
