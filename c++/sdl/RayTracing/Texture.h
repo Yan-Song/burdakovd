@@ -14,7 +14,7 @@ namespace RT
 		SDL_Surface* surface;
 
 		Texture(const Texture&);
-		const Texture operator =(const Texture&);
+		Texture& operator =(const Texture&);
 
 	public:
 		Texture(const std::string& path);
