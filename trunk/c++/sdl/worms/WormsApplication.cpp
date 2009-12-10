@@ -1,12 +1,11 @@
-#include <iostream>
-#include "WormsApplication.h"
-#include "Vector.h"
 #include <ctime>
+#include <iostream>
+#include <Color.h>
+#include <Utils.h>
+#include <Vector.h>
 #include "ISomeWorm.h"
-#include "Utils.h"
-#include "Vector.h"
 #include "IWorm.h"
-#include "Color.h"
+#include "WormsApplication.h"
 
 const Color WormsApplication::EmptyColor = Palette::Black;
 const Color WormsApplication::WallColor = Palette::Gray;
@@ -16,16 +15,13 @@ const int WormsApplication::FieldWidth = 800;
 const int WormsApplication::FieldHeight = 600;
 
 
-WormsApplication::WormsApplication() : Map(FieldHeight, FieldWidth), nextWormID(0)
+WormsApplication::WormsApplication() : Map(FieldHeight, FieldWidth), printStatsTimer(), nextWormID(0)
 {
-	lasttime = time(NULL);
-	
-	std::cout<<WallColor<<std::endl;
-	std::cout<<FoodColor<<std::endl;
-
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
+	SetFPSCap(20);
+	printStatsTimer.Start();
 
-	SDL_WM_SetCaption("Worms", "");
+	SetCaption("Worms");
 
 	const unsigned int ncolors = 5;
 	Color wcolors[ncolors] = { Palette::Green, Palette::Blue, Palette::Gray, Palette::Red, Palette::Yellow };
@@ -108,10 +104,11 @@ void WormsApplication::Main()
 	Flip();
 
 	// статистика производительности раз в секунду
-	if(lasttime != time(NULL))
+	if(printStatsTimer.GetTime() >= 1.0)
 	{
-		lasttime = time(NULL);
-		std::cout<<"Time: "<<GetTime()<<"; total worms: "<<worms.size()<<"; FPS = "<<FPS()<<", dt min/avg/max = "<<dtMin()<<"/"<<dtAvg()<<"/"<<dtMax()<<" ms."<<std::endl;
+		printStatsTimer.Start();
+		std::cout << "Time: " << GetTime() << "; total worms: " << worms.size() << 
+			"; FPS = " << FPS() << ", dt min/avg/max = " << dtMin() << "/" << dtAvg() << "/" << dtMax() << " ms." << std::endl;
 	}
 }
 

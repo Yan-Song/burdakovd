@@ -122,6 +122,22 @@ public:
 
 	virtual ~SDLApplication(); // деструктор
 
+	// ограничить число кадров в секунду, 0 - не ограничивать
+	void SetFPSCap(const Uint32 value)
+	{
+		fpsCap = value;
+	}
+
+	Uint32 GetFPSCap() const
+	{
+		return fpsCap;
+	}
+
+	bool CappedFPS() const
+	{
+		return fpsCap != 0;
+	}
+
 protected:
 	void Stop(); // вызывается изнутри класса
 
@@ -162,6 +178,7 @@ protected:
 private:
 	time_t startTime;
 	int _locked;
+	Uint32 fpsCap;
 
 	// нельзя копировать
 	SDLApplication(const SDLApplication&);

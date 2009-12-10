@@ -11,7 +11,7 @@ SDLApplication::SDLApplication() :
 	Screen(NULL), frames(0), dt(0.0),
 	KeyState(NULL), Running(false),
 	startTime(time(NULL)), _locked(false),
-	stats(), timer(), fps()
+	fpsCap(0), stats(), timer(), fps()
 {
 	srand(static_cast<unsigned int>(startTime));
 	std::cout<<"Random number generator initialized"<<std::endl;
@@ -93,7 +93,7 @@ int SDLApplication::dtMin() const
 void SDLApplication::InitializeSDL(size_t ScreenHeight, size_t ScreenWidth, int ColorDepth, Uint32 SDLflags)
 {
 	// Load SDL
-	SDLCheck(SDL_Init(SDL_INIT_EVERYTHING));
+	SDLCheck(SDL_Init(SDL_INIT_VIDEO));
 
 	Screen = SDL_SetVideoMode(static_cast<int>(ScreenWidth), \
 		static_cast<int>(ScreenHeight), ColorDepth, SDLflags);
@@ -136,13 +136,24 @@ void SDLApplication::Run()
 	std::cout<<"Run()"<<std::endl;
 
 	InitialRender();
-
+	
+	Timer frameTimer;
 	while(Running)
 	{
+		frameTimer.Start();
+
 		UpdateStats();
 		ProcessEvents();
 		Main();
 		Render();
+
+		frameTimer.Pause();
+
+		if(CappedFPS() && (frameTimer.GetTicks() < 1000 / GetFPSCap()))
+        {
+            //Sleep the remaining frame time
+			SDL_Delay(1000 / GetFPSCap() - frameTimer.GetTicks());
+        }
 	}
 
 	std::cout<<"Stopped"<<std::endl;

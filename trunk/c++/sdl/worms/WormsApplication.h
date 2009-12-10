@@ -1,13 +1,14 @@
 #ifndef WORMSAPPLICATION_H
 #define WORMSAPPLICATION_H
 
-#include "SDLApplication.h"
-#include "Utils.h"
-#include "Color.h"
-#include "Registrator.h"
-#include "CellType.h"
 #include <vector>
+#include <Color.h>
+#include <SDLApplication.h>
+#include <Timer.h>
+#include <Utils.h>
 #include "BattleField.h"
+#include "CellType.h"
+#include "Registrator.h"
 
 class ISomeWorm;
 typedef std::vector<ISomeWorm*> SomeWorms;
@@ -35,7 +36,7 @@ public:
 private:
 	static const int ColorDepth = 0, SDLflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
 	static const int ScreenWidth = 800, ScreenHeight = 600;
-	long long lasttime;
+	Timer printStatsTimer;
 	unsigned int nextWormID;
 	Registrator registrator;
 	SomeWorms worms;
