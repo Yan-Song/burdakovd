@@ -17,9 +17,9 @@ public:
 	};
 
 	// делать delete для этого указателя возлагается на вызывающего
-	virtual ISomeWorm* Create() const
+	virtual SharedSomeWorm Create() const
 	{
-		return new W();
+		return SharedSomeWorm(new W());
 	}
 
 	virtual std::string ClassName() const

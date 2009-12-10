@@ -39,7 +39,7 @@ namespace RT
 			CompoundObject::Add(CompoundObject::SharedObject(new Tetragon(c, d, h, g, material)));
 			CompoundObject::Add(CompoundObject::SharedObject(new Tetragon(d, A, e, h, material)));
 
-			// добавляем невидимую ограничивающую сферу, чтобы при всех Аффинных преобразованиях она тоже двигалась
+			// РґРѕР±Р°РІР»СЏРµРј РЅРµРІРёРґРёРјСѓСЋ РѕРіСЂР°РЅРёС‡РёРІР°СЋС‰СѓСЋ СЃС„РµСЂСѓ, С‡С‚РѕР±С‹ РїСЂРё РІСЃРµС… РђС„С„РёРЅРЅС‹С… РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏС… РѕРЅР° С‚РѕР¶Рµ РґРІРёРіР°Р»Р°СЃСЊ
 			CompoundObject::Add(CompoundObject::SharedObject(new RT::Invisible(sphere)));
 		}
 

@@ -6,7 +6,7 @@
 
 namespace RT
 {
-	// "невидимый" RTObject
+	// "РЅРµРІРёРґРёРјС‹Р№" RTObject
 	class Invisible : public IRTObject 
 	{
 	private:

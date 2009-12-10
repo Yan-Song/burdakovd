@@ -1,53 +1,48 @@
 #ifndef REGISTRATOR_H
 #define REGISTATOR_H
 
+#include <string>
+#include <vector>
+#include <Shared.h>
 #include "IWormFactory.h"
 #include "ISomeWorm.h"
-#include <vector>
-#include <string>
 
 class Registrator
 {
 private:
-	std::vector<IWormFactory*> factories;
+	typedef Shared::shared_ptr<IWormFactory> SharedFactory;
+	std::vector<SharedFactory> factories;
 
-	// delete для этих указателей будет вызван в деструкторе
-	inline void Register(IWormFactory* wf)
+	inline void Register(const SharedFactory& f)
 	{
-		factories.push_back(wf);
+		factories.push_back(f);
 	}
 
 public:
 	Registrator();
 
 	// Количество зарегистрированных червяков
-	inline unsigned int Count() const
+	inline size_t Count() const
 	{
 		return factories.size();
 	}
 
 	// имя класса заданного червяка
-	inline std::string ClassName(unsigned int index) const
+	inline std::string ClassName(const size_t index) const
 	{
 		if(index >= factories.size())
-			throw new std::out_of_range("ClassName(unsigned int index)");
+			throw new std::out_of_range("ClassName(const size_t index)");
 
 		return factories[index]->ClassName();
 	}
 
 	// делать delete для этого указателя возлагается на вызывающего
-	inline ISomeWorm* Create(unsigned int ClassID) const
+	inline SharedSomeWorm Create(const size_t ClassID) const
 	{
 		if(ClassID >= factories.size())
-			throw new std::out_of_range("Create(unsigned int index)");
+			throw new std::out_of_range("Create(const size_t index)");
 
 		return factories[ClassID]->Create();
-	}
-
-	~Registrator()
-	{
-		for(unsigned int i = 0; i < factories.size(); ++i)
-			delete factories[i];
 	}
 };
 

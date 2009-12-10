@@ -50,18 +50,18 @@ void Worm::Go(const WormLogic direction)
 	if(target == CellEmpty || target == CellFood)
 	{
 		// если туда можно идти
-		
+
 		// если там еда...
 		if(target == CellFood)
 			energy += Config::FoodEnergyPerCell;
 
 		// добавляем голову
 		position.push_front(head);
-		
+
 		// занимаем эту ячейку и рисуем
 		app->Map.Set(head.X, head.Y, CellWorm);
 		app->DrawWormCell(head, this, 0);
-		
+
 		// корректируем длину
 		CheckLength();
 	}
@@ -69,7 +69,7 @@ void Worm::Go(const WormLogic direction)
 	{
 		// туда идти нельзя, сжимаемся
 		position.push_front(position.front());
-		
+
 		// корректируем длину
 		CheckLength();
 	}
@@ -180,11 +180,11 @@ void Worm::UpdateEnergy()
 		Die();
 
 		// создать детей
-		ISomeWorm* first = app->AddWorm(GetClassID(), energy / 2, pfirst, GetColor());
+		SharedSomeWorm first = app->AddWorm(GetClassID(), energy / 2, pfirst, GetColor());
 		first->UpdateMap();
 		first->Draw();
 
-		ISomeWorm* second = app->AddWorm(GetClassID(), energy / 2, psecond, GetColor());
+		SharedSomeWorm second = app->AddWorm(GetClassID(), energy / 2, psecond, GetColor());
 		second->UpdateMap();
 		second->Draw();
 	}

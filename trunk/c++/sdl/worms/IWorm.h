@@ -8,7 +8,7 @@ struct SimplePoint
 {
 	int X, Y;
 	SimplePoint(const int x, const int y) : X(x), Y(y) {};
-	
+
 	inline bool operator ==(const SimplePoint& other) const
 	{
 		return X == other.X && Y == other.Y;
@@ -28,10 +28,10 @@ class IWorm
 public:
     // возвращает позиции каждой из клеток червя, [0] - голова
     virtual const TPosition& Position() const = 0;
-    
+
     // его энергия
     virtual double Energy() const = 0;
-    
+
     // Идентификатор, уникальный для каждого экземпляра червя
     virtual unsigned int GetID() const = 0;
 

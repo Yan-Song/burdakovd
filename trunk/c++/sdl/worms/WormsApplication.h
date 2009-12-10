@@ -8,25 +8,29 @@
 #include <Utils.h>
 #include "BattleField.h"
 #include "CellType.h"
+#include "ISomeWorm.h"
 #include "Registrator.h"
 
-class ISomeWorm;
-typedef std::vector<ISomeWorm*> SomeWorms;
+
+typedef std::vector<SharedSomeWorm> SomeWorms;
 
 class WormsApplication: public SDLApplication
 {
 public:
-	WormsApplication();
-	BattleField Map;
 	static const int FieldWidth, FieldHeight;
+	static const Color EmptyColor, WallColor, FoodColor;
+public:
+	BattleField Map;
+
+public:
+	WormsApplication();
 	void DrawCell(const SimplePoint& position, const CellType type);
 	void DrawWormCell(const SimplePoint& position, const ISomeWorm* worm, const int index);
 	void DrawCell(const SimplePoint& position, const Color& color);
-	static const Color EmptyColor, WallColor, FoodColor;
 	// создать нового червя заданного класса, добавить его в список, и вернуть указатель на него
 	// вызывающая сторона не должна делать delete для этого указателя
 	// UpdateMap и Draw для созданного червя автоматически не вызывается
-	ISomeWorm* AddWorm(const int ClassID, const double energy, const TPosition& position, const Color& color);
+	SharedSomeWorm AddWorm(const size_t ClassID, const double energy, const TPosition& position, const Color& color);
 	// создать некоторое количество еды для червей
 	void MakeFood();
 	void MakeFood(const int xx, const int yy, const int r);
@@ -37,7 +41,7 @@ private:
 	static const int ColorDepth = 0, SDLflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
 	static const int ScreenWidth = 800, ScreenHeight = 600;
 	Timer printStatsTimer;
-	unsigned int nextWormID;
+	size_t nextWormID;
 	Registrator registrator;
 	SomeWorms worms;
 
