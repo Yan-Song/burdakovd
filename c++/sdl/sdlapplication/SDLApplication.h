@@ -182,7 +182,7 @@ private:
 
 	// нельзя копировать
 	SDLApplication(const SDLApplication&);
-	SDLApplication& operator=(const SDLApplication&);
+	SDLApplication& operator =(const SDLApplication&);
 
 	inline Uint32 MapColor(const Color& rgb) const
 	{
