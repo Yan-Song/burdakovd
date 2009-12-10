@@ -358,7 +358,7 @@ function private.everySecond()
 		end
 		
 		-- если в банке делать нечего...
-		print("Хм... а зачем я в пришёл в банк?")
+		print("Хм... а зачем я пришёл в банк?")
 		CloseBankFrame()
 		private.changeState("THINKING")
 		return
