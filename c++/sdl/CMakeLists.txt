@@ -12,3 +12,5 @@ add_subdirectory(sdlapplication)
 add_subdirectory(primitives)
 add_subdirectory(RayTracing)
 add_subdirectory(RayTracingDemo)
+add_subdirectory(worms)
+

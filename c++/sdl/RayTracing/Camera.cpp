@@ -43,11 +43,11 @@ void RT::Camera::SetDirection(const RT::NormalizedVector3D& _direction)
 	const Vector3D dz = Vector3DByCoords(0, 0, 1);
 	const Vector3D v = static_cast<Vector3D>(direction);
 
-	// сначала находим направление, для этого проецируем dy на экранную плоскость
+	// СЃРЅР°С‡Р°Р»Р° РЅР°С…РѕРґРёРј РЅР°РїСЂР°РІР»РµРЅРёРµ, РґР»СЏ СЌС‚РѕРіРѕ РїСЂРѕРµС†РёСЂСѓРµРј dy РЅР° СЌРєСЂР°РЅРЅСѓСЋ РїР»РѕСЃРєРѕСЃС‚СЊ
 	const Vector3D dsy_dest__ = dy - v * (dy * v);
 
-	// если получился ноль, то есть плоскость перпендикулярна dy, то берём в качестве dsy_dest проекцию dz на плоскость
-	// не очень хорошо, но на самом деле вероятность этого мала
+	// РµСЃР»Рё РїРѕР»СѓС‡РёР»СЃСЏ РЅРѕР»СЊ, С‚Рѕ РµСЃС‚СЊ РїР»РѕСЃРєРѕСЃС‚СЊ РїРµСЂРїРµРЅРґРёРєСѓР»СЏСЂРЅР° dy, С‚Рѕ Р±РµСЂС‘Рј РІ РєР°С‡РµСЃС‚РІРµ dsy_dest РїСЂРѕРµРєС†РёСЋ dz РЅР° РїР»РѕСЃРєРѕСЃС‚СЊ
+	// РЅРµ РѕС‡РµРЅСЊ С…РѕСЂРѕС€Рѕ, РЅРѕ РЅР° СЃР°РјРѕРј РґРµР»Рµ РІРµСЂРѕСЏС‚РЅРѕСЃС‚СЊ СЌС‚РѕРіРѕ РјР°Р»Р°
 	const Vector3D dsy_dest_ = dsy_dest__.QLength() > epsilon ?
 		dsy_dest__
 		: dz - v * (dz * v);
@@ -56,7 +56,7 @@ void RT::Camera::SetDirection(const RT::NormalizedVector3D& _direction)
 
 	dsy = Util::ds_(dsy_dest, VerticalPhi_, ScreenHeight_);
 
-	// dsx направлен так чтобы быть перпендикулярным dsy и v, а также быть повернутым вправо
+	// dsx РЅР°РїСЂР°РІР»РµРЅ С‚Р°Рє С‡С‚РѕР±С‹ Р±С‹С‚СЊ РїРµСЂРїРµРЅРґРёРєСѓР»СЏСЂРЅС‹Рј dsy Рё v, Р° С‚Р°РєР¶Рµ Р±С‹С‚СЊ РїРѕРІРµСЂРЅСѓС‚С‹Рј РІРїСЂР°РІРѕ
 	const Vector3D dsx_dest_ = dsy_dest_ ^ v;
 
 	const NormalizedVector3D dsx_dest = static_cast<RT::NormalizedVector3D>(dsx_dest_);
@@ -68,7 +68,7 @@ void RT::Camera::SetDirection(const RT::NormalizedVector3D& _direction)
 
 RT::Ray RT::Camera::GenerateRay(const double sx, const double sy) const
 {
-	// находим 3D точку, соответствующую (sx, sy)
+	// РЅР°С…РѕРґРёРј 3D С‚РѕС‡РєСѓ, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰СѓСЋ (sx, sy)
 	const Point3D point = ScreenCenter + \
 		dsx * (sx - ScreenWidth_ * 0.5) + \
 		dsy * (sy - ScreenHeight_ * 0.5);
@@ -124,7 +124,7 @@ void RT::Camera::MoveForward(const double distance)
 
 void RT::Camera::RotateHorizontal(const double phi)
 {
-	// вращаем вокруг оси dsy
+	// РІСЂР°С‰Р°РµРј РІРѕРєСЂСѓРі РѕСЃРё dsy
 
 	const Vector3D x = dsx * cos(phi) + static_cast<Vector3D>(direction) * sin(phi) * dsx.Length();
 	const Vector3D z = static_cast<Vector3D>(direction) * cos(phi) - dsx * sin(phi) / dsx.Length();
@@ -137,7 +137,7 @@ void RT::Camera::RotateHorizontal(const double phi)
 
 void RT::Camera::RotateVertical(const double phi)
 {
-	// вращаем вокруг оси dsx
+	// РІСЂР°С‰Р°РµРј РІРѕРєСЂСѓРі РѕСЃРё dsx
 
 	const Vector3D y = dsy * cos(phi) - static_cast<Vector3D>(direction) * sin(phi) * dsy.Length();
 	const Vector3D z = static_cast<Vector3D>(direction) * cos(phi) + dsy * sin(phi) / dsy.Length();

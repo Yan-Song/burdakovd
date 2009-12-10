@@ -14,10 +14,11 @@ class WormsApplication;
 class Worm : public IMyWorm, public ISomeWorm
 {
 public:
-	Worm() : color(Palette::White), dead(false)
+	Worm() : app(NULL), position(), ID(0), classID(0), energy(0.0), time(0.0),
+	     lastUpdateEnergyTime(0.0), color(Palette::White), dead(false)
 	{
 	}
-	
+
 	virtual bool isPressed(const SDLKey key) const;
 
 	// число из полуинтервала [0, x)
@@ -41,21 +42,21 @@ public:
 	{
 		return position;
 	}
-    
+
     // его энергия
     virtual double Energy() const
 	{
 		return energy;
 	}
-    
+
     // Идентификатор, уникальный для каждого экземпляра червя
-    virtual unsigned int GetID() const
+    virtual size_t GetID() const
 	{
 		return ID;
 	}
 
     // Идентификатор, уникальный для каждого класса червя
-    virtual unsigned int GetClassID() const
+    virtual size_t GetClassID() const
 	{
 		return classID;
 	}
@@ -66,9 +67,12 @@ public:
 	}
 
 private:
+	Worm(const Worm& );
+	Worm& operator =(const Worm& );
+
 	WormsApplication* app;
 	TPosition position;
-	int ID, classID;
+	size_t ID, classID;
 	double energy;
 	// локальное время червя
 	double time;
@@ -77,8 +81,9 @@ private:
 	Color color;
 	bool dead;
 
-	virtual void Initialize(WormsApplication* _app, const int _ID, int const _classID, const double _energy, const TPosition& _position,
-		const double _time, const Color& _color)
+	virtual void Initialize(WormsApplication* _app, const size_t _ID, const size_t _classID,
+				const double _energy, const TPosition& _position,
+				const double _time, const Color& _color)
 	{
 		app = _app;
 		ID = _ID;

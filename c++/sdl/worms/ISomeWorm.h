@@ -1,8 +1,9 @@
 #ifndef ISOMEWORM_H
 #define ISOMEWORM_H
 
+#include <Color.h>
+#include <Shared.h>
 #include "IWorm.h"
-#include "Color.h"
 
 class WormsApplication;
 class Worm;
@@ -13,8 +14,9 @@ class Worm;
 class ISomeWorm : private IWorm
 {
 private:
-	virtual void Initialize(WormsApplication* _app, const int _ID, const int classID, const double energy, const TPosition& position,
-		const double _time, const Color& _color) = 0;
+	virtual void Initialize(WormsApplication* _app, const size_t _ID, const size_t classID,
+				const double energy, const TPosition& position,
+				const double _time, const Color& _color) = 0;
 
 	// полностью прорисовать червя
 	virtual void Draw() const = 0;
@@ -35,7 +37,7 @@ private:
 	virtual void Tick() = 0;
 
 	virtual bool Dead() = 0;
-	
+
 	friend class WormsApplication;
 
 	friend class Worm;
@@ -45,5 +47,7 @@ public:
 	{
 	}
 };
+
+typedef Shared::shared_ptr<ISomeWorm> SharedSomeWorm;
 
 #endif

@@ -15,7 +15,8 @@ const int WormsApplication::FieldWidth = 800;
 const int WormsApplication::FieldHeight = 600;
 
 
-WormsApplication::WormsApplication() : Map(FieldHeight, FieldWidth), printStatsTimer(), nextWormID(0)
+WormsApplication::WormsApplication() : Map(FieldHeight, FieldWidth), printStatsTimer(), nextWormID(0),
+				   registrator(), worms()
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SetFPSCap(20);
@@ -30,7 +31,7 @@ WormsApplication::WormsApplication() : Map(FieldHeight, FieldWidth), printStatsT
 	for(unsigned int i = 0; i < registrator.Count(); ++i)
 	{
 		std::cout<<"Creating "<<registrator.ClassName(i)<<" instances."<<std::endl;
-		
+
 		for(int j = 0; j < 100; ++j)
 		{
 			int xx, yy;
@@ -40,7 +41,7 @@ WormsApplication::WormsApplication() : Map(FieldHeight, FieldWidth), printStatsT
 				yy = Rand(FieldHeight);
 			}
 			while(Map.Get(xx, yy) != CellEmpty);
-			
+
 			TPosition _position;
 			_position.push_back(SimplePoint(xx, yy));
 
@@ -71,11 +72,11 @@ void WormsApplication::ProcessEvent(SDL_Event Event)
 void WormsApplication::Main()
 {
     Lock();
-	
+
 	// перекидываем содержимое worms во временный контейнер
 	// итерируем по tmp
 	// затем по мере обработки переносим обратно тех, которые не погибнут
-	// такие фокусы делаю потому, что внутри цикла возможно будут погибать/появляться новые черви, а я хз как себя поведёт итератор 
+	// такие фокусы делаю потому, что внутри цикла возможно будут погибать/появляться новые черви, а я хз как себя поведёт итератор
 	// когда контейнер модифицируется внутри цикла
 	// сейчас же удалять не придётся ничего, т.к. мёртвые просто не будут переноситься обратно
 	// а добавляться новорожденные будут в worms (AddWorm()), так что и тут конфликта с итератором не будет
@@ -88,8 +89,6 @@ void WormsApplication::Main()
 
 		if((*it)->Dead())
 		{
-			// этот червь мертв, удаляем его
-			delete *it;
 		}
 		else
 		{
@@ -97,7 +96,7 @@ void WormsApplication::Main()
 			worms.push_back(*it);
 		}
 	}
-	
+
 	// теперь в worms содержатся только живые черви
 
 	Unlock();
@@ -107,7 +106,7 @@ void WormsApplication::Main()
 	if(printStatsTimer.GetTime() >= 1.0)
 	{
 		printStatsTimer.Start();
-		std::cout << "Time: " << GetTime() << "; total worms: " << worms.size() << 
+		std::cout << "Time: " << GetTime() << "; total worms: " << worms.size() <<
 			"; FPS = " << FPS() << ", dt min/avg/max = " << dtMin() << "/" << dtAvg() << "/" << dtMax() << " ms." << std::endl;
 	}
 }
@@ -130,7 +129,7 @@ void WormsApplication::DrawCell(const SimplePoint& position, const CellType type
 }
 
 // возможно index будет использоваться если мы будем к примеру рисовать голову червя другим цветом/текстурой чем остальное тело
-void WormsApplication::DrawWormCell(const SimplePoint &position, const ISomeWorm *worm, const int index)
+void WormsApplication::DrawWormCell(const SimplePoint &position, const ISomeWorm *worm, const int )
 {
 	DrawCell(position, worm->GetColor());
 }
@@ -146,16 +145,12 @@ void WormsApplication::DrawCell(const SimplePoint &position, const Color &color)
 
 WormsApplication::~WormsApplication()
 {
-	for(unsigned int i = 0; i < worms.size(); ++i)
-	{
-		delete worms[i];
-	}
 }
 
 void WormsApplication::InitialRender()
 {
 	Lock();
-	
+
 	DrawMap();
 	// ещё тут будет прорисовка чего-то кроме карты, что не меняется на каждом кадре, рамки к примеру
 
@@ -173,13 +168,14 @@ void WormsApplication::DrawMap()
 				DrawCell(SimplePoint(x, y), Map.Get(x, y));
 		}
 
-	for(unsigned int i = 0; i < worms.size(); ++i)
+	for(size_t i = 0; i < worms.size(); ++i)
 		worms[i]->Draw();
 }
 
-ISomeWorm* WormsApplication::AddWorm(const int ClassID, const double energy, const TPosition& position, const Color& color)
+SharedSomeWorm WormsApplication::AddWorm(const size_t ClassID, const double energy,
+					 const TPosition& position, const Color& color)
 {
-	ISomeWorm* worm = registrator.Create(ClassID);
+	SharedSomeWorm worm = registrator.Create(ClassID);
 	worm->Initialize(this, nextWormID, ClassID, energy, position, GetTime(), color);
 	++nextWormID;
 	worms.push_back(worm);
