@@ -124,26 +124,11 @@ function private.updateFreeBankSlots()
 	end
 end
 
-function private.updateAuctionableBankItems()
-	-- проверка на наличие Auctionable вещей в банке
-	local old = private.hasAuctionableBankItems
-	private.hasAuctionableBankItems = #(lib.batchBankItems()) > 0
-	
-	if private.hasAuctionableBankItems ~= old then
-		if private.hasAuctionableBankItems then
-			print("В банке есть товары на продажу")
-		else
-			print("В банке нет товаров на продажу")
-		end
-	end
-end
-
 function private.updateBankStats()
 	if not bankAvailable then return end -- return if bank window is not open
 	private.lastBankInfoUpdateTime = private.GameTime
 	
 	private.updateFreeBankSlots()
-	private.updateAuctionableBankItems()
 end
 
 function private.ERROR(reason)
@@ -256,7 +241,6 @@ function private.everySecond()
 	local possiblyHasFreeBankSlots = not freshBankInfo() or private.hasFreeBankSlots
 	
 	local hasFreeBagSlots = lib.FreeBagSlots() > 0
-	local possiblyHasAuctionableBankItems = not(freshBankInfo()) or private.hasAuctionableBankItems
 	
 	-------- THINKING
     if private.state == "THINKING" then
@@ -278,14 +262,6 @@ function private.everySecond()
 					saidAboutFullBank = true
 				end
 			end
-		end
-		
-		-- если есть что взять из банка
-		if hasFreeBagSlots and possiblyHasAuctionableBankItems then
-			print("Надо забрать в банке товар на продажу")
-			private.GoToBank()
-			private.changeState("WAITING_FOR_BANK")
-			return
 		end
 		
 		-- если не будем и есть что выложить - идти на аук выкладывать
@@ -345,18 +321,6 @@ function private.everySecond()
 			return
 		end
 		
-		-- если хотим взять что-то из банка
-		if hasFreeBagSlots and possiblyHasAuctionableBankItems then
-			print("Забираю из банка всё что можно продать")
-			private.changeState("WAITING_FOR_BANK2BAGS")
-			local t = lib.batchBankItems()
-			for i,v in ipairs(t) do
-				table.remove(v,1)
-			end
-			GBM:SomeItemsFromBank(t)
-			return
-		end
-		
 		-- если в банке делать нечего...
 		print("Хм... а зачем я пришёл в банк?")
 		CloseBankFrame()
@@ -374,37 +338,6 @@ function private.everySecond()
 			
 		elseif not private.hasFreeBankSlots then
 			print("Закончилось место в банке")
-			CloseBankFrame()
-			private.changeState("THINKING")
-			return
-			
-		elseif not bankAvailable then
-			local msg = "Неожиданно закрыто окно банка"
-			private.ERROR(msg)
-			return
-			
-		elseif private.stateTime() > 30 then
-			local msg = "Что-то с банком пошло не так"
-			private.ERROR(msg)
-			CloseBankFrame()
-			return
-			
-		else
-			return
-			
-		end
-	end
-	
-	-- процесс сбора хлама из банка
-	if private.state == "WAITING_FOR_BANK2BAGS" then
-		if not possiblyHasAuctionableBankItems then
-			print("Все итемы которые можно продать собраны из банка")
-			CloseBankFrame()
-			private.changeState("THINKING")
-			return
-			
-		elseif not hasFreeBagSlots then
-			print("Закончилось место в сумке")
 			CloseBankFrame()
 			private.changeState("THINKING")
 			return
@@ -901,10 +834,6 @@ end
 
 function lib.batchItems()
 	return lib.bagItems(lib.isBatch)
-end
-
-function lib.batchBankItems()
-	return lib.bankItems(lib.isBatch)
 end
 
 function lib.nonbatchItems()
