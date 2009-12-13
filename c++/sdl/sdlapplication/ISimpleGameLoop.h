@@ -3,6 +3,8 @@
 
 #include <SDL.h>
 
+#include "Shared.h"
+
 class ISimpleGameLoop
 {
 public:
@@ -12,5 +14,7 @@ public:
 
 	virtual ~ISimpleGameLoop() {}
 };
+
+typedef Shared::shared_ptr<ISimpleGameLoop> SharedState;
 
 #endif

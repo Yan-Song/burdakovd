@@ -8,18 +8,21 @@
 
 void Worm::Draw() const
 {
-	int i = 0;
+	throw NotImplementedException();
+	/*int i = 0;
 	for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it, ++i)
-		app->DrawWormCell(*it, this, i);
+		app->DrawWormCell(*it, this, i);*/
 }
 
 void Worm::ConsumeTime(const double dt)
 {
+	throw NotImplementedException();
 	time += dt;
 }
 
 void Worm::Tick()
 {
+	throw NotImplementedException();
 	UpdateEnergy();
 
 	if(Dead())
@@ -32,7 +35,8 @@ void Worm::Tick()
 
 void Worm::Go(const WormLogic direction)
 {
-	SimplePoint head = position.front();
+	throw NotImplementedException();
+	/*SimplePoint head = position.front();
 
 	if(direction == GoDown)
 		--head.Y;
@@ -72,30 +76,34 @@ void Worm::Go(const WormLogic direction)
 
 		// корректируем длину
 		CheckLength();
-	}
+	}*/
 }
 
 void Worm::EraseOnMap() const
 {
-	for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
-		app->Map.Set(it->X, it->Y, CellEmpty);
+	throw NotImplementedException();
+	/*for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
+		app->Map.Set(it->X, it->Y, CellEmpty);*/
 }
 
 void Worm::UpdateMap() const
 {
-	for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
-		app->Map.Set(it->X, it->Y, CellWorm);
+	throw NotImplementedException();
+	/*for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
+		app->Map.Set(it->X, it->Y, CellWorm);*/
 }
 
 void Worm::EraseOnScreen() const
 {
-	for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
-		app->DrawCell(*it, CellEmpty);
+	throw NotImplementedException();
+	/*for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
+		app->DrawCell(*it, CellEmpty);*/
 }
 
 void Worm::AntiGrow()
 {
-	if(position.size() == 0)
+	throw NotImplementedException();
+	/*if(position.size() == 0)
 	{
 		throw new std::out_of_range("My length is 0, can't AntiGrow()");
 	}
@@ -112,44 +120,49 @@ void Worm::AntiGrow()
 
 		app->DrawCell(last, CellEmpty);
 		app->Map.Set(last.X, last.Y, CellEmpty);
-	}
+	}*/
 }
 
 void Worm::CheckLength()
 {
-	unsigned int need = static_cast<unsigned int>(floor(Energy() / Config::WormEnergyPerCell));
+	throw NotImplementedException();
+	/*unsigned int need = static_cast<unsigned int>(floor(Energy() / Config::WormEnergyPerCell));
 
 	while(position.size() < need)
 		Grow();
 
 	while(position.size() > need)
-		AntiGrow();
+		AntiGrow();*/
 }
 
 void Worm::Die()
 {
-	EraseOnMap();
+	throw NotImplementedException();
+	/*EraseOnMap();
 	EraseOnScreen();
 
 	if(!position.empty())
 		app->MakeFood(position.front().X, position.front().Y, Config::CorpseRadius);
 
-	dead = true;
+	dead = true;*/
 }
 
 void Worm::Grow()
 {
-	position.push_back(position.back());
+	throw NotImplementedException();
+	//position.push_back(position.back());
 }
 
 bool Worm::Dead()
 {
-	return dead;
+	throw NotImplementedException();
+	//return dead;
 }
 
 void Worm::UpdateEnergy()
 {
-	// 1) обновить энергию
+	throw NotImplementedException();
+	/*// 1) обновить энергию
 	double dt = app->GetTime() - lastUpdateEnergyTime;
 	lastUpdateEnergyTime += dt;
 	energy -= Config::EnergyLossPerSecond * dt;
@@ -187,12 +200,13 @@ void Worm::UpdateEnergy()
 		SharedSomeWorm second = app->AddWorm(GetClassID(), energy / 2, psecond, GetColor());
 		second->UpdateMap();
 		second->Draw();
-	}
+	}*/
 }
 
 void Worm::DoLogic()
 {
-	// возможно стоит сделать while вместо if, если fps маленький (<10), но там может начаться другая печаль
+	throw NotImplementedException();
+	/*// возможно стоит сделать while вместо if, если fps маленький (<10), но там может начаться другая печаль
 	if(GetLocalTime() < app->GetTime())
 	{
 		// ещё есть время!
@@ -205,34 +219,39 @@ void Worm::DoLogic()
 	}
 	// также возможно стоит сбрасывать излишки времени в конце функции
 	if(time < app->GetTime()) // !!
-		time = app->GetTime();
+		time = app->GetTime();*/
 }
 
 bool Worm::isPressed(const SDLKey key) const
 {
-	return app->isPressed(key);
+	throw NotImplementedException();
+	//return app->isPressed(key);
 }
 
 int Worm::Rand(const int x, const int y) const
 {
-	return app->Rand(x, y);
+	throw NotImplementedException();
+	//return app->Rand(x, y);
 }
 
 int Worm::Rand(const int x) const
 {
-	return app->Rand(x);
+	throw NotImplementedException();
+	//return app->Rand(x);
 }
 
 CellType Worm::Look(const int x, const int y)
 {
-	assert(position.size()>0);
+	throw NotImplementedException();
+	/*assert(position.size()>0);
 	SimplePoint head = position.front();
 	int distance = abs(head.X - x) + abs(head.Y - y);
 	ConsumeTime(Config::DiscoverTime * distance);
-	return app->Map.Get(x, y);
+	return app->Map.Get(x, y);*/
 }
 
 double Worm::GetGlobalTime() const
 {
-	return app->GetTime();
+	throw NotImplementedException();
+	//return app->GetTime();
 }
