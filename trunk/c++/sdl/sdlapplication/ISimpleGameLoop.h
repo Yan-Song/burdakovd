@@ -6,9 +6,11 @@
 class ISimpleGameLoop
 {
 public:
-	virtual void ProcessEvent(const SDL_Event&) = 0; // обработать событие, поступившее от пользователя
-	virtual void Main() = 0; // основная логика
-	virtual void Render() = 0; // без комментариев
+	virtual void ProcessEvent(const SDL_Event&) = 0; // РѕР±СЂР°Р±РѕС‚Р°С‚СЊ СЃРѕР±С‹С‚РёРµ, РїРѕСЃС‚СѓРїРёРІС€РµРµ РѕС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+	virtual void Main() = 0; // РѕСЃРЅРѕРІРЅР°СЏ Р»РѕРіРёРєР°
+	virtual void Render() = 0; // Р±РµР· РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ
+
+	virtual ~ISimpleGameLoop() {}
 };
 
 #endif
