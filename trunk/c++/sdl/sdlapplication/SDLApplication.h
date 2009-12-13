@@ -1,18 +1,22 @@
 #ifndef SDLAPPLICATION_H
 #define SDLAPPLICATION_H
 
-#include <SDL.h>
-#include "Color.h"
-#include "Vector.h"
 #include <cmath>
-#include "Utils.h"
-#include <list>
-#include "Timer.h"
-#include <string>
-#include <sstream>
 #include <ctime>
+
 #include <iostream>
+#include <list>
+#include <sstream>
+#include <string>
+
+#include <SDL.h>
+
+#include "Color.h"
+#include "IGameLoop.h"
 #include "Shared.h"
+#include "Timer.h"
+#include "Utils.h"
+#include "Vector.h"
 
 struct FrameInfo
 {
@@ -26,7 +30,7 @@ struct FrameInfo
 
 typedef std::list<FrameInfo> FrameInfoList;
 
-class SDLApplication
+class SDLApplication : protected IGameLoop
 {
 public:
 	SDLApplication();
@@ -141,17 +145,11 @@ public:
 protected:
 	void Stop(); // вызывается изнутри класса
 
-	virtual void ProcessEvents(); // обработать ввод пользователя
-
-	virtual void ProcessEvent(SDL_Event ) {};
-
-	virtual void Main() {}; // основная логика
-
 	virtual void InitialRender() {};
 
-	virtual void Render() {}; // вывести на экран текущую ситуацию
-
 	void InitializeSDL(size_t ScreenHeight, size_t ScreenWidth, int ColorDepth, Uint32 SDLflags); // инициализировать библиотеку SDL
+
+	virtual void ProcessEvents(); // обработать ввод пользователя
 
 	// количество кадров всего
 	unsigned int frames;

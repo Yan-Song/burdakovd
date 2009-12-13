@@ -103,7 +103,7 @@ void PrimitivesApplication::Render()
 	scene.Render();
 }
 
-void PrimitivesApplication::ProcessEvent(SDL_Event Event)
+void PrimitivesApplication::ProcessEvent(const SDL_Event& Event)
 {
 	if(Event.type == SDL_KEYDOWN)
 	{
