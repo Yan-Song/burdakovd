@@ -253,7 +253,7 @@ void RTDemoApplication::Main()
 	}
 }
 
-void RTDemoApplication::ProcessEvent(SDL_Event Event)
+void RTDemoApplication::ProcessEvent(const SDL_Event& Event)
 {
 	if(Event.type == SDL_KEYDOWN)
 	{

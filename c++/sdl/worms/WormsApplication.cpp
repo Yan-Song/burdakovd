@@ -50,7 +50,7 @@ WormsApplication::WormsApplication() : Map(FieldHeight, FieldWidth), printStatsT
 	}
 }
 
-void WormsApplication::ProcessEvent(SDL_Event Event)
+void WormsApplication::ProcessEvent(const SDL_Event& Event)
 {
 	if(Event.type == SDL_KEYDOWN)
 	{

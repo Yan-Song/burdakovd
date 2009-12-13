@@ -17,6 +17,9 @@ private:
 	const Point3D Center;
 	bool Rendered, Dirty;
 
+	RTDemoApplication(const RTDemoApplication& );
+	RTDemoApplication& operator =(const RTDemoApplication& );
+
 protected:
 	static const int ScreenWidth = 800, ScreenHeight = 600;
 	static const double MovementSpeed;
@@ -25,7 +28,9 @@ protected:
 
 	virtual void Main();
 
-	virtual void ProcessEvent(SDL_Event);
+	virtual void ProcessEvent(const SDL_Event& );
+
+	virtual void Render() {};
 
 	virtual void InitialRender();
 

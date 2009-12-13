@@ -46,7 +46,7 @@ private:
 	SomeWorms worms;
 
 protected:
-	virtual void ProcessEvent(SDL_Event Event);
+	virtual void ProcessEvent(const SDL_Event& Event);
 	virtual void Main();
 	virtual void Render();
 	virtual void InitialRender();

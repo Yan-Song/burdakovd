@@ -25,14 +25,14 @@ private:
 	double RotationAccelerating;
 
 	PrimitivesApplication(const PrimitivesApplication& );
-	PrimitivesApplication operator=(const PrimitivesApplication& );
+	PrimitivesApplication& operator =(const PrimitivesApplication& );
 	
 protected:
 	virtual void Main();
 
 	virtual void Render();
 
-	virtual void ProcessEvent(SDL_Event);
+	virtual void ProcessEvent(const SDL_Event& );
 
 	virtual void InitialRender();
 
