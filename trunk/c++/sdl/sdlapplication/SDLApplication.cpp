@@ -349,3 +349,11 @@ void SDLApplication::SetCaption(const std::string& text)
 {
 	SDL_WM_SetCaption(text.c_str(), "");
 }
+
+ScreenPoint SDLApplication::GetMousePosition() const
+{
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+
+	return ScreenPointByCoords(x, Screen->h - 1 - y);
+}
