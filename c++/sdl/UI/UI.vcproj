@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="RayTracing"
-	ProjectGUID="{766D1DA5-0463-45D2-878C-0B31D203DE14}"
-	RootNamespace="RayTracing"
+	Name="UI"
+	ProjectGUID="{86697F45-34B1-4765-9CCC-74E207AE6FDC}"
+	RootNamespace="UI"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -41,13 +41,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				AdditionalIncludeDirectories="..\sdlapplication"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
+				WarningLevel="4"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -106,12 +106,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;..&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				FavorSizeOrSpeed="1"
+				AdditionalIncludeDirectories="&quot;..\sdlapplication&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="4"
+				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -153,51 +154,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Camera.cpp"
+				RelativePath=".\Element.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CompoundObject.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Frustum.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Material.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NormalizedVector3D.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Plane.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SierpinskiPyramide.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Sphere.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Tetragon.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Texture.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Triangle.cpp"
+				RelativePath=".\MouseOverable.cpp"
 				>
 			</File>
 		</Filter>
@@ -207,99 +168,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Camera.h"
+				RelativePath=".\Element.h"
 				>
 			</File>
 			<File
-				RelativePath=".\CompoundObject.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Cube.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Equation.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Frustum.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ICamera.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IEngine.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IntersectionResult.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Invisible.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IObject3D.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ITracer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Light.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Material.h"
-				>
-			</File>
-			<File
-				RelativePath=".\NormalizedVector3D.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Plane.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Polynom.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Ray.h"
-				>
-			</File>
-			<File
-				RelativePath=".\RTObject.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Scene.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SierpinskiPyramide.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Sphere.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Tetragon.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Texture.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Triangle.h"
+				RelativePath=".\MouseOverable.h"
 				>
 			</File>
 		</Filter>

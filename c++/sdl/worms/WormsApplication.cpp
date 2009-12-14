@@ -8,7 +8,7 @@
 #include "MainMenu.h"
 #include "WormsApplication.h"
 
-WormsApplication::WormsApplication() : CurrentState(new MainMenu()), printStatsTimer()
+WormsApplication::WormsApplication() : CurrentState(new MainMenu(this)), printStatsTimer()
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 	SetFPSCap(20);
@@ -38,4 +38,5 @@ void WormsApplication::Main()
 void WormsApplication::Render()
 {
 	CurrentState->Render();
+	Flip();
 }

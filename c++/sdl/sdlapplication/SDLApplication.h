@@ -142,6 +142,8 @@ public:
 		return fpsCap != 0;
 	}
 
+	ScreenPoint GetMousePosition() const;
+
 protected:
 	void Stop(); // вызывается изнутри класса
 
