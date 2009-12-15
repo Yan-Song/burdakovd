@@ -14,6 +14,9 @@ namespace UI
 		int width, height, left, bottom;
 		bool enabled;
 
+		Element(const Element& );
+		Element& operator =(const Element& );
+
 	protected:
 		SDLApplication* app;
 
