@@ -6,7 +6,7 @@ const std::string UI::Button::FontName = "Fonts/arial.ttf";
 const int UI::Button::FontSize = 11;
 
 UI::Button::Button(SDLApplication* const app, const std::string& caption_)
-: Clickable(app), caption(caption_)
+: Clickable(app), caption(caption_), normal(), hovered(), pressed()
 {
 	SetWidth(73);
 	SetHeight(21);
@@ -26,7 +26,7 @@ void UI::Button::Render()
 void UI::Button::updateSprites()
 {
 	const SharedSprite text(new Sprite(GetFont(FontName, FontSize), caption, Palette::Black));
-	
+
 	normal = SharedSprite(new Sprite("button-normal.bmp"));
 	normal->SetColorKey(Color(0x00ff00));
 	hovered = SharedSprite(new Sprite("button-hover.bmp"));
