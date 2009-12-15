@@ -1,53 +1,71 @@
 #include <Color.h>
 #include <SDLApplication.h>
-#include <UI/MouseOverable.h>
+#include <Sprite.h>
+#include <UI/Clickable.h>
 #include "MainMenu.h"
+#include "MenuItem.h"
 
-namespace
+class MainMenu::MenuItems
 {
-	class test : public UI::MouseOverable
+public:
+	class Quit : public UI::MenuItem
 	{
 	public:
-		test(SDLApplication* const app_) : UI::MouseOverable(app_)
+		Quit(SDLApplication* const app) : MenuItem(app, "Quit")
 		{
-			SetHeight(50);
-			SetWidth(100);
-			SetBottom(200);
-			SetLeft(200);
 		}
 
-		virtual void Render()
+		virtual void onClick()
 		{
-			const Color color = isMouseOver() ? Palette::Gray : Palette::Gray / 2;
-
-			app->FillRectangle(
-				ScreenPointByCoords(GetLeft(), GetBottom()),
-				ScreenPointByCoords(GetLeft() + GetWidth(), GetBottom() + GetHeight()), color);
-		}
-
-		virtual void Main()
-		{
-			
+			app->Stop();
 		}
 	};
-}
 
-MainMenu::MainMenu(SDLApplication* const app) : element(new test(app))
+	class New : public UI::MenuItem
+	{
+	public:
+
+	};
+};
+
+MainMenu::MainMenu(SDLApplication* const app_) : app(app_), elements()
 {
+	elements.push_back(UI::SharedElement(new MenuItems::Quit(app)));
+
+	// разместить элементы на экране
+	const int ItemWidth = 200;
+	const int ItemHeight = 60;
+	const int ItemLeft = (app->Screen->w - ItemWidth) / 2;
+	const int MenuBottom = (app->Screen->h - ItemHeight * static_cast<int>(elements.size())) / 2;
 	
+	size_t i = elements.size() - 1;
+	for(ElementList::const_iterator it = elements.begin(); it != elements.end(); ++it, --i)
+	{
+		(*it)->SetWidth(ItemWidth);
+		(*it)->SetHeight(ItemHeight);
+		(*it)->SetLeft(ItemLeft);
+		(*it)->SetBottom(MenuBottom + static_cast<int>(i) * ItemHeight);
+	}
 }
 
 void MainMenu::ProcessEvent(const SDL_Event& Event)
 {
-	element->ProcessEvent(Event);
+	if(Event.type == SDL_KEYDOWN && Event.key.keysym.sym == SDLK_ESCAPE)
+		app->Stop();
+
+	for(ElementList::const_iterator it = elements.begin(); it != elements.end(); ++it)
+		(*it)->ProcessEvent(Event);
 }
 
 void MainMenu::Main()
 {
-	element->Main();
+	for(ElementList::const_iterator it = elements.begin(); it != elements.end(); ++it)
+		(*it)->Main();
 }
 
 void MainMenu::Render()
 {
-	element->Render();
+	app->ClearScreen(Color(0xe0e0e0));
+	for(ElementList::const_iterator it = elements.begin(); it != elements.end(); ++it)
+		(*it)->Render();
 }

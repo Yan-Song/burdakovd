@@ -1,20 +1,21 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
+#include <vector>
+#include <UI/Element.h>
 #include <ISimpleGameLoop.h>
-#include <Shared.h>
 
 class SDLApplication;
 
-namespace UI
-{
-	class Element;
-}
-
 class MainMenu : public ISimpleGameLoop
 {
-private:
-	Shared::shared_ptr<UI::Element> element;
+protected:
+	SDLApplication* app;
+
+	class MenuItems;
+
+	typedef std::vector<UI::SharedElement> ElementList;
+	ElementList elements;
 
 public:
 	MainMenu(SDLApplication* const app);

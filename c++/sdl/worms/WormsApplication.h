@@ -22,6 +22,8 @@ public:
 
 	SharedState CurrentState;
 
+	virtual ~WormsApplication();
+
 private:
 	static const int ColorDepth = 0, SDLflags = SDL_HWSURFACE | SDL_DOUBLEBUF;
 	static const int ScreenWidth = 800, ScreenHeight = 600;

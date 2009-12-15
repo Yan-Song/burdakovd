@@ -1,6 +1,8 @@
 #include <ctime>
 #include <iostream>
+#include <SDL_ttf.h>
 #include <Color.h>
+#include <Font.h>
 #include <Utils.h>
 #include <Vector.h>
 #include "ISomeWorm.h"
@@ -8,13 +10,20 @@
 #include "MainMenu.h"
 #include "WormsApplication.h"
 
-WormsApplication::WormsApplication() : CurrentState(new MainMenu(this)), printStatsTimer()
+WormsApplication::WormsApplication() : CurrentState(), printStatsTimer()
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
+
+	SDLCheck(TTF_Init());
+	std::cout << "SDL_ttf initialized" << std::endl;
+
 	SetFPSCap(20);
+
 	printStatsTimer.Start();
 
 	SetCaption("Worms");
+
+	CurrentState = SharedState(new MainMenu(this));
 }
 
 void WormsApplication::ProcessEvent(const SDL_Event& Event)
@@ -39,4 +48,11 @@ void WormsApplication::Render()
 {
 	CurrentState->Render();
 	Flip();
+}
+
+WormsApplication::~WormsApplication()
+{
+	ClearFontCache();
+	TTF_Quit();
+	std::cout << "SDL_ttf quited" << std::endl;
 }

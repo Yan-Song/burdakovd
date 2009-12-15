@@ -144,9 +144,15 @@ public:
 
 	ScreenPoint GetMousePosition() const;
 
-protected:
-	void Stop(); // вызывается изнутри класса
+	inline Uint32 MapColor(const Color& rgb) const
+	{
+		assert(rgb.R >= 0 && rgb.B >=0 && rgb.G >= 0 && rgb.R < 256 && rgb.G < 256 && rgb.B < 256);
+		return SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.R), static_cast<Uint8>(rgb.G), static_cast<Uint8>(rgb.B));
+	}
 
+	void Stop();
+
+protected:
 	virtual void InitialRender() {};
 
 	void InitializeSDL(size_t ScreenHeight, size_t ScreenWidth, int ColorDepth, Uint32 SDLflags); // инициализировать библиотеку SDL
@@ -183,12 +189,6 @@ private:
 	// нельзя копировать
 	SDLApplication(const SDLApplication&);
 	SDLApplication& operator =(const SDLApplication&);
-
-	inline Uint32 MapColor(const Color& rgb) const
-	{
-		assert(rgb.R >= 0 && rgb.B >=0 && rgb.G >= 0 && rgb.R < 256 && rgb.G < 256 && rgb.B < 256);
-		return SDL_MapRGB(Screen->format, static_cast<Uint8>(rgb.R), static_cast<Uint8>(rgb.G), static_cast<Uint8>(rgb.B));
-	}
 
 	// статистика за последнюю секунду
 	FrameInfoList stats;
