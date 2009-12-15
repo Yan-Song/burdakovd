@@ -154,11 +154,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\Button.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Clickable.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Element.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ElementSet.cpp"
 				>
 			</File>
 			<File
@@ -172,11 +180,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\Button.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Clickable.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Element.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ElementSet.h"
 				>
 			</File>
 			<File

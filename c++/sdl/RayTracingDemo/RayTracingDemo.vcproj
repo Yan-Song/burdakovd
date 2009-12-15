@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_ttf.lib"
 				LinkIncremental="2"
 				IgnoreDefaultLibraryNames="msvcrt.lib"
 				GenerateDebugInformation="true"
@@ -136,7 +136,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib SDL_ttf.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -194,26 +194,30 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\Textures\azeroth.bmp"
+		<Filter
+			Name="Текстуры"
 			>
-		</File>
-		<File
-			RelativePath=".\Textures\board.bmp"
-			>
-		</File>
-		<File
-			RelativePath=".\Textures\smile.bmp"
-			>
-		</File>
-		<File
-			RelativePath=".\Textures\wood-small.bmp"
-			>
-		</File>
-		<File
-			RelativePath=".\Textures\wood.bmp"
-			>
-		</File>
+			<File
+				RelativePath=".\Textures\azeroth.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\Textures\board.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\Textures\smile.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\Textures\wood-small.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\Textures\wood.bmp"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

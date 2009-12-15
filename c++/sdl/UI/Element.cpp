@@ -46,6 +46,12 @@ void UI::Element::SetBottom(const int b)
 	onLayoutChanged();
 }
 
+void UI::Element::SetCenter(const ScreenPoint& center)
+{
+	SetLeft(center[0] - GetWidth() / 2);
+	SetBottom(center[1] - GetHeight() / 2);
+}
+
 void UI::Element::Enable()
 {
 	enabled = true;

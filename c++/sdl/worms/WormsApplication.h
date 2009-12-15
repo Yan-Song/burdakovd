@@ -4,23 +4,22 @@
 #include <vector>
 
 #include <Color.h>
+#include <ISimpleGameLoop.h>
 #include <SDLApplication.h>
 #include <Timer.h>
 #include <Utils.h>
 
 #include "BattleField.h"
 #include "CellType.h"
-#include "ISimpleGameLoop.h"
+#include "Engine.h"
 #include "ISomeWorm.h"
 #include "Registrator.h"
 
 
-class WormsApplication: public SDLApplication
+class WormsApplication: public Engine
 {
 public:
 	WormsApplication();
-
-	SharedState CurrentState;
 
 	virtual ~WormsApplication();
 

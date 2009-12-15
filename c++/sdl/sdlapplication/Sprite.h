@@ -33,9 +33,13 @@ public:
 
 	virtual void Scale(const Vector2D& coefficients);
 
-	virtual int GetWidth() const;
+	int GetWidth() const;
 
-	virtual int GetHeight() const;
+	int GetHeight() const;
+
+	void Blit(Sprite& destination, const ScreenPoint& center) const;
+
+	void SetColorKey(const Color& color);
 
 	virtual ~Sprite();
 };
