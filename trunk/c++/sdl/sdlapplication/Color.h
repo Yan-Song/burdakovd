@@ -53,6 +53,17 @@ public:
 	{
 		return GenericColor<J>(static_cast<J>(R), static_cast<J>(G), static_cast<J>(B));
 	}
+
+	inline operator SDL_Color() const
+	{
+		SDL_Color c;
+
+		c.r = static_cast<Uint8>(R);
+		c.g = static_cast<Uint8>(G);
+		c.b = static_cast<Uint8>(B);
+
+		return c;
+	}
 };
 
 template<typename I>
