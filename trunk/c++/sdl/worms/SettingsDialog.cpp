@@ -7,6 +7,10 @@ namespace
 {
 	class OKButton : public UI::Button
 	{
+	private:
+		OKButton(const OKButton& );
+		OKButton& operator =(const OKButton& );
+
 	public:
 		OKButton(Engine* const app_) : UI::Button(app_, "OK")
 		{
@@ -17,6 +21,9 @@ namespace
 	{
 	private:
 		Engine* app;
+
+		CancelButton(const CancelButton& );
+		CancelButton& operator =(const CancelButton& );
 
 	public:
 		CancelButton(Engine* const app_) : UI::Button(app_, "Cancel"), app(app_)
@@ -39,7 +46,7 @@ SettingsDialog::SettingsDialog(Engine* const app_) : app(app_)
 	Cancel->SetCenter(ScreenPointByCoords(app->Screen->w * 80 / 100, app->Screen->h * 5 / 100));
 
 	Add(OK);
-	Add(Cancel);	
+	Add(Cancel);
 }
 
 void SettingsDialog::ProcessEvent(const SDL_Event &Event)

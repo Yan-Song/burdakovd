@@ -1,6 +1,6 @@
 include_directories(${SDLApplication_SOURCE_DIR}/sdlapplication)
 
-set(SRC Clickable Element MouseOverable)
+set(SRC Button Clickable Element ElementSet MouseOverable)
 
 add_library(UI ${SRC})
 

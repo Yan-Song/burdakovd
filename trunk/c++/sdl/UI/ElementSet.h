@@ -17,6 +17,8 @@ namespace UI
 		void Add(const SharedElement& element);
 
 	public:
+		ElementSet() : elements() {}
+
 		virtual void ProcessEvent(const SDL_Event& Event);
 
 		virtual void Main();

@@ -19,6 +19,9 @@ namespace UI
 
 		void updateSprites();
 
+		MenuItem(const MenuItem& );
+		MenuItem& operator =(const MenuItem& );
+
 	public:
 		MenuItem(Engine* const app, const std::string& text_);
 
