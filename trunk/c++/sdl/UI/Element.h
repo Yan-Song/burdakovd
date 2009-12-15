@@ -46,6 +46,8 @@ namespace UI
 
 		virtual void SetBottom(const int b);
 
+		virtual void SetCenter(const ScreenPoint& center);
+
 		virtual void Enable();
 
 		virtual void Disable();

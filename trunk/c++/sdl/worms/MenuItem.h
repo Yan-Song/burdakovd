@@ -5,6 +5,8 @@
 #include <Sprite.h>
 #include <UI/Clickable.h>
 
+class Engine;
+
 namespace UI
 {
 	class MenuItem : public Clickable
@@ -18,11 +20,13 @@ namespace UI
 		void updateSprites();
 
 	public:
-		MenuItem(SDLApplication* const app, const std::string& text_);
+		MenuItem(Engine* const app, const std::string& text_);
 
 		virtual void Render();
 
 	protected:
+		Engine* app;
+
 		void onLayoutChanged();
 	};
 }

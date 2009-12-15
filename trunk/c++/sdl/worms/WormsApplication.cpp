@@ -10,7 +10,7 @@
 #include "MainMenu.h"
 #include "WormsApplication.h"
 
-WormsApplication::WormsApplication() : CurrentState(), printStatsTimer()
+WormsApplication::WormsApplication() : Engine(), printStatsTimer()
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 
@@ -20,17 +20,19 @@ WormsApplication::WormsApplication() : CurrentState(), printStatsTimer()
 
 	SetCaption("Worms");
 
-	CurrentState = SharedState(new MainMenu(this));
+	SetState(SharedState(new MainMenu(this)));
 }
 
 void WormsApplication::ProcessEvent(const SDL_Event& Event)
 {
-	CurrentState->ProcessEvent(Event);
+	GetCurrentState()->ProcessEvent(Event);
 }
 
 void WormsApplication::Main()
 {
-    CurrentState->Main();
+    GetCurrentState()->Main();
+
+	ChangeState();
 
 	// статистика производительности раз в секунду
 	if(printStatsTimer.GetTime() >= 1.0)
@@ -43,7 +45,7 @@ void WormsApplication::Main()
 
 void WormsApplication::Render()
 {
-	CurrentState->Render();
+	GetCurrentState()->Render();
 	Flip();
 }
 

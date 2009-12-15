@@ -67,3 +67,23 @@ int Sprite::GetHeight() const
 {
 	return image->h;
 }
+
+void Sprite::Blit(Sprite &target, const ScreenPoint& center) const
+{
+	SDL_Rect offset;
+
+	offset.x = static_cast<Sint16>(center[0] - image->w / 2);
+	offset.y = static_cast<Sint16>(target.image->h - 1 - center[1] - image->h / 2 );
+
+	SDLCheck(SDL_BlitSurface(image, NULL, target.image, &offset));
+}
+
+void Sprite::SetColorKey(const Color &color)
+{
+	const Uint32 key = SDL_MapRGB(image->format,
+		static_cast<Uint8>(color.R),
+		static_cast<Uint8>(color.G),
+		static_cast<Uint8>(color.B));
+
+	SDL_SetColorKey(image, SDL_SRCCOLORKEY, key);
+}

@@ -3,30 +3,27 @@
 
 #include <vector>
 #include <UI/Element.h>
+#include <UI/ElementSet.h>
 #include <ISimpleGameLoop.h>
+#include "Engine.h"
 
 class SDLApplication;
 
-class MainMenu : public ISimpleGameLoop
+class MainMenu : public UI::ElementSet
 {
 private:
 	MainMenu(const MainMenu& );
 	MainMenu& operator =(const MainMenu& );
 
 protected:
-	SDLApplication* app;
+	Engine* app;
 
 	class MenuItems;
 
-	typedef std::vector<UI::SharedElement> ElementList;
-	ElementList elements;
-
 public:
-	MainMenu(SDLApplication* const app);
+	MainMenu(Engine* const app);
 
 	virtual void ProcessEvent(const SDL_Event& ); // обработать событие, поступившее от пользователя
-
-	virtual void Main(); // основная логика
 
 	virtual void Render(); // без комментариев
 };
