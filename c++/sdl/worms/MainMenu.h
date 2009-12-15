@@ -9,6 +9,10 @@ class SDLApplication;
 
 class MainMenu : public ISimpleGameLoop
 {
+private:
+	MainMenu(const MainMenu& );
+	MainMenu& operator =(const MainMenu& );
+
 protected:
 	SDLApplication* app;
 
@@ -20,11 +24,11 @@ protected:
 public:
 	MainMenu(SDLApplication* const app);
 
-	virtual void ProcessEvent(const SDL_Event& ); // обработать событие, поступившее от пользователя
-	
-	virtual void Main(); // основная логика
-	
-	virtual void Render(); // без комментариев
+	virtual void ProcessEvent(const SDL_Event& ); // РѕР±СЂР°Р±РѕС‚Р°С‚СЊ СЃРѕР±С‹С‚РёРµ, РїРѕСЃС‚СѓРїРёРІС€РµРµ РѕС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+
+	virtual void Main(); // РѕСЃРЅРѕРІРЅР°СЏ Р»РѕРіРёРєР°
+
+	virtual void Render(); // Р±РµР· РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ
 };
 
 #endif

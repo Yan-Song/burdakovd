@@ -4,4 +4,4 @@ set(SRC Demo main)
 
 add_executable(RayTracingDemo ${SRC})
 
-target_link_libraries(RayTracingDemo RayTracing)
+target_link_libraries(RayTracingDemo RayTracing sdlapplication SDL SDLmain)

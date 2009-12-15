@@ -33,7 +33,7 @@ void Worm::Tick()
 	CheckLength();
 }
 
-void Worm::Go(const WormLogic direction)
+void Worm::Go(const WormLogic )
 {
 	throw NotImplementedException();
 	/*SimplePoint head = position.front();
@@ -222,25 +222,25 @@ void Worm::DoLogic()
 		time = app->GetTime();*/
 }
 
-bool Worm::isPressed(const SDLKey key) const
+bool Worm::isPressed(const SDLKey ) const
 {
 	throw NotImplementedException();
 	//return app->isPressed(key);
 }
 
-int Worm::Rand(const int x, const int y) const
+int Worm::Rand(const int , const int ) const
 {
 	throw NotImplementedException();
 	//return app->Rand(x, y);
 }
 
-int Worm::Rand(const int x) const
+int Worm::Rand(const int ) const
 {
 	throw NotImplementedException();
 	//return app->Rand(x);
 }
 
-CellType Worm::Look(const int x, const int y)
+CellType Worm::Look(const int , const int )
 {
 	throw NotImplementedException();
 	/*assert(position.size()>0);

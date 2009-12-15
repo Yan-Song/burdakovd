@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <iostream>
 #include <SDL.h>
+#include <SDL_ttf.h>
+#include "Font.h"
 #include "SDLApplication.h"
 #include "SDLException.h"
 #include "Timer.h"
@@ -109,13 +111,21 @@ void SDLApplication::InitializeSDL(size_t ScreenHeight, size_t ScreenWidth, int 
 	fps.Start();
 
 	std::cout<<"SDL initialized"<<std::endl;
+
+	SDLCheck(TTF_Init());
+	std::cout << "SDL_ttf initialized" << std::endl;
 }
 
 SDLApplication::~SDLApplication()
 {
 	stats.clear();
+
 	SDL_Quit();
-	std::cout<<"SDL unloaded"<<std::endl;
+	std::cout<<"SDL quited"<<std::endl;
+
+	ClearFontCache();
+	TTF_Quit();
+	std::cout << "SDL_ttf quited" << std::endl;
 }
 
 void SDLApplication::ProcessEvents()
@@ -136,7 +146,7 @@ void SDLApplication::Run()
 	std::cout<<"Run()"<<std::endl;
 
 	InitialRender();
-	
+
 	Timer frameTimer;
 	while(Running)
 	{

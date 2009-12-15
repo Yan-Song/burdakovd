@@ -14,9 +14,6 @@ WormsApplication::WormsApplication() : CurrentState(), printStatsTimer()
 {
 	InitializeSDL(ScreenHeight, ScreenWidth, ColorDepth, SDLflags);
 
-	SDLCheck(TTF_Init());
-	std::cout << "SDL_ttf initialized" << std::endl;
-
 	SetFPSCap(20);
 
 	printStatsTimer.Start();
@@ -39,7 +36,7 @@ void WormsApplication::Main()
 	if(printStatsTimer.GetTime() >= 1.0)
 	{
 		printStatsTimer.Start();
-		std::cout << "Time: " << GetTime() << 
+		std::cout << "Time: " << GetTime() <<
 			"; FPS = " << FPS() << ", dt min/avg/max = " << dtMin() << "/" << dtAvg() << "/" << dtMax() << " ms." << std::endl;
 	}
 }
@@ -52,7 +49,5 @@ void WormsApplication::Render()
 
 WormsApplication::~WormsApplication()
 {
-	ClearFontCache();
-	TTF_Quit();
-	std::cout << "SDL_ttf quited" << std::endl;
+
 }
