@@ -23,9 +23,9 @@ private:
 	Sprite operator =(const Sprite& );
 
 public:
-	Sprite(const std::string& BMPFile, const Vector2D& center = Vector00);
+	Sprite(const std::string& file, const Vector2D& center = Vector00);
 
-	Sprite(const SharedFont& font, const std::string& text, const Color& color);
+	Sprite(const SharedFont& font, const std::string& text, const Color& color);	
 
 	virtual void Draw(SDLApplication* const app, const Vector2D& base) const;
 
@@ -37,7 +37,9 @@ public:
 
 	int GetHeight() const;
 
-	void Blit(Sprite& destination, const ScreenPoint& center) const;
+	void BlitOnSprite(Sprite& destination, const ScreenPoint& center) const;
+
+	void BlitOnScreen(SDLApplication* const app, const ScreenPoint& LeftBottom) const;
 
 	void SetColorKey(const Color& color);
 

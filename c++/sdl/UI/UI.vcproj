@@ -162,11 +162,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ColorSelector.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Element.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\ElementSet.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Label.cpp"
 				>
 			</File>
 			<File
@@ -188,11 +196,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ColorSelector.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Element.h"
 				>
 			</File>
 			<File
 				RelativePath=".\ElementSet.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Label.h"
 				>
 			</File>
 			<File

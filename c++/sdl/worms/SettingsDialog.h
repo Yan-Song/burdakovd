@@ -10,11 +10,15 @@
 class SettingsDialog : public UI::ElementSet
 {
 private:
-	class WormSetting;
 	Engine* app;
 
 	SettingsDialog(const SettingsDialog& );
 	SettingsDialog& operator =(const SettingsDialog& );
+
+	class SettingsItem;
+	typedef Shared::shared_ptr<SettingsItem> SharedSettingsItem;
+	typedef std::vector<SharedSettingsItem> Settings;
+	Settings settings;
 
 public:
 	SettingsDialog(Engine* const app);

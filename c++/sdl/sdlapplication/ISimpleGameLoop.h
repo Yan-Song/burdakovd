@@ -18,5 +18,6 @@ public:
 };
 
 typedef Shared::shared_ptr<ISimpleGameLoop> SharedState;
+typedef Shared::shared_ptr<ISimpleGameLoop> SharedSimpleGameLoop;
 
 #endif
