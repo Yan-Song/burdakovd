@@ -38,8 +38,10 @@ public:
 	};
 };
 
-MainMenu::MainMenu(Engine* const app_) : app(app_)
+MainMenu::MainMenu(Engine* const app_) : UI::ElementSet(app_), app(app_)
 {
+	Maximize();
+
 	Add(UI::SharedElement(new MenuItems::New(app)));
 	Add(UI::SharedElement(new MenuItems::Quit(app)));
 

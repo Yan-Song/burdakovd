@@ -1,6 +1,7 @@
 #ifndef ELEMENT_H
 #define ELEMENT_H
 
+#include <stack>
 #include <ISimpleGameLoop.h>
 #include <Vector.h>
 
@@ -11,6 +12,7 @@ namespace UI
 	class Element : public ISimpleGameLoop
 	{
 	private:
+		std::stack<SDL_Rect> clipStack;
 		int width, height, left, bottom;
 		bool enabled;
 
@@ -26,7 +28,7 @@ namespace UI
 
 	public:
 		Element(SDLApplication* const app_)
-			: width(0), height(0), left(0), bottom(0), enabled(true), app(app_) {}
+			: clipStack(), width(0), height(0), left(0), bottom(0), enabled(true), app(app_) {}
 
 		virtual int GetWidth() const;
 
@@ -48,6 +50,8 @@ namespace UI
 
 		virtual void SetCenter(const ScreenPoint& center);
 
+		virtual void SetEnabled(const bool);
+
 		virtual void Enable();
 
 		virtual void Disable();
@@ -59,6 +63,10 @@ namespace UI
 		virtual void Render();
 
 		virtual ScreenPoint GetCenter() const;
+
+		virtual ScreenPoint GetLeftBottom() const;
+
+		virtual void Maximize();
 
 	protected:
 		virtual void onLayoutChanged();

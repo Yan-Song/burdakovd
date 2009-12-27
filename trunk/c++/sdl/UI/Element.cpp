@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <SDLApplication.h>
+#include <Utils.h>
 #include "Element.h"
 
 int UI::Element::GetWidth() const
@@ -52,6 +53,11 @@ void UI::Element::SetCenter(const ScreenPoint& center)
 	SetBottom(center[1] - GetHeight() / 2);
 }
 
+void UI::Element::SetEnabled(const bool enabled_)
+{
+	enabled = enabled_;
+}
+
 void UI::Element::Enable()
 {
 	enabled = true;
@@ -74,18 +80,30 @@ ScreenPoint UI::Element::GetCenter() const
 
 void UI::Element::Clip()
 {
-	SDL_Rect rect;
-	rect.x = static_cast<Sint16>(GetLeft());
-	rect.y = static_cast<Sint16>(app->Screen->h - 1 - GetBottom() - GetHeight());
-	rect.w = static_cast<Uint16>(GetWidth());
-	rect.h = static_cast<Uint16>(GetHeight());
+	// сохранить предыдущий прямоугольник
+	SDL_Rect prev;
+	SDL_GetClipRect(app->Screen, &prev);
+	clipStack.push(prev);
 
-	SDL_SetClipRect(app->Screen, &rect);
+	// посчитать свой
+	SDL_Rect me;
+	me.x = static_cast<Sint16>(GetLeft());
+	me.y = static_cast<Sint16>(app->Screen->h - 1 - GetBottom() - GetHeight());
+	me.w = static_cast<Uint16>(GetWidth());
+	me.h = static_cast<Uint16>(GetHeight());
+
+	// пересечь с предыдущим
+	SDL_Rect intersection = Intersect(prev, me);
+
+	// обрезать по пересечению
+	SDL_SetClipRect(app->Screen, &intersection);
 }
 
 void UI::Element::UnClip()
 {
-	SDL_SetClipRect(app->Screen, NULL);
+	// востановить предыдущий
+	SDL_SetClipRect(app->Screen, &(clipStack.top()));
+	clipStack.pop();
 }
 
 void UI::Element::ProcessEvent(const SDL_Event& )
@@ -106,4 +124,17 @@ void UI::Element::Render()
 void UI::Element::onLayoutChanged()
 {
 
+}
+
+void UI::Element::Maximize()
+{
+	SetLeft(0);
+	SetBottom(0);
+	SetWidth(app->Screen->w);
+	SetHeight(app->Screen->h);
+}
+
+ScreenPoint UI::Element::GetLeftBottom() const
+{
+	return ScreenPointByCoords(GetLeft(), GetBottom());
 }

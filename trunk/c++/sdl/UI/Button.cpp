@@ -1,4 +1,5 @@
 #include <Color.h>
+#include <Font.h>
 #include <Utils.h>
 #include "Button.h"
 
@@ -10,7 +11,6 @@ UI::Button::Button(SDLApplication* const app, const std::string& caption_)
 {
 	SetWidth(73);
 	SetHeight(21);
-	updateSprites();
 }
 
 void UI::Button::onLayoutChanged()
@@ -20,7 +20,11 @@ void UI::Button::onLayoutChanged()
 
 void UI::Button::Render()
 {
-	(isElementPressed() ? pressed : (isMouseOver() ? hovered : normal))->Draw(app, GetCenter());
+	Clip();
+
+	(isElementPressed() ? pressed : (isMouseOver() ? hovered : normal))->BlitOnScreen(app, GetLeftBottom());
+
+	UnClip();
 }
 
 void UI::Button::updateSprites()
@@ -34,7 +38,7 @@ void UI::Button::updateSprites()
 	pressed = SharedSprite(new Sprite("button-pressed.bmp"));
 	pressed->SetColorKey(Color(0x00ff00));
 
-	text->Blit(*normal, ScreenPointByCoords(GetWidth() / 2, GetHeight() / 2));
-	text->Blit(*hovered, ScreenPointByCoords(GetWidth() / 2, GetHeight() / 2));
-	text->Blit(*pressed, ScreenPointByCoords(GetWidth() / 2, GetHeight() / 2));
+	text->BlitOnSprite(*normal, ScreenPointByCoords(GetWidth() / 2, GetHeight() / 2));
+	text->BlitOnSprite(*hovered, ScreenPointByCoords(GetWidth() / 2, GetHeight() / 2));
+	text->BlitOnSprite(*pressed, ScreenPointByCoords(GetWidth() / 2, GetHeight() / 2));
 }

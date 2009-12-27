@@ -1,18 +1,19 @@
 #include <string>
 #include <SDL.h>
+#include <SDL_image.h>
 #include "SDLApplication.h"
 #include "Sprite.h"
 
-Sprite::Sprite(const std::string &BMPFile, const Vector2D& center) : image(NULL)
+Sprite::Sprite(const std::string &file, const Vector2D& center) : image(NULL)
 {
 	Center = center;
 
-	SDL_Surface* raw = SDL_LoadBMP(BMPFile.c_str());
+	SDL_Surface* raw = IMG_Load(file.c_str());
 
 	if(raw == NULL)
 		throw SDLException();
 
-	image = SDL_DisplayFormat(raw);
+	image = SDL_DisplayFormatAlpha(raw);
 
 	SDL_FreeSurface(raw);
 
@@ -37,15 +38,9 @@ Sprite::~Sprite()
 }
 
 // http://sdl.beuc.net/sdl.wiki/SDL_BlitSurface
-void Sprite::Draw(SDLApplication * const app, const Vector2D &base) const
+void Sprite::Draw(SDLApplication* const app, const Vector2D &base) const
 {
-	SDL_Rect dst;
-	// Only the position is used in the dstrect (the width and height are ignored).
-	dst.x = static_cast<Sint16>((base + Center)[0] - image->w / 2);
-	dst.y = static_cast<Sint16>(app->Screen->h - 1 - (base + Center)[1] - image->h / 2);
-	
-	// If srcrect is NULL, the entire surface is copied.
-	SDLCheck(SDL_BlitSurface(image, NULL, app->Screen, &dst));
+	BlitOnScreen(app, base + Center - 0.5 * Vector2DByCoords(GetWidth(), GetHeight()));
 }
 
 void Sprite::Rotate(const double )
@@ -68,7 +63,7 @@ int Sprite::GetHeight() const
 	return image->h;
 }
 
-void Sprite::Blit(Sprite &target, const ScreenPoint& center) const
+void Sprite::BlitOnSprite(Sprite &target, const ScreenPoint& center) const
 {
 	SDL_Rect offset;
 
@@ -76,6 +71,15 @@ void Sprite::Blit(Sprite &target, const ScreenPoint& center) const
 	offset.y = static_cast<Sint16>(target.image->h - 1 - center[1] - image->h / 2 );
 
 	SDLCheck(SDL_BlitSurface(image, NULL, target.image, &offset));
+}
+
+void Sprite::BlitOnScreen(SDLApplication* const app, const ScreenPoint& LeftBottom) const
+{
+	SDL_Rect dst;
+	dst.x = static_cast<Sint16>(LeftBottom[0]);
+	dst.y = static_cast<Sint16>(app->Screen->h - 1 - LeftBottom[1] - image->h);
+
+	SDLCheck(SDL_BlitSurface(image, NULL, app->Screen, &dst));
 }
 
 void Sprite::SetColorKey(const Color &color)

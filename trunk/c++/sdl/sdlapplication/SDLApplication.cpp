@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iostream>
 #include <SDL.h>
+#include <SDL_image.h>
 #include <SDL_ttf.h>
 #include "Font.h"
 #include "SDLApplication.h"
@@ -105,27 +106,34 @@ void SDLApplication::InitializeSDL(size_t ScreenHeight, size_t ScreenWidth, int 
 		throw SDLException();
 	}
 
-	KeyState = SDL_GetKeyState(NULL);
+	std::cout << "SDL initialized" << std::endl;
 
-	timer.Start();
-	fps.Start();
-
-	std::cout<<"SDL initialized"<<std::endl;
+	SDLCheck(IMG_Init(IMG_INIT_PNG));
+	std::cout << "SDL_image initialized" << std::endl;
 
 	SDLCheck(TTF_Init());
 	std::cout << "SDL_ttf initialized" << std::endl;
+
+	KeyState = SDL_GetKeyState(NULL);
+	timer.Start();
+	fps.Start();
+
+	std::cout << "SDLApplication initialization completed" << std::endl;
 }
 
 SDLApplication::~SDLApplication()
 {
 	stats.clear();
 
-	SDL_Quit();
-	std::cout<<"SDL quited"<<std::endl;
-
 	ClearFontCache();
 	TTF_Quit();
 	std::cout << "SDL_ttf quited" << std::endl;
+
+	IMG_Quit();
+	std::cout << "SDL_image quited" << std::endl;
+
+	SDL_Quit();
+	std::cout << "SDL quited" << std::endl;
 }
 
 void SDLApplication::ProcessEvents()
@@ -133,10 +141,16 @@ void SDLApplication::ProcessEvents()
 	SDL_Event Event;
 
 	while(SDL_PollEvent(&Event))
+	{
 		if(Event.type == SDL_QUIT)
+		{
 			Stop();
+		}
 		else
+		{
 			ProcessEvent(Event);
+		}
+	}
 }
 
 void SDLApplication::Run()
@@ -161,18 +175,18 @@ void SDLApplication::Run()
 
 		if(CappedFPS() && (frameTimer.GetTicks() < 1000 / GetFPSCap()))
         {
-            //Sleep the remaining frame time
+            // Sleep the remaining frame time
 			SDL_Delay(1000 / GetFPSCap() - frameTimer.GetTicks());
         }
 	}
 
-	std::cout<<"Stopped"<<std::endl;
+	std::cout << "Stopped" << std::endl;
 }
 
 void SDLApplication::Stop()
 {
 	Running = false;
-	std::cout<<"Stop()"<<std::endl;
+	std::cout << "Stop()" << std::endl;
 }
 
 void SDLApplication::Lock()

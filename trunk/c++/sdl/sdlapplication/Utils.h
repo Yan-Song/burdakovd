@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstring>
 #include <map>
+#include <SDL.h>
 #include "SDLException.h"
 
 #define mset(x, v) memset(x, v, sizeof(x))
@@ -39,10 +40,13 @@ inline T sgn(const T x)
   return x < 0 ? -1 : 1;
 }
 
-inline void __assert(const bool x, const std::string& text)
+namespace
 {
-	if(!x)
-		throw AssertionException(text);
+	inline void __assert(const bool assertion, const std::string& description)
+	{
+		if(!assertion)
+			throw AssertionException(description);
+	}
 }
 
 inline int iround(const double num) {
@@ -52,5 +56,7 @@ inline int iround(const double num) {
 #define assert(assertion) __assert(assertion, #assertion)
 
 #define ALL(v) v.begin(), v.end()
+
+SDL_Rect Intersect(const SDL_Rect& first, const SDL_Rect& second);
 
 #endif

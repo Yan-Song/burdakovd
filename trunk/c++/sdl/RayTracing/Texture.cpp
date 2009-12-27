@@ -1,10 +1,11 @@
 #include "Texture.h"
 #include "sdlapplication/SDLException.h"
 #include <SDL.h>
+#include <SDL_image.h>
 
 RT::Texture::Texture(const std::string &path) : surface(NULL)
 {
-	surface = SDL_LoadBMP(path.c_str());
+	surface = IMG_Load(path.c_str());
 
 	if(surface == NULL)
 		throw SDLException();

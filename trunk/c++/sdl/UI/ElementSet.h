@@ -2,22 +2,21 @@
 #define ELEMENTSET_H
 
 #include <list>
-#include <ISimpleGameLoop.h>
 #include "Element.h"
 
 namespace UI
 {
-	class ElementSet : public ISimpleGameLoop
+	class ElementSet : public UI::Element
 	{
 	protected:
-		typedef std::list<SharedElement> Elements;
+		typedef std::list<UI::SharedElement> Elements;
 
 		Elements elements;
 
 		void Add(const SharedElement& element);
 
 	public:
-		ElementSet() : elements() {}
+		ElementSet(SDLApplication* const app);
 
 		virtual void ProcessEvent(const SDL_Event& Event);
 
