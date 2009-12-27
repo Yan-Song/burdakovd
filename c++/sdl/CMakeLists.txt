@@ -8,6 +8,8 @@ add_definitions(-DTR1_PREFIX -W -Wall -Wextra -pedantic -Weffc++ -Woverloaded-vi
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -funit-at-a-time -funswitch-loops -Wdisabled-optimization")
 set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_PROFILE} -g -pg -O0")
 
+set(LIBS ${LIBS} pthread SDL SDLmain SDL_ttf SDL_image)
+
 add_subdirectory(sdlapplication)
 add_subdirectory(primitives)
 add_subdirectory(RayTracing)

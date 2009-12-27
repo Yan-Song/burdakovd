@@ -1,6 +1,6 @@
 #include "ElementSet.h"
 
-UI::ElementSet::ElementSet(SDLApplication* const app) : UI::Element(app)
+UI::ElementSet::ElementSet(SDLApplication* const app) : UI::Element(app), elements()
 {
 
 }

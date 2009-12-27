@@ -80,28 +80,28 @@ ScreenPoint UI::Element::GetCenter() const
 
 void UI::Element::Clip()
 {
-	// сохранить предыдущий прямоугольник
+	// СЃРѕС…СЂР°РЅРёС‚СЊ РїСЂРµРґС‹РґСѓС‰РёР№ РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє
 	SDL_Rect prev;
 	SDL_GetClipRect(app->Screen, &prev);
 	clipStack.push(prev);
 
-	// посчитать свой
+	// РїРѕСЃС‡РёС‚Р°С‚СЊ СЃРІРѕР№
 	SDL_Rect me;
 	me.x = static_cast<Sint16>(GetLeft());
 	me.y = static_cast<Sint16>(app->Screen->h - 1 - GetBottom() - GetHeight());
 	me.w = static_cast<Uint16>(GetWidth());
 	me.h = static_cast<Uint16>(GetHeight());
 
-	// пересечь с предыдущим
+	// РїРµСЂРµСЃРµС‡СЊ СЃ РїСЂРµРґС‹РґСѓС‰РёРј
 	SDL_Rect intersection = Intersect(prev, me);
 
-	// обрезать по пересечению
+	// РѕР±СЂРµР·Р°С‚СЊ РїРѕ РїРµСЂРµСЃРµС‡РµРЅРёСЋ
 	SDL_SetClipRect(app->Screen, &intersection);
 }
 
 void UI::Element::UnClip()
 {
-	// востановить предыдущий
+	// РІРѕСЃС‚Р°РЅРѕРІРёС‚СЊ РїСЂРµРґС‹РґСѓС‰РёР№
 	SDL_SetClipRect(app->Screen, &(clipStack.top()));
 	clipStack.pop();
 }
