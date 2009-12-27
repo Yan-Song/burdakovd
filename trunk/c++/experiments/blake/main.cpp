@@ -262,7 +262,7 @@ int main()
 {
 	std::string text;
 
-	std::cin >> text;
+	std::getline(std::cin, text);
 	
 	try
 	{
