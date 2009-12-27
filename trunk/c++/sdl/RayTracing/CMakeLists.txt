@@ -4,4 +4,6 @@ set(SRC Camera CompoundObject Frustum Material NormalizedVector3D Plane Scene Si
 
 add_library(RayTracing ${SRC})
 
-target_link_libraries(RayTracing sdlapplication)
+set(LIBS ${LIBS} sdlapplication)
+
+target_link_libraries(RayTracing ${LIBS})

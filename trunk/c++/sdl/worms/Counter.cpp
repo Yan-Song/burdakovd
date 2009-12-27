@@ -11,18 +11,26 @@ namespace
 	private:
 		SharedSprite normal, disabled;
 
+		Button(const Button& );
+		Button& operator =(const Button& );
+
+	protected:
+		UI::Counter* const parent;
+
 	public:
-		Button(SDLApplication* const app, const std::string& normalPath, const std::string& disabledPath) : 
-		UI::Clickable(app), normal(new Sprite(normalPath)), disabled(new Sprite(disabledPath))
+		Button(SDLApplication* const app, const std::string& normalPath, const std::string& disabledPath,
+		      UI::Counter* const parent_) :
+		UI::Clickable(app), normal(new Sprite(normalPath)), disabled(new Sprite(disabledPath)),
+			      parent(parent_)
 		{
-			
+
 		}
 
 		virtual void Render()
 		{
 			SharedSprite img = Enabled() ? normal : disabled;
 
-			img->BlitOnScreen(app, GetLeftBottom() + 
+			img->BlitOnScreen(app, GetLeftBottom() +
 				ScreenPointByCoords(GetWidth() - img->GetWidth(), GetHeight() - img->GetHeight()) / 2);
 		}
 	};
@@ -30,12 +38,9 @@ namespace
 
 class UI::Counter::IncrementButton : public Button
 {
-private:
-	Counter* const parent;
-
 public:
 	IncrementButton(SDLApplication* const app, Counter* const parent_)
-		: Button(app, "Sprites/plus.png", "Sprites/plus-disabled.png"), parent(parent_)
+		: Button(app, "Sprites/plus.png", "Sprites/plus-disabled.png", parent_)
 	{
 	}
 
@@ -47,12 +52,9 @@ public:
 
 class UI::Counter::DecrementButton : public Button
 {
-private:
-	Counter* const parent;
-
 public:
 	DecrementButton(SDLApplication* const app, Counter* const parent_)
-		: Button(app, "Sprites/minus.png", "Sprites/minus-disabled.png"), parent(parent_)
+		: Button(app, "Sprites/minus.png", "Sprites/minus-disabled.png", parent_)
 	{
 	}
 
@@ -115,7 +117,7 @@ void UI::Counter::onLayoutChanged()
 	dec->SetWidth(GetWidth() / 3);
 	dec->SetLeft(GetLeft());
 	dec->SetBottom(GetBottom());
-	
+
 	num->SetCenter(GetCenter());
 
 	inc->SetHeight(GetHeight());
