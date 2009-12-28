@@ -19,6 +19,18 @@ struct Config
 	static const double ReplicateEnergyLevel;
 	// радиус трупа
 	static const int CorpseRadius;
+
+	// сколько еды изначально
+	static const int InitialFoodCount;
+
+	// сколько появляется каждую секунду
+	static const double FoodPerSecond;
+
+	// размер ячейки поля ва пикселях
+	static const int CellSize;
+	// размеры поля в ячейках
+	static const int FieldWidth, FieldHeight;
+
 };
 
 #endif

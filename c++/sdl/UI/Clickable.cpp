@@ -6,12 +6,12 @@ UI::Clickable::Clickable(SDLApplication* const app) : MouseOverable(app), halfCl
 	
 }
 
-void UI::Clickable::onMouseDown()
+void UI::Clickable::onMouseDown(const SDL_MouseButtonEvent& )
 {
 	
 }
 
-void UI::Clickable::onMouseUp()
+void UI::Clickable::onMouseUp(const SDL_MouseButtonEvent& )
 {
 	
 }
@@ -28,17 +28,25 @@ bool UI::Clickable::isElementPressed() const
 
 void UI::Clickable::ProcessEvent(const SDL_Event& Event)
 {
-	if(Event.type == SDL_MOUSEBUTTONDOWN && Event.button.button == SDL_BUTTON_LEFT && isInside(Event.button))
+	if(Event.type == SDL_MOUSEBUTTONDOWN && isInside(Event.button))
 	{
-		onMouseDown();
-		halfClicked = true;
-	}
-	else if(Event.type == SDL_MOUSEBUTTONUP && Event.button.button == SDL_BUTTON_LEFT)
-	{
-		if(isInside(Event.button) && halfClicked)
+		onMouseDown(Event.button);
+
+		if(Event.button.button == SDL_BUTTON_LEFT)
 		{
-			onClick();
-			onMouseUp();
+			halfClicked = true;
+		}
+	}
+	else if(Event.type == SDL_MOUSEBUTTONUP)
+	{
+		if(isInside(Event.button))
+		{
+			if(Event.button.button == SDL_BUTTON_LEFT && halfClicked)
+			{
+				onClick();
+			}
+
+			onMouseUp(Event.button);
 		}
 
 		halfClicked = false;

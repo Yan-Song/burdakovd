@@ -4,30 +4,44 @@
 #include <UI/Button.h>
 #include <UI/ColorSelector.h>
 #include <UI/Label.h>
+#include "Battle.h"
 #include "Counter.h"
+#include "Engine.h"
 #include "MainMenu.h"
 #include "Registrator.h"
 #include "SettingsDialog.h"
 
-namespace
+class SettingsDialog::Util
 {
+public:
 	class OKButton : public UI::Button
 	{
+	private:
+		Engine* const app;
+		SettingsDialog* const parent;
+
 	private:
 		OKButton(const OKButton& );
 		OKButton& operator =(const OKButton& );
 
 	public:
-		OKButton(Engine* const app_) : UI::Button(app_, "OK")
+		OKButton(Engine* const app_, SettingsDialog* const parent_) : UI::Button(app_, "OK"), app(app_), parent(parent_)
 		{
+		}
+
+	protected:
+		virtual void onClick()
+		{
+			app->SetNextState(SharedState(new Battle(app, parent->GetTeams())));
 		}
 	};
 
 	class CancelButton : public UI::Button
 	{
 	private:
-		Engine* app;
+		Engine* const app;
 
+	private:
 		CancelButton(const CancelButton& );
 		CancelButton& operator =(const CancelButton& );
 
@@ -36,21 +50,23 @@ namespace
 		{
 		}
 
+	protected:
 		virtual void onClick()
 		{
 			app->SetNextState(SharedState(new MainMenu(app)));
 		}
 	};
-}
+};
 
 class SettingsDialog::SettingsItem : public UI::ElementSet
 {
-public:
+private:
 	size_t ID;
 	UI::SharedLabel Name;
 	UI::SharedColorSelector Color;
 	UI::SharedCounter Count;
 
+public:
 	SettingsItem(Engine* const app, const ScreenPoint& LeftBottom, const size_t ID_, const std::string& name) :
 		UI::ElementSet(app), ID(ID_),
 		Name(new UI::Label(app, name, GetFont("Fonts/arialbd.ttf", 16))),
@@ -66,6 +82,16 @@ public:
 		SetWidth(300);
 		SetHeight(24);
 	};
+
+	bool HasTeam() const
+	{
+		return Count->GetValue() > 0;
+	}
+
+	Team GetTeam() const
+	{
+		return Team(ID, Color->color, Count->GetValue());
+	}
 
 protected:
 	virtual void onLayoutChanged()
@@ -90,8 +116,8 @@ SettingsDialog::SettingsDialog(Engine* const app_) : ElementSet(app_), app(app_)
 {
 	Maximize();
 
-	UI::SharedElement OK(new OKButton(app));
-	UI::SharedElement Cancel(new CancelButton(app));
+	UI::SharedElement OK(new Util::OKButton(app, this));
+	UI::SharedElement Cancel(new Util::CancelButton(app));
 
 	OK->SetCenter(ScreenPointByCoords(app->Screen->w * 90 / 100, app->Screen->h * 5 / 100));
 	Cancel->SetCenter(ScreenPointByCoords(app->Screen->w * 80 / 100, app->Screen->h * 5 / 100));
@@ -131,4 +157,15 @@ void SettingsDialog::Render()
 	app->ClearScreen(Color(0xe0e0e0));
 
 	ElementSet::Render();
+}
+
+Teams SettingsDialog::GetTeams() const
+{
+	Teams teams;
+	
+	for(Settings::const_iterator it = settings.begin(); it != settings.end(); ++it)
+		if((*it)->HasTeam())
+			teams.push_back((*it)->GetTeam());
+
+	return teams;
 }

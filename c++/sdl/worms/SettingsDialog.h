@@ -2,18 +2,21 @@
 #define SETTINGSDIALOG_H
 
 #include <vector>
-#include <ISimpleGameLoop.h>
-#include <UI/Element.h>
 #include <UI/ElementSet.h>
-#include "Engine.h"
+#include "BattleSettings.h"
+
+class Engine;
 
 class SettingsDialog : public UI::ElementSet
 {
 private:
-	Engine* app;
-
 	SettingsDialog(const SettingsDialog& );
 	SettingsDialog& operator =(const SettingsDialog& );
+
+private:
+	Engine* app;
+
+	class Util;
 
 	class SettingsItem;
 	typedef Shared::shared_ptr<SettingsItem> SharedSettingsItem;
@@ -26,6 +29,8 @@ public:
 	virtual void ProcessEvent(const SDL_Event& Event);
 
 	virtual void Render();
+
+	Teams GetTeams() const;
 };
 
 #endif
