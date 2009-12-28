@@ -73,6 +73,16 @@ void Sprite::BlitOnSprite(Sprite &target, const ScreenPoint& center) const
 	SDLCheck(SDL_BlitSurface(image, NULL, target.image, &offset));
 }
 
+void Sprite::BlitOnSprite(Sprite &target) const
+{
+	SDL_Rect offset;
+
+	offset.x = 0;
+	offset.y = 0;
+
+	SDLCheck(SDL_BlitSurface(image, NULL, target.image, &offset));
+}
+
 void Sprite::BlitOnScreen(SDLApplication* const app, const ScreenPoint& LeftBottom) const
 {
 	SDL_Rect dst;

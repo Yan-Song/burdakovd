@@ -27,7 +27,7 @@ public:
 		if(y >= 0 && x >= 0 && y < Height && x < Width)
 			return map[static_cast<size_t>(y)][static_cast<size_t>(x)];
 		else
-			return CellWall; // за пределами поля типа стены
+			return CellWall; // за пределами поля типа всюду стены
 	}
 
 	void Set(const int x, const int y, const CellType value)

@@ -39,6 +39,8 @@ public:
 
 	void BlitOnSprite(Sprite& destination, const ScreenPoint& center) const;
 
+	void BlitOnSprite(Sprite& destination) const;
+
 	void BlitOnScreen(SDLApplication* const app, const ScreenPoint& LeftBottom) const;
 
 	void SetColorKey(const Color& color);
