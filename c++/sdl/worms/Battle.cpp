@@ -35,13 +35,13 @@ public:
 			borderrb("Sprites/border-rb.png"),
 
 			Empty("Sprites/EmptyCell.png"),
-			Food("Sprites/EmptyCell.png") // это не опечатка
+			Food("Sprites/EmptyCell.png") // СЌС‚Рѕ РЅРµ РѕРїРµС‡Р°С‚РєР°
 		{
-			// две клетки на рамку
+			// РґРІРµ РєР»РµС‚РєРё РЅР° СЂР°РјРєСѓ
 			SetWidth(Config::CellSize * (Config::FieldWidth + 2));
 			SetHeight(Config::CellSize * (Config::FieldHeight + 2));
 
-			// наложить картинку с едой куда надо
+			// РЅР°Р»РѕР¶РёС‚СЊ РєР°СЂС‚РёРЅРєСѓ СЃ РµРґРѕР№ РєСѓРґР° РЅР°РґРѕ
 			Sprite("Sprites/FoodCell.png").BlitOnSprite(Food);
 		}
 
@@ -133,10 +133,10 @@ Battle::Battle(Engine* const app_, const Teams& teams_)
 	f->SetLeft(margin);
 	f->SetBottom(app->Screen->h - margin - f->GetHeight());
 	Add(f);
-	// ... остальные графические элементы
+	// ... РѕСЃС‚Р°Р»СЊРЅС‹Рµ РіСЂР°С„РёС‡РµСЃРєРёРµ СЌР»РµРјРµРЅС‚С‹
 
-	// инициализировать поле
-	// накидать сколько надо еды туда
+	// РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РїРѕР»Рµ
+	// РЅР°РєРёРґР°С‚СЊ СЃРєРѕР»СЊРєРѕ РЅР°РґРѕ РµРґС‹ С‚СѓРґР°
 	for(int x = 0; x < Config::FieldWidth; ++x)
 		for(int y = 0; y < Config::FieldHeight; ++y)
 		{
