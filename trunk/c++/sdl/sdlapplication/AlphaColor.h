@@ -7,7 +7,7 @@
 struct AlphaColor
 {
 	Color color;
-	// альфа-канал от 0 до 255
+	// Р°Р»СЊС„Р°-РєР°РЅР°Р» РѕС‚ 0 РґРѕ 255
 	Uint8 alpha;
 
 	AlphaColor(const Color& color_, const Uint8 alpha_ = 255) : color(color_), alpha(alpha_)
