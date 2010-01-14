@@ -108,8 +108,9 @@ void SDLApplication::InitializeSDL(size_t ScreenHeight, size_t ScreenWidth, int 
 
 	std::cout << "SDL initialized" << std::endl;
 
-	SDLCheck(IMG_Init(IMG_INIT_PNG));
-	std::cout << "SDL_image initialized" << std::endl;
+	// IMG_Init не работает на SDL_Image 1.2.6 (Ubuntu 8.04), поэтому не используем
+	//SDLCheck(IMG_Init(IMG_INIT_PNG));
+	//std::cout << "SDL_image initialized" << std::endl;
 
 	SDLCheck(TTF_Init());
 	std::cout << "SDL_ttf initialized" << std::endl;
@@ -129,8 +130,8 @@ SDLApplication::~SDLApplication()
 	TTF_Quit();
 	std::cout << "SDL_ttf quited" << std::endl;
 
-	IMG_Quit();
-	std::cout << "SDL_image quited" << std::endl;
+	//IMG_Quit();
+	//std::cout << "SDL_image quited" << std::endl;
 
 	SDL_Quit();
 	std::cout << "SDL quited" << std::endl;
