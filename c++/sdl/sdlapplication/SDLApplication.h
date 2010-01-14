@@ -67,10 +67,10 @@ public:
 	void ClearScreen(const Color& color = Palette::Black) const;
 
 	// число из полуинтервала [0, x)
-	static int Rand(int x);
+	static int Rand(const int x);
 
 	// из отрезка [x, y]
-	static int Rand(int x, int y);
+	static int Rand(const int x, int y);
 
 	void Run(); // вызывать извне класса один раз, будет работать пока изнутри не будет вызван Stop()
 

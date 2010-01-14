@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include "Font.h"
+#include "PixelAccess.h"
 #include "SDLApplication.h"
 #include "SDLException.h"
 #include "Timer.h"
@@ -229,60 +230,21 @@ void SDLApplication::DrawPixel(const int x, const int y, const Color& rgb)
 // http://plg.lrn.ru/doc/sdl/lesson1.html
 void SDLApplication::RawDrawPixel(const int x, int y, const Color& rgb) const
 {
-    if((x < 0) || (x >= Screen->w) || (y < 0) || (y >= Screen->h)) return; // out of bounds
+	const Uint32 color = MapColor(rgb);
 
 	y = Screen->h - 1 - y; // чтоб не париться
 
-	Uint32 color = MapColor(rgb);
-
-	switch (Screen->format->BytesPerPixel){
-	   case 1:  // Assuming 8-bpp
-	   {
-		 Uint8 *bufp;
-		 bufp = static_cast<Uint8*>(Screen->pixels) + y * Screen->pitch + x;
-		 *bufp = static_cast<Uint8>(color);
-	   } break;
-	   case 2: // Probably 15-bpp or 16-bpp
-	   {
-		 Uint16 *bufp;
-		 bufp = static_cast<Uint16*>(Screen->pixels) + y * Screen->pitch/2 + x;
-		 *bufp = static_cast<Uint16>(color);
-	   } break;
-	   case 3: // Slow 24-bpp mode, usually not used
-	   {
-		 Uint8 *bufp;
-		 bufp = static_cast<Uint8*>(Screen->pixels) + y * Screen->pitch + x * 3;
-		 #if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
-		 {
-		   bufp[0] = static_cast<Uint8>(color);
-		   bufp[1] = static_cast<Uint8>(color >> 8);
-		   bufp[2] = static_cast<Uint8>(color >> 16);
-		 }
-		 #else
-		 {
-		   bufp[2] = color;
-		   bufp[1] = color >> 8;
-		   bufp[0] = color >> 16;
-		 }
-		#endif
-	   } break;
-	   case 4: // Probably 32-bpp
-	   {
-		 Uint32 *bufp;
-		 bufp = static_cast<Uint32*>(Screen->pixels) + y * Screen->pitch/4 + x;
-		 *bufp = color;
-	   } break;
-	 }
+	::PutPixel(Screen, x, y, color, false);
 }
 
 // исключая x
-int SDLApplication::Rand(int x)
+int SDLApplication::Rand(const int x)
 {
     return rand() % x;
 }
 
 // [x, y]
-int SDLApplication::Rand(int x, int y)
+int SDLApplication::Rand(const int x, const int y)
 {
     return x > y ? Rand(y, x) : x + Rand(y - x + 1);
 }

@@ -1,6 +1,7 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "PixelAccess.h"
 #include "SDLApplication.h"
 #include "Sprite.h"
 
@@ -100,4 +101,27 @@ void Sprite::SetColorKey(const Color &color)
 		static_cast<Uint8>(color.B));
 
 	SDL_SetColorKey(image, SDL_SRCCOLORKEY, key);
+}
+
+AlphaColor Sprite::GetPixel(const int x, const int y) const
+{
+	const Uint32 raw = ::GetPixel(image, x, y);
+
+	Uint8 r, g, b, a;
+
+	SDL_GetRGBA(raw, image->format, &r, &g, &b, &a);
+
+	return AlphaColor(Color(r, g, b), a);
+}
+
+void Sprite::SetPixel(const int x, const int y, const AlphaColor &acolor)
+{
+	const Uint32 raw = SDL_MapRGBA(
+		image->format,
+		static_cast<Uint8>(acolor.color.R),
+		static_cast<Uint8>(acolor.color.G),
+		static_cast<Uint8>(acolor.color.B),
+		acolor.alpha);
+
+	::PutPixel(image, x, y, raw);
 }

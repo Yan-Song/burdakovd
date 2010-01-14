@@ -1,5 +1,5 @@
 #ifndef REGISTRATOR_H
-#define REGISTATOR_H
+#define REGISTRATOR_H
 
 #include <string>
 #include <vector>

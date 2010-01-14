@@ -31,11 +31,11 @@ void UI::Button::updateSprites()
 {
 	const SharedSprite text(new Sprite(GetFont(FontName, FontSize), caption, Palette::Black));
 
-	normal = SharedSprite(new Sprite("button-normal.bmp"));
+	normal = SharedSprite(new Sprite("Sprites/UI/Button/normal.bmp"));
 	normal->SetColorKey(Color(0x00ff00));
-	hovered = SharedSprite(new Sprite("button-hover.bmp"));
+	hovered = SharedSprite(new Sprite("Sprites/UI/Button/hover.bmp"));
 	hovered->SetColorKey(Color(0x00ff00));
-	pressed = SharedSprite(new Sprite("button-pressed.bmp"));
+	pressed = SharedSprite(new Sprite("Sprites/UI/Button/pressed.bmp"));
 	pressed->SetColorKey(Color(0x00ff00));
 
 	text->BlitOnSprite(*normal, ScreenPointByCoords(GetWidth() / 2, GetHeight() / 2));

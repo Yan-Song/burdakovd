@@ -40,7 +40,7 @@ class UI::Counter::IncrementButton : public Button
 {
 public:
 	IncrementButton(SDLApplication* const app, Counter* const parent_)
-		: Button(app, "Sprites/plus.png", "Sprites/plus-disabled.png", parent_)
+		: Button(app, "Sprites/UI/Button/Plus/normal.png", "Sprites/UI/Button/Plus/disabled.png", parent_)
 	{
 	}
 
@@ -54,7 +54,7 @@ class UI::Counter::DecrementButton : public Button
 {
 public:
 	DecrementButton(SDLApplication* const app, Counter* const parent_)
-		: Button(app, "Sprites/minus.png", "Sprites/minus-disabled.png", parent_)
+		: Button(app, "Sprites/UI/Button/Minus/normal.png", "Sprites/UI/Button/Minus/disabled.png", parent_)
 	{
 	}
 

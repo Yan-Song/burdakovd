@@ -1,28 +1,22 @@
+#include <list>
+#include "Battle.h"
+#include "Config.h"
 #include "IWorm.h"
+#include "SDLException.h"
+#include "SDL.h"
 #include "Worm.h"
 #include "WormsApplication.h"
 #include "WormLogic.h"
-#include "Config.h"
-#include "SDLException.h"
-#include "SDL.h"
-
-void Worm::Draw() const
-{
-	throw NotImplementedException();
-	/*int i = 0;
-	for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it, ++i)
-		app->DrawWormCell(*it, this, i);*/
-}
 
 void Worm::ConsumeTime(const double dt)
 {
-	throw NotImplementedException();
 	time += dt;
 }
 
 void Worm::Tick()
 {
-	throw NotImplementedException();
+	assert(!Dead());
+
 	UpdateEnergy();
 
 	if(Dead())
@@ -35,7 +29,13 @@ void Worm::Tick()
 
 void Worm::Go(const WormLogic )
 {
+	assert(!Dead());
 	throw NotImplementedException();
+
+	// отрисовывать себя на экране больше не надо
+	// кроме того проще будет и на карте не динамически менять себя
+	// а стирать перед движением, и перерисовывать после
+
 	/*SimplePoint head = position.front();
 
 	if(direction == GoDown)
@@ -81,58 +81,73 @@ void Worm::Go(const WormLogic )
 
 void Worm::EraseOnMap() const
 {
-	throw NotImplementedException();
-	/*for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
-		app->Map.Set(it->X, it->Y, CellEmpty);*/
+	for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
+		BattleState->Field.Set(it->X, it->Y, CellEmpty);
 }
 
 void Worm::UpdateMap() const
 {
-	throw NotImplementedException();
-	/*for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
-		app->Map.Set(it->X, it->Y, CellWorm);*/
-}
-
-void Worm::EraseOnScreen() const
-{
-	throw NotImplementedException();
-	/*for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
-		app->DrawCell(*it, CellEmpty);*/
-}
-
-void Worm::AntiGrow()
-{
-	throw NotImplementedException();
-	/*if(position.size() == 0)
-	{
-		throw new std::out_of_range("My length is 0, can't AntiGrow()");
-	}
-	else
-	{
-		// удаляем последнюю ячейку
-		const SimplePoint last = position.back();
-		position.pop_back();
-
-		// если в этой клетке не было других ячеек червя, то стираем эту клетку
-		for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
-			if(last == *it)
-				return;
-
-		app->DrawCell(last, CellEmpty);
-		app->Map.Set(last.X, last.Y, CellEmpty);
-	}*/
+	assert(!Dead());
+	
+	for(TPosition::const_iterator it = position.begin(); it != position.end(); ++it)
+		BattleState->Field.Set(it->X, it->Y, CellWorm);
 }
 
 void Worm::CheckLength()
 {
-	throw NotImplementedException();
-	/*unsigned int need = static_cast<unsigned int>(floor(Energy() / Config::WormEnergyPerCell));
+	assert(!Dead());
 
-	while(position.size() < need)
-		Grow();
+	size_t need = static_cast<size_t>(floor(Energy() / Config::WormEnergyPerCell));
 
+	EraseOnMap();
+	// пока червь длиннее чем надо - отрезаем ему хвост
 	while(position.size() > need)
-		AntiGrow();*/
+	{
+		position.pop_back();
+	}
+	UpdateMap();
+
+	// пока длина меньше чем надо, растём если возможно
+	while(position.size() < need && Grow())
+		;
+}
+
+bool Worm::Grow()
+{
+	assert(!Dead());
+	assert(!position.empty());
+
+	const SimplePoint tail = position.back();
+
+	// места где может быть расположен хвост
+	std::list<SimplePoint> candidates;
+	
+	candidates.push_back(SimplePoint(tail.X + 1, tail.Y));
+	candidates.push_back(SimplePoint(tail.X - 1, tail.Y));
+	candidates.push_back(SimplePoint(tail.X, tail.Y + 1));
+	candidates.push_back(SimplePoint(tail.X, tail.Y - 1));
+
+	// во второй тур проходят только пустые ячейки
+	std::vector<SimplePoint> candidates2;
+	for(std::list<SimplePoint>::const_iterator it = candidates.begin(); it != candidates.end(); ++it)
+		if(BattleState->Field.Get(it->X, it->Y) == CellEmpty)
+			candidates2.push_back(*it);
+
+	// если вариантов нет - то возвращаем false, иначе выбираем случайную ячейку
+	if(candidates2.empty())
+	{
+		return false;
+	}
+	else
+	{
+		const SimplePoint newtail = candidates2[app->Rand(candidates2.size())];
+
+		BattleState->Field.Set(newtail.X, newtail.Y, CellWorm);
+
+		position.push_back(newtail);
+
+		return true;
+	}
 }
 
 void Worm::Die()
@@ -147,20 +162,15 @@ void Worm::Die()
 	dead = true;*/
 }
 
-void Worm::Grow()
+bool Worm::Dead() const
 {
-	throw NotImplementedException();
-	//position.push_back(position.back());
-}
-
-bool Worm::Dead()
-{
-	throw NotImplementedException();
-	//return dead;
+	return dead;
 }
 
 void Worm::UpdateEnergy()
 {
+	assert(!Dead());
+
 	throw NotImplementedException();
 	/*// 1) обновить энергию
 	double dt = app->GetTime() - lastUpdateEnergyTime;
@@ -205,6 +215,8 @@ void Worm::UpdateEnergy()
 
 void Worm::DoLogic()
 {
+	assert(!Dead());
+
 	throw NotImplementedException();
 	/*// возможно стоит сделать while вместо if, если fps маленький (<10), но там может начаться другая печаль
 	if(GetLocalTime() < app->GetTime())
@@ -222,36 +234,32 @@ void Worm::DoLogic()
 		time = app->GetTime();*/
 }
 
-bool Worm::isPressed(const SDLKey ) const
+bool Worm::isPressed(const SDLKey key) const
 {
-	throw NotImplementedException();
-	//return app->isPressed(key);
+	return app->isPressed(key);
 }
 
-int Worm::Rand(const int , const int ) const
+int Worm::Rand(const int x, const int y) const
 {
-	throw NotImplementedException();
-	//return app->Rand(x, y);
+	return app->Rand(x, y);
 }
 
-int Worm::Rand(const int ) const
+int Worm::Rand(const int x) const
 {
-	throw NotImplementedException();
-	//return app->Rand(x);
+	return app->Rand(x);
 }
 
-CellType Worm::Look(const int , const int )
+CellType Worm::Look(const int x, const int y)
 {
-	throw NotImplementedException();
-	/*assert(position.size()>0);
+	assert(position.size() > 0);
 	SimplePoint head = position.front();
-	int distance = abs(head.X - x) + abs(head.Y - y);
+	const int distance = abs(head.X - x) + abs(head.Y - y);
 	ConsumeTime(Config::DiscoverTime * distance);
-	return app->Map.Get(x, y);*/
+
+	return BattleState->Field.Get(x, y);
 }
 
 double Worm::GetGlobalTime() const
 {
-	throw NotImplementedException();
-	//return app->GetTime();
+	return app->GetTime();
 }
