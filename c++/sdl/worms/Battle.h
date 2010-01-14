@@ -29,7 +29,7 @@ private:
 	Battle(const Battle& );
 	Battle& operator =(const Battle& );
 
-	// выбрать пустую ячейку случайным образом
+	// РІС‹Р±СЂР°С‚СЊ РїСѓСЃС‚СѓСЋ СЏС‡РµР№РєСѓ СЃР»СѓС‡Р°Р№РЅС‹Рј РѕР±СЂР°Р·РѕРј
 	SimplePoint GetFreeCell() const;
 
 

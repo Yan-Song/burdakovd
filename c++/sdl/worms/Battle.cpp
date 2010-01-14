@@ -54,20 +54,20 @@ public:
 
 			// Cells
 			Empty("Sprites/Cell/Empty.png"),
-			Food("Sprites/Cell/Empty.png") // это не опечатка
+			Food("Sprites/Cell/Empty.png") // СЌС‚Рѕ РЅРµ РѕРїРµС‡Р°С‚РєР°
 		{
-			// две клетки на рамку
+			// РґРІРµ РєР»РµС‚РєРё РЅР° СЂР°РјРєСѓ
 			SetWidth(Config::CellSize * (Config::FieldWidth + 2));
 			SetHeight(Config::CellSize * (Config::FieldHeight + 2));
 
-			// наложить картинку с едой куда надо
+			// РЅР°Р»РѕР¶РёС‚СЊ РєР°СЂС‚РёРЅРєСѓ СЃ РµРґРѕР№ РєСѓРґР° РЅР°РґРѕ
 			Sprite("Sprites/Cell/Food.png").BlitOnSprite(Food);
 		}
 
 	protected:
 		void RenderField()
 		{
-			// прорисовать фон и пищу
+			// РїСЂРѕСЂРёСЃРѕРІР°С‚СЊ С„РѕРЅ Рё РїРёС‰Сѓ
 			for(int y = 0; y < Config::FieldHeight; ++y)
 				for(int x = 0; x < Config::FieldWidth; ++x)
 				{
@@ -86,9 +86,9 @@ public:
 					}
 					else if(cell == CellWorm)
 					{
-						// Это не ошибка
-						// просто для рендеринга ячейки с червём нужно больше информации (голова/хвост/направление...)
-						// Поэтому черви будут рендериться в отдельном цикле
+						// Р­С‚Рѕ РЅРµ РѕС€РёР±РєР°
+						// РїСЂРѕСЃС‚Рѕ РґР»СЏ СЂРµРЅРґРµСЂРёРЅРіР° СЏС‡РµР№РєРё СЃ С‡РµСЂРІС‘Рј РЅСѓР¶РЅРѕ Р±РѕР»СЊС€Рµ РёРЅС„РѕСЂРјР°С†РёРё (РіРѕР»РѕРІР°/С…РІРѕСЃС‚/РЅР°РїСЂР°РІР»РµРЅРёРµ...)
+						// РџРѕСЌС‚РѕРјСѓ С‡РµСЂРІРё Р±СѓРґСѓС‚ СЂРµРЅРґРµСЂРёС‚СЊСЃСЏ РІ РѕС‚РґРµР»СЊРЅРѕРј С†РёРєР»Рµ
 						Empty.BlitOnScreen(app, position);
 					}
 					else
@@ -97,12 +97,12 @@ public:
 					}
 				}
 
-			// прорисовать червей
+			// РїСЂРѕСЂРёСЃРѕРІР°С‚СЊ С‡РµСЂРІРµР№
 			for(Battle::WormCollection::const_iterator it = parent->CurrentGeneration.begin(); it != parent->CurrentGeneration.end(); ++it)
 			{
-				const TPosition& position = (*it)->Position();
+				//const TPosition& position = (*it)->Position();
 
-				// в цикле отрендерить червя, сначала голову, затем тело и хвост
+				// РІ С†РёРєР»Рµ РѕС‚СЂРµРЅРґРµСЂРёС‚СЊ С‡РµСЂРІСЏ, СЃРЅР°С‡Р°Р»Р° РіРѕР»РѕРІСѓ, Р·Р°С‚РµРј С‚РµР»Рѕ Рё С…РІРѕСЃС‚
 			}
 		}
 
@@ -158,7 +158,8 @@ public:
 };
 
 Battle::Battle(Engine* const app_, const Teams& teams_)
-	: UI::ElementSet(app_), app(app_), teams(teams_), lastWormID(0), timer(), Field(Config::FieldHeight, Config::FieldWidth)
+	: UI::ElementSet(app_), app(app_), teams(teams_), CurrentGeneration(), NextGeneration(), \
+		lastWormID(0), timer(), renderers(), Field(Config::FieldHeight, Config::FieldWidth)
 {
 	timer.Start();
 
@@ -170,10 +171,10 @@ Battle::Battle(Engine* const app_, const Teams& teams_)
 	f->SetLeft(margin);
 	f->SetBottom(app->Screen->h - margin - f->GetHeight());
 	Add(f);
-	// ... остальные графические элементы
+	// ... РѕСЃС‚Р°Р»СЊРЅС‹Рµ РіСЂР°С„РёС‡РµСЃРєРёРµ СЌР»РµРјРµРЅС‚С‹
 
-	// инициализировать поле
-	// накидать сколько надо еды туда
+	// РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РїРѕР»Рµ
+	// РЅР°РєРёРґР°С‚СЊ СЃРєРѕР»СЊРєРѕ РЅР°РґРѕ РµРґС‹ С‚СѓРґР°
 	for(int x = 0; x < Config::FieldWidth; ++x)
 		for(int y = 0; y < Config::FieldHeight; ++y)
 		{
@@ -185,7 +186,7 @@ Battle::Battle(Engine* const app_, const Teams& teams_)
 
 	Registrator registrator;
 
-	// посоздавать червей сколько было указано в настройках
+	// РїРѕСЃРѕР·РґР°РІР°С‚СЊ С‡РµСЂРІРµР№ СЃРєРѕР»СЊРєРѕ Р±С‹Р»Рѕ СѓРєР°Р·Р°РЅРѕ РІ РЅР°СЃС‚СЂРѕР№РєР°С…
 	for(Teams::const_iterator team = teams.begin(); team != teams.end(); ++team)
 	{
 		for(size_t i = 0; i < team->Count; ++i)
