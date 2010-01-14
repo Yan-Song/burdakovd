@@ -3,9 +3,19 @@
 #include "Battle.h"
 #include "Config.h"
 #include "Engine.h"
+#include "IWorm.h"
+#include "Registrator.h"
+#include "WormsApplication.h"
 
 class Battle::Util
 {
+private:
+	class MetaSprite
+	{
+	public:
+		//SharedSprite Create(
+	};
+
 public:
 	class UIField : public UI::Element
 	{
@@ -25,29 +35,39 @@ public:
 	public:
 		UIField(Engine* const app_, Battle* const parent_)
 			: UI::Element(app_), app(app_), parent(parent_),
-			borderl("Sprites/border-l.png"),
-			borderr("Sprites/border-r.png"),
-			bordert("Sprites/border-t.png"),
-			borderb("Sprites/border-b.png"),
-			borderlt("Sprites/border-lt.png"),
-			borderlb("Sprites/border-lb.png"),
-			borderrt("Sprites/border-rt.png"),
-			borderrb("Sprites/border-rb.png"),
 
-			Empty("Sprites/EmptyCell.png"),
-			Food("Sprites/EmptyCell.png") // СЌС‚Рѕ РЅРµ РѕРїРµС‡Р°С‚РєР°
+			// Border
+			borderl("Sprites/UI/Border/l.png"),
+			borderr("Sprites/UI/Border/r.png"),
+			bordert("Sprites/UI/Border/t.png"),
+			borderb("Sprites/UI/Border/b.png"),
+			borderlt("Sprites/UI/Border/lt.png"),
+			borderlb("Sprites/UI/Border/lb.png"),
+			borderrt("Sprites/UI/Border/rt.png"),
+			borderrb("Sprites/UI/Border/rb.png"),
+
+			/* // Worm
+			worm_h_r("Sprites/Worm/Head/r.png"),
+			worm_h_r("Sprites/Worm/Head/l.png"),
+			worm_h_r("Sprites/Worm/Head/t.png"),
+			worm_h_r("Sprites/Worm/Head/b.png"),*/
+
+			// Cells
+			Empty("Sprites/Cell/Empty.png"),
+			Food("Sprites/Cell/Empty.png") // это не опечатка
 		{
-			// РґРІРµ РєР»РµС‚РєРё РЅР° СЂР°РјРєСѓ
+			// две клетки на рамку
 			SetWidth(Config::CellSize * (Config::FieldWidth + 2));
 			SetHeight(Config::CellSize * (Config::FieldHeight + 2));
 
-			// РЅР°Р»РѕР¶РёС‚СЊ РєР°СЂС‚РёРЅРєСѓ СЃ РµРґРѕР№ РєСѓРґР° РЅР°РґРѕ
-			Sprite("Sprites/FoodCell.png").BlitOnSprite(Food);
+			// наложить картинку с едой куда надо
+			Sprite("Sprites/Cell/Food.png").BlitOnSprite(Food);
 		}
 
 	protected:
 		void RenderField()
 		{
+			// прорисовать фон и пищу
 			for(int y = 0; y < Config::FieldHeight; ++y)
 				for(int x = 0; x < Config::FieldWidth; ++x)
 				{
@@ -64,11 +84,26 @@ public:
 					{
 						Food.BlitOnScreen(app, position);
 					}
+					else if(cell == CellWorm)
+					{
+						// Это не ошибка
+						// просто для рендеринга ячейки с червём нужно больше информации (голова/хвост/направление...)
+						// Поэтому черви будут рендериться в отдельном цикле
+						Empty.BlitOnScreen(app, position);
+					}
 					else
 					{
 						throw NotImplementedException();
 					}
 				}
+
+			// прорисовать червей
+			for(Battle::WormCollection::const_iterator it = parent->CurrentGeneration.begin(); it != parent->CurrentGeneration.end(); ++it)
+			{
+				const TPosition& position = (*it)->Position();
+
+				// в цикле отрендерить червя, сначала голову, затем тело и хвост
+			}
 		}
 
 		void RenderBorder()
@@ -123,8 +158,10 @@ public:
 };
 
 Battle::Battle(Engine* const app_, const Teams& teams_)
-	: UI::ElementSet(app_), app(app_), teams(teams_), Field(Config::FieldHeight, Config::FieldWidth)
+	: UI::ElementSet(app_), app(app_), teams(teams_), lastWormID(0), timer(), Field(Config::FieldHeight, Config::FieldWidth)
 {
+	timer.Start();
+
 	Maximize();
 
 	const int margin = 10;
@@ -133,10 +170,10 @@ Battle::Battle(Engine* const app_, const Teams& teams_)
 	f->SetLeft(margin);
 	f->SetBottom(app->Screen->h - margin - f->GetHeight());
 	Add(f);
-	// ... РѕСЃС‚Р°Р»СЊРЅС‹Рµ РіСЂР°С„РёС‡РµСЃРєРёРµ СЌР»РµРјРµРЅС‚С‹
+	// ... остальные графические элементы
 
-	// РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РїРѕР»Рµ
-	// РЅР°РєРёРґР°С‚СЊ СЃРєРѕР»СЊРєРѕ РЅР°РґРѕ РµРґС‹ С‚СѓРґР°
+	// инициализировать поле
+	// накидать сколько надо еды туда
 	for(int x = 0; x < Config::FieldWidth; ++x)
 		for(int y = 0; y < Config::FieldHeight; ++y)
 		{
@@ -145,6 +182,22 @@ Battle::Battle(Engine* const app_, const Teams& teams_)
 				Field.Set(x, y, CellFood);
 			}
 		}
+
+	Registrator registrator;
+
+	// посоздавать червей сколько было указано в настройках
+	for(Teams::const_iterator team = teams.begin(); team != teams.end(); ++team)
+	{
+		for(size_t i = 0; i < team->Count; ++i)
+		{
+			SharedSomeWorm worm = registrator.Create(team->ID);
+
+			++lastWormID;
+			worm->Initialize(app, this, lastWormID, team->ID, Config::StartEnergy, TPosition(1, GetFreeCell()), GetTime(), SharedRenderer());
+
+			CurrentGeneration.push_back(worm);
+		}
+	}
 }
 
 void Battle::Render()
@@ -152,4 +205,23 @@ void Battle::Render()
 	app->ClearScreen(Color(0xe0e0f0));
 
 	ElementSet::Render();
+}
+
+double Battle::GetTime() const
+{
+	return timer.GetTime();
+}
+
+SimplePoint Battle::GetFreeCell() const
+{
+	SimplePoint point(0, 0);
+
+	do
+	{
+		point.X = app->Rand(Field.Width);
+		point.Y = app->Rand(Field.Height);
+	}
+	while(Field.Get(point.X, point.Y) != CellEmpty);
+
+	return point;
 }

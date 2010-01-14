@@ -8,14 +8,17 @@
 #include <vector>
 #include "SDL.h"
 
-class WormsApplication;
+class Engine;
+class Battle;
 
 // от этого класса будут наследоваться все черви
+// ИНВАРИАНТ: если червь жив, и метод Initialize уже был вызван - то все ячейки его тела отмечены на карте, и лишние не отмечены
+// Когда он умирает - все его ячейки стираются с карты
 class Worm : public IMyWorm, public ISomeWorm
 {
 public:
-	Worm() : app(NULL), position(), ID(0), classID(0), energy(0.0), time(0.0),
-	     lastUpdateEnergyTime(0.0), color(Palette::White), dead(false)
+	Worm() : app(NULL), BattleState(NULL), position(), ID(0), classID(0), energy(0.0), time(0.0),
+	     lastUpdateEnergyTime(0.0), renderer(), dead(false)
 	{
 	}
 
@@ -61,16 +64,17 @@ public:
 		return classID;
 	}
 
-	virtual Color GetColor() const
+	virtual SharedRenderer GetRenderer() const
 	{
-		return color;
+		return renderer;
 	}
 
 private:
 	Worm(const Worm& );
 	Worm& operator =(const Worm& );
 
-	WormsApplication* app;
+	Engine* app;
+	Battle* BattleState;
 	TPosition position;
 	size_t ID, classID;
 	double energy;
@@ -78,27 +82,10 @@ private:
 	double time;
 	// время последнего обновления энергии
 	double lastUpdateEnergyTime;
-	Color color;
+	SharedRenderer renderer;
 	bool dead;
 
-	virtual void Initialize(WormsApplication* _app, const size_t _ID, const size_t _classID,
-				const double _energy, const TPosition& _position,
-				const double _time, const Color& _color)
-	{
-		app = _app;
-		ID = _ID;
-		classID = _classID;
-		energy = _energy;
-		position = _position;
-		lastUpdateEnergyTime = time = _time;
-		color = _color;
-	};
-
-	virtual void Draw() const;
-
 	virtual void UpdateMap() const;
-
-	virtual void EraseOnScreen() const;
 
 	virtual void EraseOnMap() const;
 
@@ -111,16 +98,11 @@ private:
 	// проверить соотношение своей длины и энергии и удлиниться/укоротиться при необходимости
 	virtual void CheckLength();
 
-	// увеличить свою длину на 1 клетку, с хвоста
-	virtual void Grow();
-
-	// уменьшить свою длину на 1 клетку, с хвоста
-	virtual void AntiGrow();
-
-	// умереть (убрать себя с карты, с экрана), вызов Dead() теперь будет возвращать true
+	// умереть (убрать себя с карты), вызов Dead() теперь будет возвращать true
 	virtual void Die();
 
-	virtual bool Dead();
+	// мертв ли?
+	virtual bool Dead() const;
 
 	// Уменьшить энергию в соответствии с прошедшим временем с последнего вызова этой функции.
 	// Размножение (деление) при превышении некоторой пороговой величины энергии.
@@ -129,6 +111,28 @@ private:
 
 	// Если подошло время - вызвать Run() и перейти в нужном направлении
 	void DoLogic();
+
+	// попытаться найти свободную клетку и удлиннить хвост на одну ячейку
+	// возвращает true если это сделать удалось
+	bool Grow();
+
+	virtual void Initialize(Engine* const _app, Battle* const battle_, const size_t _ID, const size_t _classID,
+				const double _energy, const TPosition& _position,
+				const double _time, const SharedRenderer& _renderer)
+	{
+		app = _app;
+		BattleState = battle_;
+		ID = _ID;
+		classID = _classID;
+		energy = _energy;
+		position = _position;
+		lastUpdateEnergyTime = time = _time;
+		renderer = _renderer;
+
+		UpdateMap();
+
+		CheckLength();
+	};
 
 public:
 	virtual ~Worm()

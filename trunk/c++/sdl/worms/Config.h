@@ -31,6 +31,8 @@ struct Config
 	// размеры поля в ячейках
 	static const int FieldWidth, FieldHeight;
 
+	static const double StartEnergy;
+
 };
 
 #endif

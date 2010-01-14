@@ -3,6 +3,7 @@
 
 #include <string>
 #include <SDL.h>
+#include "AlphaColor.h"
 #include "Color.h"
 #include "Font.h"
 #include "GraphObject.h"
@@ -44,6 +45,11 @@ public:
 	void BlitOnScreen(SDLApplication* const app, const ScreenPoint& LeftBottom) const;
 
 	void SetColorKey(const Color& color);
+
+	// попиксельный доступ (медленный)
+	AlphaColor GetPixel(const int x, const int y) const;
+
+	void SetPixel(const int x, const int y, const AlphaColor& acolor);
 
 	virtual ~Sprite();
 };

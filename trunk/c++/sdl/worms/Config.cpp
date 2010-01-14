@@ -12,6 +12,7 @@ const double Config::ReplicateEnergyLevel = 200.0;
 const int Config::CorpseRadius = 3;
 const int Config::InitialFoodCount = 10;
 const double Config::FoodPerSecond = 1;
+const double Config::StartEnergy = 100;
 
 const int Config::CellSize = 10;
 const int Config::FieldHeight = 40;
