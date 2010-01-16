@@ -67,6 +67,20 @@ public:
 };
 
 template<typename I>
+inline bool operator ==(const GenericColor<I>& first, const GenericColor<I>& second)
+{
+	return first.R == second.R && first.G == second.G && first.B == second.B;
+}
+
+template<typename I>
+inline bool operator <(const GenericColor<I>& first, const GenericColor<I>& second)
+{
+	return (first.R < second.R) ||
+		(first.R == second.R && first.G < second.G) ||
+		(first.R == second.R && first.G == second.G && first.B < second.B);
+}
+
+template<typename I>
 inline GenericColor<I> operator *(const I k, const GenericColor<I>& color)
 {
 	return color * k;

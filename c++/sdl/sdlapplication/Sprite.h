@@ -51,6 +51,8 @@ public:
 
 	void SetPixel(const int x, const int y, const AlphaColor& acolor);
 
+	void Save(const std::string& filename) const;
+
 	virtual ~Sprite();
 };
 
