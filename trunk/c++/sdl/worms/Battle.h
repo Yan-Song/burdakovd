@@ -32,6 +32,8 @@ private:
 	// выбрать пустую ячейку случайным образом
 	SimplePoint GetFreeCell() const;
 
+	// берёт рендерер из кэша, или создаёт новый
+	SharedRenderer GetRenderer(const Color& color);
 
 public:
 	BattleField Field;

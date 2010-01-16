@@ -125,3 +125,9 @@ void Sprite::SetPixel(const int x, const int y, const AlphaColor &acolor)
 
 	::PutPixel(image, x, y, raw);
 }
+
+void Sprite::Save(const std::string &filename) const
+{
+	// \todo: как сохранить не в BMP?
+	SDLCheck(SDL_SaveBMP(image, filename.c_str()));
+}
