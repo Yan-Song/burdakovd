@@ -214,15 +214,18 @@ void Worm::UpdateEnergy()
 		// тут был один неприятный баг, из-за которого нарушался Инвариант карты
 		// так что код смерти и создания детей стоит редактировать осторожнее
 		
-		// фокус
+		// фокус, укорачиваемся до размера второго сына
 		position = psecond;
+		UpdateMap();
 
-		// создать детей
-		const SharedSomeWorm w1 = BattleState->AddWorm(GetClassID(), energy / 2, pfirst, GetRenderer());
+		// создать первого сына
+		BattleState->AddWorm(GetClassID(), energy / 2, pfirst, GetRenderer());
 
+		// сдохнуть
 		Die();
 
-		const SharedSomeWorm w2 = BattleState->AddWorm(GetClassID(), energy / 2, psecond, GetRenderer());
+		// создать второго сына
+		BattleState->AddWorm(GetClassID(), energy / 2, psecond, GetRenderer());
 	}
 	else
 	{
