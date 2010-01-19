@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Clickable.h"
 
-UI::Clickable::Clickable(SDLApplication* const app) : MouseOverable(app), halfClicked(false)
+UI::Clickable::Clickable(SDLApplication* const app) : MouseOverable(app), halfClicked(false), buttonDefault(false), buttonCancel(false)
 {
 	
 }
@@ -51,4 +51,12 @@ void UI::Clickable::ProcessEvent(const SDL_Event& Event)
 
 		halfClicked = false;
 	}
-}
+	else if(Event.type == SDL_KEYDOWN && Event.key.keysym.sym == SDLK_ESCAPE && GetButtonCancel())
+	{
+		onClick();
+	}
+	else if(Event.type == SDL_KEYDOWN && Event.key.keysym.sym == SDLK_RETURN && GetButtonDefault())
+	{
+		onClick();
+	}
+}	

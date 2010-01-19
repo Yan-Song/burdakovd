@@ -1,4 +1,7 @@
+#include <algorithm>
 #include <list>
+#include <set>
+#include <vector>
 #include "Battle.h"
 #include "Config.h"
 #include "IWorm.h"
@@ -17,26 +20,28 @@ void Worm::Tick()
 {
 	assert(!Dead());
 
+	
 	UpdateEnergy();
 
 	if(Dead())
 		return;
 
+	
 	DoLogic();
 
 	CheckLength();
+	
 }
 
-void Worm::Go(const WormLogic )
+void Worm::Go(const WormLogic direction)
 {
 	assert(!Dead());
-	throw NotImplementedException();
 
 	// отрисовывать себя на экране больше не надо
 	// кроме того проще будет и на карте не динамически менять себя
 	// а стирать перед движением, и перерисовывать после
 
-	/*SimplePoint head = position.front();
+	SimplePoint head = position.front();
 
 	if(direction == GoDown)
 		--head.Y;
@@ -49,7 +54,7 @@ void Worm::Go(const WormLogic )
 	else
 		throw new NotImplementedException();
 
-	CellType target = app->Map.Get(head.X, head.Y);
+	const CellType target = BattleState->Field.Get(head.X, head.Y);
 
 	if(target == CellEmpty || target == CellFood)
 	{
@@ -60,23 +65,26 @@ void Worm::Go(const WormLogic )
 			energy += Config::FoodEnergyPerCell;
 
 		// добавляем голову
+		if(std::find(position.begin(), position.end(), head) != position.end())
+			throw NotImplementedException();
 		position.push_front(head);
 
-		// занимаем эту ячейку и рисуем
-		app->Map.Set(head.X, head.Y, CellWorm);
-		app->DrawWormCell(head, this, 0);
+		// занимаем эту ячейку
+		BattleState->Field.Set(head.X, head.Y, CellWorm);
 
+		
 		// корректируем длину
 		CheckLength();
+		
+
+		ConsumeTime(Config::MovementTime);
 	}
 	else
 	{
-		// туда идти нельзя, сжимаемся
-		position.push_front(position.front());
+		// туда идти нельзя
+	}
 
-		// корректируем длину
-		CheckLength();
-	}*/
+	
 }
 
 void Worm::EraseOnMap() const
@@ -93,6 +101,7 @@ void Worm::UpdateMap() const
 		BattleState->Field.Set(it->X, it->Y, CellWorm);
 }
 
+// * инвариант карты
 void Worm::CheckLength()
 {
 	assert(!Dead());
@@ -112,6 +121,7 @@ void Worm::CheckLength()
 		;
 }
 
+// * инвариант карты
 bool Worm::Grow()
 {
 	assert(!Dead());
@@ -152,14 +162,14 @@ bool Worm::Grow()
 
 void Worm::Die()
 {
-	throw NotImplementedException();
-	/*EraseOnMap();
-	EraseOnScreen();
+	EraseOnMap();
 
 	if(!position.empty())
-		app->MakeFood(position.front().X, position.front().Y, Config::CorpseRadius);
+	{
+		BattleState->MakeFood(position.front().X, position.front().Y, Config::CorpseRadius);
+	}
 
-	dead = true;*/
+	dead = true;
 }
 
 bool Worm::Dead() const
@@ -167,18 +177,19 @@ bool Worm::Dead() const
 	return dead;
 }
 
+// * инвариант карты
 void Worm::UpdateEnergy()
 {
 	assert(!Dead());
 
-	throw NotImplementedException();
-	/*// 1) обновить энергию
-	double dt = app->GetTime() - lastUpdateEnergyTime;
+	
+	// 1) обновить энергию
+	const double dt = GetGlobalTime() - lastUpdateEnergyTime;
 	lastUpdateEnergyTime += dt;
 	energy -= Config::EnergyLossPerSecond * dt;
 
 	// 2) не пора ли умереть?
-	if(energy < Config::DeathEnergyLevel)
+	if(energy <= Config::DeathEnergyLevel)
 	{
 		Die();
 		return;
@@ -187,51 +198,57 @@ void Worm::UpdateEnergy()
 	// 3) не пора ли завести детей?
 	if(energy > Config::ReplicateEnergyLevel)
 	{
-		unsigned int n = position.size();
-		unsigned int n1 = n / 2;
+		size_t n = position.size();
+		size_t n1 = n / 2;
 
 		// находим середину
 		TPosition::iterator middle = position.begin();
-		for(unsigned int i = 0; i < n1; ++i)
+		for(size_t i = 0; i < n1; ++i)
 			++middle;
 
 		// рассчитываем позиции детей
-		TPosition pfirst(position.begin(), middle);
+		const TPosition pfirst(position.begin(), middle);
 		TPosition psecond(middle, position.end());
+		psecond.reverse();
 
-		// Умереть самому
-		Die();
+		// тут был один неприятный баг, из-за которого нарушался Инвариант карты
+		// так что код смерти и создания детей стоит редактировать осторожнее
+		
+		// фокус
+		position = psecond;
 
 		// создать детей
-		SharedSomeWorm first = app->AddWorm(GetClassID(), energy / 2, pfirst, GetColor());
-		first->UpdateMap();
-		first->Draw();
+		const SharedSomeWorm w1 = BattleState->AddWorm(GetClassID(), energy / 2, pfirst, GetRenderer());
 
-		SharedSomeWorm second = app->AddWorm(GetClassID(), energy / 2, psecond, GetColor());
-		second->UpdateMap();
-		second->Draw();
-	}*/
+		Die();
+
+		const SharedSomeWorm w2 = BattleState->AddWorm(GetClassID(), energy / 2, psecond, GetRenderer());
+	}
+	else
+	{
+		
+	}
 }
 
+// * инвариант карты
 void Worm::DoLogic()
 {
 	assert(!Dead());
 
-	throw NotImplementedException();
-	/*// возможно стоит сделать while вместо if, если fps маленький (<10), но там может начаться другая печаль
-	if(GetLocalTime() < app->GetTime())
+	if(GetLocalTime() < GetGlobalTime())
 	{
 		// ещё есть время!
 		WormLogic decision = Run();
 		if(decision != Stay)
 		{
-			ConsumeTime(Config::MovementTime);
 			Go(decision);
 		}
 	}
+
 	// также возможно стоит сбрасывать излишки времени в конце функции
-	if(time < app->GetTime()) // !!
-		time = app->GetTime();*/
+	if(time < GetGlobalTime())
+		time = GetGlobalTime();
+
 }
 
 bool Worm::isPressed(const SDLKey key) const
@@ -261,5 +278,5 @@ CellType Worm::Look(const int x, const int y)
 
 double Worm::GetGlobalTime() const
 {
-	return app->GetTime();
+	return BattleState->GetTime();
 }

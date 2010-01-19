@@ -8,6 +8,7 @@
 #include "BattleSettings.h"
 #include "ISomeWorm.h"
 #include "IWorm.h"
+#include "Registrator.h"
 
 class Engine;
 
@@ -20,8 +21,7 @@ private:
 	WormCollection CurrentGeneration, NextGeneration;
 	size_t lastWormID;
 	::Timer timer;
-	typedef std::map<Color, SharedRenderer> Renderers;
-	Renderers renderers;
+	int foodMade;
 	
 	class Util;
 
@@ -32,14 +32,20 @@ private:
 	// выбрать пустую ячейку случайным образом
 	SimplePoint GetFreeCell() const;
 
-	// берёт рендерер из кэша, или создаёт новый
 	SharedRenderer GetRenderer(const Color& color);
 
 public:
 	BattleField Field;
+	Registrator registrator;
 
 public:
 	Battle(Engine* const app_, const Teams& teams_);
+
+	SharedSomeWorm AddWorm(const size_t classID, const double initialEnergy, const TPosition& initialPosition, const SharedRenderer& renderer);
+
+	void MakeFood(const int x, const int y, const int r);
+
+	virtual void Main();
 
 	virtual void Render();
 
