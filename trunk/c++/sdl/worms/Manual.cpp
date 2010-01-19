@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Vector.h"
 
-unsigned int Manual::LeaderID = 2<<31;
+unsigned int Manual::LeaderID = 2 << 31;
 SimplePoint Manual::LeaderPosition = SimplePoint(0,0);
 double Manual::LastLeaderPresenceTime = 0;
 
@@ -14,7 +14,7 @@ WormLogic Manual::Run()
 	if(GetGlobalTime() - LastLeaderPresenceTime > 1)
 	{
 		InitiateElections();
-		std::cout<<"Initiate elections ["<<GetID()<<"]"<<std::endl;
+		std::cout << "Initiate elections [" << GetID() << "]" << std::endl;
 	}
 
 	// если мой ID меньше чем у лидера, то перехватить власть
@@ -40,16 +40,16 @@ WormLogic Manual::Run()
 	{
 		// первоочередная задача - следовать за лидером
 		SimplePoint head = Position().front();
-		double distance = Vector2DByCoords(head.X, head.Y).Distance(Vector2DByCoords(LeaderPosition.X, LeaderPosition.Y));
+		const double distance = Vector2DByCoords(head.X, head.Y).Distance(Vector2DByCoords(LeaderPosition.X, LeaderPosition.Y));
 
-		if(distance > 50)	
+		if(distance > 20)	
 		{
-			int dx = sgn(LeaderPosition.X - head.X);
-			int dy = sgn(LeaderPosition.Y - head.Y);
+			const int dx = sgn(LeaderPosition.X - head.X);
+			const int dy = sgn(LeaderPosition.Y - head.Y);
 			SimplePoint pdx = head; pdx.X += dx;
 			SimplePoint pdy = head; pdy.Y += dy;
-			int deltax = abs(LeaderPosition.X - head.X);
-			int deltay =  abs(LeaderPosition.Y - head.Y);
+			const int deltax = abs(LeaderPosition.X - head.X);
+			const int deltay =  abs(LeaderPosition.Y - head.Y);
 
 			if(Rand(deltax + deltay) < deltax)
 			{
@@ -84,7 +84,7 @@ void Manual::InitiateElections()
 
 WormLogic Manual::FindFood()
 {
-	SimplePoint head = Position().front();
+	const SimplePoint head = Position().front();
 
 	if(Look(head.X + 1, head.Y) == CellFood)
 		return GoRight;

@@ -5,6 +5,7 @@
 #include "Statue.h"
 #include "Manual.h"
 #include "Random.h"
+#include "RandomEater.h"
 
 #define REGISTER(worm) Register(SharedFactory(new Factory<worm>(#worm)))
 
@@ -14,4 +15,5 @@ Registrator::Registrator() : factories()
 	//REGISTER(Statue);
 	REGISTER(Manual);
 	REGISTER(Random);
+	REGISTER(RandomEater);
 }

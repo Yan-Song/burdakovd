@@ -10,6 +10,8 @@ namespace UI
 	{
 	private:
 		bool halfClicked;
+		bool buttonDefault;
+		bool buttonCancel;
 
 	protected:
 		// вызывается в момент нажатия левой кнопки мыши в пределах элемента управления
@@ -30,6 +32,26 @@ namespace UI
 		virtual bool isElementPressed() const;
 
 	public:
+		bool GetButtonDefault() const
+		{
+			return buttonDefault;
+		}
+
+		bool GetButtonCancel() const
+		{
+			return buttonCancel;
+		}
+
+		void SetButtonDefault(const bool value)
+		{
+			buttonDefault = value;
+		}
+
+		void SetButtonCancel(const bool value)
+		{
+			buttonCancel = value;
+		}
+
 		Clickable(SDLApplication* const app);
 
 		virtual void ProcessEvent(const SDL_Event& Event);

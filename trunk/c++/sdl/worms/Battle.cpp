@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <sstream>
 #include <string>
+#include <vector>
 #include <SDLException.h>
 #include <Sprite.h>
 #include "Battle.h"
@@ -317,7 +318,8 @@ public:
 			// рисуем в цикле тело
 			for(; next != position.end(); ++previous, ++current, ++next)
 			{
-				const ScreenPoint sposition = ScreenPointByCoords(UIField->GetLeft() + (current->X + 1) * Config::CellSize,
+				const ScreenPoint sposition = ScreenPointByCoords(
+					UIField->GetLeft() + (current->X + 1) * Config::CellSize,
 					UIField->GetBottom() + (current->Y + 1) * Config::CellSize);
 				const std::string previous_pos = RelativePosition(*previous, *current);
 				const std::string next_pos = RelativePosition(*next, *current);
@@ -389,7 +391,7 @@ public:
 
 Battle::Battle(Engine* const app_, const Teams& teams_)
 	: UI::ElementSet(app_), app(app_), teams(teams_), CurrentGeneration(), NextGeneration(), \
-		lastWormID(0), timer(), renderers(), Field(Config::FieldHeight, Config::FieldWidth)
+		lastWormID(0), timer(), foodMade(0), Field(Config::FieldHeight, Config::FieldWidth), registrator()
 {
 	timer.Start();
 
@@ -414,22 +416,16 @@ Battle::Battle(Engine* const app_, const Teams& teams_)
 			}
 		}
 
-	const Registrator registrator;
-
+	NextGeneration.clear();
 	// посоздавать червей сколько было указано в настройках
 	for(Teams::const_iterator team = teams.begin(); team != teams.end(); ++team)
 	{
 		for(size_t i = 0; i < team->Count; ++i)
 		{
-			SharedSomeWorm worm = registrator.Create(team->ID);
-
-			++lastWormID;
-			worm->Initialize(app, this, lastWormID, team->ID, Config::StartEnergy, 
-				TPosition(1, GetFreeCell()), GetTime(), GetRenderer(team->color));
-
-			CurrentGeneration.push_back(worm);
+			AddWorm(team->ID, Config::StartEnergy, TPosition(1, GetFreeCell()), SharedRenderer(new Util::Renderer(team->color, app, this)));
 		}
 	}
+	CurrentGeneration = NextGeneration;
 }
 
 void Battle::Render()
@@ -446,24 +442,78 @@ double Battle::GetTime() const
 
 SimplePoint Battle::GetFreeCell() const
 {
-	SimplePoint point(0, 0);
+	typedef std::vector<SimplePoint> Points;
+	Points candidates;
+	candidates.reserve(Field.Width * Field.Height);
 
-	do
+	for(int x = 0; x < Field.Width; ++x)
+		for(int y = 0; y < Field.Height; ++y)
+			if(Field.Get(x, y) == CellEmpty)
+				candidates.push_back(SimplePoint(x, y));
+
+	if(candidates.empty())
 	{
-		point.X = app->Rand(Field.Width);
-		point.Y = app->Rand(Field.Height);
+		throw std::overflow_error("Field overflow");
 	}
-	while(Field.Get(point.X, point.Y) != CellEmpty);
-
-	return point;
+	else
+	{
+		return candidates[app->Rand(candidates.size())];
+	}
 }
 
 SharedRenderer Battle::GetRenderer(const Color &color)
 {
-	if(!renderers.count(color))
+	return Util::GenerateWormRenderer(color, app, this);
+}
+
+void Battle::Main()
+{
+	// make food
+	while(foodMade < timer.GetTime() * Config::FoodPerSecond)
 	{
-		renderers[color] = Util::GenerateWormRenderer(color, app, this);
+		++foodMade;
+		const SimplePoint free = GetFreeCell();
+
+		Field.Set(free.X, free.Y, CellFood);
 	}
 
-	return renderers[color];
+	NextGeneration.clear();
+	NextGeneration.reserve(CurrentGeneration.size());
+	// do worm logic
+	for(WormCollection::const_iterator it = CurrentGeneration.begin(); it != CurrentGeneration.end(); ++it)
+	{
+		(*it)->Tick();
+	}
+	for(WormCollection::const_iterator it = CurrentGeneration.begin(); it != CurrentGeneration.end(); ++it)
+	{
+		if(!(*it)->Dead())
+		{
+			NextGeneration.push_back(*it);
+		}
+	}
+
+	CurrentGeneration = NextGeneration;
+	NextGeneration.clear();
+}
+
+SharedSomeWorm Battle::AddWorm(const size_t classID, const double initialEnergy, const TPosition &initialPosition, const SharedRenderer &renderer)
+{
+	const SharedSomeWorm worm = registrator.Create(classID);
+
+	++lastWormID;
+	worm->Initialize(app, this, lastWormID, classID, initialEnergy,	initialPosition, GetTime(), renderer);
+
+	NextGeneration.push_back(worm);
+
+	return worm;
+}
+
+void Battle::MakeFood(const int X, const int Y, const int r)
+{
+	for(int x = X - r; x <= X + r; ++x)
+		for(int y = Y - r; y <= Y + r; ++y)
+			if(Field.Get(x, y) == CellEmpty && sqr(X - x) + sqr(Y - y) <= sqr(r))
+			{
+				Field.Set(x, y, CellFood);
+			}
 }

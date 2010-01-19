@@ -14,7 +14,7 @@ public:
 
 	virtual WormLogic Run()
 	{
-		int decision = Rand(0, 3);
+		const int decision = Rand(0, 3);
 
 		if(decision == 0)
 			return GoUp;

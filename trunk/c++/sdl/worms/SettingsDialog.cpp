@@ -27,6 +27,7 @@ public:
 	public:
 		OKButton(Engine* const app_, SettingsDialog* const parent_) : UI::Button(app_, "OK"), app(app_), parent(parent_)
 		{
+			SetButtonDefault(true);
 		}
 
 	protected:
@@ -48,6 +49,7 @@ public:
 	public:
 		CancelButton(Engine* const app_) : UI::Button(app_, "Cancel"), app(app_)
 		{
+			SetButtonCancel(true);
 		}
 
 	protected:
@@ -144,11 +146,6 @@ SettingsDialog::SettingsDialog(Engine* const app_) : ElementSet(app_), app(app_)
 
 void SettingsDialog::ProcessEvent(const SDL_Event &Event)
 {
-	if(Event.type == SDL_KEYDOWN && Event.key.keysym.sym == SDLK_ESCAPE)
-	{
-		app->SetNextState(SharedState(new MainMenu(app)));
-	}
-
 	ElementSet::ProcessEvent(Event);
 }
 
