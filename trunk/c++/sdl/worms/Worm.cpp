@@ -198,8 +198,8 @@ void Worm::UpdateEnergy()
 	// 3) не пора ли завести детей?
 	if(energy > Config::ReplicateEnergyLevel)
 	{
-		size_t n = position.size();
-		size_t n1 = n / 2;
+		const size_t n = position.size();
+		const size_t n1 = n / 2;
 
 		// находим середину
 		TPosition::iterator middle = position.begin();
@@ -241,7 +241,7 @@ void Worm::DoLogic()
 	if(GetLocalTime() < GetGlobalTime())
 	{
 		// ещё есть время!
-		WormLogic decision = Run();
+		const WormLogic decision = Run();
 		if(decision != Stay)
 		{
 			Go(decision);
@@ -250,7 +250,9 @@ void Worm::DoLogic()
 
 	// также возможно стоит сбрасывать излишки времени в конце функции
 	if(time < GetGlobalTime())
+	{
 		time = GetGlobalTime();
+	}
 
 }
 
@@ -272,7 +274,7 @@ int Worm::Rand(const int x) const
 CellType Worm::Look(const int x, const int y)
 {
 	assert(position.size() > 0);
-	SimplePoint head = position.front();
+	const SimplePoint head = position.front();
 	const int distance = abs(head.X - x) + abs(head.Y - y);
 	ConsumeTime(Config::DiscoverTime * distance);
 
