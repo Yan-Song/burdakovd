@@ -254,8 +254,8 @@ void SDLApplication::FillRectangle(const ScreenPoint& A, const ScreenPoint& B, c
 	SDL_Rect rect;
 	rect.x = static_cast<Sint16>(std::min(A[0], B[0]));
 	rect.y = static_cast<Sint16>(Screen->h - 1 - std::max(A[1], B[1]));
-	rect.w = static_cast<Uint16>(abs(A[0] - B[0]));
-	rect.h = static_cast<Uint16>(abs(A[1] - B[1]));
+	rect.w = static_cast<Uint16>(abs(A[0] - B[0]) + 1);
+	rect.h = static_cast<Uint16>(abs(A[1] - B[1]) + 1);
 	SDL_FillRect(Screen, &rect, MapColor(color));
 }
 
