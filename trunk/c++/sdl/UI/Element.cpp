@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <SDL.h>
 #include <SDLApplication.h>
 #include <Utils.h>
@@ -137,4 +138,34 @@ void UI::Element::Maximize()
 ScreenPoint UI::Element::GetLeftBottom() const
 {
 	return ScreenPointByCoords(GetLeft(), GetBottom());
+}
+
+void UI::Element::SetPadding(const int padding_)
+{
+	padding = padding_;
+}
+
+int UI::Element::GetPadding() const
+{
+	return padding;
+}
+
+int UI::Element::GetInnerBottom() const
+{
+	return GetBottom() + GetPadding();
+}
+
+int UI::Element::GetInnerHeight() const
+{
+	return std::max(0, GetHeight() - 2 * GetPadding());
+}
+
+int UI::Element::GetInnerLeft() const
+{
+	return GetLeft() + GetPadding();
+}
+
+int UI::Element::GetInnerWidth() const
+{
+	return std::max(0, GetWidth() - 2 * GetPadding());
 }
