@@ -14,6 +14,7 @@ namespace UI
 	private:
 		std::stack<SDL_Rect> clipStack;
 		int width, height, left, bottom;
+		int padding;
 		bool enabled;
 
 		Element(const Element& );
@@ -28,7 +29,9 @@ namespace UI
 
 	public:
 		Element(SDLApplication* const app_)
-			: clipStack(), width(0), height(0), left(0), bottom(0), enabled(true), app(app_) {}
+			: clipStack(), width(0), height(0), left(0), bottom(0), padding(0), enabled(true), app(app_)
+		{
+		}
 
 		virtual int GetWidth() const;
 
@@ -67,6 +70,18 @@ namespace UI
 		virtual ScreenPoint GetLeftBottom() const;
 
 		virtual void Maximize();
+
+		virtual void SetPadding(const int padding_);
+
+		virtual int GetPadding() const;
+
+		virtual int GetInnerWidth() const;
+
+		virtual int GetInnerHeight() const;
+
+		virtual int GetInnerBottom() const;
+
+		virtual int GetInnerLeft() const;
 
 	protected:
 		virtual void onLayoutChanged();
