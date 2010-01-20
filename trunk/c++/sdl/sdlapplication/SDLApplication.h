@@ -60,7 +60,7 @@ public:
 	// нарисовать отрезок
 	void DrawSegment(const ScreenPoint& A, const ScreenPoint& B, const Color& color);
 
-	// нарисовать закрашенный прямоугольник
+	// нарисовать закрашенный прямоугольник, содержащий указанные точки в качестве угловых
 	void FillRectangle(const ScreenPoint& A, const ScreenPoint& B, const Color& color) const;
 
 	// очистить экран
