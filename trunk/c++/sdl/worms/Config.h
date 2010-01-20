@@ -1,6 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <Color.h>
+
 // здесь указан список различных параметров
 struct Config
 {
@@ -33,6 +35,9 @@ struct Config
 
 	static const double StartEnergy;
 
+	static const Color GraphBackground;
+	static const double GraphUpdateFrequency;
+	static const int GraphStep;
 };
 
 #endif

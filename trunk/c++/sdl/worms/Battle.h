@@ -24,6 +24,7 @@ private:
 	int foodMade;
 	
 	class Util;
+	friend class Util;
 
 private:
 	Battle(const Battle& );

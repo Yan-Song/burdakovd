@@ -169,3 +169,23 @@ int UI::Element::GetInnerWidth() const
 {
 	return std::max(0, GetWidth() - 2 * GetPadding());
 }
+
+int UI::Element::GetRight() const
+{
+	return GetLeft() + GetWidth() - 1;
+}
+
+int UI::Element::GetTop() const
+{
+	return GetBottom() + GetHeight() + 1;
+}
+
+int UI::Element::GetInnerRight() const
+{
+	return GetInnerLeft() + GetInnerWidth() - 1;
+}
+
+int UI::Element::GetInnerTop() const
+{
+	return GetInnerBottom() + GetInnerHeight() - 1;
+}

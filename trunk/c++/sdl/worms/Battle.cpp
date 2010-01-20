@@ -1,9 +1,13 @@
 #include <algorithm>
+#include <list>
+#include <map>
 #include <sstream>
 #include <string>
 #include <vector>
 #include <SDLException.h>
 #include <Sprite.h>
+#include <Timer.h>
+#include <Utils.h>
 #include "Battle.h"
 #include "Config.h"
 #include "Engine.h"
@@ -47,12 +51,6 @@ public:
 			borderlb("Sprites/UI/Border/lb.png"),
 			borderrt("Sprites/UI/Border/rt.png"),
 			borderrb("Sprites/UI/Border/rb.png"),
-
-			/* // Worm
-			worm_h_r("Sprites/Worm/Head/r.png"),
-			worm_h_r("Sprites/Worm/Head/l.png"),
-			worm_h_r("Sprites/Worm/Head/t.png"),
-			worm_h_r("Sprites/Worm/Head/b.png"),*/
 
 			// Cells
 			Empty("Sprites/Cell/Empty.png"),
@@ -140,10 +138,153 @@ public:
 
 	class Graph : public UI::Element
 	{
+	private:
+		Graph(const Graph& );
+		Graph& operator =(const Graph& );
+
+	private:
+		Engine* const app;
+		const Battle* const battle;
+
+		typedef std::list<double> TeamGraphStats;
+		typedef std::map<size_t, TeamGraphStats> TeamsGraphStats;
+		TeamsGraphStats stats;
+
+		Timer tickTimer;
+		
+
+	public:
+		Graph(Engine* const app_, Battle* const battle_) : UI::Element(app_), app(app_), battle(battle_), stats(), tickTimer()
+		{
+			SetPadding(10);
+
+			for(Teams::const_iterator it = battle->teams.begin(); it != battle->teams.end(); ++it)
+			{
+				stats[it->ID] = TeamGraphStats();
+			}
+
+			tickTimer.Start();
+		}
+
+	private:
+		void RemoveOld()
+		{
+			for(TeamsGraphStats::iterator team = stats.begin(); team != stats.end(); ++team)
+			{
+				const size_t limit = static_cast<size_t>(GetInnerWidth()) * 9 / 10 / Config::GraphStep; // 90%
+
+				while(team->second.size() > limit)
+				{
+					team->second.pop_front();
+				}
+			}
+		}
+
+		double maxCount() const
+		{
+			double ans = 1;
+
+			for(TeamsGraphStats::const_iterator team = stats.begin(); team != stats.end(); ++team)
+			{
+				if(!team->second.empty())
+				{
+					ans = std::max(ans, *std::max_element(team->second.begin(), team->second.end()));
+				}
+			}
+
+			return ans;
+		}
+
+		void RenderBorder() const
+		{
+			// \todo
+		}
+
+		void RenderGraph() const
+		{
+			const SimplePoint a(GetInnerLeft(), GetInnerBottom());
+			const SimplePoint b(GetInnerRight(), GetInnerTop());
+
+			// фон
+			app->FillRectangle(ScreenPointByCoords(a.X, a.Y), ScreenPointByCoords(b.X, b.Y), Config::GraphBackground);
+
+			const double high = maxCount(); // чтоб сверху отступ был
+			const double bottomPadding = 0.1;
+			const double topPadding = 0.1;
+
+			// сами графики
+			for(Teams::const_iterator team = battle->teams.begin(); team != battle->teams.end(); ++team)
+			{
+				std::list<int> ys;
+
+				const TeamsGraphStats::const_iterator tstats = stats.find(team->ID);
+
+				for(TeamGraphStats::const_iterator it = tstats->second.begin(); it != tstats->second.end(); ++it)
+				{
+					ys.push_back(static_cast<int>(
+						GetBottom() +
+						GetInnerHeight() * (*it + bottomPadding * high)
+						/ (1 + topPadding + bottomPadding) / high));
+				}
+
+				if(ys.size() > 1)
+				{
+					std::list<int>::const_iterator current = ys.begin(), next = ys.begin();
+					++next;
+
+					for(int curx = GetInnerLeft(); next != ys.end(); curx += Config::GraphStep, ++current, ++next)
+					{
+						const int nextx = curx + Config::GraphStep;
+
+						app->DrawSegment(ScreenPointByCoords(curx, *current), ScreenPointByCoords(nextx, *next), team->color);
+					}
+				}
+			}
+		}
+
+	protected:
+		virtual void Main()
+		{
+			// если пришло время обновить график
+			if(tickTimer.GetTime() >= Config::GraphUpdateFrequency)
+			{
+				// сначала всем записываем 0.0
+				for(TeamsGraphStats::iterator it = stats.begin(); it != stats.end(); ++it)
+				{
+					it->second.push_back(0.0);
+				}
+
+				// проходя по списку всех червей, добавляем командам их хп
+				for(Battle::WormCollection::const_iterator it = battle->CurrentGeneration.begin(); it != battle->CurrentGeneration.end(); ++it)
+				{
+					double& teamHP = stats[(*it)->GetClassID()].back();
+					teamHP += (*it)->Energy() - Config::DeathEnergyLevel;
+				}
+				
+				RemoveOld();
+
+				// сбросить таймер
+				tickTimer.Start();
+			}
+		}
+
+		virtual void Render()
+		{
+			RenderBorder();
+			RenderGraph();
+		}
+
+		virtual void UpdateLayout()
+		{
+			RemoveOld();
+		}
+
+		
 	};
 
-	class Table : public UI::Element
+	class TeamsTable : public UI::Element
 	{
+
 	};
 
 	class Timer : public UI::Element
@@ -401,8 +542,16 @@ Battle::Battle(Engine* const app_, const Teams& teams_)
 
 	const UI::SharedElement f(new Util::UIField(app, this));
 	f->SetLeft(margin);
-	f->SetBottom(app->Screen->h - margin - f->GetHeight());
+	f->SetBottom(GetHeight() - margin - f->GetHeight());
 	Add(f);
+
+	const UI::SharedElement g(new Util::Graph(app, this));
+	g->SetLeft(margin);
+	g->SetBottom(margin);
+	g->SetHeight(GetHeight() - 3 * margin - f->GetHeight());
+	g->SetWidth(f->GetWidth());
+	Add(g);
+
 	// ... остальные графические элементы
 
 	// инициализировать поле
@@ -479,6 +628,7 @@ void Battle::Main()
 
 	NextGeneration.clear();
 	NextGeneration.reserve(CurrentGeneration.size());
+
 	// do worm logic
 	for(WormCollection::const_iterator it = CurrentGeneration.begin(); it != CurrentGeneration.end(); ++it)
 	{
@@ -494,6 +644,9 @@ void Battle::Main()
 
 	CurrentGeneration = NextGeneration;
 	NextGeneration.clear();
+
+	// вызвать Main вложенным объектам
+	ElementSet::Main();
 }
 
 SharedSomeWorm Battle::AddWorm(const size_t classID, const double initialEnergy, const TPosition &initialPosition, const SharedRenderer &renderer)

@@ -41,6 +41,10 @@ namespace UI
 
 		virtual int GetBottom() const;
 
+		virtual int GetRight() const;
+
+		virtual int GetTop() const;
+
 		virtual bool Enabled() const;
 
 		virtual void SetWidth(const int w);
@@ -82,6 +86,10 @@ namespace UI
 		virtual int GetInnerBottom() const;
 
 		virtual int GetInnerLeft() const;
+
+		virtual int GetInnerRight() const;
+
+		virtual int GetInnerTop() const;
 
 	protected:
 		virtual void onLayoutChanged();
