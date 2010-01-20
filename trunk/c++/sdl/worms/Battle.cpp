@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <iomanip>
+#include <iostream>
 #include <list>
 #include <map>
 #include <sstream>
@@ -289,6 +291,47 @@ public:
 
 	class Timer : public UI::Element
 	{
+	private:
+		Timer(const Timer& );
+		Timer& operator =(const Timer& );
+
+	private:
+		Engine* const app;
+		const Battle* const battle;
+
+	public:
+		Timer(Engine* const app_, Battle* const battle_) : UI::Element(app_), app(app_), battle(battle_)
+		{
+		}
+
+	private:
+		void RenderBorder() const
+		{
+			// \todo
+		}
+
+		void RenderText() const
+		{
+			const int time = static_cast<int>(battle->GetTime());
+			const int hours = time / 60 / 60;
+			const int minutes = time / 60 % 60;
+			const int seconds = time % 60;
+			
+			std::ostringstream text;
+			text << std::setfill('0') << std::setw(2) << hours << ":" << std::setw(2) << minutes << ":" << std::setw(2) << seconds;
+
+			// \todo: рамка
+			const SharedSprite stext(new Sprite(SharedFont(new Font("Fonts/arialbd.ttf", 32)), text.str(), Palette::Black));
+
+			stext->Draw(app, GetCenter());
+		}
+
+	protected:
+		virtual void Render()
+		{
+			RenderBorder();
+			RenderText();
+		}
 	};
 
 	class Speedometer : public UI::Element
@@ -551,6 +594,13 @@ Battle::Battle(Engine* const app_, const Teams& teams_)
 	g->SetHeight(GetHeight() - 3 * margin - f->GetHeight());
 	g->SetWidth(f->GetWidth());
 	Add(g);
+
+	const UI::SharedElement t(new Util::Timer(app, this));
+	t->SetLeft(2 * margin + f->GetWidth());
+	t->SetHeight(50);
+	t->SetBottom(GetHeight() - margin - t->GetHeight());
+	t->SetWidth(GetWidth() - 3 * margin - f->GetWidth());
+	Add(t);
 
 	// ... остальные графические элементы
 
