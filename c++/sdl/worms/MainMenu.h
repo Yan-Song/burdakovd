@@ -2,6 +2,7 @@
 #define MAINMENU_H
 
 #include <vector>
+#include <Sprite.h>
 #include <UI/Element.h>
 #include <UI/ElementSet.h>
 #include <ISimpleGameLoop.h>
@@ -14,6 +15,8 @@ class MainMenu : public UI::ElementSet
 private:
 	MainMenu(const MainMenu& );
 	MainMenu& operator =(const MainMenu& );
+	
+	const SharedSprite background;
 
 protected:
 	Engine* app;
