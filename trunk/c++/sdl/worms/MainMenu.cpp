@@ -38,7 +38,7 @@ public:
 	};
 };
 
-MainMenu::MainMenu(Engine* const app_) : UI::ElementSet(app_), app(app_)
+MainMenu::MainMenu(Engine* const app_) : UI::ElementSet(app_), background(new Sprite("Sprites/UI/MainMenu/background.png")), app(app_)
 {
 	Maximize();
 
@@ -71,7 +71,7 @@ void MainMenu::ProcessEvent(const SDL_Event& Event)
 
 void MainMenu::Render()
 {
-	app->ClearScreen(Color(0xe0e0e0));
+	background->Draw(app, GetCenter());
 
 	ElementSet::Render();
 }

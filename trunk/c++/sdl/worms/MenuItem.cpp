@@ -1,7 +1,7 @@
 #include "Engine.h"
 #include "MenuItem.h"
 
-const std::string UI::MenuItem::MenuFont = "Fonts/arialbd.ttf";
+const std::string UI::MenuItem::MenuFont = "Fonts/Luismimurder.ttf";
 
 UI::MenuItem::MenuItem(Engine* const app_, const std::string& text_)
 : Clickable(app_), text(text_), normal(), hovered(), disabled(), app(app_)
@@ -39,7 +39,7 @@ void UI::MenuItem::onLayoutChanged()
 
 void UI::MenuItem::updateSprites()
 {
-	normal = SharedSprite(new Sprite(GetFont(MenuFont, 36), text, Palette::Black));
-	hovered = SharedSprite(new Sprite(GetFont(MenuFont, 48), text, Palette::Blue));
-	disabled = SharedSprite(new Sprite(GetFont(MenuFont, 36), text, Palette::Gray));
+	normal = SharedSprite(new Sprite(GetFont(MenuFont, 48), text, Palette::Black));
+	hovered = SharedSprite(new Sprite(GetFont(MenuFont, 54), text, Palette::Green));
+	disabled = SharedSprite(new Sprite(GetFont(MenuFont, 48), text, Palette::Gray));
 }
