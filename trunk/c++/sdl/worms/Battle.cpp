@@ -200,7 +200,7 @@ public:
 
 		virtual void ProcessEvent(const SDL_Event& Event)
 		{
-			if(Event.type == SDL_KEYDOWN && Event.key.keysym.sym == SDLK_k)
+			if(Event.type == SDL_KEYDOWN && Event.key.keysym.sym == SDLK_b)
 			{
 				// сделать плохо
 				const SharedSomeWorm worm = SelectedWorm();
@@ -211,7 +211,7 @@ public:
 				}
 			}
 
-			if(Event.type == SDL_KEYDOWN && Event.key.keysym.sym == SDLK_h)
+			if(Event.type == SDL_KEYDOWN && Event.key.keysym.sym == SDLK_g)
 			{
 				// сделать хорошо
 				const SharedSomeWorm worm = SelectedWorm();
