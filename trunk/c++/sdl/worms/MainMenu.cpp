@@ -59,6 +59,7 @@ MainMenu::MainMenu(Engine* const app_) : UI::ElementSet(app_), background(new Sp
 		(*it)->SetLeft(ItemLeft);
 		(*it)->SetBottom(MenuBottom + static_cast<int>(i) * ItemHeight);
 	}
+
 }
 
 void MainMenu::ProcessEvent(const SDL_Event& Event)
