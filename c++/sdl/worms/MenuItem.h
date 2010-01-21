@@ -12,10 +12,8 @@ namespace UI
 	class MenuItem : public Clickable
 	{
 	private:
-		std::string text;
+		std::string path;
 		SharedSprite normal, hovered, disabled;
-
-		static const std::string MenuFont;
 
 		void updateSprites();
 
@@ -23,14 +21,13 @@ namespace UI
 		MenuItem& operator =(const MenuItem& );
 
 	public:
-		MenuItem(Engine* const app, const std::string& text_);
+		MenuItem(Engine* const app, const std::string& path_);
 
 		virtual void Render();
 
 	protected:
 		Engine* app;
 
-		void onLayoutChanged();
 	};
 }
 
