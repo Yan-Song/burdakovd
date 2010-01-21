@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <SDLApplication.h>
 #include <SDLException.h>
 #include <Sprite.h>
 #include <Timer.h>
@@ -39,8 +40,7 @@ public:
 
 	private: // sprites
 		const Sprite borderl, borderr, bordert, borderb, borderlt, borderlb, borderrt, borderrb;
-		const Sprite Empty;
-		Sprite Food;
+		const Sprite Empty, Food, Selected;
 
 	public:
 		UIField(Engine* const app_, Battle* const parent_)
@@ -58,14 +58,30 @@ public:
 
 			// Cells
 			Empty("Sprites/Cell/Empty.png"),
-			Food("Sprites/Cell/Empty.png") // это не опечатка
+			Food("Sprites/Cell/Food.png"),
+			Selected("Sprites/Cell/Selected.png")
 		{
 			// две клетки на рамку
 			SetWidth(Config::CellSize * (Config::FieldWidth + 2));
 			SetHeight(Config::CellSize * (Config::FieldHeight + 2));
+		}
 
-			// наложить картинку с едой куда надо
-			Sprite("Sprites/Cell/Food.png").BlitOnSprite(Food);
+		// над какой ячейкой находится указатель мыши
+		SimplePoint MousePosition(const int x, const int y) const
+		{
+			const int sdx = x - GetLeft(), sdy = y - GetBottom();
+
+			const int dx = sdx / Config::CellSize - 1;
+			const int dy = sdy / Config::CellSize - 1;
+
+			return SimplePoint(dx, dy);
+		}
+
+		SimplePoint MousePosition() const
+		{
+			const ScreenPoint p = app->GetMousePosition();
+
+			return MousePosition(p[0], p[1]);
 		}
 
 	protected:
@@ -80,9 +96,10 @@ public:
 						GetLeft() + (x + 1) * Config::CellSize, 
 						GetBottom() + (y + 1) * Config::CellSize);
 
+					Empty.BlitOnScreen(app, position);
+
 					if(cell == CellEmpty)
 					{
-						Empty.BlitOnScreen(app, position);
 					}
 					else if(cell == CellFood)
 					{
@@ -90,14 +107,15 @@ public:
 					}
 					else if(cell == CellWorm)
 					{
-						// Это не ошибка
-						// просто для рендеринга ячейки с червём нужно больше информации (голова/хвост/направление...)
-						// Поэтому черви будут рендериться в отдельном цикле
-						Empty.BlitOnScreen(app, position);
 					}
 					else
 					{
 						throw NotImplementedException();
+					}
+
+					if(SimplePoint(x, y) == MousePosition())
+					{
+						Selected.BlitOnScreen(app, position);
 					}
 				}
 
@@ -458,13 +476,7 @@ public:
 
 	static SharedSprite WormSprite(const std::string& filename, const Color& color)
 	{
-		const SharedSprite background(new Sprite("Sprites/Cell/Empty.png"));
-
-		const SharedSprite raw(MetaSprite(filename, color));
-
-		raw->BlitOnSprite(*background);
-
-		return background;
+		return MetaSprite(filename, color);
 	}
 
 	static std::string RelativePosition(const SimplePoint& point, const SimplePoint& base)
@@ -518,7 +530,9 @@ public:
 			body_lt,
 			body_lb,
 			body_rt,
-			body_rb;
+			body_rb,
+			
+			Selected;
 
 		SDLApplication* const app;
 		Battle* const battle;
@@ -541,6 +555,8 @@ public:
 			body_lb(WormSprite("Sprites/Worm/Body/lb.png", color)),
 			body_rt(WormSprite("Sprites/Worm/Body/rt.png", color)),
 			body_rb(WormSprite("Sprites/Worm/Body/rb.png", color)),
+
+			Selected(new Sprite("Sprites/Cell/Selected.png")),
 
 			app(app_), battle(battle_)
 		{
@@ -656,6 +672,26 @@ public:
 			else
 			{
 				throw NotImplementedException();
+			}
+
+			bool selected = false;
+			for(TPosition::const_iterator p = position.begin(); p != position.end(); ++p)
+			{
+				if(*p == dynamic_cast<const ::Battle::Util::UIField*>(UIField)->MousePosition())
+				{
+					selected = true;
+				}
+			}
+
+			if(selected)
+			{
+				for(TPosition::const_iterator p = position.begin(); p != position.end(); ++p)
+				{
+					const ScreenPoint tsposition = ScreenPointByCoords(UIField->GetLeft() + (p->X + 1) * Config::CellSize, 
+						UIField->GetBottom() + (p->Y + 1) * Config::CellSize);
+
+					Selected->BlitOnScreen(app, tsposition);
+				}
 			}
 		}
 	};
