@@ -574,8 +574,8 @@ public:
 };
 
 Battle::Battle(Engine* const app_, const Teams& teams_)
-	: UI::ElementSet(app_), app(app_), teams(teams_), CurrentGeneration(), NextGeneration(), \
-		lastWormID(0), timer(), foodMade(0), Field(Config::FieldHeight, Config::FieldWidth), registrator()
+	: UI::ElementSet(app_), app(app_), teams(teams_), CurrentGeneration(), NextGeneration(), lastWormID(0), timer(), \
+	foodMade(0), background(new Sprite("Sprites/UI/Battle/background.png")), Field(Config::FieldHeight, Config::FieldWidth), registrator()
 {
 	timer.Start();
 
@@ -629,7 +629,7 @@ Battle::Battle(Engine* const app_, const Teams& teams_)
 
 void Battle::Render()
 {
-	app->ClearScreen(Color(0xe0e0f0));
+	background->Draw(app, GetCenter());
 
 	ElementSet::Render();
 }

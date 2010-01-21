@@ -114,7 +114,7 @@ protected:
 	}
 };
 
-SettingsDialog::SettingsDialog(Engine* const app_) : ElementSet(app_), app(app_), settings()
+SettingsDialog::SettingsDialog(Engine* const app_) : ElementSet(app_), background(new Sprite("Sprites/UI/SettingsDialog/background.png")), app(app_), settings()
 {
 	Maximize();
 
@@ -151,7 +151,7 @@ void SettingsDialog::ProcessEvent(const SDL_Event &Event)
 
 void SettingsDialog::Render()
 {
-	app->ClearScreen(Color(0xe0e0e0));
+	background->Draw(app, GetCenter());
 
 	ElementSet::Render();
 }
