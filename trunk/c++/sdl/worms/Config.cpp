@@ -18,7 +18,7 @@ const int Config::CellSize = 10;
 const int Config::FieldHeight = 40;
 const int Config::FieldWidth = 60;
 
-const Color Config::GraphBackground(0xd0d0f0);
+const Color Config::GraphBackground(Palette::White);
 const double Config::GraphUpdateFrequency = 0.1;
 const int Config::GraphStep = 10;
 const double Config::GodEnergyDelta = 100;
