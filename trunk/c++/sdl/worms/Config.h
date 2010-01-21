@@ -38,6 +38,8 @@ struct Config
 	static const Color GraphBackground;
 	static const double GraphUpdateFrequency;
 	static const int GraphStep;
+
+	static const double GodEnergyDelta;
 };
 
 #endif

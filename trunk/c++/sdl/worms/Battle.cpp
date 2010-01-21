@@ -178,6 +178,52 @@ public:
 				makeFood(MousePosition());
 			}
 		}
+
+		SharedSomeWorm SelectedWorm() const
+		{
+			const SimplePoint mouse = MousePosition();
+
+			for(Battle::WormCollection::const_iterator it = parent->CurrentGeneration.begin(); it != parent->CurrentGeneration.end(); ++it)
+			{
+				const TPosition& position = (*it)->Position();
+
+				const bool selected = std::find(position.begin(), position.end(), mouse) != position.end();
+				
+				if(selected)
+				{
+					return *it;
+				}
+			}
+
+			return SharedSomeWorm();
+		}
+
+		virtual void ProcessEvent(const SDL_Event& Event)
+		{
+			if(Event.type == SDL_KEYDOWN && Event.key.keysym.sym == SDLK_k)
+			{
+				// сделать плохо
+				const SharedSomeWorm worm = SelectedWorm();
+
+				if(worm)
+				{
+					worm->ModifyEnergy(-Config::GodEnergyDelta);
+				}
+			}
+
+			if(Event.type == SDL_KEYDOWN && Event.key.keysym.sym == SDLK_h)
+			{
+				// сделать хорошо
+				const SharedSomeWorm worm = SelectedWorm();
+
+				if(worm)
+				{
+					worm->ModifyEnergy(Config::GodEnergyDelta);
+				}
+			}
+
+			UI::Clickable::ProcessEvent(Event);
+		}
 	};
 
 	class Graph : public UI::Element
@@ -696,14 +742,11 @@ public:
 				throw NotImplementedException();
 			}
 
-			bool selected = false;
-			for(TPosition::const_iterator p = position.begin(); p != position.end(); ++p)
-			{
-				if(*p == dynamic_cast<const ::Battle::Util::UIField*>(UIField)->MousePosition())
-				{
-					selected = true;
-				}
-			}
+			const bool selected =
+				std::find(
+				position.begin(), position.end(),
+				dynamic_cast<const ::Battle::Util::UIField*>(UIField)->MousePosition())
+				!= position.end();
 
 			if(selected)
 			{
