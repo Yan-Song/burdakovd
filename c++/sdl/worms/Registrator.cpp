@@ -4,6 +4,8 @@
 // include custom worms
 #include "Statue.h"
 #include "Manual.h"
+#include "MouseAvoiders.h"
+#include "MouseFollowers.h"
 #include "Random.h"
 #include "RandomEater.h"
 
@@ -16,4 +18,6 @@ Registrator::Registrator() : factories()
 	REGISTER(Manual);
 	REGISTER(Random);
 	REGISTER(RandomEater);
+	REGISTER(MouseAvoider);
+	REGISTER(MouseFollower);
 }
