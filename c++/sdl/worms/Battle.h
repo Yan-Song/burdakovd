@@ -19,8 +19,12 @@ class Battle : public UI::ElementSet
 private:
 	Engine* const app;
 	Teams teams;
+
+public:
 	typedef std::vector<SharedSomeWorm> WormCollection;
 	WormCollection CurrentGeneration, NextGeneration;
+
+private:
 	size_t lastWormID;
 	::Timer timer;
 	int foodMade;
