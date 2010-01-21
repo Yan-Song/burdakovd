@@ -94,6 +94,8 @@ private:
 	SharedRenderer renderer;
 	bool dead;
 
+	virtual void ModifyEnergy(const double delta);
+
 	virtual void UpdateMap() const;
 
 	virtual void EraseOnMap() const;

@@ -21,6 +21,9 @@ private:
 				const double energy, const TPosition& position,
 				const double _localtime, const SharedRenderer& _renderer) = 0;
 
+	virtual void ModifyEnergy(const double delta) = 0;
+
+
 	// обновить ячейки червя на карте (пометить их как содержащие червя)
 	virtual void UpdateMap() const = 0;
 

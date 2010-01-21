@@ -196,7 +196,7 @@ void Worm::UpdateEnergy()
 	}
 
 	// 3) не пора ли завести детей?
-	if(energy > Config::ReplicateEnergyLevel)
+	if(energy > Config::ReplicateEnergyLevel && position.size() >= 2)
 	{
 		const size_t n = position.size();
 		const size_t n1 = n / 2;
@@ -286,4 +286,9 @@ CellType Worm::Look(const int x, const int y)
 double Worm::GetGlobalTime() const
 {
 	return BattleState->GetTime();
+}
+
+void Worm::ModifyEnergy(const double delta)
+{
+	energy += delta;
 }
