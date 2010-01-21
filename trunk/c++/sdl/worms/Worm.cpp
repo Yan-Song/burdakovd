@@ -182,17 +182,20 @@ void Worm::UpdateEnergy()
 {
 	assert(!Dead());
 
-	
-	// 1) обновить энергию
-	const double dt = GetGlobalTime() - lastUpdateEnergyTime;
-	lastUpdateEnergyTime += dt;
-	energy -= Config::EnergyLossPerSecond * dt;
-
-	// 2) не пора ли умереть?
-	if(energy <= Config::DeathEnergyLevel)
+	// если червь остался один то он неуязвим!
+	if(BattleState->CurrentGeneration.size() > 1)
 	{
-		Die();
-		return;
+		// 1) обновить энергию
+		const double dt = GetGlobalTime() - lastUpdateEnergyTime;
+		lastUpdateEnergyTime += dt;
+		energy -= Config::EnergyLossPerSecond * dt;
+
+		// 2) не пора ли умереть?
+		if(energy <= Config::DeathEnergyLevel)
+		{
+			Die();
+			return;
+		}
 	}
 
 	// 3) не пора ли завести детей?
