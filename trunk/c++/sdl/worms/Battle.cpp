@@ -329,7 +329,7 @@ public:
 
 				const int ihp = static_cast<int>(hp);
 
-				info << "Count: " << count << "  " << "HP: " << ihp;
+				info << "Count: " << count << ",  " << "Energy: " << ihp;
 
 				const SharedSprite sinfo(new Sprite(GetFont("Fonts/arial.ttf", 10), info.str(), Palette::Black));
 
@@ -396,7 +396,7 @@ public:
 		Battle* const battle;
 
 	public:
-		ExitButton(Engine* const app_, Battle* const battle_) : UI::Button(app_, "Quit to menu"), app(app_), battle(battle_)
+		ExitButton(Engine* const app_, Battle* const battle_) : UI::Button(app_, "Menu"), app(app_), battle(battle_)
 		{
 		}
 
@@ -405,6 +405,28 @@ public:
 		{
 			battle->Pause();
 			app->SetNextState(SharedState(new MainMenu(app, app->GetCurrentState())));
+		}
+	};
+
+	class RestartButton : public UI::Button
+	{
+	private:
+		RestartButton(const RestartButton& );
+		RestartButton& operator =(const RestartButton& );
+
+	private:
+		Engine* const app;
+		Battle* const battle;
+
+	public:
+		RestartButton(Engine* const app_, Battle* const battle_) : UI::Button(app_, "Restart"), app(app_), battle(battle_)
+		{
+		}
+
+	protected:
+		virtual void onClick()
+		{
+			app->SetNextState(SharedState(new Battle(app, battle->teams)));
 		}
 	};
 
@@ -678,15 +700,17 @@ Battle::Battle(Engine* const app_, const Teams& teams_)
 	quitButton->SetButtonCancel(true);
 	Add(quitButton);
 
+	const Shared::shared_ptr<UI::Button> restartButton(new Util::RestartButton(app, this));
+	restartButton->SetCenter(ScreenPointByCoords(t->GetCenter()[0], quitButton->GetBottom() - margin - restartButton->GetHeight() / 2));
+	Add(restartButton);
+
 	const UI::SharedElement tt(new Util::TeamsTable(app, this));
 	tt->SetLeft(2 * margin + f->GetWidth());
 	tt->SetWidth(GetWidth() - 3 * margin - f->GetWidth());
-	tt->SetHeight(GetHeight() - 4 * margin - t->GetHeight() - quitButton->GetHeight());
+	tt->SetHeight(GetHeight() - 5 * margin - t->GetHeight() - quitButton->GetHeight() - restartButton->GetHeight());
 	tt->SetBottom(margin);
 	tt->SetPadding(10);
 	Add(tt);
-
-	// ... остальные графические элементы
 
 	// инициализировать поле
 	// накидать сколько надо еды туда
