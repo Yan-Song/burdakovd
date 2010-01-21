@@ -305,10 +305,11 @@ public:
 			// сетка
 			const int base = GetInnerLeft() +
 				static_cast<int>(
-				(ceil(graphStartTime) - graphStartTime) / Config::GraphUpdateFrequency * Config::GraphStep
+				(ceil(graphStartTime / Config::GraphVerticalLinesInterval) - graphStartTime / Config::GraphVerticalLinesInterval)
+				* Config::GraphVerticalLinesInterval / Config::GraphUpdateFrequency * Config::GraphStep
 				);
 
-			const int lineStep = static_cast<int>(Config::GraphStep / Config::GraphUpdateFrequency);
+			const int lineStep = static_cast<int>(Config::GraphVerticalLinesInterval * Config::GraphStep / Config::GraphUpdateFrequency);
 
 			for(int x = base; x < GetInnerRight(); x += lineStep)
 			{

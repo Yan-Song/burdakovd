@@ -20,6 +20,7 @@ const int Config::FieldWidth = 60;
 
 const Color Config::GraphBackground(Palette::White);
 const Color Config::GraphLines(Color(0xd0d0ff));
-const double Config::GraphUpdateFrequency = 0.1;
+const double Config::GraphUpdateFrequency = 1;
 const int Config::GraphStep = 10;
 const double Config::GodEnergyDelta = 100;
+const double Config::GraphVerticalLinesInterval = 10;

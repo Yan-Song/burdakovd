@@ -41,6 +41,7 @@ struct Config
 	static const int GraphStep;
 
 	static const double GodEnergyDelta;
+	static const double GraphVerticalLinesInterval;
 };
 
 #endif
