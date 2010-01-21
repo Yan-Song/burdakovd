@@ -36,6 +36,7 @@ struct Config
 	static const double StartEnergy;
 
 	static const Color GraphBackground;
+	static const Color GraphLines;
 	static const double GraphUpdateFrequency;
 	static const int GraphStep;
 

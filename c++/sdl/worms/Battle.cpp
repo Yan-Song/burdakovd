@@ -1,3 +1,4 @@
+#include <cmath>
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
@@ -239,12 +240,14 @@ public:
 		typedef std::list<double> TeamGraphStats;
 		typedef std::map<size_t, TeamGraphStats> TeamsGraphStats;
 		TeamsGraphStats stats;
+		double graphStartTime;
 
 		Timer tickTimer;
 		
 
 	public:
-		Graph(Engine* const app_, Battle* const battle_) : UI::Element(app_), app(app_), battle(battle_), stats(), tickTimer()
+		Graph(Engine* const app_, Battle* const battle_) : UI::Element(app_), app(app_), battle(battle_), stats(),
+			graphStartTime(battle->GetTime()), tickTimer()
 		{
 			SetPadding(10);
 
@@ -266,6 +269,7 @@ public:
 				while(team->second.size() > limit)
 				{
 					team->second.pop_front();
+					graphStartTime += Config::GraphUpdateFrequency;
 				}
 			}
 		}
@@ -298,9 +302,32 @@ public:
 			// фон
 			app->FillRectangle(ScreenPointByCoords(a.X, a.Y), ScreenPointByCoords(b.X, b.Y), Config::GraphBackground);
 
+			// сетка
+			const int base = GetInnerLeft() +
+				static_cast<int>(
+				(ceil(graphStartTime) - graphStartTime) / Config::GraphUpdateFrequency * Config::GraphStep
+				);
+
+			const int lineStep = static_cast<int>(Config::GraphStep / Config::GraphUpdateFrequency);
+
+			for(int x = base; x < GetInnerRight(); x += lineStep)
+			{
+				app->DrawSegment(ScreenPointByCoords(x, GetInnerTop()), ScreenPointByCoords(x, GetInnerBottom()), Config::GraphLines);
+			}
+
 			const double high = maxCount(); // чтоб сверху отступ был
 			const double bottomPadding = 0.1;
 			const double topPadding = 0.1;
+
+			for(double hp = 0; (hp + bottomPadding * high) / (1 + topPadding + bottomPadding) / high < 1.0; hp += Config::StartEnergy)
+			{
+				const int y = static_cast<int>(
+						GetInnerBottom() +
+						GetInnerHeight() * (hp + bottomPadding * high)
+						/ (1 + topPadding + bottomPadding) / high);
+
+				app->DrawSegment(ScreenPointByCoords(GetInnerLeft(), y), ScreenPointByCoords(GetInnerRight(), y), Config::GraphLines);
+			}
 
 			// сами графики
 			for(Teams::const_iterator team = battle->teams.begin(); team != battle->teams.end(); ++team)
@@ -312,7 +339,7 @@ public:
 				for(TeamGraphStats::const_iterator it = tstats->second.begin(); it != tstats->second.end(); ++it)
 				{
 					ys.push_back(static_cast<int>(
-						GetBottom() +
+						GetInnerBottom() +
 						GetInnerHeight() * (*it + bottomPadding * high)
 						/ (1 + topPadding + bottomPadding) / high));
 				}
