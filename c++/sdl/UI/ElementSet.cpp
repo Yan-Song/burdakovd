@@ -13,7 +13,12 @@ void UI::ElementSet::Add(const SharedElement &element)
 void UI::ElementSet::ProcessEvent(const SDL_Event &Event)
 {
 	for(Elements::const_iterator it = elements.begin(); it != elements.end(); ++it)
-		(*it)->ProcessEvent(Event);
+	{
+		if((*it)->Enabled())
+		{
+			(*it)->ProcessEvent(Event);
+		}
+	}
 }
 
 void UI::ElementSet::Main()

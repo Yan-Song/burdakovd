@@ -54,6 +54,10 @@ public:
 	virtual void Render();
 
 	double GetTime() const;
+
+	void Pause();
+
+	void Resume();
 };
 
 #endif

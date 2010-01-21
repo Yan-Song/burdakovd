@@ -2,6 +2,7 @@
 #include <SDLApplication.h>
 #include <Sprite.h>
 #include <UI/Clickable.h>
+#include "Battle.h"
 #include "Engine.h"
 #include "MainMenu.h"
 #include "MenuItem.h"
@@ -36,18 +37,40 @@ public:
 			app->SetNextState(SharedState(new SettingsDialog(app)));
 		}
 	};
+
+	class Resume : public UI::MenuItem
+	{
+	private:
+		Resume& operator =(const Resume& );
+
+	private:
+		const SharedState resume;
+
+	public:
+		Resume(Engine* const app, const SharedState& resume_) : MenuItem(app, "Resume"), resume(resume_)
+		{
+			SetEnabled(static_cast<bool>(resume));
+		}
+
+		virtual void onClick()
+		{
+			dynamic_cast<Battle*>(resume.get()) -> Resume();
+			app->SetNextState(resume);
+		}
+	};
 };
 
-MainMenu::MainMenu(Engine* const app_) : UI::ElementSet(app_), background(new Sprite("Sprites/UI/MainMenu/background.png")), app(app_)
+MainMenu::MainMenu(Engine* const app_, const SharedState resume) : UI::ElementSet(app_), background(new Sprite("Sprites/UI/MainMenu/background.png")), app(app_)
 {
 	Maximize();
 
 	Add(UI::SharedElement(new MenuItems::New(app)));
+	Add(UI::SharedElement(new MenuItems::Resume(app, resume)));
 	Add(UI::SharedElement(new MenuItems::Quit(app)));
 
 	// разместить элементы на экране
 	const int ItemWidth = 200;
-	const int ItemHeight = 50;
+	const int ItemHeight = 60;
 	const int ItemLeft = (app->Screen->w - ItemWidth) / 2;
 	const int MenuBottom = (app->Screen->h - ItemHeight * static_cast<int>(elements.size())) / 2;
 	

@@ -24,7 +24,7 @@ protected:
 	class MenuItems;
 
 public:
-	MainMenu(Engine* const app);
+	MainMenu(Engine* const app, const SharedState resume = SharedState());
 
 	virtual void ProcessEvent(const SDL_Event& ); // обработать событие, поступившее от пользователя
 

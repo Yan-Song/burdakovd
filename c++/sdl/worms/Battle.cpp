@@ -10,12 +10,14 @@
 #include <Sprite.h>
 #include <Timer.h>
 #include <Utils.h>
+#include <UI/Button.cpp>
 #include "Battle.h"
 #include "Config.h"
 #include "Engine.h"
 #include "IRenderer.h"
 #include "ISomeWorm.h"
 #include "IWorm.h"
+#include "MainMenu.h"
 #include "Registrator.h"
 #include "WormsApplication.h"
 
@@ -286,7 +288,56 @@ public:
 
 	class TeamsTable : public UI::Element
 	{
+	private:
+		TeamsTable(const TeamsTable& );
+		TeamsTable& operator =(const TeamsTable& );
 
+	private:
+		Engine* const app;
+		Battle* const battle;
+
+	public:
+		TeamsTable(Engine* const app_, Battle* const battle_) : UI::Element(app_), app(app_), battle(battle_)
+		{
+		}
+
+	protected:
+		virtual void Render()
+		{
+			const int xoffset = GetInnerLeft();
+			const int itemHeight = 50;
+
+			int index = 0;
+			for(Teams::const_iterator team = battle->teams.begin(); team != battle->teams.end(); ++team, ++index)
+			{
+				const int yoffset = GetInnerTop() - index * itemHeight;
+
+				const SharedSprite name(new Sprite(GetFont("Fonts/arialbd.ttf", 14), battle->registrator.ClassName(team->ID), team->color));
+				std::ostringstream info;
+
+				int count = 0;
+				double hp = 0.0;
+
+				for(Battle::WormCollection::const_iterator it = battle->CurrentGeneration.begin(); it != battle->CurrentGeneration.end(); ++it)
+				{
+					if((*it)->GetClassID() == team->ID)
+					{
+						++count;
+						hp += (*it)->Energy();
+					}
+				}
+
+				const int ihp = static_cast<int>(hp);
+
+				info << "Count: " << count << "  " << "HP: " << ihp;
+
+				const SharedSprite sinfo(new Sprite(GetFont("Fonts/arial.ttf", 10), info.str(), Palette::Black));
+
+				const int distance = 3;
+				name->BlitOnScreen(app, ScreenPointByCoords(xoffset, yoffset - name->GetHeight()));
+				sinfo->BlitOnScreen(app, ScreenPointByCoords(xoffset, yoffset - name->GetHeight() - distance - sinfo->GetHeight()));
+			}
+		}
 	};
 
 	class Timer : public UI::Element
@@ -334,9 +385,29 @@ public:
 		}
 	};
 
-	class Speedometer : public UI::Element
+	class ExitButton : public UI::Button
 	{
+	private:
+		ExitButton(const ExitButton& );
+		ExitButton& operator =(const ExitButton& );
+
+	private:
+		Engine* const app;
+		Battle* const battle;
+
+	public:
+		ExitButton(Engine* const app_, Battle* const battle_) : UI::Button(app_, "Quit to menu"), app(app_), battle(battle_)
+		{
+		}
+
+	protected:
+		virtual void onClick()
+		{
+			battle->Pause();
+			app->SetNextState(SharedState(new MainMenu(app, app->GetCurrentState())));
+		}
 	};
+
 
 	// получает картинку из оттенков красного и серого
 	// заменяет красный на то что нужно
@@ -602,6 +673,19 @@ Battle::Battle(Engine* const app_, const Teams& teams_)
 	t->SetWidth(GetWidth() - 3 * margin - f->GetWidth());
 	Add(t);
 
+	const Shared::shared_ptr<UI::Button> quitButton(new Util::ExitButton(app, this));
+	quitButton->SetCenter(ScreenPointByCoords(t->GetCenter()[0], t->GetBottom() - margin - quitButton->GetHeight() / 2));
+	quitButton->SetButtonCancel(true);
+	Add(quitButton);
+
+	const UI::SharedElement tt(new Util::TeamsTable(app, this));
+	tt->SetLeft(2 * margin + f->GetWidth());
+	tt->SetWidth(GetWidth() - 3 * margin - f->GetWidth());
+	tt->SetHeight(GetHeight() - 4 * margin - t->GetHeight() - quitButton->GetHeight());
+	tt->SetBottom(margin);
+	tt->SetPadding(10);
+	Add(tt);
+
 	// ... остальные графические элементы
 
 	// инициализировать поле
@@ -671,9 +755,15 @@ void Battle::Main()
 	while(foodMade < timer.GetTime() * Config::FoodPerSecond)
 	{
 		++foodMade;
-		const SimplePoint free = GetFreeCell();
+		try
+		{
+			const SimplePoint free = GetFreeCell();
 
-		Field.Set(free.X, free.Y, CellFood);
+			Field.Set(free.X, free.Y, CellFood);
+		}
+		catch(std::overflow_error& )
+		{
+		}
 	}
 
 	NextGeneration.clear();
@@ -719,4 +809,14 @@ void Battle::MakeFood(const int X, const int Y, const int r)
 			{
 				Field.Set(x, y, CellFood);
 			}
+}
+
+void Battle::Pause()
+{
+	timer.Pause();
+}
+
+void Battle::Resume()
+{
+	timer.Resume();
 }

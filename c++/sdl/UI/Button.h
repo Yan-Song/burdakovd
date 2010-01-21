@@ -1,5 +1,5 @@
-#ifndef BUTTON_H
-#define BUTTON_H
+#ifndef UIBUTTON_H
+#define UIBUTTON_H
 
 #include <string>
 #include <Sprite.h>

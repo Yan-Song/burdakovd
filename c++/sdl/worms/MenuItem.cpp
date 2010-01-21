@@ -41,5 +41,5 @@ void UI::MenuItem::updateSprites()
 {
 	normal = SharedSprite(new Sprite(GetFont(MenuFont, 48), text, Palette::Black));
 	hovered = SharedSprite(new Sprite(GetFont(MenuFont, 54), text, Palette::Green));
-	disabled = SharedSprite(new Sprite(GetFont(MenuFont, 48), text, Palette::Gray));
+	disabled = SharedSprite(new Sprite(GetFont(MenuFont, 48), text, Color(0xd0d0d0)));
 }
