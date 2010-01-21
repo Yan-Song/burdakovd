@@ -59,7 +59,7 @@ public:
 			// Cells
 			Empty("Sprites/Cell/Empty.png"),
 			Food("Sprites/Cell/Food.png"),
-			Selected("Sprites/Cell/Selected.png")
+			Selected("Sprites/Cell/selected.png")
 		{
 			// две клетки на рамку
 			SetWidth(Config::CellSize * (Config::FieldWidth + 2));
@@ -556,7 +556,7 @@ public:
 			body_rt(WormSprite("Sprites/Worm/Body/rt.png", color)),
 			body_rb(WormSprite("Sprites/Worm/Body/rb.png", color)),
 
-			Selected(new Sprite("Sprites/Cell/Selected.png")),
+			Selected(new Sprite("Sprites/Cell/selected.png")),
 
 			app(app_), battle(battle_)
 		{
