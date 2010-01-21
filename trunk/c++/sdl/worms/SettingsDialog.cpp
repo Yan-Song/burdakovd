@@ -71,7 +71,7 @@ private:
 public:
 	SettingsItem(Engine* const app, const ScreenPoint& LeftBottom, const size_t ID_, const std::string& name) :
 		UI::ElementSet(app), ID(ID_),
-		Name(new UI::Label(app, name, GetFont("Fonts/arialbd.ttf", 16))),
+		Name(new UI::Label(app, name, GetFont("Fonts/Luismimurder.ttf", 32))),
 		Color(new UI::ColorSelector(app)),
 		Count(new UI::Counter(app, 0, 99, 0, Vector00))
 	{
@@ -82,7 +82,7 @@ public:
 		SetLeft(LeftBottom[0]);
 		SetBottom(LeftBottom[1]);
 		SetWidth(300);
-		SetHeight(24);
+		SetHeight(32);
 	};
 
 	bool HasTeam() const
@@ -98,7 +98,7 @@ public:
 protected:
 	virtual void onLayoutChanged()
 	{
-		const int nameWidth = 120;
+		const int nameWidth = 150;
 
 		Name->SetLeft(GetLeft());
 		Name->SetBottom(GetBottom());
@@ -109,7 +109,7 @@ protected:
 		Color->SetWidth(GetHeight());
 		Color->SetHeight(GetHeight());
 		
-		Count->SetLeft(GetLeft() + nameWidth + 20 + Color->GetWidth() + 40);
+		Count->SetLeft(GetLeft() + nameWidth  + Color->GetWidth() + 40);
 		Count->SetBottom(GetBottom());
 	}
 };

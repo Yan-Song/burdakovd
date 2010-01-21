@@ -14,7 +14,7 @@ public:
 	class Quit : public UI::MenuItem
 	{
 	public:
-		Quit(Engine* const app) : MenuItem(app, "Quit")
+		Quit(Engine* const app) : MenuItem(app, "Sprites/UI/Button/Quit")
 		{
 		}
 
@@ -27,7 +27,7 @@ public:
 	class New : public UI::MenuItem
 	{
 	public:
-		New(Engine* const app) : MenuItem(app, "New")
+		New(Engine* const app) : MenuItem(app, "Sprites/UI/Button/New")
 		{
 
 		}
@@ -47,7 +47,7 @@ public:
 		const SharedState resume;
 
 	public:
-		Resume(Engine* const app, const SharedState& resume_) : MenuItem(app, "Resume"), resume(resume_)
+		Resume(Engine* const app, const SharedState& resume_) : MenuItem(app, "Sprites/UI/Button/Resume"), resume(resume_)
 		{
 			SetEnabled(static_cast<bool>(resume));
 		}
@@ -68,21 +68,21 @@ MainMenu::MainMenu(Engine* const app_, const SharedState resume) : UI::ElementSe
 	Add(UI::SharedElement(new MenuItems::Resume(app, resume)));
 	Add(UI::SharedElement(new MenuItems::Quit(app)));
 
-	// разместить элементы на экране
-	const int ItemWidth = 200;
-	const int ItemHeight = 60;
-	const int ItemLeft = (app->Screen->w - ItemWidth) / 2;
-	const int MenuBottom = (app->Screen->h - ItemHeight * static_cast<int>(elements.size())) / 2;
-	
-	size_t i = elements.size() - 1;
-	for(Elements::const_iterator it = elements.begin(); it != elements.end(); ++it, --i)
+	const int distance = 10;
+	int totalWidth = (elements.size() - 1) * distance;
+	for(Elements::const_iterator it = elements.begin(); it != elements.end(); ++it)
 	{
-		(*it)->SetWidth(ItemWidth);
-		(*it)->SetHeight(ItemHeight);
-		(*it)->SetLeft(ItemLeft);
-		(*it)->SetBottom(MenuBottom + static_cast<int>(i) * ItemHeight);
+		totalWidth += (*it)->GetWidth();
 	}
 
+	const int baseX = (GetWidth() - totalWidth) / 2;
+	int offsetX = baseX;
+	const int centerY = GetHeight() * 2 / 3;
+
+	for(Elements::const_iterator it = elements.begin(); it != elements.end(); offsetX += distance + (*it)->GetWidth(), ++it)
+	{
+		(*it)->SetCenter(ScreenPointByCoords(offsetX + (*it)->GetWidth() / 2, centerY));
+	}
 }
 
 void MainMenu::ProcessEvent(const SDL_Event& Event)

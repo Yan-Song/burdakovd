@@ -1,10 +1,8 @@
 #include "Engine.h"
 #include "MenuItem.h"
 
-const std::string UI::MenuItem::MenuFont = "Fonts/Luismimurder.ttf";
-
-UI::MenuItem::MenuItem(Engine* const app_, const std::string& text_)
-: Clickable(app_), text(text_), normal(), hovered(), disabled(), app(app_)
+UI::MenuItem::MenuItem(Engine* const app_, const std::string& path_)
+: Clickable(app_), path(path_), normal(), hovered(), disabled(), app(app_)
 {
 	updateSprites();
 }
@@ -32,14 +30,12 @@ void UI::MenuItem::Render()
 	UnClip();
 }
 
-void UI::MenuItem::onLayoutChanged()
-{
-	updateSprites();
-}
-
 void UI::MenuItem::updateSprites()
 {
-	normal = SharedSprite(new Sprite(GetFont(MenuFont, 48), text, Palette::Black));
-	hovered = SharedSprite(new Sprite(GetFont(MenuFont, 54), text, Palette::Green));
-	disabled = SharedSprite(new Sprite(GetFont(MenuFont, 48), text, Color(0xd0d0d0)));
+	normal = SharedSprite(new Sprite(path + "/" + "normal.png"));
+	hovered = SharedSprite(new Sprite(path + "/" + "active.png"));
+	disabled = SharedSprite(new Sprite(path + "/" + "disabled.png"));
+	
+	SetWidth(normal->GetWidth());
+	SetHeight(normal->GetHeight());
 }

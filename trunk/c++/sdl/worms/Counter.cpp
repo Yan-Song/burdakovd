@@ -67,7 +67,7 @@ public:
 class UI::Counter::Number : public UI::Label
 {
 public:
-	Number(SDLApplication* const app) : UI::Label(app, "", ::GetFont("Fonts/arialbd.ttf", 20))
+	Number(SDLApplication* const app) : UI::Label(app, "", ::GetFont("Fonts/Luismimurder.ttf", 20))
 	{
 	}
 };
