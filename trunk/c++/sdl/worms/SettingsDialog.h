@@ -12,6 +12,8 @@ class SettingsDialog : public UI::ElementSet
 private:
 	SettingsDialog(const SettingsDialog& );
 	SettingsDialog& operator =(const SettingsDialog& );
+	
+	const SharedSprite background;
 
 private:
 	Engine* app;

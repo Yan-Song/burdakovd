@@ -4,6 +4,7 @@
 #include <map>
 #include <Timer.h>
 #include <UI/ElementSet.h>
+#include <Sprite.h>
 #include "BattleField.h"
 #include "BattleSettings.h"
 #include "ISomeWorm.h"
@@ -29,6 +30,8 @@ private:
 private:
 	Battle(const Battle& );
 	Battle& operator =(const Battle& );
+
+	const SharedSprite background;
 
 	// выбрать пустую ячейку случайным образом
 	SimplePoint GetFreeCell() const;
