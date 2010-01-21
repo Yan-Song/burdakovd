@@ -12,6 +12,7 @@
 #include <Timer.h>
 #include <Utils.h>
 #include <UI/Button.cpp>
+#include <UI/Clickable.cpp>
 #include "Battle.h"
 #include "Config.h"
 #include "Engine.h"
@@ -28,7 +29,7 @@ private:
 	
 
 public:
-	class UIField : public UI::Element
+	class UIField : public UI::Clickable
 	{
 	private:
 		UIField(const UIField& );
@@ -44,7 +45,7 @@ public:
 
 	public:
 		UIField(Engine* const app_, Battle* const parent_)
-			: UI::Element(app_), app(app_), parent(parent_),
+			: UI::Clickable(app_), app(app_), parent(parent_),
 
 			// Border
 			borderl("Sprites/UI/Border/l.png"),
@@ -155,6 +156,27 @@ public:
 		{
 			RenderField();
 			RenderBorder();
+		}
+
+		void makeFood(const SimplePoint& point)
+		{
+			if(parent->Field.Get(point.X, point.Y) == CellEmpty)
+			{
+				parent->Field.Set(point.X, point.Y, CellFood);
+			}
+		}
+
+		virtual void onMouseDown(const SDL_MouseButtonEvent& e)
+		{
+			makeFood(MousePosition(e.x, e.y));
+		}
+
+		virtual void Main()
+		{
+			if(isElementPressed())
+			{
+				makeFood(MousePosition());
+			}
 		}
 	};
 

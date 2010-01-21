@@ -1,5 +1,5 @@
-#ifndef CLICKABLE_H
-#define CLICKABLE_H
+#ifndef UICLICKABLE_H
+#define UICLICKABLE_H
 
 #include <SDL.h>
 #include "MouseOverable.h"
