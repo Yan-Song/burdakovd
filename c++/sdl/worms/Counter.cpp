@@ -9,7 +9,7 @@ namespace
 	class Button : public UI::Clickable
 	{
 	private:
-		SharedSprite normal, disabled;
+		SharedSprite normal, disabled, hovered;
 
 		Button(const Button& );
 		Button& operator =(const Button& );
@@ -19,19 +19,19 @@ namespace
 
 	public:
 		Button(SDLApplication* const app, const std::string& normalPath, const std::string& disabledPath,
-		      UI::Counter* const parent_) :
-		UI::Clickable(app), normal(new Sprite(normalPath)), disabled(new Sprite(disabledPath)),
+			const std::string& hoveredPath, UI::Counter* const parent_) :
+		UI::Clickable(app), normal(new Sprite(normalPath)), disabled(new Sprite(disabledPath)), hovered(new Sprite(hoveredPath)),
 			      parent(parent_)
 		{
-
+			SetWidth(normal->GetWidth());
+			SetHeight(normal->GetHeight());
 		}
 
 		virtual void Render()
 		{
-			SharedSprite img = Enabled() ? normal : disabled;
+			const SharedSprite img = Enabled() ? (isMouseOver() ? hovered : normal) : disabled;
 
-			img->BlitOnScreen(app, GetLeftBottom() +
-				ScreenPointByCoords(GetWidth() - img->GetWidth(), GetHeight() - img->GetHeight()) / 2);
+			img->Draw(app, GetCenter());
 		}
 	};
 }
@@ -40,7 +40,7 @@ class UI::Counter::IncrementButton : public Button
 {
 public:
 	IncrementButton(SDLApplication* const app, Counter* const parent_)
-		: Button(app, "Sprites/UI/Button/Plus/normal.png", "Sprites/UI/Button/Plus/disabled.png", parent_)
+		: Button(app, "Sprites/UI/Button/Plus/normal.png", "Sprites/UI/Button/Plus/disabled.png", "Sprites/UI/Button/Plus/active.png", parent_)
 	{
 	}
 
@@ -54,7 +54,7 @@ class UI::Counter::DecrementButton : public Button
 {
 public:
 	DecrementButton(SDLApplication* const app, Counter* const parent_)
-		: Button(app, "Sprites/UI/Button/Minus/normal.png", "Sprites/UI/Button/Minus/disabled.png", parent_)
+		: Button(app, "Sprites/UI/Button/Minus/normal.png", "Sprites/UI/Button/Minus/disabled.png", "Sprites/UI/Button/Minus/active.png", parent_)
 	{
 	}
 
@@ -113,17 +113,11 @@ void UI::Counter::SetValue(const int newvalue)
 
 void UI::Counter::onLayoutChanged()
 {
-	dec->SetHeight(GetHeight());
-	dec->SetWidth(GetWidth() / 3);
-	dec->SetLeft(GetLeft());
-	dec->SetBottom(GetBottom());
+	dec->SetCenter(ScreenPointByCoords(GetLeft() + dec->GetWidth() / 2, GetCenter()[1]));
 
 	num->SetCenter(GetCenter());
 
-	inc->SetHeight(GetHeight());
-	inc->SetWidth(GetWidth() / 3);
-	inc->SetLeft(GetLeft() + 2 * GetWidth() / 3);
-	inc->SetBottom(GetBottom());
+	inc->SetCenter(ScreenPointByCoords(GetRight() - inc->GetWidth() / 2, GetCenter()[1]));
 }
 
 UI::Counter::Counter(SDLApplication* const app, const int min, const int max, const int current, const ScreenPoint LeftBottom)
@@ -138,8 +132,11 @@ UI::Counter::Counter(SDLApplication* const app, const int min, const int max, co
 {
 	SetLeft(LeftBottom[0]);
 	SetBottom(LeftBottom[1]);
-	SetWidth(72);
-	SetHeight(24);
+	
+	const int textWidth = 30;
+	
+	SetWidth(inc->GetWidth() + textWidth + dec->GetWidth());
+	SetHeight(inc->GetHeight());
 
 	Add(inc);
 	Add(dec);

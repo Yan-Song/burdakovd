@@ -63,6 +63,8 @@ public:
 class SettingsDialog::SettingsItem : public UI::ElementSet
 {
 private:
+	static const int nameWidth = 150;
+	static const int margin = 20;
 	size_t ID;
 	UI::SharedLabel Name;
 	UI::SharedColorSelector Color;
@@ -75,13 +77,19 @@ public:
 		Color(new UI::ColorSelector(app)),
 		Count(new UI::Counter(app, 0, 99, 0, Vector00))
 	{
+		Color->SetWidth(20);
+		Color->SetHeight(20);
+		
 		UI::ElementSet::Add(Name);
 		UI::ElementSet::Add(Color);
 		UI::ElementSet::Add(Count);
+		
+		SetHeight(std::max(std::max(Name->GetHeight(), Color->GetHeight()), Count->GetHeight()));
+		SetWidth(nameWidth + margin + Color->GetWidth() + margin + Count->GetWidth());
 
 		SetLeft(LeftBottom[0]);
 		SetBottom(LeftBottom[1]);
-		SetWidth(300);
+		SetWidth(500);
 		SetHeight(32);
 	};
 
@@ -98,19 +106,11 @@ public:
 protected:
 	virtual void onLayoutChanged()
 	{
-		const int nameWidth = 150;
+		Name->SetCenter(ScreenPointByCoords(GetLeft() + Name->GetWidth() / 2, GetCenter()[1]));
 
-		Name->SetLeft(GetLeft());
-		Name->SetBottom(GetBottom());
-		Name->SetHeight(GetHeight());
-
-		Color->SetLeft(GetLeft() + nameWidth + 20);
-		Color->SetBottom(GetBottom());
-		Color->SetWidth(GetHeight());
-		Color->SetHeight(GetHeight());
+		Color->SetCenter(ScreenPointByCoords(GetLeft() + nameWidth + margin + Color->GetWidth() / 2, GetCenter()[1]));
 		
-		Count->SetLeft(GetLeft() + nameWidth  + Color->GetWidth() + 40);
-		Count->SetBottom(GetBottom());
+		Count->SetCenter(ScreenPointByCoords(Color->GetRight() + margin + Count->GetWidth() / 2, GetCenter()[1]));
 	}
 };
 
