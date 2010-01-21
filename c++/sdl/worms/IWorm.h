@@ -47,6 +47,8 @@ public:
 	// узнать текущее время
 	virtual double GetGlobalTime() const = 0;
 
+	virtual SimplePoint Mouse() const = 0;
+
 	virtual ~IWorm()
 	{
 	}

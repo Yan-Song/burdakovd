@@ -769,7 +769,8 @@ public:
 
 Battle::Battle(Engine* const app_, const Teams& teams_)
 	: UI::ElementSet(app_), app(app_), teams(teams_), CurrentGeneration(), NextGeneration(), lastWormID(0), timer(), \
-	foodMade(0), background(new Sprite("Sprites/UI/Battle/background.png")), Field(Config::FieldHeight, Config::FieldWidth), registrator()
+	foodMade(0), background(new Sprite("Sprites/UI/Battle/background.png")), Field(Config::FieldHeight, Config::FieldWidth), registrator(),
+	UIField(new Util::UIField(app, this))
 {
 	timer.Start();
 
@@ -777,7 +778,7 @@ Battle::Battle(Engine* const app_, const Teams& teams_)
 
 	const int margin = 10;
 
-	const UI::SharedElement f(new Util::UIField(app, this));
+	const UI::SharedElement f = UIField;
 	f->SetLeft(margin);
 	f->SetBottom(GetHeight() - margin - f->GetHeight());
 	Add(f);
@@ -944,4 +945,9 @@ void Battle::Pause()
 void Battle::Resume()
 {
 	timer.Resume();
+}
+
+SimplePoint Battle::MousePosition() const
+{
+	return dynamic_cast<const Util::UIField*>(UIField.get())->MousePosition();
 }
