@@ -292,3 +292,8 @@ void Worm::ModifyEnergy(const double delta)
 {
 	energy += delta;
 }
+
+SimplePoint Worm::Mouse() const
+{
+	return BattleState->MousePosition();
+}

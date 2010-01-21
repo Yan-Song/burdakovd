@@ -31,6 +31,8 @@ public:
 	{
 	}
 
+	virtual SimplePoint Mouse() const;
+
 	virtual bool isPressed(const SDLKey key) const;
 
 	// число из полуинтервала [0, x)

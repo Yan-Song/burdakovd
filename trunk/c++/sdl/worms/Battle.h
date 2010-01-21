@@ -3,6 +3,7 @@
 
 #include <map>
 #include <Timer.h>
+#include <UI/Element.h>
 #include <UI/ElementSet.h>
 #include <Sprite.h>
 #include "BattleField.h"
@@ -40,7 +41,10 @@ private:
 
 public:
 	BattleField Field;
-	Registrator registrator;
+	const Registrator registrator;
+
+private:
+	const UI::SharedElement UIField;
 
 public:
 	Battle(Engine* const app_, const Teams& teams_);
@@ -58,6 +62,8 @@ public:
 	void Pause();
 
 	void Resume();
+
+	SimplePoint MousePosition() const;
 };
 
 #endif
