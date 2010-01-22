@@ -3,22 +3,7 @@
 
 #include <list>
 #include <Utils.h>
-
-struct SimplePoint
-{
-	int X, Y;
-	SimplePoint(const int x, const int y) : X(x), Y(y) {};
-
-	inline bool operator ==(const SimplePoint& other) const
-	{
-		return X == other.X && Y == other.Y;
-	}
-
-	inline bool operator !=(const SimplePoint& other) const
-	{
-		return X != other.X || Y != other.Y;
-	}
-};
+#include "SimplePoint.h"
 
 typedef std::list<SimplePoint> TPosition;
 

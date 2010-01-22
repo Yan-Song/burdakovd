@@ -3,7 +3,7 @@
 // параметры
 
 const double Config::MovementTime = 0.1;
-const double Config::DiscoverTime = 0.01;
+const double Config::DiscoverTime = 0.001;
 const double Config::WormEnergyPerCell = 10.0;
 const double Config::FoodEnergyPerCell = 1;
 const double Config::EnergyLossPerSecond = 1;
