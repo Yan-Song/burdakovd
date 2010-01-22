@@ -27,10 +27,6 @@ public:
 
 		return static_cast<WormLogic>(Rand(1, 4));
 	}
-
-	virtual ~RandomEater()
-	{
-	}
 };
 
 #endif

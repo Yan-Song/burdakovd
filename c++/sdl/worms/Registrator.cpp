@@ -2,7 +2,7 @@
 #include "Factory.h"
 
 // include custom worms
-#include "Statue.h"
+#include "CountingWorm.h"
 #include "Manual.h"
 #include "MouseAvoiders.h"
 #include "MouseFollowers.h"
@@ -14,7 +14,7 @@
 // тут проходит регистрация всех червей
 Registrator::Registrator() : factories()
 {
-	//REGISTER(Statue);
+	REGISTER(CountingWorm);
 	REGISTER(Manual);
 	REGISTER(Random);
 	REGISTER(RandomEater);
