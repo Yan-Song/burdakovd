@@ -56,7 +56,7 @@ namespace WoWMemoryManager
         /// and "realmwizard", when you choose a realm
         /// </summary>        
         /// http://www.mmowned.com/forums/wow-memory-editing/260085-wow-3-2-2-info-dump-thread.html#post1684721
-        public static uint GameState = 0x00B02BB8; // works for 3.3.0
+        public static uint GameState = 0x00B03BB8; // works for 3.3.2
 
         /// <summary>
         /// Сам составил :), работает для 3.2.2 - 3.3.0
