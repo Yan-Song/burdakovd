@@ -820,7 +820,9 @@ namespace NakamarStates
 
             DestinationPoint destination;
             if (Destinations.ContainsKey(query)) // by name
+            {
                 destination = Destinations[query];
+            }
             else // by tag
             {
                 List<DestinationPoint> candidates = new List<DestinationPoint>();
@@ -901,13 +903,17 @@ namespace NakamarStates
                 return l;
             }
             else
+            {
                 throw new ArgumentException("destination unreachable");
+            }
         }
 
         private Route DirectRoute(DestinationPoint start, DestinationPoint destination)
         {
             if (start == destination)
+            {
                 return new Route("empty", start.Name, destination.Name);
+            }
 
             List<Route> directRoutes = new List<Route>(
                 from route in Destinations.RoutesFrom(start)
@@ -915,7 +921,9 @@ namespace NakamarStates
                 select route);
 
             if (directRoutes.Count == 0)
+            {
                 return null;
+            }
             else
             {
                 Route route = directRoutes[(new Random()).Next(0, directRoutes.Count)];
