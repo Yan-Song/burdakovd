@@ -3,7 +3,7 @@
 
 import sys, os
 sys.path.append(".")
-from BeanCounterDB import data
+from BeanCounterDB import data, constant_count
 
 import time
 
@@ -114,8 +114,8 @@ def h(text, cls="headline"):
 
 def faction(f, text=None):
     if text is None: text = f
-    if f=="Alliance": return span(text, "alliance-icon")
-    if f=="Horde": return span(text, "horde-icon")
+    if f == "Alliance": return span(text, "alliance-icon")
+    if f == "Horde": return span(text, "horde-icon")
     return span(text, "unknown-faction")
 
 def gold(amount):
@@ -736,8 +736,8 @@ for realm in realms:
             write(iname, "%s - %s: %s" % (realm, fac, itemname(ids)), s)
 
 
-index_data = h(u"Данные от BeanCounter (последнее обновление: %s)" % \
-    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(max(lasts) if lasts else 0))) + \
+index_data = h(u"Данные от BeanCounter (последнее обновление: %s, %s)" % \
+    (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(max(lasts) if lasts else 0)), constant_count[0])) + \
     ul(map(lambda realm: "%s: %s" % (realm, ", ".join(map(
         lambda (char, f): link("%s-%s-data-1.html" % (realm, char), \
         faction(f, char), "character"), realchars[realm]
