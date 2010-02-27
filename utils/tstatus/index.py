@@ -27,7 +27,7 @@ class problem:
         """will be used by sort
         чем меньше людей задачу решили, тем она сложнее
         а также учитываем, что на решение старых задач было больше времени"""
-        self.c = 1000000 * (lastnum + 200 - self.pid) / (self.solvers + 3)
+        self.c = 100 * (lastnum + 200.0 - self.pid) / (self.solvers + 3.0)
 
 def fetch(url, cachetime):
     """Качает страницу по http, возможно некоторое кэширование результатов в datastore"""
@@ -71,11 +71,12 @@ def format(problem, tries):
         <TD CLASS="source">%s</TD>
         <TD><A HREF="http://acm.timus.ru/detail.aspx?space=1&amp;num=%d">%s</A></TD>
         <TD><A HREF="http://acm.timus.ru/rating.aspx?space=1&amp;num=%d">%s</A></TD>
+        <TD>%d</TD>
         </TR>""" %
         (
         ("""<img src="%s/ok.gif">""" % config.static_url) if problem.solved else (u"""\n<img src="%s/failed.png" alt="попытка">""" % config.static_url)*tries, problem.pid, \
         problem.pid, problem.name, problem.source, problem.pid, \
-        problem.percent, problem.pid, problem.solvers))
+        problem.percent, problem.pid, problem.solvers, problem.c))
 
 def form():
     return """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -100,7 +101,7 @@ def main(uid, showsolved = True):
     problems = fetchproblems()
     lastnum = max([problem.pid for problem in problems])
     map(lambda x: x.complexity(lastnum), problems)
-    problems.sort(lambda x, y: x.c-y.c)
+    problems.sort(key = lambda x: x.c)
     c = [problem.c for problem in problems]
     minc = min(c)
     maxc = max(c)
