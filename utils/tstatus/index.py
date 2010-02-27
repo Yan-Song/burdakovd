@@ -1,10 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import urllib2
+from google.appengine.api import urlfetch
+from google.appengine.api import memcache
 import re
 import time
-import config
+import logging
+
+class config:
+  static_url = '/static'
+  debug = True
 
 class problem:
     tries = 0
@@ -22,70 +27,42 @@ class problem:
         """will be used by sort
         чем меньше людей задачу решили, тем она сложнее
         а также учитываем, что на решение старых задач было больше времени"""
-        self.c = 1000000*(lastnum+100-self.pid) / (self.solvers+3)
+        self.c = 1000000 * (lastnum + 200 - self.pid) / (self.solvers + 3)
 
 def fetch(url, cachetime):
-    """Качает страницу по http, возможно некоторое кэширование результатов в mysql"""
-    valid_db = ("mysql", "sqlite3")
-    if config.debug:
-        print "Fetching <%s>..." % url
-    if config.db in valid_db:
-        if config.db == "mysql":
-            import MySQLdb
-            conn = MySQLdb.connect(host = config.dbhost,
-                               user = config.dbuser,
-                               passwd = config.dbpasswd,
-                               db = config.dbname)
-            c = conn.cursor()
-            c.execute('set NAMES utf8')
-            c.execute('delete from cache where time<UNIX_TIMESTAMP()')
-            c.execute('select data from cache where url=%s', (url, ))
-        elif config.db == "sqlite3":
-            from sqlite3.dbapi2 import connect
-            conn = connect(config.dbname)
-            c = conn.cursor()
-            c.execute("SELECT name FROM SQLITE_MASTER WHERE type='table' AND name='cache'")
-            if not c.fetchall():
-                # такой таблички в бд нет, надо создать
-                # типы данных: http://www.sqlite.org/datatype3.html
-                c.execute("CREATE TABLE cache (url text, time integer, data blob)")
-                c.execute("CREATE UNIQUE INDEX url_key ON cache(url)")
-            c.execute('delete from cache where time<?', (time.time(), ))
-            c.execute('select data from cache where url=?', (url, ))
-        page = c.fetchall()
-    else: page = ()
-    if page:
-        r = page[0][0]
-        if type(r) == str: r=r.decode('utf-8')
-    else:
-        response = urllib2.urlopen(url)
-        r = response.read().decode("utf-8")
-        if config.db == "mysql":
-            c.execute('insert into cache(url, time, data) values(%s, UNIX_TIMESTAMP()+%s, %s)', \
-                (url, cachetime, r.encode("utf-8")))
-        elif config.db == "sqlite3":
-            c.execute('insert into cache(url, time, data) values(?, ?, ?)', \
-                (url, time.time()+cachetime, r))
-    if config.db in valid_db:
-        conn.commit()
-        conn.close()
-    if config.debug:
-        print "...done, fetched %d bytes" % len(r)
-    return r
+    """Качает страницу по http, возможно некоторое кэширование результатов в datastore"""
+    
+    key = "urlfetch: " + url
+    page = memcache.get(key)
+    
+    if page == None:
+        logging.info("fetching %s ..." % url)
+        
+        response = urlfetch.fetch(url)
+        if response.status_code == 200:
+            page = response.content
+            logging.info("... fetched %d bytes from %s" % (len(page), url))
+            # сохранить в кэш
+            memcache.set(key, page, cachetime)
+        else:
+            throw (url, response.status_code)
+    
+    return page.decode("utf-8")
 
 def fetchproblems():
     """качает список всех задач с тимуса"""
     problems = []
-    re_problems = re.compile(r'\<TR\>\<TD\>\<BR\>\</TD\>\<TD\>(\d{4})\</TD\>\<TD\ CLASS\=\"na'+\
-        'me\"\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\><TD\ CLASS\=\"source\">([^\<]*)</TD>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<\/TR\>', re.IGNORECASE)
-    for volume in range(1, 8):
-        # кэшируем список задач на сутки
-        html = fetch("http://acm.timus.ru/problemset.aspx?space=1&page=%d&locale=ru" % volume, 86400)
-        cp = re_problems.findall(html)
-        if config.debug:
-            print "parsed %d problems" % len(cp)
-        for pid, name, source, percent, solved in cp:
-            problems.append(problem(int(pid), name, source, percent, int(solved)))
+    re_problems = re.compile(r'\<TR\>\<TD\>\<BR\>\</TD\>\<TD\>(\d{4})\</TD\>\<TD\ CLASS\=\"na' + \
+        'me\"\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\><TD\ CLASS\=\"source\">([^\<]*)</TD>\<TD\><A[^\>]' + \
+        '+\>([^\<]+)\<\/A\>\<\/TD\>\<TD\><A[^\>]+\>([^\<]+)\<\/A\>\<\/TD\>\<\/TR\>', re.IGNORECASE)
+
+    # кэшируем список задач на сутки
+    html = fetch("http://acm.timus.ru/problemset.aspx?space=1&page=all&locale=ru", 86400)
+    cp = re_problems.findall(html)
+    if config.debug:
+        logging.debug("parsed %d problems" % len(cp))
+    for pid, name, source, percent, solved in cp:
+        problems.append(problem(int(pid), name, source, percent, int(solved)))
     return problems
 
 def format(problem, tries):
@@ -95,7 +72,8 @@ def format(problem, tries):
         <TD><A HREF="http://acm.timus.ru/detail.aspx?space=1&amp;num=%d">%s</A></TD>
         <TD><A HREF="http://acm.timus.ru/rating.aspx?space=1&amp;num=%d">%s</A></TD>
         </TR>""" %
-        ((u"""\n<img src="%s/failed.png" alt="попытка">""" % config.static_url)*tries, problem.pid, \
+        (
+        ("""<img src="%s/ok.gif">""" % config.static_url) if problem.solved else (u"""\n<img src="%s/failed.png" alt="попытка">""" % config.static_url)*tries, problem.pid, \
         problem.pid, problem.name, problem.source, problem.pid, \
         problem.percent, problem.pid, problem.solvers))
 
@@ -111,13 +89,13 @@ def form():
         
 
         <p>
-        <FORM ACTION="index.py" METHOD="GET" STYLE="margin-top:0.6em;">
+        <FORM ACTION="." METHOD="GET" STYLE="margin-top:0.6em;">
         <INPUT NAME="uid" SIZE="15" VALUE="62871"> <INPUT TYPE="SUBMIT" VALUE="го"></FORM>
        
         </body></html>
         """ % config.static_url;
 
-def main(uid):
+def main(uid, showsolved = True):
     uid = int(uid) # на всякий случай, чтоб исключить любой инклудинг
     problems = fetchproblems()
     lastnum = max([problem.pid for problem in problems])
@@ -134,13 +112,16 @@ def main(uid):
         html, re.IGNORECASE)[0])
     p = re.findall(ur'\<NOBR\>\<A[^\>]+\>(\d{4})\<\/A\>\ \<FONT\ SIZE\=\"\-2\"\>(\d+)\/(\d+)\<\/FONT\>\,?\<\/NOBR\>', \
         html, re.IGNORECASE)
-    solvedproblems = []
+    solvedproblems = set()
     trieslist = {}
     for num, solved, tries in p:
         trieslist[int(num)] = int(tries)
-        if int(solved)>0: solvedproblems.append(int(num))
+        if int(solved) > 0: solvedproblems.add(int(num))
     total = len(problems)
-    problems = filter(lambda x: not(x.pid in solvedproblems), problems)
+    for p in problems:
+        p.solved = p.pid in solvedproblems
+    if not showsolved:
+        problems = filter(lambda x: not(x.solved), problems)
     header = u"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
         <html><head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -153,10 +134,11 @@ def main(uid):
         </head><body alink="#1a5cc8" link="#1a5cc8" vlink="#1a5cc8">
         <p><a href="http://acm.timus.ru/author.aspx?id=%d">%s</a>, решено %d из %d задач, место: %d.</p>
         <p align="center">
-        <TABLE WIDTH="75%%" CLASS="problemset strict">
+        <TABLE WIDTH="80%%" CLASS="problemset strict">
         <TR><TH WIDTH="40">Неудачные попытки</TH><TH WIDTH="50">ID</TH>
         <TH>Название</TH><TH>Источник</TH><TH WIDTH="100">Зачтено</TH>
-        <TH WIDTH="100">Авторы</TH></TR>
+        <TH WIDTH="100">Авторы</TH>
+        <TH WIDTH="40">Сложность</TH></TR>
 
         """ % (
 
@@ -682,7 +664,13 @@ def main(uid):
                     font-size: 1.19em;
                     margin-bottom: 0.3em;
                     border-bottom: dashed 1px Silver;
-            }"""
+            }
+            img
+            {
+                    //padding: 2px;
+                    //margin: 0px;
+            }
+            """
             , name, uid, name, len(solvedproblems), total, place)
     footer = u"""</TABLE></body></html>"""
     return (header + u'\n'.join(
@@ -692,8 +680,8 @@ def main(uid):
                )
            ) + footer).encode("utf-8")
 
-def index(uid=-1):
-    if uid==-1: return form()
+def index(uid = -1):
+    if uid == -1: return form()
     else: return main(uid)
 
 if __name__ == '__main__': print main(62871) # for testing
