@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 
 string_constant = r'"(?:\\\\|\\"|[^"])*"'
 numeric_constant = r'[0-9\.]+'
@@ -19,7 +20,15 @@ def calcstats(filename):
 	ans = calculate(text)
 	return ("%s: %s" % (filename, ans[0]), ans[1])
 	
-stats = [calcstats(filename) for filename in os.listdir(path) if filename.endswith(".lua")]
-stats.sort(key = lambda x: -x[1])
-for x in stats:
-	print x[0]
+def main():
+	if len(sys.argv) > 1:
+		stat = calcstats(sys.argv[1])
+		print "constant_count = %s" % repr(stat)
+	else:
+		stats = [calcstats(filename) for filename in os.listdir(path) if filename.endswith(".lua")]
+		stats.sort(key = lambda x: -x[1])
+		for x in stats:
+			print x[0]
+
+if __name__ == "__main__":
+	main()
