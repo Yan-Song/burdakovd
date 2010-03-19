@@ -1,39 +1,20 @@
-import logging, os
+import os
+import wsgiref.handlers
+from google.appengine.ext.webapp import template
+from google.appengine.ext import webapp
 
-# Google App Engine imports.
-from google.appengine.ext.webapp import util
-
-# Force Django to reload its settings.
-from django.conf import settings
-settings._target = None
-
-# Must set this env var before importing any part of Django
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-
-import logging
-import django.core.handlers.wsgi
-import django.core.signals
-import django.db
-import django.dispatch.dispatcher
-
-def log_exception(*args, **kwds):
-  logging.exception('Exception in request:')
-
-# Log errors.
-django.dispatch.dispatcher.connect(
-   log_exception, django.core.signals.got_request_exception)
-
-# Unregister the rollback event handler.
-django.dispatch.dispatcher.disconnect(
-    django.db._rollback_on_exception,
-    django.core.signals.got_request_exception)
+class MainPage(webapp.RequestHandler):
+  def get(self):
+    path = os.path.join(os.path.dirname(__file__), 'templates', 'main.html')
+    print path
+    template_values = {}
+    self.response.out.write(template.render(path, template_values))
 
 def main():
-  # Create a Django application for WSGI.
-  application = django.core.handlers.wsgi.WSGIHandler()
+  application = webapp.WSGIApplication(
+                                       [('/', MainPage)],
+                                       debug=True)
+  wsgiref.handlers.CGIHandler().run(application)
 
-  # Run the WSGI CGI handler with that application.
-  util.run_wsgi_app(application)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
   main()
