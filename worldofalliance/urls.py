@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from django.conf.urls.defaults import *
+from website.views import *
 
 urlpatterns = patterns('',
     # Example:
@@ -20,4 +21,7 @@ urlpatterns = patterns('',
 
     # Uncomment this for admin:
 #     (r'^admin/', include('django.contrib.admin.urls')),
+    ('^$', Main),
+    ('^about/$', About),
+    ('^contacts/$', Contacts),
 )
