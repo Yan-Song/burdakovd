@@ -198,3 +198,12 @@ ul.errorlist
 	font-size:small;
 	margin-bottom: 4px;
 }
+
+h2 {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+img {
+    vertical-align: middle;
+}

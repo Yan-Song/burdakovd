@@ -1,5 +1,29 @@
 {% extends "base.html" %}
 
-{% block title %} �������� {% endblock %}
+{% block title %} Контакты {% endblock %}
 
-{% block content %} icq, phone, email... {% endblock %}
+{% block content %}
+
+<p>Чтобы связаться с нами Вы можете воспользоваться следующими данными</p>
+<h2>ICQ</h2>
+<p>
+Для клиентов:
+
+<script type="text/javascript"><!--
+document.write('<img style="border-style:none" alt="ICQ Status Indicator" src="http://status.icq.com/online.gif?icq=590254171&amp;img=27&rnd='+Math.random()+'" />')
+//--></script>
+<noscript><div style="display:inline"><img style="border-style:none; margin-right:0px; margin-left:5px" alt="ICQ Status Indicator" src="http://status.icq.com/online.gif?icq=590254171&amp;img=27" /></div></noscript>
+590254171 (просьба обращать внимание на статус)</p>
+<!--<div>Для поставщиков: ******* (просьба обращать внимание на статус)</div>-->
+<h2>Email: </h2>
+<p>
+<div>Для клиентов: <img src="{{ MEDIA_URL }}website/mail-buy.png"/></div>
+<div>Для поставщиков: <img src="{{ MEDIA_URL }}website/mail-sell.png"/></div>
+</p>
+<p>
+Если у вас возникли трудности или вопросы,
+Вы можете отправить письмо на адрес поддержки, вам обязательно ответят
+
+ <img src="{{ MEDIA_URL }}website/mail-support.png"/>
+</p>
+{% endblock %}
