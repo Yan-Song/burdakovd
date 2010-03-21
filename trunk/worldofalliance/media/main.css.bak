@@ -236,7 +236,7 @@ form label {
     text-align: right;
 }
 
-form p { clear: left; margin: 12px;}
+form p { clear: left; margin: 12px; margin-top: 6px;}
 
 form fieldset {
 	padding: 12px;

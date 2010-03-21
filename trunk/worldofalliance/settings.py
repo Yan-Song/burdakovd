@@ -4,7 +4,7 @@ from ragendja.settings_pre import *
 # Increase this when you update your media on the production site, so users
 # don't have to refresh their cache. By setting this your MEDIA_URL
 # automatically becomes /media/MEDIA_VERSION/
-MEDIA_VERSION = 1
+MEDIA_VERSION = 2
 
 # By hosting media on a different domain we can get a speedup (more parallel
 # browser connections).
@@ -123,7 +123,7 @@ DATABASE_OPTIONS = {
     # Override remoteapi handler's path (default: '/remote_api').
     # This is a good idea, so you make it not too easy for hackers. ;)
     # Don't forget to also update your app.yaml!
-    #'remote_url': '/remote-secret-url',
+    'remote_url': '/remote-secret-url-YgyHJGVYHJFGVhJGjyhhjgjgFTYFYGJY',
 
     # !!!Normally, the following settings should not be used!!!
 
@@ -135,7 +135,7 @@ DATABASE_OPTIONS = {
     #'remote_id': 'otherappid',
 
     # Change domain (default: <remoteid>.appspot.com)
-    #'remote_host': 'bla.com',
+    'remote_host': 'www.worldofalliance.com',
 }
 
 from ragendja.settings_post import *

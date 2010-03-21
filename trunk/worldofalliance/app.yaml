@@ -10,6 +10,10 @@ handlers:
   static_dir: _generated_media
   secure: optional
 
+- url: /remote-secret-url-YgyHJGVYHJFGVhJGjyhhjgjgFTYFYGJY
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
+  
 - url: /.*
   script: common/appenginepatch/main.py
   secure: optional
