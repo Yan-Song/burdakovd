@@ -52,7 +52,7 @@
 							{% if google_user %}
 							  <a class="smallbutton" href="{% google_logout_url request.get_full_path %}">Выйти</a>
 							{% else %}
-							  <a class="smallbutton" href="{% url django.contrib.auth.views.logout request.get_full_path %}">Войти</a>
+							  <a class="smallbutton" href="{% url django.contrib.auth.views.logout request.get_full_path %}">Выйти</a>
 							{% endif %}
 						{% else %}
 							<a class="smallbutton" href="{% url django.contrib.auth.views.login request.get_full_path %}">Войти</a>
@@ -73,8 +73,8 @@
 					<div class="middle">
 						<div class="navigation">
 							{% block navigation %}
-							<a href="{% url website.views.Main %}">Главная</a>
-							<a href="#">Купить голд</a>
+							<a class="smallbutton" href="{% url website.views.Main %}">Главная</a>
+							<a class="smallbutton" href="#">Купить голд</a>
 							{% endblock %}
 						</div>
 						

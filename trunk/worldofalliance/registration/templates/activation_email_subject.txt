@@ -1,1 +1,1 @@
-Activation of your {{ site }} account
+﻿Активация аккаунта на {{ site }}

@@ -6,7 +6,6 @@
 
 <p>
 <a href="{% url registration_register %}">Зарегистрироваться</a>, или <a href="{% google_login_url next %}">войти с помощью аккаунта Google</a>
-{{ next }}
 </p>
 <form action="{{ request.get_full_path }}" method="post" class="niceform">
   <fieldset>
@@ -14,6 +13,7 @@
     {{ form.as_p }}
     <input type="hidden" name="next" value="{{ next }}" />
     <p><label>&nbsp; </label> <input type="submit" value="Войти" class="smallbutton" /> </p>
+    <p><a href="{% url auth_password_reset %}">Сброс ароля</a></p>
   </fieldset>
 </form>
 
