@@ -1,0 +1,20 @@
+﻿{% extends "base.html" %}
+{% load googletags %} 
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+
+<p>
+<a href="{% url registration_register %}">Зарегистрироваться</a>, или <a href="{% google_login_url next %}">войти с помощью аккаунта Google</a>
+{{ next }}
+</p>
+<form action="{{ request.get_full_path }}" method="post" class="niceform">
+  <fieldset>
+    <legend>Вход</legend>
+    {{ form.as_p }}
+    <input type="hidden" name="next" value="{{ next }}" />
+    <p><label>&nbsp; </label> <input type="submit" value="Войти" class="smallbutton" /> </p>
+  </fieldset>
+</form>
+
+{% endblock content %}
