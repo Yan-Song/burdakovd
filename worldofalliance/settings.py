@@ -4,8 +4,8 @@ from ragendja.settings_pre import *
 # Increase this when you update your media on the production site, so users
 # don't have to refresh their cache. By setting this your MEDIA_URL
 # automatically becomes /media/MEDIA_VERSION/
-MEDIA_VERSION = 2
-
+MEDIA_VERSION = 3
+ADMINS = ('icqkill@gmail.com', )
 # By hosting media on a different domain we can get a speedup (more parallel
 # browser connections).
 #if on_production_server or not have_appserver:
@@ -26,7 +26,7 @@ COMBINE_MEDIA = {
 
 # Change your email settings
 if on_production_server:
-    DEFAULT_FROM_EMAIL = 'noreply@worldofalliance.com'
+    DEFAULT_FROM_EMAIL = 'WorldofAlliance.com <webmaster@worldofalliance.com>'
     SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 from private_settings import SECRET_KEY
@@ -84,6 +84,7 @@ GLOBALTAGS = ('ragendja.templatetags.googletags',)
 LOGIN_URL = '/account/login/'
 LOGOUT_URL = '/account/logout/'
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 INSTALLED_APPS = (
     # Add jquery support (app is in "common" folder). This automatically
@@ -139,3 +140,5 @@ DATABASE_OPTIONS = {
 }
 
 from ragendja.settings_post import *
+
+DEBUG = True

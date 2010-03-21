@@ -7,8 +7,9 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
+from django.views.generic.simple import redirect_to
 from django.template import RequestContext
-
+from django.core.urlresolvers import reverse
 from registration.forms import RegistrationForm
 from registration.models import RegistrationProfile
 
@@ -66,11 +67,11 @@ def activate(request, activation_key,
     context = RequestContext(request)
     for key, value in extra_context.items():
         context[key] = callable(value) and value() or value
-    return render_to_response(template_name,
-                              { 'account': account,
-                                'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS },
-                              context_instance=context)
-
+    
+    if account:
+        return HttpResponseRedirect(reverse("registration_activation_successful"))
+    else:
+        return HttpResponseRedirect(reverse("registration_activation_failed"))
 
 def register(request, success_url=None,
              form_class=RegistrationForm,

@@ -1,12 +1,16 @@
-{% extends "base.html" %}
-{% block title %}{% if account %}Activation successful{% else %}Activation failed :({% endif %}{% endblock %}
+﻿{% extends "base.html" %}
+{% block title %}{% if account %}Регистрация завершена{% else %}Аккаунт не активирован :({% endif %}{% endblock %}
 
 {% block content %}
 {% if account %}
-  <h1>Activation successful</h1>
-  <p>Congratulations, {{ account.username }}. Your account has been created successfully.</p>
+  <h1>Аккаунт активирован</h1>
+  <p>Поздравляем, {{ account.username }}.
+  Ваш аккаунт успешно создан.
+  <a href="{% url django.contrib.auth.views.login %}">Войти</a></p>
 {% else %}
-  <h1>Activation failed :(</h1>
-  <p>Sorry, there were problems with the activation. Please make sure that the activation link was opened correctly in your Browser. Please be also aware that activation links expire automatically.</p>
+  <h1>Активация не удалась :(</h1>
+  <p>Не удалось активировать ваш аккаунт.
+  Пожалуйста убедитесь, что ссылка активации была корректно открыта в браузере.
+  Также имейте в виду, что ссылки для активации имеют ограниченный срок действия, и могут быть использованы только один раз.</p>
 {% endif %}
 {% endblock content %}
