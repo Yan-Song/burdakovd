@@ -74,6 +74,12 @@ namespace Plugins.AccountManager
 
         private bool CheckIfNeedToLogout()
         {
+            // не ботаем ли мы уже слишком долго?
+            if (Settings.Default.Profiles[Settings.Default.CurrentProfile].BottedLast24Hours() >
+                (double)Settings.Default.HowMuchHoursAllowedToBotEvery24Hours)
+                return true;
+
+
             string best = AccountManager.Manager.GetBestProfile();
 
             if (!string.IsNullOrEmpty(best))
