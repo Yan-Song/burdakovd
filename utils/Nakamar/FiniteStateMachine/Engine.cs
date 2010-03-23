@@ -231,14 +231,7 @@ namespace FiniteStateMachine
             // здесь остался только основной поток, так что можно делать всё что угодно
             foreach (State state in States)
             {
-                try
-                {
-                    state.Stop();
-                }
-                catch(Exception e)
-                {
-                    Logger.LogError("FSM-stop", e.Message);
-                }
+                state.Stop();
             }
             // Clear out the thread object.
             _workerThread = null;
@@ -292,7 +285,6 @@ namespace FiniteStateMachine
                             // (That would be bad!)
                             if (!States.Contains(tempState))
                             {
-                                //Logger.Log("loading "+tempState.GetType().Name);
                                 States.Add(tempState);
                             }
                         }

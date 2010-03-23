@@ -16,13 +16,13 @@
         "Entry"
         {
         "MsmKey" = "8:_19AEE2A64D746AABD4973550722D1459"
-        "OwnerKey" = "8:_EED7CA81AC8745F78E65264118F0048E"
+        "OwnerKey" = "8:_5EF21DA73F07A9BD7AF65B04C1718C7C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_19AEE2A64D746AABD4973550722D1459"
-        "OwnerKey" = "8:_5EF21DA73F07A9BD7AF65B04C1718C7C"
+        "OwnerKey" = "8:_97ED27503DD8459F8DD5FBBC37EB4D10"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -40,7 +40,13 @@
         "Entry"
         {
         "MsmKey" = "8:_318E01C8696547AE6766CC7CF043B6E2"
-        "OwnerKey" = "8:_EED7CA81AC8745F78E65264118F0048E"
+        "OwnerKey" = "8:_97ED27503DD8459F8DD5FBBC37EB4D10"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_318E01C8696547AE6766CC7CF043B6E2"
+        "OwnerKey" = "8:_9B8578CFB8FB656D0398523F04B3416F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -58,25 +64,43 @@
         "Entry"
         {
         "MsmKey" = "8:_5B44DD5DB623661381F92FDFCC8EACB9"
-        "OwnerKey" = "8:_EED7CA81AC8745F78E65264118F0048E"
+        "OwnerKey" = "8:_97ED27503DD8459F8DD5FBBC37EB4D10"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_5EF21DA73F07A9BD7AF65B04C1718C7C"
-        "OwnerKey" = "8:_EED7CA81AC8745F78E65264118F0048E"
+        "OwnerKey" = "8:_97ED27503DD8459F8DD5FBBC37EB4D10"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_64F66FFA700B783B779D45BB9A1E2315"
-        "OwnerKey" = "8:_EED7CA81AC8745F78E65264118F0048E"
+        "OwnerKey" = "8:_97ED27503DD8459F8DD5FBBC37EB4D10"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_64F66FFA700B783B779D45BB9A1E2315"
         "OwnerKey" = "8:_C8A65D96B8FE06967EB8A685A89EC4AE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_97ED27503DD8459F8DD5FBBC37EB4D10"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9B8578CFB8FB656D0398523F04B3416F"
+        "OwnerKey" = "8:_5EF21DA73F07A9BD7AF65B04C1718C7C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9B8578CFB8FB656D0398523F04B3416F"
+        "OwnerKey" = "8:_97ED27503DD8459F8DD5FBBC37EB4D10"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -88,7 +112,7 @@
         "Entry"
         {
         "MsmKey" = "8:_C8A65D96B8FE06967EB8A685A89EC4AE"
-        "OwnerKey" = "8:_EED7CA81AC8745F78E65264118F0048E"
+        "OwnerKey" = "8:_97ED27503DD8459F8DD5FBBC37EB4D10"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -99,20 +123,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EED7CA81AC8745F78E65264118F0048E"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_EED7CA81AC8745F78E65264118F0048E"
+        "OwnerKey" = "8:_97ED27503DD8459F8DD5FBBC37EB4D10"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_5EF21DA73F07A9BD7AF65B04C1718C7C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_9B8578CFB8FB656D0398523F04B3416F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -405,6 +429,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9B8578CFB8FB656D0398523F04B3416F"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:LoaderManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_9B8578CFB8FB656D0398523F04B3416F"
+                    {
+                    "Name" = "8:LoaderManager.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:LoaderManager.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_CAA9250EF64744FCACBC6B8C20DA5A73"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C8A65D96B8FE06967EB8A685A89EC4AE"
             {
             "AssemblyRegister" = "3:1"
@@ -493,7 +548,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Nakamar"
         "ProductCode" = "8:{169A99B8-36D0-436F-9C99-E6BA0E874D98}"
-        "PackageCode" = "8:{904B689D-2EE3-475A-9907-AEEBF64558DF}"
+        "PackageCode" = "8:{64D7C3BB-38E8-4205-8247-DE6E448125A6}"
         "UpgradeCode" = "8:{96393778-FE7D-487D-9C2F-BC09F9E47ED3}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -509,7 +564,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:_EED7CA81AC8745F78E65264118F0048E"
+        "ARPPRODUCTICON" = "8:_97ED27503DD8459F8DD5FBBC37EB4D10"
         "ARPIconIndex" = "3:32512"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -612,18 +667,32 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_8529093D22F248C5AFDF61E16C11812D"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_77443DEA3ECE478ABA2B47887B852C5C"
             {
-            "Name" = "8:Nakamar"
+            "Name" = "8:Запуск бота"
             "Arguments" = "8:"
-            "Description" = "8:Запустить бота"
+            "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:32512"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_EED7CA81AC8745F78E65264118F0048E"
+            "Target" = "8:_97ED27503DD8459F8DD5FBBC37EB4D10"
             "Folder" = "8:_3D462791BC1A460D96D78C21A05C39CF"
             "WorkingFolder" = "8:_CAA9250EF64744FCACBC6B8C20DA5A73"
-            "Icon" = "8:_EED7CA81AC8745F78E65264118F0048E"
+            "Icon" = "8:_97ED27503DD8459F8DD5FBBC37EB4D10"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_7E8961A2EE1C4E7B89DCBB2B27C3FEC3"
+            {
+            "Name" = "8:Плагины"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:"
+            "Folder" = "8:_3D462791BC1A460D96D78C21A05C39CF"
+            "WorkingFolder" = "8:_CAA9250EF64744FCACBC6B8C20DA5A73"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
         }
@@ -929,7 +998,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_EED7CA81AC8745F78E65264118F0048E"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_97ED27503DD8459F8DD5FBBC37EB4D10"
             {
             "SourcePath" = "8:..\\Nakamar\\obj\\Debug\\Nakamar.exe"
             "TargetName" = "8:"

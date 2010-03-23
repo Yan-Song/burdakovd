@@ -5,7 +5,7 @@ using System.Text;
 using FiniteStateMachine;
 using WoWMemoryManager;
 
-namespace NakamarStates
+namespace Plugins
 {
     /// <summary>
     /// Это состояние обладает наименьшим приоритетом

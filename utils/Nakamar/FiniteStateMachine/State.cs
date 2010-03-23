@@ -1,7 +1,7 @@
 ﻿// 
 // Copyright © ApocDev 2009 <apoc@apocdev.com>
 //
-// modfied, burdakovd 2009, <kreved at kreved dot org>
+// modified, burdakovd 2009, <kreved at kreved dot org>
 
 
 using System;

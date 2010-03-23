@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace NakamarStates
+namespace Plugins
 {
     public enum WayPointType
     {
@@ -22,7 +22,7 @@ namespace NakamarStates
             XYZRange = 3,
             RescueRange = 10;
 
-        public WayPointType Type { get; private set; }
+        public WayPointType PointType { get; private set; }
         public string Name { get; set; }
         public string Tag { get; set; }
 
@@ -30,21 +30,21 @@ namespace NakamarStates
         {
             get
             {
-                if (Type == WayPointType.Mailbox)
+                if (PointType == WayPointType.Mailbox)
                     return MailboxRange;
-                if (Type == WayPointType.NPC)
+                if (PointType == WayPointType.NPC)
                     return NPCRange;
-                if (Type == WayPointType.Simple)
+                if (PointType == WayPointType.Simple)
                     return XYZRange;
-                if (Type == WayPointType.Rescue)
+                if (PointType == WayPointType.Rescue)
                     return RescueRange;
-                throw new NotImplementedException(Type.ToString());
+                throw new NotImplementedException(PointType.ToString());
             }
         }
 
         public DestinationPoint(string name, WayPointType type, string tag, double x, double y, double z) : base(x, y, z)
         {
-            Type = type;
+            PointType = type;
             Name = name;
             Tag = tag;
         }
@@ -57,7 +57,7 @@ namespace NakamarStates
 
         public DestinationPoint(XElement xml) : base(xml)
         {
-            this.Type = (WayPointType)Enum.Parse(typeof(WayPointType), xml.Attribute("Type").Value);
+            this.PointType = (WayPointType)Enum.Parse(typeof(WayPointType), xml.Attribute("Type").Value);
             this.Name = xml.Attribute("Name").Value;
             this.Tag = xml.Attribute("Tag").Value;
         }
@@ -66,7 +66,7 @@ namespace NakamarStates
         {
             XElement xml = new XElement("DestinationPoint",
                 new XAttribute("Name", Name),
-                new XAttribute("Type", Type),
+                new XAttribute("Type", PointType),
                 new XAttribute("Tag", Tag),
                 new XAttribute("X", X),
                 new XAttribute("Y", Y),
@@ -78,7 +78,7 @@ namespace NakamarStates
         public virtual bool Equals(DestinationPoint other)
         {
             return other != null && other.X == X && other.Y == Y && other.Z == Z &&
-                other.Name == Name && other.Type == Type && other.Tag == Tag;
+                other.Name == Name && other.PointType == PointType && other.Tag == Tag;
         }
 
         public override bool Equals(object obj)
@@ -102,7 +102,7 @@ namespace NakamarStates
                 result = (result * 397) ^ Y.GetHashCode();
                 result = (result * 397) ^ Z.GetHashCode();
                 result = (result * 397) ^ Name.GetHashCode();
-                result = (result * 397) ^ Type.GetHashCode();
+                result = (result * 397) ^ PointType.GetHashCode();
                 result = (result * 397) ^ Tag.GetHashCode();
                 return result;
             }

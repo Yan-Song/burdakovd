@@ -9,7 +9,7 @@ using WoWMemoryManager.WoWObject;
 using System.Collections;
 
 
-namespace NakamarStates
+namespace Plugins
 {
     public class Watcher : State
     {

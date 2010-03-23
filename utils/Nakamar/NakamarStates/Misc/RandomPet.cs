@@ -5,7 +5,7 @@ using System.Text;
 using FiniteStateMachine;
 using WoWMemoryManager;
 
-namespace NakamarStates
+namespace Plugins
 {
     public class RandomPet : State
     {

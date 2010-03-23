@@ -4,9 +4,11 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml;
 using System.Collections;
+using System;
 
-namespace NakamarStates
+namespace Plugins
 {
+    [Serializable]
     public class WayPointSet : Dictionary<string, DestinationPoint>
     {
         public Dictionary<string, List<Route>> Routes;

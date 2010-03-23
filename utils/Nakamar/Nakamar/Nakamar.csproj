@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{55CC75A6-9C4A-4D62-99B1-DC84FF4A82FC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -120,13 +120,17 @@
       <Project>{78DF6A81-A7AC-44DF-8F8F-278E0D119903}</Project>
       <Name>FiniteStateMachine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LoaderManager\LoaderManager.csproj">
+      <Project>{49BAC39E-1E89-41DC-8079-6DF67B60A634}</Project>
+      <Name>LoaderManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Logger\Util.csproj">
       <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
       <Name>Util</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NakamarStates\NakamarStates.csproj">
+    <ProjectReference Include="..\NakamarStates\Plugins.csproj">
       <Project>{4A688F33-BA30-477B-A651-5918C1603D2F}</Project>
-      <Name>NakamarStates</Name>
+      <Name>Plugins</Name>
     </ProjectReference>
     <ProjectReference Include="..\WMemory\WMemory.csproj">
       <Project>{6E806492-5FFE-4C3C-BF20-22277FAED955}</Project>

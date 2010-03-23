@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4A688F33-BA30-477B-A651-5918C1603D2F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Plugins</RootNamespace>
+    <AssemblyName>NakamarStates</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountManager\CountDown.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AccountManager\CountDown.Designer.cs">
+      <DependentUpon>CountDown.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountManager\EditProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AccountManager\EditProfile.Designer.cs">
+      <DependentUpon>EditProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountManager\InGameManager.cs" />
+    <Compile Include="AccountManager\Manager.cs" />
+    <Compile Include="AccountManager\Profile.cs" />
+    <Compile Include="AccountManager\ProfileManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AccountManager\ProfileManagement.Designer.cs">
+      <DependentUpon>ProfileManagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountManager\Settings.cs" />
+    <Compile Include="AccountManager\WoWStartManager.cs" />
+    <Compile Include="Misc\DoNotRestart.cs" />
+    <Compile Include="Misc\Idle.cs" />
+    <Compile Include="Misc\KeyBindings.cs" />
+    <Compile Include="Misc\MessageScanner.cs" />
+    <Compile Include="Misc\MessageTimeout.cs" />
+    <Compile Include="Misc\PurchaseConfirmation.cs" />
+    <Compile Include="Misc\RandomPet.cs" />
+    <Compile Include="Misc\WoWWindowActivator.cs" />
+    <Compile Include="Navigation\DestinationPoint.cs" />
+    <Compile Include="Navigation\Navigation.cs" />
+    <Compile Include="Navigation\PlayerPoint.cs" />
+    <Compile Include="Navigation\Point.cs" />
+    <Compile Include="Navigation\Route.cs" />
+    <Compile Include="Navigation\WayPoint.cs" />
+    <Compile Include="Navigation\WayPointSet.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="AccountManager\ReLogger.cs" />
+    <Compile Include="Misc\TimeOut.cs" />
+    <Compile Include="Misc\Watcher.cs" />
+    <Compile Include="Misc\StartStopManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BlackMagic\BlackMagic.csproj">
+      <Project>{79FD54B0-DEAB-459F-83B9-F1CED68D288B}</Project>
+      <Name>BlackMagic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FiniteStateMachine\FiniteStateMachine.csproj">
+      <Project>{78DF6A81-A7AC-44DF-8F8F-278E0D119903}</Project>
+      <Name>FiniteStateMachine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LoaderManager\LoaderManager.csproj">
+      <Project>{49BAC39E-1E89-41DC-8079-6DF67B60A634}</Project>
+      <Name>LoaderManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logger\Util.csproj">
+      <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
+      <Name>Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WMemory\WMemory.csproj">
+      <Project>{6E806492-5FFE-4C3C-BF20-22277FAED955}</Project>
+      <Name>WMemory</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AccountManager\CountDown.resx">
+      <DependentUpon>CountDown.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountManager\EditProfile.resx">
+      <DependentUpon>EditProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountManager\ProfileManagement.resx">
+      <DependentUpon>ProfileManagement.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

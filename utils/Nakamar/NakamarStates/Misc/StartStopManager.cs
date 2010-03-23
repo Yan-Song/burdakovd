@@ -9,7 +9,7 @@ using System.Threading;
 using System.Windows.Input;
 
 
-namespace NakamarStates
+namespace Plugins
 {
     public class StartStopManager : State
     {
