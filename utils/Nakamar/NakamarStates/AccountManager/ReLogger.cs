@@ -24,6 +24,7 @@ namespace Plugins
         public ReLogger(object machine, object memory) : base(machine, memory)
         {
             profile = Settings.Default.Profiles[Settings.Default.CurrentProfile];
+            profile.AddSession();
         }
 
         public override void Configure()
@@ -93,8 +94,6 @@ namespace Plugins
                 Log("Вхожу в игровой мир");
                 LoggedIn = true;
                 EnteredTheWorld = true;
-
-                profile.AddSession();
             }
         }
 
