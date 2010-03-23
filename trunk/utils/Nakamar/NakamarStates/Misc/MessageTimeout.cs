@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using FiniteStateMachine;
 using WoWMemoryManager;
-using NakamarStates.Properties;
+using Plugins.Properties;
 using System.Windows.Forms;
 
-namespace NakamarStates
+namespace Plugins
 {
     public class MessageTimeout : State
     {

@@ -15,14 +15,14 @@ namespace Nakamar
 {
     public partial class MainForm : Form
     {
-        private bool _botenabled;
+        private bool botEnabled;
         private bool BotEnabled
         {
-            get { return _botenabled; }
+            get { return botEnabled; }
             set
             {
                 StatesList.Enabled = StateSettings.Enabled = RestartButton.Enabled = 
-                    DisableBotButton.Enabled = _botenabled =
+                    DisableBotButton.Enabled = botEnabled =
                     BlockedStatesGroup.Enabled = BlockStateButton.Enabled = value;
 
                 EnableBotButton.Enabled = !value;
@@ -33,9 +33,9 @@ namespace Nakamar
         private Engine FSM;
         private ulong PreviousFrameCount;
         private DateTime lastDisabled = new DateTime(0);
-        private DateTime lastStartedWoW = new DateTime(0);
+        private LoaderManager LoaderManager = new LoaderManager(Settings.Default.StatesPath);
 
-        private void Log(string message)
+        static private void Log(string message)
         {
             Logger.Log("Main",  message);
         }
@@ -44,7 +44,7 @@ namespace Nakamar
         {
             if (Settings.Default.SaveLogs)
             {
-                if (Settings.Default.LogDirectory == "")
+                if (String.IsNullOrEmpty(Settings.Default.LogDirectory))
                 {
                     Settings.Default.SaveLogs = false;
                     Logger.LogError("Main", "Не выбрана директория для логов");
@@ -107,7 +107,7 @@ namespace Nakamar
             
             RestoreWindowState();
 
-            Monitor(sender, e);
+            uniqueMonitor(sender, e);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -200,13 +200,6 @@ namespace Nakamar
             FSM.StopEngine();
             if (FSM.DoNotRestart)
             {
-                // бот остановлен ненормально
-                if (Settings.Default.AutoEnable || Settings.Default.WoWAutoStart)
-                {
-                    Log("Автозапуск WoW и бота отключён");
-                    Settings.Default.AutoEnable = false;
-                    Settings.Default.WoWAutoStart = false;
-                }
                 PlayDoNotRestartSound();
             }
             FSM = null;
@@ -231,20 +224,60 @@ namespace Nakamar
             return WoWProcesses().Count == 1;
         }
 
+        private bool monitorIsActiveNow = false;
+        private object monitorLock = new object();
+
+        private void uniqueMonitor(object sender, EventArgs e)
+        {
+            lock (monitorLock)
+            {
+                if (monitorIsActiveNow)
+                {
+                    return;
+                }
+                else
+                {
+                    monitorIsActiveNow = true;
+                }
+            }
+
+            Monitor(sender, e);
+
+            monitorIsActiveNow = false;
+        }
+
         private void Monitor(object sender, EventArgs e)
         {
+
+            LastStateValue.Text = null;
+
             // stop bot if something goes wrong
             if (BotEnabled && !(FSM.Running && IsOneWoWRunning()))
+            {
                 DisableBot();
+            }
 
             // run WoW if needed
             if (Settings.Default.WoWAutoStart && !IsWoWRunning())
-                StartWoW(sender, e);
+            {
+                string reason = LoaderManager.WhyShouldntStartWow();
+
+                if (reason == null)
+                {
+                    StartWoW(sender, e, false);
+                }
+                else
+                {
+                    LastStateValue.Text = "Не запускаю WoW: " + reason;
+                }
+            }
             StartWoWButton.Enabled = !IsWoWRunning();
 
-            // start if needed
-            if (!BotEnabled && Settings.Default.AutoEnable && IsOneWoWRunning() && (DateTime.Now-lastDisabled).Ticks>100000000)
+            // start bot if needed
+            if (!BotEnabled && Settings.Default.AutoEnable && IsOneWoWRunning() && (DateTime.Now - lastDisabled).Seconds > 5)
+            {
                 EnableBot();
+            }
 
             // update fps value
             if (FSM != null)
@@ -260,7 +293,7 @@ namespace Nakamar
             else
             {
                 CurrentFPSValue.Visible = false;
-                LastStateValue.Text = "не работает";
+                LastStateValue.Text = LastStateValue.Text ?? "не работает";
                 LastStateValue.ToolTipText = "конечный автомат сейчас не запущен";
                 PreviousFrameCount = 0;
             }
@@ -360,9 +393,25 @@ namespace Nakamar
 
         private void StartWoW(object sender, EventArgs e)
         {
+            StartWoW(sender, e, true);
+        }
+
+        private void StartWoW(object sender, EventArgs e, bool needCheck)
+        {
             if (File.Exists(Settings.Default.WoWPath))
                 if (Settings.Default.WoWPath.EndsWith("Wow.exe"))
                 {
+                    if(needCheck)
+                    {
+                        Log("Сейчас проверю");//!!
+                        string reason = LoaderManager.WhyShouldntStartWow();
+                        if (reason != null)
+                        {
+                            Log("Не запускаю WoW: " + reason);
+                            return;
+                        }
+                    }
+                    LoaderManager.Prepare();
                     Log("Запускаю " + Settings.Default.WoWPath);
                     StartWoWButton.Enabled = false;
                     this.Cursor = Cursors.WaitCursor;
@@ -372,7 +421,7 @@ namespace Nakamar
                     this.Cursor = Cursors.Default;
                 }
                 else
-                    Log("нужен файл Wow.exe");
+                    Log("Нужен файл Wow.exe");
             else
                 Log("Файл Wow.exe не найден");
         }
@@ -406,8 +455,10 @@ namespace Nakamar
             // update gui list
             StatesList.BeginUpdate();
             StatesList.Items.Clear();
+
             foreach(State state in FSM.States)
                 StatesList.Items.Add(state.GetType().FullName);
+
             StatesList.EndUpdate();
 
             BlockedStatesList.BeginUpdate();
@@ -423,7 +474,9 @@ namespace Nakamar
         {
             int index = BlockedStatesList.SelectedIndex;
             if (index == -1)
+            {
                 ShowError("нужно выбрать состояние из списка прежде чем нажимать кнопку разблокирования");
+            }
             else
             {
                 string name = (string)BlockedStatesList.Items[index];

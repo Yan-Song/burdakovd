@@ -5,7 +5,7 @@ using System.Text;
 using FiniteStateMachine;
 using WoWMemoryManager;
 
-namespace NakamarStates
+namespace Plugins
 {
     public class DoNotRestart : State
     {
@@ -27,13 +27,13 @@ namespace NakamarStates
                 return
                     Memory.CurrentGameState == GameState.World &&
                     Memory.GetAddonMessage() != null &&
-                    (Memory.GetAddonMessage().DoNotRestart != "") != Machine.DoNotRestart;
+                    string.IsNullOrEmpty(Memory.GetAddonMessage().DoNotRestart) == Machine.DoNotRestart;
             }
         }
 
         public override void Run()
         {
-            if (Memory.GetAddonMessage().DoNotRestart != "")
+            if (!string.IsNullOrEmpty(Memory.GetAddonMessage().DoNotRestart))
             {
                 Log("Аддон попросил не перезапускать WoW (" + Memory.GetAddonMessage().DoNotRestart + ")");
                 Machine.DoNotRestart = true;

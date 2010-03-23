@@ -150,7 +150,7 @@
             this.MonitorTimer.Enabled = true;
             this.MonitorTimer.Interval = 1000;
             this.MonitorTimer.Tag = "";
-            this.MonitorTimer.Tick += new System.EventHandler(this.Monitor);
+            this.MonitorTimer.Tick += new System.EventHandler(this.uniqueMonitor);
             // 
             // LogDirectoryBrowser
             // 
@@ -217,6 +217,7 @@
             // 
             this.TopMostCheckBox.AutoSize = true;
             this.TopMostCheckBox.Checked = global::Nakamar.Properties.Settings.Default.TopMost;
+            this.TopMostCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.TopMostCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::Nakamar.Properties.Settings.Default, "TopMost", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.TopMostCheckBox.Location = new System.Drawing.Point(6, 6);
             this.TopMostCheckBox.Name = "TopMostCheckBox";
@@ -319,6 +320,7 @@
             // 
             this.HideManagementButtons.AutoSize = true;
             this.HideManagementButtons.Checked = global::Nakamar.Properties.Settings.Default.HideButtons;
+            this.HideManagementButtons.CheckState = System.Windows.Forms.CheckState.Checked;
             this.HideManagementButtons.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::Nakamar.Properties.Settings.Default, "HideButtons", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.HideManagementButtons.Location = new System.Drawing.Point(96, 32);
             this.HideManagementButtons.Name = "HideManagementButtons";
@@ -514,6 +516,7 @@
             // 
             // LastStateValue
             // 
+            this.LastStateValue.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.LastStateValue.Name = "LastStateValue";
             this.LastStateValue.Size = new System.Drawing.Size(794, 17);
             this.LastStateValue.Spring = true;

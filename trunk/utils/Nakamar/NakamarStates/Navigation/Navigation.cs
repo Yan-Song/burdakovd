@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FiniteStateMachine;
-using NakamarStates.Properties;
+using Plugins.Properties;
 using System.IO;
 using System.Windows.Forms;
 using WoWMemoryManager;
@@ -13,7 +13,7 @@ using System.Collections;
 using System.Windows.Input;
 using System.Threading;
 
-namespace NakamarStates
+namespace Plugins
 {
     enum TurningState
     {
@@ -720,13 +720,13 @@ namespace NakamarStates
                 return InteractResult.Failed;
             }
 
-            else if (current.Type == WayPointType.Simple)
+            else if (current.PointType == WayPointType.Simple)
                 return InteractWithXYZ(current);
-            else if (current.Type == WayPointType.NPC)
+            else if (current.PointType == WayPointType.NPC)
                 return InteractWithNPC(current);
-            else if (current.Type == WayPointType.Mailbox)
+            else if (current.PointType == WayPointType.Mailbox)
                 return InteractWithMailbox(current);
-            else if (current.Type == WayPointType.Rescue)
+            else if (current.PointType == WayPointType.Rescue)
                 return InteractWithRescue(current);
             else
                 throw new NotImplementedException();

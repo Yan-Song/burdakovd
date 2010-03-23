@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 
-namespace NakamarStates
+namespace Plugins
 {
     public static class KeyBindings
     {
-        public static Key
+        public const Key
             MoveForward = Key.W,
             TurnLeft = Key.A,
             TurnRight = Key.D,

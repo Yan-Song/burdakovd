@@ -2,7 +2,7 @@
 using FiniteStateMachine;
 using WoWMemoryManager;
 
-namespace NakamarStates
+namespace Plugins
 {
     public class MessageScanner : State
     {

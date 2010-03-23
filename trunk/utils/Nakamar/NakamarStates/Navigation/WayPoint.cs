@@ -5,7 +5,7 @@ using System.Collections;
 using System.Globalization;
 using System.Windows;
 
-namespace NakamarStates
+namespace Plugins
 {
     /// <summary>
     /// http://www.mmowned.com/forums/c/237023-bot-developers-simple-waypoint-navigation-system-including-loading-saving.html
@@ -16,22 +16,22 @@ namespace NakamarStates
 
         public virtual double Range { get { return WayPointRange; } }
 
-        public bool InRange(double range, WayPoint other)
+        public bool InRange(double range, Point other)
         {
             return Distance(other) < range;
         }
 
-        public virtual bool InRange(WayPoint other)
+        public virtual bool InRange(Point other)
         {
             return InRange(Range, other);
         }
 
-        public virtual bool InRange2D(WayPoint other)
+        public virtual bool InRange2D(Point other)
         {
             return InRange2D(Range, other);
         }
 
-        private bool InRange2D(double range, WayPoint other)
+        private bool InRange2D(double range, Point other)
         {
             return Distance2D(other) < range;
         }

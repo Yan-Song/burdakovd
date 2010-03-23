@@ -449,7 +449,7 @@ namespace WoWMemoryManager
 
         public bool NewAddonMessage()
         {
-            return GetAddonMessage()!=null && GetAddonMessage().Id > LastProcessedMessage;
+            return GetAddonMessage() != null && GetAddonMessage().Id > LastProcessedMessage;
         }
 
         public void ProcessAddonMessage(int id)

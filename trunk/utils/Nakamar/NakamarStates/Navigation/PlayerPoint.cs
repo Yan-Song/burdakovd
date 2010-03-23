@@ -6,9 +6,9 @@ using System.Windows;
 using System.Numeric;
 using System.Diagnostics;
 
-namespace NakamarStates
+namespace Plugins
 {
-    public class PlayerPoint : WayPoint
+    public class PlayerPoint : Point
     {
         static readonly Vector OX = new Vector(1, 0);
 
@@ -23,7 +23,7 @@ namespace NakamarStates
         /// </summary>
         /// <param name="p"></param>
         /// <returns>0..2*Math.PI</returns>
-        public double Angle(WayPoint p)
+        public double Angle(Point p)
         {
             Vector v = new Vector(p.X - this.X, p.Y - this.Y);
             double angle = Vector.AngleBetween(OX, v);

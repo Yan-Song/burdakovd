@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="NakamarStates.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Plugins.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="Password" Type="System.String" Scope="User">
@@ -7,6 +7,18 @@
     </Setting>
     <Setting Name="WayPointsPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">WayPoints.xml</Value>
+    </Setting>
+    <Setting Name="CurrentProfile" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="HowMuchHoursAllowedToBotEvery24Hours" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">12</Value>
+    </Setting>
+    <Setting Name="HowOldHoursNTDIsInteresting" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">8</Value>
+    </Setting>
+    <Setting Name="ConfigWTF" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

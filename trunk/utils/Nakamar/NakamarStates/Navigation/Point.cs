@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NakamarStates
+namespace Plugins
 {
     /// <summary>
     /// поддерживает разные геометрические операции

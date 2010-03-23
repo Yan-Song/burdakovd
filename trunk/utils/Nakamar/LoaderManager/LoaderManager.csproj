@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</ProjectGuid>
+    <ProjectGuid>{49BAC39E-1E89-41DC-8079-6DF67B60A634}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Util</RootNamespace>
-    <AssemblyName>Logger</AssemblyName>
+    <RootNamespace>LoaderManager</RootNamespace>
+    <AssemblyName>LoaderManager</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -35,8 +35,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -47,13 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigWTF.cs" />
-    <Compile Include="Serialization.cs" />
-    <Compile Include="ComparableListOfDouble.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="Mouse.cs" />
+    <Compile Include="Loader.cs" />
+    <Compile Include="LoaderManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerializableDictionary.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Logger\Util.csproj">
+      <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
+      <Name>Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

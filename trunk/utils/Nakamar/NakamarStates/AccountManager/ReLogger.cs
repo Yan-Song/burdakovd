@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FiniteStateMachine;
-using NakamarStates.Properties;
+using Plugins.Properties;
 using WoWMemoryManager;
 using System.Windows.Input;
 using System.Threading;
+using Plugins.AccountManager;
 
-namespace NakamarStates
+namespace Plugins
 {
     public class ReLogger : State
     {
@@ -18,19 +19,17 @@ namespace NakamarStates
         private bool CharacterSelected = false;
         private bool EnteredTheWorld = false;
         private bool RealmWizardMessagePrinted = false;
+        private Profile profile;
 
-        public ReLogger(object machine, object memory) : base(machine, memory) { }
+        public ReLogger(object machine, object memory) : base(machine, memory)
+        {
+            profile = Settings.Default.Profiles[Settings.Default.CurrentProfile];
+        }
 
         public override void Configure()
         {
-            Relogger.PasswordDialog f = new Relogger.PasswordDialog();
-            if (f.ShowDialog() == DialogResult.OK)
-            {
-                Settings.Default.Password = f.PasswordBox.Text;
-                Log("Пароль изменён");
-            }
+            new ProfileManagement().ShowDialog();
             Settings.Default.Save();
-
         }
 
         /// <summary>
@@ -61,7 +60,9 @@ namespace NakamarStates
                     Machine.StopEngineByWorker();
                 }
                 else if (!PasswordEntered)
+                {
                     EnterPassword();
+                }
             }
             else if (state == GameState.RealmWizard)
             {
@@ -92,6 +93,8 @@ namespace NakamarStates
                 Log("Вхожу в игровой мир");
                 LoggedIn = true;
                 EnteredTheWorld = true;
+
+                profile.AddSession();
             }
         }
 
@@ -108,9 +111,8 @@ namespace NakamarStates
 
         private void EnterPassword()
         {
-
-            Log("Ввожу пароль");
-            Memory.KB.SendText(Settings.Default.Password, true);
+            Log(string.Format("Ввожу пароль для аккаунта {0}", profile.AccountName));
+            Memory.KB.SendText(profile.Password, true);
             Thread.Sleep(500); // на всякий случай
             Memory.KB.PressKey(Key.Enter, true);
             PasswordEntered = true;

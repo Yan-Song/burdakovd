@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nakamar", "Nakamar\Nakamar.csproj", "{55CC75A6-9C4A-4D62-99B1-DC84FF4A82FC}"
 	ProjectSection(ProjectDependencies) = postProject
-		{4A688F33-BA30-477B-A651-5918C1603D2F} = {4A688F33-BA30-477B-A651-5918C1603D2F}
+		{49BAC39E-1E89-41DC-8079-6DF67B60A634} = {49BAC39E-1E89-41DC-8079-6DF67B60A634}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackMagic", "BlackMagic\BlackMagic.csproj", "{79FD54B0-DEAB-459F-83B9-F1CED68D288B}"
@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Binaries", "Binaries", "{7B
 		Binaries\fasmdll_managed.dll = Binaries\fasmdll_managed.dll
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakamarStates", "NakamarStates\NakamarStates.csproj", "{4A688F33-BA30-477B-A651-5918C1603D2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugins", "NakamarStates\Plugins.csproj", "{4A688F33-BA30-477B-A651-5918C1603D2F}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "NakamarInstaller", "NakamarInstaller\NakamarInstaller.vdproj", "{16B1B50E-9B92-4F91-BC75-6F081C4E80B2}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -32,6 +32,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "NakamarInstaller", "Nakamar
 		{79FD54B0-DEAB-459F-83B9-F1CED68D288B} = {79FD54B0-DEAB-459F-83B9-F1CED68D288B}
 		{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A} = {E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoaderManager", "LoaderManager\LoaderManager.csproj", "{49BAC39E-1E89-41DC-8079-6DF67B60A634}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -74,6 +76,10 @@ Global
 		{16B1B50E-9B92-4F91-BC75-6F081C4E80B2}.Debug|Any CPU.ActiveCfg = Debug
 		{16B1B50E-9B92-4F91-BC75-6F081C4E80B2}.Release|Any CPU.ActiveCfg = Release
 		{16B1B50E-9B92-4F91-BC75-6F081C4E80B2}.Release|Any CPU.Build.0 = Release
+		{49BAC39E-1E89-41DC-8079-6DF67B60A634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49BAC39E-1E89-41DC-8079-6DF67B60A634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49BAC39E-1E89-41DC-8079-6DF67B60A634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49BAC39E-1E89-41DC-8079-6DF67B60A634}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

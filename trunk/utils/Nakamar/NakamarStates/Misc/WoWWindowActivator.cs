@@ -5,9 +5,9 @@ using System.Text;
 using FiniteStateMachine;
 using WoWMemoryManager;
 
-namespace NakamarStates
+namespace Plugins
 {
-    class WoWWindowActivator : State
+    public class WoWWindowActivator : State
     {
         // когда окно WoW было активно последний раз или когда была последняя попытка активации
         private DateTime lastActiveTime = DateTime.MinValue;
