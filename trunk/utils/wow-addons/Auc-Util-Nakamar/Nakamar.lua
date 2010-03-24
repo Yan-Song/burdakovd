@@ -288,6 +288,7 @@ function private.everySecond()
 			CloseAuctionHouse()
 		end
 		print("Надо проверить почтовый ящик")
+		NNothingToDo(false)
 		private.GoToMail()
 		private.changeState("WAITING_FOR_MAILBOX")
 		return
@@ -301,6 +302,7 @@ function private.everySecond()
 	-- иначе
 	if private.state == "THINKING" then
 		print("Делать пока нечего, пойду сканировать аукцион")
+		NNothingToDo(true)
 		private.GoToAuction()
 		private.changeState("WAITING_FOR_AUCTION")
 		return
