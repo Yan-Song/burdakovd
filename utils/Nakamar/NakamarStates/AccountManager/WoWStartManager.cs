@@ -91,13 +91,19 @@ namespace Plugins
                 }
             }
 
+            Profile profile = Settings.Default.Profiles[Settings.Default.CurrentProfile];
+
             ConfigWTF wtf = new ConfigWTF();
             wtf.Load(Settings.Default.ConfigWTF);
 
-            Profile profile = Settings.Default.Profiles[Settings.Default.CurrentProfile];
-
             wtf["accountName"] = profile.AccountName;
             wtf["realmName"] = profile.Realm;
+            wtf["lastCharacterIndex"] = profile.CharacterIndex.ToString();
+            wtf["checkAddonVersion"] = "0"; // чтобы можно было использовать устаревшие аддоны
+            wtf["readEULA"] = "1";
+            wtf["readScanning"] = "1";
+            wtf["readTOS"] = "1";
+
 
             wtf.Save();
 
