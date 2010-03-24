@@ -17,6 +17,7 @@ data[1] = 901791
 --data[8] is DoNotRestart
 --data[9] is needPurchaseConfirmation
 --data[10] is CurrentState (string)
+--data[11] is NothingToDo (yes/no)
 
 local msgcount = 0
 local lastCommandTime = 0
@@ -64,6 +65,14 @@ function NNeedPurchaseConfirmation(need)
 	else
 		data[9] = ""
 	end
+end
+
+function NNothingToDo(yes)
+    if yes then
+        data[11] = "yes"
+    else
+        data[11] = "no"
+    end
 end
 
 NSendCommand("nop")
