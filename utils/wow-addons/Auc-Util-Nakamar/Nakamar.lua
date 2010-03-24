@@ -456,6 +456,9 @@ function private.everySecond()
 				if postable == 0 then
 					print("весь товар выложен на аукцион")
 					private.doScanning()
+					-- считаем, что нам нечего делать, если весь товар выложен на аукцион
+					-- и до следующего сбора почты больше 10 минут
+					NNothingToDo(private.nextMailTime > private.GameTime + 600)
 				else
 					private.ERROR("часть товара не удалось выложить на аукцион")
 				end
