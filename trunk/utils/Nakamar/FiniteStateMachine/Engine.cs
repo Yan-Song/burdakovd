@@ -150,7 +150,7 @@ namespace FiniteStateMachine
                 }
                 catch
                 {
-                    Logger.LogError("FSM-worker", "WoW закрылся неожиданно. Запрещаю перезапуск");
+                    Logger.LogError("FSM-worker", "Ошибка при получении CurrentGameState. Запрещаю перезапуск");
                     DoNotRestart = true;
                 }
             }

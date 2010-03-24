@@ -201,12 +201,20 @@ namespace Nakamar
             if (FSM.DoNotRestart)
             {
                 PlayDoNotRestartSound();
+                
             }
             FSM = null;
             WoW = null;
             BotEnabled = false;
             lastDisabled = DateTime.Now;
             Log("Бот остановлен");
+
+            while (IsOneWoWRunning())
+            {
+                MessageBox.Show(
+                    "Произошла ошибка в работе бота, WoW не закрыт. Посмотрите, что c ним произошло, закройте WoW и затем нажмите ОК",
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private List<int> WoWProcesses()
