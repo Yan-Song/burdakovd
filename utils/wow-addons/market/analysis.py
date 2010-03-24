@@ -398,7 +398,7 @@ def group_months(market, f):
 
 for realm in realms:
     chars = data[realm].keys()
-    print realm + ": " + ", ".join(chars)
+    prn( realm + ": " + ", ".join(chars))
     for char in chars:
         # general
         c = data[realm][char]
