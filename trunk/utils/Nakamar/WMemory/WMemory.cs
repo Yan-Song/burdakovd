@@ -272,7 +272,9 @@ namespace WoWMemoryManager
                 }
 
                 if (ok)
+                {
                     return cached;
+                }
                 else
                 {
                     DynamicDoublePatternCache.Remove(pattern);
@@ -395,22 +397,34 @@ namespace WoWMemoryManager
         private string[] GetRawAddonMessage(ComparableListOfDouble signature)
         {
             uint p = CachedDoublePattern(signature);
-            if (p == 0) return null;
-            uint pMessage = BM.ReadUInt(p + 16 * (uint)signature.Count);
-            uint pTarget = BM.ReadUInt(p + 16 * ((uint)signature.Count + 1));
-            uint pDoNotRestart = BM.ReadUInt(p + 16 * ((uint)signature.Count + 2));
-            uint pNeedPurchaseConfirmation = BM.ReadUInt(p + 16 * ((uint)signature.Count + 3));
-            uint pCurrentState = BM.ReadUInt(p + 16 * ((uint)signature.Count + 4));
-            uint pNothingToDo = BM.ReadUInt(p + 16 * ((uint)signature.Count + 5));
-            // http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html#post717199
-            string text = BM.ReadUTF8String(pMessage + 0x14, BM.ReadUInt(pMessage + 0x10));
-            string target = BM.ReadUTF8String(pTarget + 0x14, BM.ReadUInt(pTarget + 0x10));
-            string DoNotRestart = BM.ReadUTF8String(pDoNotRestart + 0x14, BM.ReadUInt(pDoNotRestart + 0x10));
-            string NeedPurchaseConfirmation =
-                BM.ReadUTF8String(pNeedPurchaseConfirmation + 0x14, BM.ReadUInt(pNeedPurchaseConfirmation + 0x10));
-            string CurrentState = BM.ReadUTF8String(pCurrentState + 0x14, BM.ReadUInt(pCurrentState + 0x10));
-            string NothingToDo = BM.ReadUTF8String(pNothingToDo + 0x14, BM.ReadUInt(pNothingToDo + 0x10));
-            return new string[] { text, target, DoNotRestart, NeedPurchaseConfirmation, CurrentState, NothingToDo };
+            if (p == 0)
+            {
+                return null;
+            }
+            try
+            {
+                uint pMessage = BM.ReadUInt(p + 16 * (uint)signature.Count);
+                uint pTarget = BM.ReadUInt(p + 16 * ((uint)signature.Count + 1));
+                uint pDoNotRestart = BM.ReadUInt(p + 16 * ((uint)signature.Count + 2));
+                uint pNeedPurchaseConfirmation = BM.ReadUInt(p + 16 * ((uint)signature.Count + 3));
+                uint pCurrentState = BM.ReadUInt(p + 16 * ((uint)signature.Count + 4));
+                uint pNothingToDo = BM.ReadUInt(p + 16 * ((uint)signature.Count + 5));
+                // http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html#post717199
+                string text = BM.ReadUTF8String(pMessage + 0x14, BM.ReadUInt(pMessage + 0x10));
+                string target = BM.ReadUTF8String(pTarget + 0x14, BM.ReadUInt(pTarget + 0x10));
+                string DoNotRestart = BM.ReadUTF8String(pDoNotRestart + 0x14, BM.ReadUInt(pDoNotRestart + 0x10));
+                string NeedPurchaseConfirmation =
+                    BM.ReadUTF8String(pNeedPurchaseConfirmation + 0x14, BM.ReadUInt(pNeedPurchaseConfirmation + 0x10));
+                string CurrentState = BM.ReadUTF8String(pCurrentState + 0x14, BM.ReadUInt(pCurrentState + 0x10));
+                string NothingToDo = BM.ReadUTF8String(pNothingToDo + 0x14, BM.ReadUInt(pNothingToDo + 0x10));
+                return new string[] { text, target, DoNotRestart, NeedPurchaseConfirmation, CurrentState, NothingToDo };
+            }
+            catch (Exception ex)
+            {
+                Log(string.Format("Не удалось прочитать сообщение от аддона ({0}). Удаляю кэшированный адрес {1}", ex.Message, p));
+                DynamicDoublePatternCache.Remove(signature);
+                return null;
+            }
         }
 
         public AddonMessage GetAddonMessage()
