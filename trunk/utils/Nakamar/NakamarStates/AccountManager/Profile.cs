@@ -47,6 +47,7 @@ namespace Plugins.AccountManager
         public string AccountName;
         public string Password;
         public string Realm;
+        public int CharacterIndex = 0;
         public bool Enabled = true;
 
         public List<Session> Sessions = new List<Session>();

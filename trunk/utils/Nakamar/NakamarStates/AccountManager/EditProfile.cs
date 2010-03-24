@@ -26,6 +26,7 @@ namespace Plugins.AccountManager
             AccountName.Text = newProfile.AccountName;
             AccountPassword.Text = newProfile.Password;
             Realm.Text = newProfile.Realm;
+            CharacterIndex.Value = (decimal)newProfile.CharacterIndex;
             ProfileEnabled.Checked = newProfile.Enabled;
 
             fillStats();
@@ -77,6 +78,7 @@ namespace Plugins.AccountManager
             newProfile.Password = AccountPassword.Text;
             newProfile.Realm = Realm.Text;
             newProfile.Enabled = ProfileEnabled.Checked;
+            newProfile.CharacterIndex = (int)CharacterIndex.Value;
 
             if(Settings.Default.Profiles.ContainsKey(oldName))
             {
