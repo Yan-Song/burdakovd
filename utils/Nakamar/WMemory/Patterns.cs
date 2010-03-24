@@ -56,10 +56,10 @@ namespace WoWMemoryManager
         /// and "realmwizard", when you choose a realm
         /// </summary>        
         /// http://www.mmowned.com/forums/wow-memory-editing/260085-wow-3-2-2-info-dump-thread.html#post1684721
-        public static uint GameState = 0x00B03BB8; // works for 3.3.2
+        public static uint GameState = 0x00C8F2E0; // works for 3.3.3
 
         /// <summary>
-        /// Сам составил :), работает для 3.2.2 - 3.3.0
+        /// Сам составил :), работает для 3.2.2 - 3.3.2
         /// </summary>
         public static Pattern PlayerBase =
             new Pattern("55 8B EC 8B 45 08 81 EC 00 01 00 00 56 8B 75 0C 57 8B 7D 10 8B CE 0B CF A3 FF FF FF FF 0F 84 FF FF FF FF D9 E8",
