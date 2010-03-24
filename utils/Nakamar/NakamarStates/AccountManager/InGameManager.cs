@@ -11,7 +11,7 @@ namespace Plugins.AccountManager
     public class InGameManager : State
     {
         DateTime lastSessionUpdate = DateTime.MinValue;
-        string CurrentAddonState, PreviousAddonState;
+        bool CurrentNTDState, PreviousNTDState;
 
         public InGameManager(object machine, object memory)
             : base(machine, memory)
@@ -50,15 +50,14 @@ namespace Plugins.AccountManager
 
                 if (Memory.GetAddonMessage() != null)
                 {
-                    string state = Memory.GetAddonMessage().CurrentState;
+                    bool state = Memory.GetAddonMessage().NothingToDo;
+                    PreviousNTDState = CurrentNTDState;
+                    CurrentNTDState = state;
 
-                    PreviousAddonState = CurrentAddonState;
-                    CurrentAddonState = state;
-
-                    if (CurrentAddonState == "SCANNING")
+                    if (CurrentNTDState)
                     {
                         // NTD
-                        if (CurrentAddonState != PreviousAddonState)
+                        if (!PreviousNTDState)
                         {
                             Settings.Default.Profiles[Settings.Default.CurrentProfile].NothingToDo();
                             Settings.Default.Save();
