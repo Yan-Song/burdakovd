@@ -30,23 +30,23 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditProfile));
             this.OK = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.Cancel = new System.Windows.Forms.Button();
             this.tableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.ProfileName = new System.Windows.Forms.TextBox();
             this.AccountName = new System.Windows.Forms.TextBox();
             this.AccountPassword = new System.Windows.Forms.TextBox();
             this.Realm = new System.Windows.Forms.TextBox();
             this.Online24 = new System.Windows.Forms.Label();
-            this.ProfileEnabled = new System.Windows.Forms.CheckBox();
             this.TimeSinceLastNTD = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.CharacterIndex = new System.Windows.Forms.NumericUpDown();
+            this.ProfileEnabled = new System.Windows.Forms.CheckBox();
             this.tableLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CharacterIndex)).BeginInit();
             this.SuspendLayout();
@@ -55,7 +55,7 @@
             // 
             this.OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.OK.Location = new System.Drawing.Point(246, 272);
+            this.OK.Location = new System.Drawing.Point(272, 273);
             this.OK.Name = "OK";
             this.OK.Size = new System.Drawing.Size(90, 30);
             this.OK.TabIndex = 0;
@@ -63,16 +63,16 @@
             this.OK.UseVisualStyleBackColor = true;
             this.OK.Click += new System.EventHandler(this.OK_Click);
             // 
-            // button2
+            // Cancel
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(342, 272);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(90, 30);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Отмена";
-            this.button2.UseVisualStyleBackColor = true;
+            this.Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.Cancel.Location = new System.Drawing.Point(368, 273);
+            this.Cancel.Name = "Cancel";
+            this.Cancel.Size = new System.Drawing.Size(90, 30);
+            this.Cancel.TabIndex = 1;
+            this.Cancel.Text = "Отмена";
+            this.Cancel.UseVisualStyleBackColor = true;
             // 
             // tableLayout
             // 
@@ -106,7 +106,7 @@
             this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28939F));
             this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.2851F));
             this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28511F));
-            this.tableLayout.Size = new System.Drawing.Size(418, 239);
+            this.tableLayout.Size = new System.Drawing.Size(444, 240);
             this.tableLayout.TabIndex = 2;
             // 
             // label1
@@ -153,75 +153,6 @@
             this.label4.Text = "Игровой мир";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // ProfileName
-            // 
-            this.ProfileName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.ProfileName.Location = new System.Drawing.Point(205, 7);
-            this.ProfileName.Name = "ProfileName";
-            this.ProfileName.Size = new System.Drawing.Size(210, 20);
-            this.ProfileName.TabIndex = 6;
-            this.ProfileName.TextChanged += new System.EventHandler(this.NameChanged);
-            // 
-            // AccountName
-            // 
-            this.AccountName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.AccountName.Location = new System.Drawing.Point(205, 41);
-            this.AccountName.Name = "AccountName";
-            this.AccountName.Size = new System.Drawing.Size(210, 20);
-            this.AccountName.TabIndex = 7;
-            this.AccountName.TextChanged += new System.EventHandler(this.ProfileChanged);
-            // 
-            // AccountPassword
-            // 
-            this.AccountPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.AccountPassword.Location = new System.Drawing.Point(205, 75);
-            this.AccountPassword.Name = "AccountPassword";
-            this.AccountPassword.Size = new System.Drawing.Size(210, 20);
-            this.AccountPassword.TabIndex = 8;
-            this.AccountPassword.UseSystemPasswordChar = true;
-            this.AccountPassword.TextChanged += new System.EventHandler(this.ProfileChanged);
-            // 
-            // Realm
-            // 
-            this.Realm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.Realm.Location = new System.Drawing.Point(205, 109);
-            this.Realm.Name = "Realm";
-            this.Realm.Size = new System.Drawing.Size(210, 20);
-            this.Realm.TabIndex = 9;
-            this.Realm.TextChanged += new System.EventHandler(this.ProfileChanged);
-            // 
-            // Online24
-            // 
-            this.Online24.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.Online24.AutoSize = true;
-            this.Online24.Location = new System.Drawing.Point(205, 180);
-            this.Online24.Name = "Online24";
-            this.Online24.Size = new System.Drawing.Size(35, 13);
-            this.Online24.TabIndex = 10;
-            this.Online24.Text = "label7";
-            this.Online24.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ProfileEnabled
-            // 
-            this.ProfileEnabled.AutoSize = true;
-            this.ProfileEnabled.Location = new System.Drawing.Point(14, 323);
-            this.ProfileEnabled.Name = "ProfileEnabled";
-            this.ProfileEnabled.Size = new System.Drawing.Size(70, 17);
-            this.ProfileEnabled.TabIndex = 3;
-            this.ProfileEnabled.Text = "Включён";
-            this.ProfileEnabled.UseVisualStyleBackColor = true;
-            // 
-            // TimeSinceLastNTD
-            // 
-            this.TimeSinceLastNTD.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.TimeSinceLastNTD.AutoSize = true;
-            this.TimeSinceLastNTD.Location = new System.Drawing.Point(205, 215);
-            this.TimeSinceLastNTD.Name = "TimeSinceLastNTD";
-            this.TimeSinceLastNTD.Size = new System.Drawing.Size(35, 13);
-            this.TimeSinceLastNTD.TabIndex = 11;
-            this.TimeSinceLastNTD.Text = "label8";
-            this.TimeSinceLastNTD.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -239,10 +170,69 @@
             this.label6.Dock = System.Windows.Forms.DockStyle.Right;
             this.label6.Location = new System.Drawing.Point(3, 204);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(196, 35);
+            this.label6.Size = new System.Drawing.Size(196, 36);
             this.label6.TabIndex = 5;
             this.label6.Text = "Время с последнего \"нечего делать\"";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // ProfileName
+            // 
+            this.ProfileName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.ProfileName.Location = new System.Drawing.Point(205, 7);
+            this.ProfileName.Name = "ProfileName";
+            this.ProfileName.Size = new System.Drawing.Size(236, 20);
+            this.ProfileName.TabIndex = 6;
+            this.ProfileName.TextChanged += new System.EventHandler(this.NameChanged);
+            // 
+            // AccountName
+            // 
+            this.AccountName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.AccountName.Location = new System.Drawing.Point(205, 41);
+            this.AccountName.Name = "AccountName";
+            this.AccountName.Size = new System.Drawing.Size(236, 20);
+            this.AccountName.TabIndex = 7;
+            this.AccountName.TextChanged += new System.EventHandler(this.ProfileChanged);
+            // 
+            // AccountPassword
+            // 
+            this.AccountPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.AccountPassword.Location = new System.Drawing.Point(205, 75);
+            this.AccountPassword.Name = "AccountPassword";
+            this.AccountPassword.Size = new System.Drawing.Size(236, 20);
+            this.AccountPassword.TabIndex = 8;
+            this.AccountPassword.UseSystemPasswordChar = true;
+            this.AccountPassword.TextChanged += new System.EventHandler(this.ProfileChanged);
+            // 
+            // Realm
+            // 
+            this.Realm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.Realm.Location = new System.Drawing.Point(205, 109);
+            this.Realm.Name = "Realm";
+            this.Realm.Size = new System.Drawing.Size(236, 20);
+            this.Realm.TabIndex = 9;
+            this.Realm.TextChanged += new System.EventHandler(this.ProfileChanged);
+            // 
+            // Online24
+            // 
+            this.Online24.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.Online24.AutoSize = true;
+            this.Online24.Location = new System.Drawing.Point(205, 180);
+            this.Online24.Name = "Online24";
+            this.Online24.Size = new System.Drawing.Size(35, 13);
+            this.Online24.TabIndex = 10;
+            this.Online24.Text = "label7";
+            this.Online24.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TimeSinceLastNTD
+            // 
+            this.TimeSinceLastNTD.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.TimeSinceLastNTD.AutoSize = true;
+            this.TimeSinceLastNTD.Location = new System.Drawing.Point(205, 215);
+            this.TimeSinceLastNTD.Name = "TimeSinceLastNTD";
+            this.TimeSinceLastNTD.Size = new System.Drawing.Size(35, 13);
+            this.TimeSinceLastNTD.TabIndex = 11;
+            this.TimeSinceLastNTD.Text = "label8";
+            this.TimeSinceLastNTD.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label7
             // 
@@ -255,7 +245,7 @@
             this.label7.Text = "Номер персонажа (начиная с нуля)";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // numericUpDown1
+            // CharacterIndex
             // 
             this.CharacterIndex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.CharacterIndex.Location = new System.Drawing.Point(205, 143);
@@ -264,21 +254,32 @@
             0,
             0,
             0});
-            this.CharacterIndex.Name = "numericUpDown1";
-            this.CharacterIndex.Size = new System.Drawing.Size(210, 20);
+            this.CharacterIndex.Name = "CharacterIndex";
+            this.CharacterIndex.Size = new System.Drawing.Size(236, 20);
             this.CharacterIndex.TabIndex = 13;
             this.CharacterIndex.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // ProfileEnabled
+            // 
+            this.ProfileEnabled.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.ProfileEnabled.AutoSize = true;
+            this.ProfileEnabled.Location = new System.Drawing.Point(14, 284);
+            this.ProfileEnabled.Name = "ProfileEnabled";
+            this.ProfileEnabled.Size = new System.Drawing.Size(70, 17);
+            this.ProfileEnabled.TabIndex = 3;
+            this.ProfileEnabled.Text = "Включён";
+            this.ProfileEnabled.UseVisualStyleBackColor = true;
             // 
             // EditProfile
             // 
             this.AcceptButton = this.OK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.button2;
-            this.ClientSize = new System.Drawing.Size(444, 314);
+            this.CancelButton = this.Cancel;
+            this.ClientSize = new System.Drawing.Size(470, 315);
             this.Controls.Add(this.ProfileEnabled);
             this.Controls.Add(this.tableLayout);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.Cancel);
             this.Controls.Add(this.OK);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -297,7 +298,7 @@
         #endregion
 
         private System.Windows.Forms.Button OK;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button Cancel;
         private System.Windows.Forms.TableLayoutPanel tableLayout;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
