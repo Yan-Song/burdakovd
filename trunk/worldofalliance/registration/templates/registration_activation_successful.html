@@ -1,8 +1,0 @@
-﻿{% extends "base.html" %}
-{% block title %}{% if account %}Регистрация завершена{% else %}Аккаунт не активирован :({% endif %}{% endblock %}
-
-{% block content %}
-  <h1>Аккаунт активирован</h1>
-  <p>Поздравляем, ваш аккаунт успешно создан.
-  <a href="{% url django.contrib.auth.views.login %}">Войти</a></p>
-{% endblock content %}
