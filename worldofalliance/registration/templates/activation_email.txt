@@ -1,7 +1,0 @@
-﻿На ваш e-mail был зарегистрирован аккаунт на сайте http://worldofalliance.com/
-
-Для подтверждения регистрации пройдите по ссылке:
-http://{{ site }}{% url registration_activate activation_key=activation_key %}
-
----
-World of Alliance
