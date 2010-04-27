@@ -1,0 +1,1132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE rise:model[<!--DTD for RISE XML 1.1 by R2B Software AB,copyright 2007, 2008, 2009-->
+<!ELEMENT rise:model (rise:modelInfo,rise:naming?,(rise:evolution,rise:publish?,rise:presentation?,rise:documentation?,rise:applications?))>
+<!ATTLIST rise:model xmlns:rise CDATA #FIXED "http://www.r2bsoftware/ns/rise/">
+<!ELEMENT rise:modelInfo (rise:name,rise:prefix,rise:guid,rise:about?,rise:engineVersion?,rise:integerSize?,rise:vendor,rise:base?)>
+<!ELEMENT rise:name (#PCDATA)>
+<!ELEMENT rise:prefix (#PCDATA)>
+<!ELEMENT rise:guid (#PCDATA)>
+<!ELEMENT rise:about (#PCDATA)>
+<!ELEMENT rise:engineVersion (#PCDATA)>
+<!ELEMENT rise:vendor (rise:name,rise:email,rise:www,rise:copyright)>
+<!ELEMENT rise:email (#PCDATA)>
+<!ELEMENT rise:www (#PCDATA)>
+<!ELEMENT rise:copyright (#PCDATA)>
+<!ELEMENT rise:base (rise:name,rise:guid,rise:sequenceNumber,rise:timeStamp?,rise:hint?)>
+<!ELEMENT rise:evolution ((rise:newEntity|rise:renameEntity|rise:deleteEntity|rise:newRelation|rise:renameRelation|rise:editRelation|rise:deleteRelation|rise:newAttribute|rise:renameAttribute|rise:editAttribute|rise:deleteAttribute|rise:release|rise:newSpecialization|rise:deleteSpecialization|rise:newIndex|rise:deleteIndex|rise:snapshot|rise:newInstance|rise:editInstance|rise:deleteInstance|rise:sortAttribute)*)>
+<!ELEMENT rise:newEntity (rise:sequenceNumber,rise:timeStamp,rise:entity)>
+<!ELEMENT rise:renameEntity (rise:sequenceNumber,rise:timeStamp,rise:entityName,rise:newEntityName)>
+<!ELEMENT rise:deleteEntity (rise:sequenceNumber,rise:timeStamp,rise:entityName)>
+<!ELEMENT rise:newRelation (rise:sequenceNumber,rise:timeStamp,rise:relation)>
+<!ELEMENT rise:renameRelation (rise:sequenceNumber,rise:timeStamp,rise:relationName,rise:newRelationName)>
+<!ELEMENT rise:editRelation (rise:sequenceNumber,rise:timeStamp,rise:relation)>
+<!ELEMENT rise:deleteRelation (rise:sequenceNumber,rise:timeStamp,rise:relationName)>
+<!ELEMENT rise:newAttribute (rise:sequenceNumber,rise:timeStamp,rise:entity)>
+<!ELEMENT rise:renameAttribute (rise:sequenceNumber,rise:timeStamp,rise:entityName,rise:attributeName,rise:newAttributeName)>
+<!ELEMENT rise:editAttribute (rise:sequenceNumber,rise:timeStamp,rise:entity)>
+<!ELEMENT rise:deleteAttribute (rise:sequenceNumber,rise:timeStamp,rise:entityName,rise:attributeName)>
+<!ELEMENT rise:release (rise:sequenceNumber,rise:timeStamp,rise:comment?)>
+<!ELEMENT rise:newSpecialization (rise:sequenceNumber,rise:timeStamp,rise:specialization)>
+<!ELEMENT rise:deleteSpecialization (rise:sequenceNumber,rise:timeStamp,rise:specializationName)>
+<!ELEMENT rise:newIndex (rise:sequenceNumber,rise:timeStamp,rise:entity)>
+<!ELEMENT rise:deleteIndex (rise:sequenceNumber,rise:timeStamp,rise:entityName,rise:indexName)>
+<!ELEMENT rise:snapshot (rise:sequenceNumber,rise:timeStamp,rise:releases,(rise:entity|rise:relation|rise:specialization)*)>
+<!ELEMENT rise:newInstance (rise:sequenceNumber,rise:timeStamp,(rise:entity|rise:relation|rise:specialization))>
+<!ELEMENT rise:editInstance (rise:sequenceNumber,rise:timeStamp,(rise:entity|rise:relation|rise:specialization))>
+<!ELEMENT rise:deleteInstance (rise:sequenceNumber,rise:timeStamp,(rise:entity|rise:relation|rise:specialization))>
+<!ELEMENT rise:sortAttribute (rise:sequenceNumber,rise:timeStamp,rise:entityName,rise:attributeName,rise:newPosition)>
+<!ELEMENT rise:sequenceNumber (#PCDATA)>
+<!ELEMENT rise:timeStamp (#PCDATA)>
+<!ELEMENT rise:entity (rise:name,rise:isDataType?,rise:attribute*,rise:index*,rise:deleted?,rise:maxID,rise:ID*)>
+<!ELEMENT rise:attribute (rise:name,rise:dataTypeAlias?,(rise:dataType,rise:dataSize?,rise:mustBeUnique?,rise:mustExist?,rise:default?,rise:check?,rise:fkAttribute?,rise:description?)?,rise:deleted?,rise:instance*)>
+<!ELEMENT rise:entityName (#PCDATA)>
+<!ELEMENT rise:newEntityName (#PCDATA)>
+<!ELEMENT rise:relation (rise:name,rise:node,rise:node,rise:deleted?,rise:maxID,rise:ID*)>
+<!ELEMENT rise:relationName (#PCDATA)>
+<!ELEMENT rise:newRelationName (#PCDATA)>
+<!ELEMENT rise:attributeName (#PCDATA)>
+<!ELEMENT rise:newAttributeName (#PCDATA)>
+<!ELEMENT rise:newPosition (#PCDATA)>
+<!ELEMENT rise:comment (#PCDATA)>
+<!ELEMENT rise:specialization (rise:name,rise:subEntity,rise:superEntity,rise:deleted?,rise:specialized*)>
+<!ELEMENT rise:specializationName (#PCDATA)>
+<!ELEMENT rise:index (rise:name,rise:mustBeUnique,rise:indexColumn+)>
+<!ELEMENT rise:indexColumn ((rise:attributeName|rise:relationName|rise:specializationName),rise:orderBy, rise:fkName?)>
+<!ELEMENT rise:releases (#PCDATA)>
+<!ELEMENT rise:fkName (#PCDATA)>
+<!ELEMENT rise:dataType (#PCDATA)>
+<!ELEMENT rise:dataSize (#PCDATA)>
+<!ELEMENT rise:mustBeUnique (#PCDATA)>
+<!ELEMENT rise:mustExist (#PCDATA)>
+<!ELEMENT rise:default (#PCDATA)>
+<!ELEMENT rise:check (#PCDATA)>
+<!ELEMENT rise:fkAttribute (rise:pkTable, rise:pkColumn)>
+<!ELEMENT rise:pkTable (#PCDATA)>
+<!ELEMENT rise:pkColumn (#PCDATA)>
+<!ELEMENT rise:node (rise:name,rise:entityName,rise:attributeName?,rise:cardinality,rise:reference*)>
+<!ELEMENT rise:cardinality (#PCDATA)>
+<!ELEMENT rise:subEntity (#PCDATA)>
+<!ELEMENT rise:superEntity (#PCDATA)>
+<!ELEMENT rise:deleted (#PCDATA)>
+<!ELEMENT rise:publish (rise:view*,rise:interface*)>
+<!ELEMENT rise:view (rise:name,rise:distinct?,rise:entityName,rise:viewAttribute*,rise:extendWith*,rise:whereClause?,rise:groupBy?)>
+<!ELEMENT rise:distinct (#PCDATA)>
+<!ELEMENT rise:extendWith (rise:name,(rise:specializationName|(rise:relationName,rise:nodeName)),rise:viewName?,rise:mandatory)>
+<!ELEMENT rise:viewAttribute (rise:name,rise:extendWithName?,rise:attributeName?,rise:postProcess?)>
+<!ELEMENT rise:whereClause (#PCDATA)>
+<!ELEMENT rise:groupBy (#PCDATA)>
+<!ELEMENT rise:nodeName (#PCDATA)>
+<!ELEMENT rise:mandatory (#PCDATA)>
+<!ELEMENT rise:extendWithName (#PCDATA)>
+<!ELEMENT rise:postProcess (#PCDATA)>
+<!ELEMENT rise:interface (rise:name,rise:method*,rise:isPrivate?)>
+<!ELEMENT rise:method (rise:name,(rise:entityMethod|rise:viewMethod|rise:customMethod|rise:composedMethod),rise:description?,rise:userManaged?,rise:isPrivate?)>
+<!ELEMENT rise:entityMethod (rise:entityName,rise:operation,rise:returnSet?,rise:argumentList?,rise:filterBy?,rise:orderBy?,rise:extendedQuery?)>
+<!ELEMENT rise:viewMethod (rise:viewName,rise:returnSet?,rise:argumentList?,rise:filterBy?,rise:orderBy?,rise:extendedQuery?)>
+<!ELEMENT rise:relationMethod (rise:relationName,rise:operation,rise:returnSet?,rise:argumentList?)>
+<!ELEMENT rise:customMethod (rise:include,rise:class,rise:isListing?,rise:returnSet?,rise:argumentList?,rise:noDatabase?)>
+<!ELEMENT rise:composedMethod (rise:composition,rise:returnSet?,rise:argumentList?)>
+<!ELEMENT rise:description (#PCDATA)>
+<!ELEMENT rise:userManaged (#PCDATA)>
+<!ELEMENT rise:viewName (#PCDATA)>
+<!ELEMENT rise:operation (#PCDATA)>
+<!ELEMENT rise:returnSet (rise:return+)>
+<!ELEMENT rise:argumentList (rise:argument+)>
+<!ELEMENT rise:filterBy (#PCDATA)>
+<!ELEMENT rise:orderBy (#PCDATA)>
+<!ELEMENT rise:extendedQuery (#PCDATA)>
+<!ELEMENT rise:include (#PCDATA)>
+<!ELEMENT rise:class (#PCDATA)>
+<!ELEMENT rise:return (rise:name,((rise:dataType,rise:mustExist?)|rise:attributeName|(rise:isID,((rise:relationName,rise:nodeName)|rise:specializationName)?)),rise:postProcess?)>
+<!ELEMENT rise:argument (rise:name,((rise:dataType,rise:mustExist?)|rise:attributeName|(rise:isID,((rise:relationName,rise:nodeName)|rise:specializationName)?)),rise:postProcess?)>
+<!ELEMENT rise:argumentName (#PCDATA)>
+<!ELEMENT rise:isID (#PCDATA)>
+<!ELEMENT rise:presentation (rise:diagram*)>
+<!ELEMENT rise:diagram (rise:name,(rise:drawEntity|rise:drawView|rise:drawInterface|rise:drawText)*)>
+<!ELEMENT rise:drawEntity (rise:entityName,rise:showAttributes?,rise:boundingBox,rise:color?)>
+<!ELEMENT rise:drawView (rise:viewName,rise:showAttributes?,rise:boundingBox,rise:color?)>
+<!ELEMENT rise:drawInterface (rise:interfaceName,rise:boundingBox,rise:color?)>
+<!ELEMENT rise:drawText (rise:textRef,rise:display,rise:boundingBox,rise:color?)>
+<!ELEMENT rise:showAttributes (#PCDATA)>
+<!ELEMENT rise:boundingBox (rise:x,rise:y,rise:sizeX,rise:sizeY)>
+<!ELEMENT rise:textRef (#PCDATA)>
+<!ELEMENT rise:display (#PCDATA)>
+<!ELEMENT rise:documentation (rise:text*)>
+<!ELEMENT rise:text (rise:textID,rise:title,rise:text,(rise:entityName|rise:viewName|rise:interfaceName|rise:relationName|rise:specializationName)*)>
+<!ELEMENT rise:textID (#PCDATA)>
+<!ELEMENT rise:title (#PCDATA)>
+<!ELEMENT rise:text (#PCDATA)>
+<!ELEMENT rise:interfaceName (#PCDATA)>
+<!ELEMENT rise:x (#PCDATA)>
+<!ELEMENT rise:y (#PCDATA)>
+<!ELEMENT rise:sizeX (#PCDATA)>
+<!ELEMENT rise:sizeY (#PCDATA)>
+<!ELEMENT rise:ID (#PCDATA)>
+<!ELEMENT rise:maxID (#PCDATA)>
+<!ELEMENT rise:refID (#PCDATA)>
+<!ELEMENT rise:subID (#PCDATA)>
+<!ELEMENT rise:superID (#PCDATA)>
+<!ELEMENT rise:data (#PCDATA)>
+<!ELEMENT rise:instance (rise:ID,rise:data?)>
+<!ELEMENT rise:reference (rise:ID,rise:refID)>
+<!ELEMENT rise:specialized (rise:subID,rise:superID)>
+<!ELEMENT rise:applications (rise:application*)>
+<!ELEMENT rise:application (rise:name,rise:timeStamp,rise:ajax?)>
+<!ELEMENT rise:ajax (#PCDATA)>
+<!ELEMENT rise:composition (rise:dataset,rise:call*,rise:dataset)>
+<!ELEMENT rise:call (rise:interfaceName,rise:methodName,rise:dataset,rise:flowControl?)>
+<!ELEMENT rise:methodName (#PCDATA)>
+<!ELEMENT rise:dataset (rise:name,rise:member*)>
+<!ELEMENT rise:member (rise:name,(rise:sourceDatasetName,rise:sourceMemberName)?)>
+<!ELEMENT rise:sourceDatasetName (#PCDATA)>
+<!ELEMENT rise:sourceMemberName (#PCDATA)>
+<!ELEMENT rise:isPrivate (#PCDATA)>
+<!ELEMENT rise:isListing (#PCDATA)>
+<!ELEMENT rise:noDatabase (#PCDATA)>
+<!ELEMENT rise:flowControl (rise:flowControlType,rise:sourceDatasetName,rise:sourceMemberName)>
+<!ELEMENT rise:flowControlType (#PCDATA)>
+<!ELEMENT rise:integerSize (#PCDATA)>
+<!ELEMENT rise:dataTypeAlias (#PCDATA)>
+<!ELEMENT rise:isDataType (#PCDATA)>
+<!ELEMENT rise:bgColor (#PCDATA)>
+<!ELEMENT rise:textColor (#PCDATA)>
+<!ELEMENT rise:color (rise:bgColor,rise:textColor)>
+<!ELEMENT rise:naming (rise:dbNaming, rise:srcNaming, rise:customDataType*,rise:styles)>
+<!ELEMENT rise:dbNaming (rise:dbTablePrefix,rise:dbTableDeletedPrefix,rise:dbEntityTable,rise:dbRelationTable,rise:dbColumnPrefix,rise:dbColumnDeletedPrefix,rise:dbIdColumn,rise:dbAttributeColumn,rise:dbForeignKeyColumn,rise:dbDefaultValueConstraint,rise:dbUniqueConstraint,rise:dbCheckConstraint,rise:dbForeignKeyConstraint,rise:dbExternalForeignKeyConstraint,rise:dbIndex,rise:dbTable,rise:dbColumn,rise:dbView)>
+<!ELEMENT rise:dbTablePrefix (#PCDATA)>
+<!ELEMENT rise:dbTableDeletedPrefix (#PCDATA)>
+<!ELEMENT rise:dbEntityTable (#PCDATA)>
+<!ELEMENT rise:dbRelationTable (#PCDATA)>
+<!ELEMENT rise:dbColumnPrefix (#PCDATA)>
+<!ELEMENT rise:dbColumnDeletedPrefix (#PCDATA)>
+<!ELEMENT rise:dbIdColumn (#PCDATA)>
+<!ELEMENT rise:dbAttributeColumn (#PCDATA)>
+<!ELEMENT rise:dbForeignKeyColumn (#PCDATA)>
+<!ELEMENT rise:dbDefaultValueConstraint (#PCDATA)>
+<!ELEMENT rise:dbUniqueConstraint (#PCDATA)>
+<!ELEMENT rise:dbCheckConstraint (#PCDATA)>
+<!ELEMENT rise:dbForeignKeyConstraint (#PCDATA)>
+<!ELEMENT rise:dbExternalForeignKeyConstraint (#PCDATA)>
+<!ELEMENT rise:dbIndex (#PCDATA)>
+<!ELEMENT rise:dbTable (#PCDATA)>
+<!ELEMENT rise:dbColumn (#PCDATA)>
+<!ELEMENT rise:dbView (#PCDATA)>
+<!ELEMENT rise:srcNaming (rise:srcListEntity,rise:srcNewEntity,rise:srcDeleteEntity,rise:srcGetEntity,rise:srcSetEntity,rise:srcDownloadBlob,rise:srcUploadBlob,rise:srcListView,rise:srcReturnValue,rise:srcMethod,rise:srcListEntityByFk,rise:srcGetEntityByFk,rise:srcGetEntityByAttribute,rise:srcAttributeArg,rise:srcPkArg,rise:srcFkArg,rise:srcArgument)>
+<!ELEMENT rise:srcListEntity (#PCDATA)>
+<!ELEMENT rise:srcListEntityByFk (#PCDATA)>
+<!ELEMENT rise:srcNewEntity (#PCDATA)>
+<!ELEMENT rise:srcDeleteEntity (#PCDATA)>
+<!ELEMENT rise:srcGetEntity (#PCDATA)>
+<!ELEMENT rise:srcGetEntityByFk (#PCDATA)>
+<!ELEMENT rise:srcGetEntityByAttribute (#PCDATA)>
+<!ELEMENT rise:srcSetEntity (#PCDATA)>
+<!ELEMENT rise:srcDownloadBlob (#PCDATA)>
+<!ELEMENT rise:srcUploadBlob (#PCDATA)>
+<!ELEMENT rise:srcAttributeArg (#PCDATA)>
+<!ELEMENT rise:srcPkArg (#PCDATA)>
+<!ELEMENT rise:srcFkArg (#PCDATA)>
+<!ELEMENT rise:srcArgument (#PCDATA)>
+<!ELEMENT rise:srcListView (#PCDATA)>
+<!ELEMENT rise:srcReturnValue (#PCDATA)>
+<!ELEMENT rise:srcMethod (#PCDATA)>
+<!ELEMENT rise:customDataType (rise:dataTypeAlias,rise:dataType,rise:dataSize?)>
+<!ELEMENT rise:styles (rise:entityStyle,rise:viewStyle,rise:interfaceStyle,rise:textStyle)>
+<!ELEMENT rise:entityStyle (rise:color)>
+<!ELEMENT rise:viewStyle (rise:color)>
+<!ELEMENT rise:interfaceStyle (rise:color)>
+<!ELEMENT rise:textStyle (rise:color)>
+]>
+<rise:model xmlns:rise="http://www.r2bsoftware/ns/rise/">
+  <rise:modelInfo>
+    <rise:name>MilkyDB</rise:name>
+    <rise:prefix />
+    <rise:guid>cf9dba35-e839-4634-b0a8-1a83fe557ab9</rise:guid>
+    <rise:engineVersion>3.0.3637.29089</rise:engineVersion>
+    <rise:integerSize>64</rise:integerSize>
+    <rise:vendor>
+      <rise:name />
+      <rise:email />
+      <rise:www />
+      <rise:copyright />
+    </rise:vendor>
+  </rise:modelInfo>
+  <rise:evolution>
+    <rise:newEntity>
+      <rise:sequenceNumber>1</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>BaseProductClass - базовый класс продукта</rise:name>
+        <rise:attribute>
+          <rise:name>Name (String)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description>Наименование</rise:description>
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>Fatness (float, %)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>float</rise:dataType>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description>Жирность, %</rise:description>
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>CalorificValue (float, cal)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>float</rise:dataType>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description>Калорийность, кал</rise:description>
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>StorageLife (TimeSpan)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>datetime</rise:dataType>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>Packing (Text)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>text</rise:dataType>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>False</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>StorageConstraints (Text)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>text</rise:dataType>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>False</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>TransportationConstraints (Text)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>False</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>2</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>Microelements</rise:name>
+        <rise:attribute>
+          <rise:name>Name (String)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>3</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>Ferments</rise:name>
+        <rise:attribute>
+          <rise:name>Name (String)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>4</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>ProductSet - набор идентичных товаров</rise:name>
+        <rise:attribute>
+          <rise:name>ManufacturingDate</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>datetime</rise:dataType>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>5</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>Provider</rise:name>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>6</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>RawClass - Класс сырьевых продуктов</rise:name>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>7</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>FinalProductClass - Класс готовой продукции</rise:name>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>8</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>RawSet - Партия сырьевых продуктов (уже купленная)</rise:name>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>9</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>FinalProductSet - Партия готовой продукции (ещё не проданная)</rise:name>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>10</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>Supply (договора о поставках)</rise:name>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>11</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>Demand (договора с магазинами на покупку нашей продукции)</rise:name>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>12</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>Shop</rise:name>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>13</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>Partner</rise:name>
+        <rise:attribute>
+          <rise:name>Name (String)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>Address (Text)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>Phone (Phone)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>SupplyFrequency (Text) ?</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>14</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>Contract</rise:name>
+        <rise:attribute>
+          <rise:name>Frequency (TimeSpan)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>False</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>Count (Integer)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>False</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>15</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>ProductSet - Партия продукции</rise:name>
+        <rise:attribute>
+          <rise:name>ManufacturingDate (Date)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>datetime</rise:dataType>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>16</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>Personal</rise:name>
+        <rise:attribute>
+          <rise:name>Name (String)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>Address(String)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>Phone(Phone)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>Birth Year (Integer)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:attribute>
+          <rise:name>Оклад (Integer)</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>True</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newEntity>
+      <rise:sequenceNumber>17</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:entity>
+        <rise:name>Должность</rise:name>
+        <rise:attribute>
+          <rise:name>Name</rise:name>
+          <rise:dataTypeAlias />
+          <rise:dataType>string</rise:dataType>
+          <rise:dataSize>50</rise:dataSize>
+          <rise:mustBeUnique>False</rise:mustBeUnique>
+          <rise:mustExist>False</rise:mustExist>
+          <rise:description />
+        </rise:attribute>
+        <rise:maxID>0</rise:maxID>
+      </rise:entity>
+    </rise:newEntity>
+    <rise:newRelation>
+      <rise:sequenceNumber>18</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>MicroelementsListProperty</rise:name>
+        <rise:node>
+          <rise:name>Microelements</rise:name>
+          <rise:entityName>Microelements</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>ListProperty</rise:name>
+          <rise:entityName>BaseProductClass - базовый класс продукта</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>19</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>FermentsListProperty</rise:name>
+        <rise:node>
+          <rise:name>Ferments</rise:name>
+          <rise:entityName>Ferments</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>ListProperty</rise:name>
+          <rise:entityName>BaseProductClass - базовый класс продукта</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>20</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>BaseProductClass - базовый класс продуктаProductSet - набор идентичных товаров</rise:name>
+        <rise:node>
+          <rise:name>BaseProductClass - базовый класс продукта</rise:name>
+          <rise:entityName>BaseProductClass - базовый класс продукта</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>ProductSet - набор идентичных товаров</rise:name>
+          <rise:entityName>ProductSet - набор идентичных товаров</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>21</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>ProviderProductSet - набор идентичных товаров</rise:name>
+        <rise:node>
+          <rise:name>Provider</rise:name>
+          <rise:entityName>Provider</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>ProductSet - набор идентичных товаров</rise:name>
+          <rise:entityName>ProductSet - набор идентичных товаров</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>22</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>Наследование (не связь)BaseProductClass - базовый класс продукта</rise:name>
+        <rise:node>
+          <rise:name>Наследование (не связь)</rise:name>
+          <rise:entityName>RawClass - Класс сырьевых продуктов</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>BaseProductClass - базовый класс продукта</rise:name>
+          <rise:entityName>BaseProductClass - базовый класс продукта</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>23</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>Наследованиe (не связь)BaseProductClass - базовый класс продукта</rise:name>
+        <rise:node>
+          <rise:name>Наследованиe (не связь)</rise:name>
+          <rise:entityName>FinalProductClass - Класс готовой продукции</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>BaseProductClass - базовый класс продукта</rise:name>
+          <rise:entityName>BaseProductClass - базовый класс продукта</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>24</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>RawClass - Класс сырьевых продуктовRawSet - Партия сырьевых продуктов (уже купленная)</rise:name>
+        <rise:node>
+          <rise:name>RawClass - Класс сырьевых продуктов</rise:name>
+          <rise:entityName>RawClass - Класс сырьевых продуктов</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>RawSet - Партия сырьевых продуктов (уже купленная)</rise:name>
+          <rise:entityName>RawSet - Партия сырьевых продуктов (уже купленная)</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>25</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>FinalProductClass - Класс готовой продукцииFinalProductSet - Партия готовой продукции (ещё не проданная)</rise:name>
+        <rise:node>
+          <rise:name>FinalProductClass - Класс готовой продукции</rise:name>
+          <rise:entityName>FinalProductClass - Класс готовой продукции</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>FinalProductSet - Партия готовой продукции (ещё не проданная)</rise:name>
+          <rise:entityName>FinalProductSet - Партия готовой продукции (ещё не проданная)</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>26</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>ProviderRawSet - Партия сырьевых продуктов (уже купленная)</rise:name>
+        <rise:node>
+          <rise:name>Provider</rise:name>
+          <rise:entityName>Provider</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>RawSet - Партия сырьевых продуктов (уже купленная)</rise:name>
+          <rise:entityName>RawSet - Партия сырьевых продуктов (уже купленная)</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>27</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>ProviderSupply (договора о поставках)</rise:name>
+        <rise:node>
+          <rise:name>Provider</rise:name>
+          <rise:entityName>Provider</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>Supply (договора о поставках)</rise:name>
+          <rise:entityName>Supply (договора о поставках)</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>28</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>RawClass - Класс сырьевых продуктовSupply (договора о поставках)</rise:name>
+        <rise:node>
+          <rise:name>RawClass - Класс сырьевых продуктов</rise:name>
+          <rise:entityName>RawClass - Класс сырьевых продуктов</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>Supply (договора о поставках)</rise:name>
+          <rise:entityName>Supply (договора о поставках)</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>29</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>FinalProductClass - Класс готовой продукцииDemand (договора с магазинами на покупку нашей продукции)</rise:name>
+        <rise:node>
+          <rise:name>FinalProductClass - Класс готовой продукции</rise:name>
+          <rise:entityName>FinalProductClass - Класс готовой продукции</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>Demand (договора с магазинами на покупку нашей продукции)</rise:name>
+          <rise:entityName>Demand (договора с магазинами на покупку нашей продукции)</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>30</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>ShopDemand (договора с магазинами на покупку нашей продукции)</rise:name>
+        <rise:node>
+          <rise:name>Shop</rise:name>
+          <rise:entityName>Shop</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>Demand (договора с магазинами на покупку нашей продукции)</rise:name>
+          <rise:entityName>Demand (договора с магазинами на покупку нашей продукции)</rise:entityName>
+          <rise:cardinality>0toN</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>31</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>ProviderНаследование</rise:name>
+        <rise:node>
+          <rise:name>Provider</rise:name>
+          <rise:entityName>Provider</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>Наследование</rise:name>
+          <rise:entityName>Partner</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>32</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>НаследованиеShop</rise:name>
+        <rise:node>
+          <rise:name>Наследование</rise:name>
+          <rise:entityName>Partner</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>Shop</rise:name>
+          <rise:entityName>Shop</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>33</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>НаследованиеSupply (договора о поставках)</rise:name>
+        <rise:node>
+          <rise:name>Наследование</rise:name>
+          <rise:entityName>Contract</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>Supply (договора о поставках)</rise:name>
+          <rise:entityName>Supply (договора о поставках)</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>34</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>НаследованиеDemand (договора с магазинами на покупку нашей продукции)</rise:name>
+        <rise:node>
+          <rise:name>Наследование</rise:name>
+          <rise:entityName>Contract</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>Demand (договора с магазинами на покупку нашей продукции)</rise:name>
+          <rise:entityName>Demand (договора с магазинами на покупку нашей продукции)</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>35</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>наследованиеRawSet - Партия сырьевых продуктов (уже купленная)</rise:name>
+        <rise:node>
+          <rise:name>наследование</rise:name>
+          <rise:entityName>ProductSet - Партия продукции</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>RawSet - Партия сырьевых продуктов (уже купленная)</rise:name>
+          <rise:entityName>RawSet - Партия сырьевых продуктов (уже купленная)</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>36</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>наследованиеFinalProductSet - Партия готовой продукции (ещё не проданная)</rise:name>
+        <rise:node>
+          <rise:name>наследование</rise:name>
+          <rise:entityName>ProductSet - Партия продукции</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>FinalProductSet - Партия готовой продукции (ещё не проданная)</rise:name>
+          <rise:entityName>FinalProductSet - Партия готовой продукции (ещё не проданная)</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:newRelation>
+      <rise:sequenceNumber>37</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:relation>
+        <rise:name>ДолжностьPersonal</rise:name>
+        <rise:node>
+          <rise:name>Должность</rise:name>
+          <rise:entityName>Должность</rise:entityName>
+          <rise:cardinality>1</rise:cardinality>
+        </rise:node>
+        <rise:node>
+          <rise:name>Personal</rise:name>
+          <rise:entityName>Personal</rise:entityName>
+          <rise:cardinality>1toN</rise:cardinality>
+        </rise:node>
+        <rise:maxID>0</rise:maxID>
+      </rise:relation>
+    </rise:newRelation>
+    <rise:release>
+      <rise:sequenceNumber>38</rise:sequenceNumber>
+      <rise:timeStamp>2010-04-20T19:16:22</rise:timeStamp>
+      <rise:comment>Created from snapshot of model MilkyDB (,f0163983-b37d-4e33-bcc8-691f5d710815) at evolution #37</rise:comment>
+    </rise:release>
+  </rise:evolution>
+  <rise:publish />
+  <rise:presentation>
+    <rise:diagram>
+      <rise:name>Drawing</rise:name>
+      <rise:drawEntity>
+        <rise:entityName>BaseProductClass - базовый класс продукта</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>452</rise:x>
+          <rise:y>199</rise:y>
+          <rise:sizeX>319</rise:sizeX>
+          <rise:sizeY>150</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;220;220;220;Gainsboro</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>Microelements</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>653</rise:x>
+          <rise:y>16</rise:y>
+          <rise:sizeX>106</rise:sizeX>
+          <rise:sizeY>55</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;176;224;230;PowderBlue</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>Ferments</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>463</rise:x>
+          <rise:y>17</rise:y>
+          <rise:sizeX>106</rise:sizeX>
+          <rise:sizeY>58</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;176;224;230;PowderBlue</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>Provider</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>274</rise:x>
+          <rise:y>930</rise:y>
+          <rise:sizeX>158</rise:sizeX>
+          <rise:sizeY>62</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;176;224;230;PowderBlue</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>RawClass - Класс сырьевых продуктов</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>1</rise:x>
+          <rise:y>214</rise:y>
+          <rise:sizeX>285</rise:sizeX>
+          <rise:sizeY>120</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;176;224;230;PowderBlue</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>FinalProductClass - Класс готовой продукции</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>934</rise:x>
+          <rise:y>213</rise:y>
+          <rise:sizeX>291</rise:sizeX>
+          <rise:sizeY>122</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;176;224;230;PowderBlue</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>RawSet - Партия сырьевых продуктов (уже купленная)</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>5</rise:x>
+          <rise:y>573</rise:y>
+          <rise:sizeX>277</rise:sizeX>
+          <rise:sizeY>124</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;176;224;230;PowderBlue</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>FinalProductSet - Партия готовой продукции (ещё не проданная)</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>911</rise:x>
+          <rise:y>575</rise:y>
+          <rise:sizeX>292</rise:sizeX>
+          <rise:sizeY>121</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;176;224;230;PowderBlue</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>Supply (договора о поставках)</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>264</rise:x>
+          <rise:y>405</rise:y>
+          <rise:sizeX>142</rise:sizeX>
+          <rise:sizeY>78</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;176;224;230;PowderBlue</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>Demand (договора с магазинами на покупку нашей продукции)</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>780</rise:x>
+          <rise:y>406</rise:y>
+          <rise:sizeX>143</rise:sizeX>
+          <rise:sizeY>77</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;176;224;230;PowderBlue</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>Shop</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>677</rise:x>
+          <rise:y>937</rise:y>
+          <rise:sizeX>158</rise:sizeX>
+          <rise:sizeY>58</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;176;224;230;PowderBlue</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>Partner</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>473</rise:x>
+          <rise:y>1030</rise:y>
+          <rise:sizeX>158</rise:sizeX>
+          <rise:sizeY>96</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;220;220;220;Gainsboro</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>Contract</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>519</rise:x>
+          <rise:y>405</rise:y>
+          <rise:sizeX>142</rise:sizeX>
+          <rise:sizeY>78</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;220;220;220;Gainsboro</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>ProductSet - Партия продукции</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>465</rise:x>
+          <rise:y>573</rise:y>
+          <rise:sizeX>277</rise:sizeX>
+          <rise:sizeY>124</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;220;220;220;Gainsboro</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>Personal</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>309</rise:x>
+          <rise:y>1232</rise:y>
+          <rise:sizeX>129</rise:sizeX>
+          <rise:sizeY>150</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;176;224;230;PowderBlue</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+      <rise:drawEntity>
+        <rise:entityName>Должность</rise:entityName>
+        <rise:boundingBox>
+          <rise:x>572</rise:x>
+          <rise:y>1270</rise:y>
+          <rise:sizeX>100</rise:sizeX>
+          <rise:sizeY>75</rise:sizeY>
+        </rise:boundingBox>
+        <rise:color>
+          <rise:bgColor>255;176;224;230;PowderBlue</rise:bgColor>
+          <rise:textColor>255;0;0;0;Black</rise:textColor>
+        </rise:color>
+      </rise:drawEntity>
+    </rise:diagram>
+  </rise:presentation>
+  <rise:documentation />
+  <rise:applications />
+</rise:model>
