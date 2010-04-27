@@ -12,6 +12,6 @@ public class MilkyClient implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		RootPanel.get("slot").add(panel);
-		panel.add(new Label("Heldlo!"));
+		panel.add(new Label("Hello!"));
 	}
 }
