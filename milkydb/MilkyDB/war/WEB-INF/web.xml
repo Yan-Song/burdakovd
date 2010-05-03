@@ -7,13 +7,13 @@
   
   <!-- Servlets --> 
   <servlet>
-    <servlet-name>squarer</servlet-name>
-    <servlet-class>com.appspot.milkydb.server.SquarerImpl</servlet-class>
+    <servlet-name>MilkyService</servlet-name>
+    <servlet-class>com.appspot.milkydb.server.MilkyServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>squarer</servlet-name>
-    <url-pattern>/rpc/squarer</url-pattern>
+    <servlet-name>MilkyService</servlet-name>
+    <url-pattern>milkyService</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
