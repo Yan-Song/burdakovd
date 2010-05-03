@@ -1,34 +1,26 @@
 /** Add css rules here for your application. */
 
-
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+a, a:visited, a:hover {
+	color: #9999ff;
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+.gwt-Hyperlink a {
+	padding: 0.5em;
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
+#navigation a {
+	display: block;
 }
 
-.dialogVPanel {
-  margin: 5px;
+.gwt-Hyperlink-selected {
+	background-color: #9999ff;
 }
 
-.serverResponseLabelError {
-  color: red;
+.gwt-Hyperlink-selected a, .gwt-Hyperlink-selected a:visited, .gwt-Hyperlink-selected a:hover {
+	color: white;
 }
 
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+#loading {
+	padding: 1em;
+	font-size: large;
 }
