@@ -10,13 +10,23 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ApplicationView extends Composite implements Display {
 
-	final SimplePanel navigationPanel = new SimplePanel();
-	final FlowPanel contentPanel = new FlowPanel();
+	final SimplePanel navigationPanel = new SimplePanel() {
+		{
+			addStyleName("navigation-panel");
+		}
+	};
+
+	final FlowPanel contentPanel = new FlowPanel() {
+		{
+			addStyleName("content-panel");
+		}
+	};
 
 	public ApplicationView() {
 		final SplitLayoutPanel splitter = new SplitLayoutPanel();
 		splitter.addWest(navigationPanel, 200);
 		splitter.add(contentPanel);
+		splitter.addStyleName("application-panel");
 		initWidget(splitter);
 	}
 

@@ -9,6 +9,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
+@SuppressWarnings("serial")
 public class NavigationPresenter implements Presenter,
 		ValueChangeHandler<String> {
 
@@ -28,11 +29,11 @@ public class NavigationPresenter implements Presenter,
 		}
 	}
 
-	private final List<NavigationLink> menuLinks = new ArrayList<NavigationLink>();
-	{
-		menuLinks.add(new NavigationLink("home", "Главная"));
-		menuLinks.add(new NavigationLink("test", "Проверка"));
-	}
+	private final List<NavigationLink> menuLinks = new ArrayList<NavigationLink>() {
+		{
+			add(new NavigationLink("home", "Домашняя страница"));
+		}
+	};
 
 	private final Display display;
 

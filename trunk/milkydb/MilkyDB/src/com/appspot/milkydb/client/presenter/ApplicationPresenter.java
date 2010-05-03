@@ -1,11 +1,13 @@
 package com.appspot.milkydb.client.presenter;
 
+import com.appspot.milkydb.client.view.HomeView;
 import com.appspot.milkydb.client.view.NavigationView;
 import com.appspot.milkydb.shared.MilkyServiceAsync;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -59,7 +61,20 @@ public class ApplicationPresenter implements Presenter,
 
 	@Override
 	public void onValueChange(final ValueChangeEvent<String> event) {
+		final String token = History.getToken();
 
+		Presenter presenter = null;
+
+		if (token.equals("home")) {
+			presenter = new HomePresenter(new HomeView());
+		}
+
+		if (presenter == null) {
+			Window.alert("Page " + token
+					+ " not found. Redirecting to default page...");
+			History.newItem(defaultHistoryToken);
+		} else {
+			presenter.go(display.getContentPanel());
+		}
 	}
-
 }
