@@ -13,7 +13,7 @@
   
   <servlet-mapping>
     <servlet-name>MilkyService</servlet-name>
-    <url-pattern>milkyService</url-pattern>
+    <url-pattern>/milkyService</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

@@ -15,6 +15,7 @@ public class NavigationView extends Composite implements
 	private final VerticalPanel panel = new VerticalPanel();
 
 	public NavigationView() {
+		panel.setWidth("100%");
 		initWidget(panel);
 	}
 

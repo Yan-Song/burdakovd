@@ -1,15 +1,16 @@
 /** Add css rules here for your application. */
 
+.content-panel {
+	padding: 1em;
+}
+
 a, a:visited, a:hover {
 	color: #9999ff;
 }
 
-.gwt-Hyperlink a {
-	padding: 0.5em;
-}
-
-#navigation a {
+.navigation-panel a {
 	display: block;
+	padding: 0.6em;
 }
 
 .gwt-Hyperlink-selected {
