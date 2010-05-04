@@ -1,7 +1,6 @@
 package com.appspot.milkydb.client.view;
 
 import com.appspot.milkydb.client.presenter.HomePresenter;
-import com.appspot.milkydb.client.presenter.HomePresenter.Display;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;

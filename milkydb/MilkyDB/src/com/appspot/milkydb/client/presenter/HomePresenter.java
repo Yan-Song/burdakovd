@@ -17,6 +17,7 @@ public class HomePresenter implements Presenter {
 
 	@Override
 	public void go(final HasWidgets container) {
+		container.clear();
 		container.add(display.asWidget());
 	}
 }

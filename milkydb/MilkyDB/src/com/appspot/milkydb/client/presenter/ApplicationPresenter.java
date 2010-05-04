@@ -1,8 +1,9 @@
 package com.appspot.milkydb.client.presenter;
 
+import com.appspot.milkydb.client.services.MilkyServiceAsync;
+import com.appspot.milkydb.client.view.EmployeeView;
 import com.appspot.milkydb.client.view.HomeView;
 import com.appspot.milkydb.client.view.NavigationView;
-import com.appspot.milkydb.shared.MilkyServiceAsync;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -67,11 +68,13 @@ public class ApplicationPresenter implements Presenter,
 
 		if (token.equals("home")) {
 			presenter = new HomePresenter(new HomeView());
+		} else if (token.equals("employee")) {
+			presenter = new EmployeePresenter(new EmployeeView(), service);
 		}
 
 		if (presenter == null) {
-			Window.alert("Page " + token
-					+ " not found. Redirecting to default page...");
+			Window.alert("Page \"" + token
+					+ "\" not found. Redirecting to default page...");
 			History.newItem(defaultHistoryToken);
 		} else {
 			presenter.go(display.getContentPanel());
