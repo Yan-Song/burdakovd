@@ -32,6 +32,7 @@ public class NavigationPresenter implements Presenter,
 	private final List<NavigationLink> menuLinks = new ArrayList<NavigationLink>() {
 		{
 			add(new NavigationLink("home", "Домашняя страница"));
+			add(new NavigationLink("employee", "Служащие"));
 		}
 	};
 
@@ -56,5 +57,4 @@ public class NavigationPresenter implements Presenter,
 	public void onValueChange(final ValueChangeEvent<String> event) {
 		display.setData(menuLinks, History.getToken());
 	}
-
 }
