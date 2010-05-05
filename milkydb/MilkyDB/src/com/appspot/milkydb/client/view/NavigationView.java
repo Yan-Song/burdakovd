@@ -31,7 +31,7 @@ public class NavigationView extends Composite implements
 			final Hyperlink hyperlink = new Hyperlink(link.text, link.token);
 
 			if (token.startsWith(link.token)) {
-				hyperlink.addStyleDependentName("selected");
+				hyperlink.addStyleName("selected");
 			}
 
 			panel.add(hyperlink);
