@@ -34,8 +34,14 @@ a:hover {
 
 /************************************************************************/
 
+.application {
+	margin: 1em;
+}
+
+/************************************************************************/
+
 .content {
-	padding: 1em;
+	
 }
 
 .content p {
@@ -45,10 +51,8 @@ a:hover {
 /************************************************************************/
 
 .navigation {
-	margin-left: 1em;
-	margin-top: 1em;
-	margin-bottom: 1em;
 	border-right: 1px solid #ddd;
+	margin-right: 1em;
 }
 
 .navigation a {
