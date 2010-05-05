@@ -1,25 +1,153 @@
-/** Add css rules here for your application. */
+body {
+	background: white;
+	background-position: left top;
+	background-attachment: fixed;
+	font-family: verdana, sans-serif;
+	font-size: 12px;
+	font-size-adjust: none;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: 1.4em;
+	margin: 0;
+	padding: 0;
+}
 
-.content-panel {
+/************************************************************************/
+
+h1 {
+	font-weight: bold;
+	font-size: 1.5em;
+	color: #555555;
+	width: 100%;
+}
+
+/************************************************************************/
+
+a,a:visited,.link {
+	color: #7070b8;
+}
+
+a:hover {
+	color: #1010c8;
+}
+
+/************************************************************************/
+
+.content {
 	padding: 1em;
 }
 
-a, a:visited, a:hover {
-	color: #9999ff;
+.content p {
+	margin-left: 2em;
 }
 
-.navigation-panel a {
+/************************************************************************/
+
+.navigation {
+	margin-left: 1em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	border-right: 1px solid #ddd;
+}
+
+.navigation a {
 	display: block;
-	padding: 0.6em;
+	padding: 0.5em;
+	padding-left: 1em;
 }
 
-.gwt-Hyperlink-selected {
-	background-color: #9999ff;
+.navigation .selected a {
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	background-color: #ddd;
 }
 
-.gwt-Hyperlink-selected a, .gwt-Hyperlink-selected a:visited, .gwt-Hyperlink-selected a:hover {
-	color: white;
+/************************************************************************/
+
+table.listing {
+	border-bottom: 1px solid #d7d7d7;
+	border-collapse: collapse;
+	border-spacing: 0;
+	clear: both;
+	width: 100%;
 }
+
+table.listing tbody tr {
+	border-top: 1px solid #dddddd;
+}
+
+table.listing tbody tr.odd {
+	background-color: #f7f7f7;
+}
+
+table.listing tbody tr.even {
+	background-color: #fcfcfc;
+}
+
+table.listing tbody tr:hover {
+	background: #eed;
+}
+
+table.listing thead tr,table.listing tbody tr.header {
+	background: #f7f7f0 none repeat scroll 0 0;
+}
+
+table.listing tbody td {
+	border: 1px solid #dddddd;
+	padding: 0.33em 0.5em;
+	vertical-align: middle;
+}
+
+table.listing thead th,table.listing tr.header td {
+	border-color: #d7d7d7 #d7d7d7 #999999;
+	border-style: solid;
+	border-width: 1px;
+	font-size: 11px;
+	font-weight: bold;
+	padding-left: 1em;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-right: 2px;
+	vertical-align: middle;
+	text-align: left;
+}
+
+/************************************************************************/
+
+.errorlist {
+	list-style: none;
+	color: red;
+	margin-bottom: 0px;
+}
+
+textarea {
+	display: block;
+}
+
+.simpleform {
+	background: #f7f7f0 none repeat scroll 0 0;
+	border: 1px outset #999988;
+	padding: 0.8em;
+}
+
+/************************************************************************/
+
+.messages ul {
+	list-style: none;
+	margin-bottom: 0;
+	padding: 0;
+	text-align: center;
+}
+
+.messages ul li {
+	display: inline;
+	background-color: #ffbf0e;
+	padding: 0.4em;
+}
+
+/************************************************************************/
 
 #loading {
 	padding: 1em;
