@@ -4,29 +4,50 @@ import java.util.List;
 
 import com.appspot.milkydb.client.presenter.EmployeePresenter.Display;
 import com.appspot.milkydb.shared.LightEmployeeDetails;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class EmployeeView extends Composite implements Display {
 
-	private final int Width = 3;
-	private final String Title = "Список служащих";
-	private final String[] headers = { "ФИО", "Должность", "Оклад" };
+	private final int TableColumns = 3;
+	private final String TableTitle = "Список служащих";
+	private final String[] TableHeaders = { "ФИО", "Должность", "Оклад" };
 
-	private final Grid table = new Grid(1, Width) {
+	private final Grid listing = new Grid(1, TableColumns) {
 		{
 			addStyleName("listing");
-			setTitle(Title);
+			setTitle(TableTitle);
 			getRowFormatter().addStyleName(0, "header");
-			for (int i = 0; i < headers.length; ++i) {
-				setText(0, i, headers[i]);
+			for (int i = 0; i < TableHeaders.length; ++i) {
+				setText(0, i, TableHeaders[i]);
 			}
 		}
 	};
 
+	private final Button addButton = new Button("Добавить");
+
+	private final HorizontalPanel menu = new HorizontalPanel() {
+		{
+			addStyleName("buttons");
+			add(addButton);
+		}
+	};
+
+	private final VerticalPanel content = new VerticalPanel() {
+		{
+			add(menu);
+			add(listing);
+			setWidth("100%");
+		}
+	};
+
 	public EmployeeView() {
-		initWidget(table);
+		initWidget(content);
 	}
 
 	@Override
@@ -35,12 +56,17 @@ public class EmployeeView extends Composite implements Display {
 	}
 
 	@Override
+	public HasClickHandlers getAddButton() {
+		return addButton;
+	}
+
+	@Override
 	public void setData(final List<LightEmployeeDetails> employees) {
-		table.resize(employees.size() + 1, Width);
+		listing.resize(employees.size() + 1, TableColumns);
 		for (int i = 0; i < employees.size(); ++i) {
-			table.setText(i + 1, 0, employees.get(i).name);
-			table.setText(i + 1, 1, employees.get(i).post);
-			table.setText(i + 1, 2, ((Double) employees.get(i).salary)
+			listing.setText(i + 1, 0, employees.get(i).name);
+			listing.setText(i + 1, 1, employees.get(i).post);
+			listing.setText(i + 1, 2, ((Double) employees.get(i).salary)
 					.toString());
 		}
 	}

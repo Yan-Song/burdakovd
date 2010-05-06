@@ -9,8 +9,8 @@ body {
 	font-variant: normal;
 	font-weight: normal;
 	line-height: 1.4em;
-	margin: 0;
-	padding: 0;
+	margin: 0px;
+	padding: 0px;
 }
 
 /************************************************************************/
@@ -41,7 +41,8 @@ a:hover {
 /************************************************************************/
 
 .content {
-	
+	padding: 1em;
+	padding-top: 0em;
 }
 
 .content p {
@@ -52,7 +53,6 @@ a:hover {
 
 .navigation {
 	border-right: 1px solid #ddd;
-	margin-right: 1em;
 }
 
 .navigation a {
@@ -76,6 +76,7 @@ table.listing {
 	border-spacing: 0;
 	clear: both;
 	width: 100%;
+	margin: 0.4em;
 }
 
 table.listing tbody tr {
@@ -113,7 +114,7 @@ table.listing thead th,table.listing tr.header td {
 	padding-left: 1em;
 	padding-top: 2px;
 	padding-bottom: 2px;
-	padding-right: 2px;
+	padding-right: 1em;
 	vertical-align: middle;
 	text-align: left;
 }
@@ -156,4 +157,10 @@ textarea {
 #loading {
 	padding: 1em;
 	font-size: large;
+}
+
+/************************************************************************/
+
+.buttons {
+	margin: 0.4em;
 }

@@ -1,5 +1,7 @@
 package com.appspot.milkydb.client.presenter;
 
+import com.appspot.milkydb.client.event.AddEmployeeEvent;
+import com.appspot.milkydb.client.event.AddEmployeeEventHandler;
 import com.appspot.milkydb.client.services.MilkyServiceAsync;
 import com.appspot.milkydb.client.view.EmployeeView;
 import com.appspot.milkydb.client.view.HomeView;
@@ -46,6 +48,19 @@ public class ApplicationPresenter implements Presenter,
 
 	private void bind() {
 		History.addValueChangeHandler(this);
+
+		eventBus.addHandler(AddEmployeeEvent.TYPE,
+				new AddEmployeeEventHandler() {
+					@Override
+					public void onAddEmployee(
+							final AddEmployeeEvent addEmployeeEvent) {
+						doAddEmployee();
+					}
+				});
+	}
+
+	private void doAddEmployee() {
+		History.newItem("employee/new");
 	}
 
 	@Override
@@ -69,7 +84,8 @@ public class ApplicationPresenter implements Presenter,
 		if (token.equals("home")) {
 			presenter = new HomePresenter(new HomeView());
 		} else if (token.equals("employee")) {
-			presenter = new EmployeePresenter(new EmployeeView(), service);
+			presenter = new EmployeePresenter(new EmployeeView(), service,
+					eventBus);
 		}
 
 		if (presenter == null) {
