@@ -24,11 +24,11 @@ public class ApplicationView extends Composite implements Display {
 	};
 
 	public ApplicationView() {
-		final DockLayoutPanel splitter = new DockLayoutPanel(Unit.PX);
-		splitter.addWest(navigationPanel, 200);
-		splitter.add(contentPanel);
-		splitter.addStyleName("application");
-		initWidget(splitter);
+		final DockLayoutPanel panel = new DockLayoutPanel(Unit.EM);
+		panel.addWest(navigationPanel, 20);
+		panel.add(contentPanel);
+		panel.addStyleName("application");
+		initWidget(panel);
 	}
 
 	@Override
