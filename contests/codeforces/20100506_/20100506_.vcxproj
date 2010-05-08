@@ -10,10 +10,13 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="B.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8FAC81F0-5FC5-403F-B8B7-240AFD8E5A6C}</ProjectGuid>
+    <ProjectGuid>{5E864D85-66D8-44DA-8CC6-43563957351A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>My20100426</RootNamespace>
+    <RootNamespace>My20100506_</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
