@@ -1,12 +1,12 @@
-package com.appspot.milkydb.client.services;
+package com.appspot.milkydb.shared.services;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
-import com.appspot.milkydb.shared.LightEmployeeDetails;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("milkyService")
 public interface MilkyService extends RemoteService {
-	ArrayList<LightEmployeeDetails> getEmployeeList();
+	<Req extends Serializable, Resp extends Serializable> Resp execute(
+			Action<Req, Resp> command, Req request);
 }

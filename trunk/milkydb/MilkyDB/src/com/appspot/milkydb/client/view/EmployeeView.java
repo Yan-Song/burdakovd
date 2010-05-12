@@ -2,8 +2,8 @@ package com.appspot.milkydb.client.view;
 
 import java.util.List;
 
-import com.appspot.milkydb.client.presenter.EmployeePresenter.Display;
-import com.appspot.milkydb.shared.LightEmployeeDetails;
+import com.appspot.milkydb.client.presenter.EmployeePresenter;
+import com.appspot.milkydb.shared.transferObjects.LightEmployee;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -12,7 +12,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class EmployeeView extends Composite implements Display {
+public class EmployeeView extends Composite implements
+		EmployeePresenter.Display {
 
 	private final int TableColumns = 3;
 	private final String TableTitle = "Список служащих";
@@ -61,7 +62,7 @@ public class EmployeeView extends Composite implements Display {
 	}
 
 	@Override
-	public void setData(final List<LightEmployeeDetails> employees) {
+	public void setData(final List<LightEmployee> employees) {
 		listing.resize(employees.size() + 1, TableColumns);
 		for (int i = 0; i < employees.size(); ++i) {
 			listing.setText(i + 1, 0, employees.get(i).name);

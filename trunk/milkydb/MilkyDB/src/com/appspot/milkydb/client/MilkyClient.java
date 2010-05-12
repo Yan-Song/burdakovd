@@ -1,9 +1,9 @@
 package com.appspot.milkydb.client;
 
 import com.appspot.milkydb.client.presenter.ApplicationPresenter;
-import com.appspot.milkydb.client.services.MilkyService;
-import com.appspot.milkydb.client.services.MilkyServiceAsync;
 import com.appspot.milkydb.client.view.ApplicationView;
+import com.appspot.milkydb.shared.services.MilkyService;
+import com.appspot.milkydb.shared.services.MilkyServiceAsync;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;

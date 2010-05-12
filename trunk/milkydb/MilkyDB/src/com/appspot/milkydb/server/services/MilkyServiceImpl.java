@@ -1,38 +1,52 @@
 package com.appspot.milkydb.server.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.HashMap;
 
-import javax.jdo.PersistenceManager;
-
-import com.appspot.milkydb.client.services.MilkyService;
-import com.appspot.milkydb.server.PMF;
-import com.appspot.milkydb.server.Models.Employee;
-import com.appspot.milkydb.shared.LightEmployeeDetails;
-import com.google.appengine.repackaged.com.google.common.base.Function;
-import com.google.appengine.repackaged.com.google.common.collect.Lists;
+import com.appspot.milkydb.shared.services.Action;
+import com.appspot.milkydb.shared.services.MilkyService;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
 public class MilkyServiceImpl extends RemoteServiceServlet implements
 		MilkyService {
 
+	/*
+	 * соотвестствие между командами и их обработчиками
+	 */
+	private HashMap<Action<?, ?>, ActionHandler<?, ?>> handlers;
+
+	public MilkyServiceImpl() {
+		registerActionHandler(Action.getLightEmployeeList,
+				new getLightEmployeeListHandler());
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public ArrayList<LightEmployeeDetails> getEmployeeList() {
-		final PersistenceManager pm = PMF.get();
-		final javax.jdo.Query query = pm.newQuery(Employee.class);
-		query.setOrdering("name asc");
+	/*
+	 * Каст внутри не должен давать ошибок, так как в handlers хранятся только
+	 * совпадающие по параметрам команды и их обработчики. Несовпадающие там
+	 * оказаться не могут, так как handlers имеет модификатор private, а метод
+	 * RegisterActionHandler параметризован
+	 */
+	public <Req extends Serializable, Resp extends Serializable> Resp execute(
+			final Action<Req, Resp> action, final Req request) {
 
-		return new ArrayList<LightEmployeeDetails>(Lists.transform(
-				(List<Employee>) query.execute(),
-				new Function<Employee, LightEmployeeDetails>() {
-					@Override
-					public LightEmployeeDetails apply(final Employee employee) {
-						return new LightEmployeeDetails(employee.getName(),
-								employee.getAppointment().getName(), employee
-										.getSalary());
-					}
-				}));
+		final ActionHandler<Req, Resp> handler = (ActionHandler<Req, Resp>) handlers
+				.get(action);
+
+		if (handler == null) {
+			throw new NullPointerException("Handler for action " + action
+					+ " not registered");
+		} else {
+			return handler.execute(request);
+		}
+	}
+
+	private <Req extends Serializable, Resp extends Serializable> void registerActionHandler(
+			final Action<Req, Resp> action,
+			final ActionHandler<Req, Resp> handler) {
+
+		handlers.put(action, handler);
 	}
 }
