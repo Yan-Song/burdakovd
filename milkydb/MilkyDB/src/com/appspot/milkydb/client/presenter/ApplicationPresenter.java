@@ -2,10 +2,11 @@ package com.appspot.milkydb.client.presenter;
 
 import com.appspot.milkydb.client.event.AddEmployeeEvent;
 import com.appspot.milkydb.client.event.AddEmployeeEventHandler;
-import com.appspot.milkydb.client.services.MilkyServiceAsync;
+import com.appspot.milkydb.client.view.EditEmployeeView;
 import com.appspot.milkydb.client.view.EmployeeView;
 import com.appspot.milkydb.client.view.HomeView;
 import com.appspot.milkydb.client.view.NavigationView;
+import com.appspot.milkydb.shared.services.MilkyServiceAsync;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -86,6 +87,9 @@ public class ApplicationPresenter implements Presenter,
 		} else if (token.equals("employee")) {
 			presenter = new EmployeePresenter(new EmployeeView(), service,
 					eventBus);
+		} else if (token.equals("employee/new")) {
+			presenter = new EditEmployeePresenter(new EditEmployeeView(),
+					service, eventBus);
 		}
 
 		if (presenter == null) {

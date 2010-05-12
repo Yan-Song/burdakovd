@@ -1,17 +1,17 @@
-package com.appspot.milkydb.shared;
+package com.appspot.milkydb.shared.transferObjects;
 
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class LightEmployeeDetails implements Serializable {
+public class LightEmployee implements Serializable {
 	public String name;
 	public String post;
 	public double salary;
 
-	public LightEmployeeDetails() {
+	public LightEmployee() {
 	}
 
-	public LightEmployeeDetails(final String name, final String post,
+	public LightEmployee(final String name, final String post,
 			final double salary) {
 		this.name = name;
 		this.post = post;
