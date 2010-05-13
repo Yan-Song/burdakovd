@@ -1,4 +1,4 @@
-package com.appspot.milkydb.shared.transferObjects;
+package com.appspot.milkydb.shared.dto;
 
 import java.io.Serializable;
 

@@ -2,6 +2,8 @@ package com.appspot.milkydb.client.presenter;
 
 import com.appspot.milkydb.client.event.AddEmployeeEvent;
 import com.appspot.milkydb.client.event.AddEmployeeEventHandler;
+import com.appspot.milkydb.client.event.EditEmployeeCancelledEvent;
+import com.appspot.milkydb.client.event.EditEmployeeCancelledEventHandler;
 import com.appspot.milkydb.client.view.EditEmployeeView;
 import com.appspot.milkydb.client.view.EmployeeView;
 import com.appspot.milkydb.client.view.HomeView;
@@ -55,13 +57,18 @@ public class ApplicationPresenter implements Presenter,
 					@Override
 					public void onAddEmployee(
 							final AddEmployeeEvent addEmployeeEvent) {
-						doAddEmployee();
+						History.newItem("employee/new");
 					}
 				});
-	}
 
-	private void doAddEmployee() {
-		History.newItem("employee/new");
+		eventBus.addHandler(EditEmployeeCancelledEvent.TYPE,
+				new EditEmployeeCancelledEventHandler() {
+					@Override
+					public void onEditEventCancelled(
+							final EditEmployeeCancelledEvent editEmployeeCancelledEvent) {
+						History.back();
+					}
+				});
 	}
 
 	@Override

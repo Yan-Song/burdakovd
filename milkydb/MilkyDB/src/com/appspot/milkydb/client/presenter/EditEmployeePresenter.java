@@ -1,6 +1,9 @@
 package com.appspot.milkydb.client.presenter;
 
+import com.appspot.milkydb.client.event.EditEmployeeCancelledEvent;
 import com.appspot.milkydb.shared.services.MilkyServiceAsync;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasValue;
@@ -37,7 +40,12 @@ public class EditEmployeePresenter implements Presenter {
 	}
 
 	private void bind() {
-
+		display.getCancelButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(final ClickEvent event) {
+				eventBus.fireEvent(new EditEmployeeCancelledEvent());
+			}
+		});
 	}
 
 	@Override

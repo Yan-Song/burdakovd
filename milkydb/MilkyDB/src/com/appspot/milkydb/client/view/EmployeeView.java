@@ -3,7 +3,7 @@ package com.appspot.milkydb.client.view;
 import java.util.List;
 
 import com.appspot.milkydb.client.presenter.EmployeePresenter;
-import com.appspot.milkydb.shared.transferObjects.LightEmployee;
+import com.appspot.milkydb.shared.dto.LightEmployee;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;

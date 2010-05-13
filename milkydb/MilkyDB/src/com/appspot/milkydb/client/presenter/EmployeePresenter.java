@@ -1,14 +1,18 @@
 package com.appspot.milkydb.client.presenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.appspot.milkydb.client.event.AddEmployeeEvent;
+import com.appspot.milkydb.shared.dto.LightEmployee;
+import com.appspot.milkydb.shared.services.Action;
 import com.appspot.milkydb.shared.services.MilkyServiceAsync;
-import com.appspot.milkydb.shared.transferObjects.LightEmployee;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -45,16 +49,21 @@ public class EmployeePresenter implements Presenter {
 	}
 
 	private void fetchEmployeeList() {
-		/*
-		 * service.execute(Action.getLightEmployeeList, null, new
-		 * AsyncCallback<ArrayList<LightEmployee>>() {
-		 * 
-		 * @Override public void onFailure(final Throwable caught) {
-		 * Window.alert("Can't fetch employee list"); }
-		 * 
-		 * @Override public void onSuccess(final ArrayList<LightEmployee>
-		 * result) { display.setData(result); } });
-		 */
+
+		service.execute(Action.getLightEmployeeList, null,
+				new AsyncCallback<ArrayList<LightEmployee>>() {
+
+					@Override
+					public void onFailure(final Throwable caught) {
+						Window.alert("Can't fetch employee list");
+					}
+
+					@Override
+					public void onSuccess(final ArrayList<LightEmployee> result) {
+						display.setData(result);
+					}
+				});
+
 	}
 
 	@Override
