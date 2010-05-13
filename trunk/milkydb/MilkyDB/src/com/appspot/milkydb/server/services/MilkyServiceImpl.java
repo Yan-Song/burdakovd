@@ -12,9 +12,9 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 		MilkyService {
 
 	/*
-	 * соотвестствие между командами и их обработчиками
+	 * соответствие между командами и их обработчиками
 	 */
-	private HashMap<Action<?, ?>, ActionHandler<?, ?>> handlers;
+	private final HashMap<Action<?, ?>, ActionHandler<?, ?>> handlers = new HashMap<Action<?, ?>, ActionHandler<?, ?>>();
 
 	public MilkyServiceImpl() {
 		registerActionHandler(Action.getLightEmployeeList,

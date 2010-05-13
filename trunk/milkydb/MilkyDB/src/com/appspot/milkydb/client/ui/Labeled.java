@@ -1,6 +1,7 @@
 package com.appspot.milkydb.client.ui;
 
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -16,6 +17,7 @@ public class Labeled<F extends Widget> extends Composite {
 		field.addStyleName("field");
 
 		final HorizontalPanel panel = new HorizontalPanel();
+		panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		panel.addStyleName("labeled-field");
 		panel.add(label);
 		panel.add(field);

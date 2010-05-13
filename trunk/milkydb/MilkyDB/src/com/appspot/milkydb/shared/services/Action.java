@@ -3,7 +3,7 @@ package com.appspot.milkydb.shared.services;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import com.appspot.milkydb.shared.transferObjects.LightEmployee;
+import com.appspot.milkydb.shared.dto.LightEmployee;
 
 /*
  * Нужно различать различные команды, и пользоваться оператором == нельзя,
