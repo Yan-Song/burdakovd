@@ -1,6 +1,4 @@
-package com.appspot.milkydb.server._models;
-
-import java.util.Date;
+package com.appspot.milkydb.server.models;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -10,36 +8,39 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import org.joda.time.Period;
+
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
-public class ProductSet {
+public class Contract {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
 
 	@Persistent
-	private Date manufacturingDate;
+	private Period frequency;
 
 	@Persistent
-	private Date expirationDate;
+	private Integer count;
 
-	public Date getExpirationDate() {
-		return expirationDate;
+	public Integer getCount() {
+		return count;
+	}
+
+	public Period getFrequency() {
+		return frequency;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public Date getManufacturingDate() {
-		return manufacturingDate;
+	public void setCount(final Integer count) {
+		this.count = count;
 	}
 
-	public void setExpirationDate(final Date expirationDate) {
-		this.expirationDate = expirationDate;
+	public void setFrequency(final Period frequency) {
+		this.frequency = frequency;
 	}
 
-	public void setManufacturingDate(final Date manufacturingDate) {
-		this.manufacturingDate = manufacturingDate;
-	}
 }
