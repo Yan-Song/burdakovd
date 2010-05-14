@@ -1,6 +1,4 @@
-package com.appspot.milkydb.server.Models;
-
-import java.util.Date;
+package com.appspot.milkydb.server._models;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -9,37 +7,40 @@ import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+import javax.persistence.Embedded;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
-public class ProductSet {
+public class Partner {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
 
 	@Persistent
-	private Date manufacturingDate;
+	private String name;
 
 	@Persistent
-	private Date expirationDate;
+	@Embedded
+	private ContactInfo contactInfo;
 
-	public Date getExpirationDate() {
-		return expirationDate;
+	public ContactInfo getContactInfo() {
+		return contactInfo;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public Date getManufacturingDate() {
-		return manufacturingDate;
+	public String getName() {
+		return name;
 	}
 
-	public void setExpirationDate(final Date expirationDate) {
-		this.expirationDate = expirationDate;
+	public void setContactInfo(final ContactInfo contactInfo) {
+		this.contactInfo = contactInfo;
 	}
 
-	public void setManufacturingDate(final Date manufacturingDate) {
-		this.manufacturingDate = manufacturingDate;
+	public void setName(final String name) {
+		this.name = name;
 	}
+
 }

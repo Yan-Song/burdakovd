@@ -6,7 +6,7 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 
 import com.appspot.milkydb.server.PMF;
-import com.appspot.milkydb.server.Models.Employee;
+import com.appspot.milkydb.server._models.Employee;
 import com.appspot.milkydb.shared.dto.LightEmployee;
 import com.appspot.milkydb.shared.services.SerializableVoid;
 import com.google.appengine.repackaged.com.google.common.base.Function;

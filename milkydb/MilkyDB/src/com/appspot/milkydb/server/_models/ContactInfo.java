@@ -1,4 +1,4 @@
-package com.appspot.milkydb.server.Models;
+package com.appspot.milkydb.server._models;
 
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.PersistenceCapable;

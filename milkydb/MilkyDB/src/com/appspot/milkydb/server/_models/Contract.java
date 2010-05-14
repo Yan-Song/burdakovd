@@ -1,4 +1,4 @@
-package com.appspot.milkydb.server.Models;
+package com.appspot.milkydb.server._models;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -7,40 +7,40 @@ import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-import javax.persistence.Embedded;
+
+import org.joda.time.Period;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
-public class Partner {
+public class Contract {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
 
 	@Persistent
-	private String name;
+	private Period frequency;
 
 	@Persistent
-	@Embedded
-	private ContactInfo contactInfo;
+	private Integer count;
 
-	public ContactInfo getContactInfo() {
-		return contactInfo;
+	public Integer getCount() {
+		return count;
+	}
+
+	public Period getFrequency() {
+		return frequency;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public String getName() {
-		return name;
+	public void setCount(final Integer count) {
+		this.count = count;
 	}
 
-	public void setContactInfo(final ContactInfo contactInfo) {
-		this.contactInfo = contactInfo;
-	}
-
-	public void setName(final String name) {
-		this.name = name;
+	public void setFrequency(final Period frequency) {
+		this.frequency = frequency;
 	}
 
 }
