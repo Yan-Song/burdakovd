@@ -1,9 +1,9 @@
-package com.appspot.milkydb.server._models;
+package com.appspot.milkydb.server.models;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class RawMaterialClass extends BaseProductClass {
+public class FinalProductClass extends BaseProductClass {
 
 }

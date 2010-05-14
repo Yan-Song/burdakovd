@@ -1,11 +1,11 @@
-package com.appspot.milkydb.server._models;
+package com.appspot.milkydb.server.models;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class Demand extends Contract {
+public class FinalProductSet extends ProductSet {
 	@Persistent
 	private FinalProductClass productClass;
 

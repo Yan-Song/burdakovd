@@ -1,4 +1,4 @@
-package com.appspot.milkydb.server._models;
+package com.appspot.milkydb.server.models;
 
 import java.util.List;
 
