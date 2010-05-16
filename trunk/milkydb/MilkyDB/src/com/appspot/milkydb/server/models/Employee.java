@@ -7,11 +7,13 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import javax.persistence.Embedded;
 
+import com.google.appengine.api.datastore.Key;
+
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Employee {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long id;
+	private Key key;
 
 	@Persistent
 	private String name;
@@ -21,12 +23,12 @@ public class Employee {
 	private ContactInfo contactInfo;
 
 	@Persistent
-	private Appointment appointment;
+	private String appointment;
 
 	@Persistent
 	private double salary;
 
-	public Appointment getAppointment() {
+	public String getAppointment() {
 		return appointment;
 	}
 
@@ -34,15 +36,19 @@ public class Employee {
 		return contactInfo;
 	}
 
-	public Long getId() {
-		return id;
+	public Key getKey() {
+		return key;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setAppointment(final Appointment appointment) {
+	public double getSalary() {
+		return salary;
+	}
+
+	public void setAppointment(final String appointment) {
 		this.appointment = appointment;
 	}
 
@@ -50,15 +56,15 @@ public class Employee {
 		this.contactInfo = contactInfo;
 	}
 
+	public void setKey(final Key key) {
+		this.key = key;
+	}
+
 	public void setName(final String name) {
 		this.name = name;
 	}
 
-	public void setSalary(double salary) {
+	public void setSalary(final double salary) {
 		this.salary = salary;
-	}
-
-	public double getSalary() {
-		return salary;
 	}
 }
