@@ -12,7 +12,7 @@ import com.appspot.milkydb.shared.dto.FullEmployee;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
-public class SaveEmployeeHandler_ implements
+public class SaveEmployeeHandler implements
 		ActionHandler<FullEmployee, String> {
 
 	@Override

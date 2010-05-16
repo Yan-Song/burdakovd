@@ -18,9 +18,9 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 
 	public MilkyServiceImpl() {
 		registerActionHandler(Action.getLightEmployeeList,
-				new GetLightEmployeeListHandler_());
+				new GetLightEmployeeListHandler());
 		registerActionHandler(Action.getEmployee, new GetEmployeeHandler());
-		registerActionHandler(Action.saveEmployee, new SaveEmployeeHandler_());
+		registerActionHandler(Action.saveEmployee, new SaveEmployeeHandler());
 		registerActionHandler(Action.getAppointments,
 				new GetAppointmentsHandler());
 	}
