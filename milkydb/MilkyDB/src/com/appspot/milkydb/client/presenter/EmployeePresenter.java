@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.appspot.milkydb.client.event.AddEmployeeEvent;
+import com.appspot.milkydb.client.event.EditEmployeeEvent;
+import com.appspot.milkydb.client.view.Waitable;
 import com.appspot.milkydb.shared.dto.LightEmployee;
 import com.appspot.milkydb.shared.services.Action;
 import com.appspot.milkydb.shared.services.MilkyServiceAsync;
@@ -18,10 +20,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class EmployeePresenter implements Presenter {
 
-	public interface Display {
+	public interface Display extends Waitable {
 		Widget asWidget();
 
 		HasClickHandlers getAddButton();
+
+		HasClickHandlers getEmployeeTable();
+
+		int getRowIndexForEvent(ClickEvent event);
 
 		void setData(final List<LightEmployee> employees);
 	}
@@ -29,6 +35,7 @@ public class EmployeePresenter implements Presenter {
 	private final Display display;
 	private final MilkyServiceAsync service;
 	private final HandlerManager eventBus;
+	private ArrayList<String> keys;
 
 	public EmployeePresenter(final Display display,
 			final MilkyServiceAsync service, final HandlerManager eventBus) {
@@ -46,9 +53,18 @@ public class EmployeePresenter implements Presenter {
 				eventBus.fireEvent(new AddEmployeeEvent());
 			}
 		});
+
+		display.getEmployeeTable().addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(final ClickEvent event) {
+				onTableClick(event);
+			}
+		});
 	}
 
 	private void fetchEmployeeList() {
+		display.startWait("Загрузка списка служащих...");
 
 		service.execute(Action.getLightEmployeeList, null,
 				new AsyncCallback<ArrayList<LightEmployee>>() {
@@ -56,11 +72,18 @@ public class EmployeePresenter implements Presenter {
 					@Override
 					public void onFailure(final Throwable caught) {
 						Window.alert("Can't fetch employee list");
+						caught.printStackTrace();
+						display.stopWait();
 					}
 
 					@Override
 					public void onSuccess(final ArrayList<LightEmployee> result) {
+						keys = new ArrayList<String>();
+						for (final LightEmployee e : result) {
+							keys.add(e.key);
+						}
 						display.setData(result);
+						display.stopWait();
 					}
 				});
 
@@ -72,5 +95,12 @@ public class EmployeePresenter implements Presenter {
 		container.add(display.asWidget());
 
 		fetchEmployeeList();
+	}
+
+	private void onTableClick(final ClickEvent event) {
+		final int idx = display.getRowIndexForEvent(event);
+		if (idx >= 0) {
+			eventBus.fireEvent(new EditEmployeeEvent(keys.get(idx)));
+		}
 	}
 }

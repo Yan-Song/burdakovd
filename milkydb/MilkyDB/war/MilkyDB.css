@@ -83,7 +83,7 @@ table.listing tbody tr {
 	border-top: 1px solid #dddddd;
 }
 
-table.listing tbody tr.odd {
+table.listing tbody tr { /*.odd*/
 	background-color: #f7f7f7;
 }
 
@@ -103,6 +103,7 @@ table.listing tbody td {
 	border: 1px solid #dddddd;
 	padding: 0.33em 0.5em;
 	vertical-align: middle;
+	cursor: pointer;
 }
 
 table.listing thead th,table.listing tr.header td {
@@ -162,13 +163,26 @@ textarea {
 /************************************************************************/
 
 .buttons {
-	margin: 0.4em;
+	margin-top: 0.4em;
 }
 
 .field-label {
 	text-align: right;
 }
 
-.buttons {
-	
+.field {
+	width:auto;
+	margin-left: 0px;
+	marin-right: 0px;
+}
+
+.waitbox-inner {
+	margin: 0px;
+	height: 48px;
+	padding-left: 48px;
+	padding-right: 1em;
+	background-image: url("images/wait.gif");
+	background-repeat: no-repeat;
+	display: table-cell;
+	vertical-align: middle;
 }

@@ -1,42 +1,25 @@
 package com.appspot.milkydb.server.models;
 
-import java.util.Set;
-
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.api.datastore.Key;
+
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Appointment {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long id;
+	private Key key;
 
-	@Persistent
-	private String name;
-
-	@Persistent(mappedBy = "appointment")
-	private Set<Employee> employees;
-
-	public Set<Employee> getEmployees() {
-		return employees;
+	public Key getKey() {
+		return key;
 	}
 
-	public Long getId() {
-		return id;
+	public void setKey(final Key key) {
+		this.key = key;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setEmployees(final Set<Employee> employees) {
-		this.employees = employees;
-	}
-
-	public void setName(final String name) {
-		this.name = name;
-	}
 }

@@ -28,6 +28,13 @@ public class FreeListBox extends Composite implements HasValue<String> {
 		bind();
 	}
 
+	@Override
+	public HandlerRegistration addValueChangeHandler(
+			final ValueChangeHandler<String> handler) {
+
+		return handlerManager.addHandler(ValueChangeEvent.getType(), handler);
+	}
+
 	private void bind() {
 		listBox.addChangeHandler(new ChangeHandler() {
 			@Override
@@ -35,13 +42,6 @@ public class FreeListBox extends Composite implements HasValue<String> {
 				onListboxChange(event);
 			}
 		});
-	}
-
-	@Override
-	public HandlerRegistration addValueChangeHandler(
-			final ValueChangeHandler<String> handler) {
-
-		return handlerManager.addHandler(ValueChangeEvent.getType(), handler);
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class FreeListBox extends Composite implements HasValue<String> {
 	 * 
 	 * Иначе сбрасывает выделение.
 	 */
-	private void setVariants(final List<String> variants,
+	public void setVariants(final List<String> variants,
 			final boolean saveCurrentSelection) {
 
 		if (saveCurrentSelection) {

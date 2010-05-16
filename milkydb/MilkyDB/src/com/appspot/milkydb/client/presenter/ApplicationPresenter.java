@@ -2,8 +2,10 @@ package com.appspot.milkydb.client.presenter;
 
 import com.appspot.milkydb.client.event.AddEmployeeEvent;
 import com.appspot.milkydb.client.event.AddEmployeeEventHandler;
-import com.appspot.milkydb.client.event.EditEmployeeCancelledEvent;
-import com.appspot.milkydb.client.event.EditEmployeeCancelledEventHandler;
+import com.appspot.milkydb.client.event.EditEmployeeEvent;
+import com.appspot.milkydb.client.event.EditEmployeeEventHandler;
+import com.appspot.milkydb.client.event.EditEmployeeFinishedEvent;
+import com.appspot.milkydb.client.event.EditEmployeeFinishedEventHandler;
 import com.appspot.milkydb.client.view.EditEmployeeView;
 import com.appspot.milkydb.client.view.EmployeeView;
 import com.appspot.milkydb.client.view.HomeView;
@@ -61,12 +63,23 @@ public class ApplicationPresenter implements Presenter,
 					}
 				});
 
-		eventBus.addHandler(EditEmployeeCancelledEvent.TYPE,
-				new EditEmployeeCancelledEventHandler() {
+		eventBus.addHandler(EditEmployeeEvent.TYPE,
+				new EditEmployeeEventHandler() {
+
 					@Override
-					public void onEditEventCancelled(
-							final EditEmployeeCancelledEvent editEmployeeCancelledEvent) {
-						History.back();
+					public void onEditEmployee(
+							final EditEmployeeEvent editEmployeeEvent) {
+						History.newItem("employee/edit/"
+								+ editEmployeeEvent.getKey());
+					}
+				});
+
+		eventBus.addHandler(EditEmployeeFinishedEvent.TYPE,
+				new EditEmployeeFinishedEventHandler() {
+					@Override
+					public void onEditEmployeeFinished(
+							final EditEmployeeFinishedEvent editEmployeeFinishedEvent) {
+						History.newItem("employee");
 					}
 				});
 	}
@@ -89,6 +102,8 @@ public class ApplicationPresenter implements Presenter,
 
 		Presenter presenter = null;
 
+		final String editEmployeePrefix = "employee/edit/";
+
 		if (token.equals("home")) {
 			presenter = new HomePresenter(new HomeView());
 		} else if (token.equals("employee")) {
@@ -97,6 +112,10 @@ public class ApplicationPresenter implements Presenter,
 		} else if (token.equals("employee/new")) {
 			presenter = new EditEmployeePresenter(new EditEmployeeView(),
 					service, eventBus);
+		} else if (token.startsWith(editEmployeePrefix)) {
+			presenter = new EditEmployeePresenter(new EditEmployeeView(),
+					service, eventBus, token.substring(editEmployeePrefix
+							.length()));
 		}
 
 		if (presenter == null) {

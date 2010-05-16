@@ -15,6 +15,11 @@ public class ContactInfo {
 	@Persistent
 	private String phoneNumber;
 
+	public ContactInfo(final String address, final String phone) {
+		this.address = new Text(address);
+		this.phoneNumber = phone;
+	}
+
 	public Text getAddress() {
 		return address;
 	}
