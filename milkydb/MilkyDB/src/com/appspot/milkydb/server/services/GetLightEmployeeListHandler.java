@@ -13,7 +13,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.repackaged.com.google.common.base.Function;
 import com.google.appengine.repackaged.com.google.common.collect.Lists;
 
-public class GetLightEmployeeListHandler_ implements
+public class GetLightEmployeeListHandler implements
 		ActionHandler<SerializableVoid, ArrayList<LightEmployee>> {
 
 	@SuppressWarnings("unchecked")
