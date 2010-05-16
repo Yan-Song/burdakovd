@@ -81,6 +81,7 @@ table.listing {
 
 table.listing tbody tr {
 	border-top: 1px solid #dddddd;
+	cursor: pointer;
 }
 
 table.listing tbody tr { /*.odd*/
@@ -97,13 +98,13 @@ table.listing tbody tr:hover {
 
 table.listing thead tr,table.listing tbody tr.header {
 	background: #f7f7f0 none repeat scroll 0 0;
+	cursor: default;
 }
 
 table.listing tbody td {
 	border: 1px solid #dddddd;
 	padding: 0.33em 0.5em;
 	vertical-align: middle;
-	cursor: pointer;
 }
 
 table.listing thead th,table.listing tr.header td {
