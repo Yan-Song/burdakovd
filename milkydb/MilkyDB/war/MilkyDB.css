@@ -201,10 +201,7 @@ textarea {
 }
 
 .validation-failed {
-	border-width: 1px;
-	border-color: red;
-	border-style: solid;
-	background-color: #ffeeee;
+	background-color: #fff0f0;
 }
 
 .error-label {
