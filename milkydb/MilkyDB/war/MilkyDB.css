@@ -199,3 +199,14 @@ textarea {
 .waitbox ul {
 	padding-left: 1em;
 }
+
+.validation-failed {
+	border-width: 1px;
+	border-color: red;
+	border-style: solid;
+	background-color: #ffeeee;
+}
+
+.error-label {
+	color: red;
+}

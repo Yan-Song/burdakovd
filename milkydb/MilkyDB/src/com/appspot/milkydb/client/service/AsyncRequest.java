@@ -52,9 +52,9 @@ public class AsyncRequest<Req extends Serializable, Resp extends Serializable> {
 				executing = false;
 				complete();
 				try {
-					getCallback().onSuccess(result);
-				} finally {
 					managed.onSuccess(AsyncRequest.this);
+				} finally {
+					getCallback().onSuccess(result);
 				}
 			}
 		});
