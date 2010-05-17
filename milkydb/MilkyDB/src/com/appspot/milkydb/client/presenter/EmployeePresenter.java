@@ -44,7 +44,7 @@ public class EmployeePresenter implements Presenter {
 		this.display = display;
 		this.service = service;
 		this.eventBus = eventBus;
-		this.wait = new Wait(eventBus);
+		this.wait = new Wait(eventBus, service);
 
 		bind();
 	}
