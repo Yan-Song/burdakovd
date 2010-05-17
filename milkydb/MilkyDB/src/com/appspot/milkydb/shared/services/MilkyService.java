@@ -8,5 +8,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("milkyService")
 public interface MilkyService extends RemoteService {
 	<Req extends Serializable, Resp extends Serializable> Resp execute(
-			Action<Req, Resp> command, Req request);
+			Action<Req, Resp> action, Req request);
 }

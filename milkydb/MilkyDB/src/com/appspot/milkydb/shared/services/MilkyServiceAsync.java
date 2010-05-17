@@ -7,6 +7,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface MilkyServiceAsync {
 
 	<Req extends Serializable, Resp extends Serializable> void execute(
-			Action<Req, Resp> command, Req request, AsyncCallback<Resp> callback);
+			Action<Req, Resp> action, Req request, AsyncCallback<Resp> callback);
 
 }

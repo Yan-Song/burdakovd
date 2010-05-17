@@ -177,13 +177,25 @@ textarea {
 	marin-right: 0px;
 }
 
-.waitbox-inner {
+.waitbox ul li {
+	display: block;
 	margin: 0px;
-	height: 48px;
-	padding-left: 48px;
+	padding: 0px;
+}
+
+.waitbox ul li div {
+	margin: 0px;
+	height: 24px;
+	padding-left: 24px;
 	padding-right: 1em;
 	background-image: url("images/wait.gif");
 	background-repeat: no-repeat;
+	background-position: 3px 3px;
 	display: table-cell;
 	vertical-align: middle;
+	list-style-type: none;
+}
+
+.waitbox ul {
+	padding-left: 1em;
 }

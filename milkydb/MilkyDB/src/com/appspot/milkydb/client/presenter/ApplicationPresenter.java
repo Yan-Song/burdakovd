@@ -6,11 +6,11 @@ import com.appspot.milkydb.client.event.EditEmployeeEvent;
 import com.appspot.milkydb.client.event.EditEmployeeEventHandler;
 import com.appspot.milkydb.client.event.EditEmployeeFinishedEvent;
 import com.appspot.milkydb.client.event.EditEmployeeFinishedEventHandler;
+import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.view.EditEmployeeView;
 import com.appspot.milkydb.client.view.EmployeeView;
 import com.appspot.milkydb.client.view.HomeView;
 import com.appspot.milkydb.client.view.NavigationView;
-import com.appspot.milkydb.shared.services.MilkyServiceAsync;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -33,12 +33,12 @@ public class ApplicationPresenter implements Presenter,
 	static final String defaultHistoryToken = "home";
 
 	private final HandlerManager eventBus;
-	private final MilkyServiceAsync service;
+	private final ManagedAsyncService service;
 
 	private final Display display;
 
 	public ApplicationPresenter(final HandlerManager eventBus,
-			final MilkyServiceAsync service, final Display display) {
+			final ManagedAsyncService service, final Display display) {
 
 		this.eventBus = eventBus;
 		this.service = service;

@@ -3,11 +3,12 @@ package com.appspot.milkydb.client.presenter;
 import java.util.ArrayList;
 
 import com.appspot.milkydb.client.event.EditEmployeeFinishedEvent;
+import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.ui.FreeListBox;
+import com.appspot.milkydb.client.ui.Wait;
 import com.appspot.milkydb.client.view.Waitable;
 import com.appspot.milkydb.shared.dto.FullEmployee;
 import com.appspot.milkydb.shared.services.Action;
-import com.appspot.milkydb.shared.services.MilkyServiceAsync;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -20,7 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class EditEmployeePresenter implements Presenter {
 
-	public interface Display extends Waitable {
+	public interface Display {
 		Widget asWidget();
 
 		HasValue<String> getAddress();
@@ -38,8 +39,9 @@ public class EditEmployeePresenter implements Presenter {
 		HasClickHandlers getSubmitButton();
 	}
 
+	private final Waitable wait;
 	private final Display display;
-	private final MilkyServiceAsync service;
+	private final ManagedAsyncService service;
 	private final HandlerManager eventBus;
 	private final String key;
 
@@ -47,17 +49,18 @@ public class EditEmployeePresenter implements Presenter {
 	 * добавление служащего
 	 */
 	public EditEmployeePresenter(final Display editEmployeeView,
-			final MilkyServiceAsync service, final HandlerManager eventBus) {
+			final ManagedAsyncService service, final HandlerManager eventBus) {
 		this(editEmployeeView, service, eventBus, null);
 	}
 
 	public EditEmployeePresenter(final Display editEmployeeView,
-			final MilkyServiceAsync service, final HandlerManager eventBus,
+			final ManagedAsyncService service, final HandlerManager eventBus,
 			final String key) {
 		this.display = editEmployeeView;
 		this.service = service;
 		this.eventBus = eventBus;
 		this.key = key;
+		wait = new Wait(eventBus);
 
 		bind();
 	}
@@ -87,50 +90,43 @@ public class EditEmployeePresenter implements Presenter {
 	}
 
 	private void doSubmit() {
-		display.startWait("Сохранение");
 
 		// тут может быть клиентская валидация
 		// ...
 
-		service.execute(Action.saveEmployee, new FullEmployee(key, display
-				.getName().getValue(), display.getPost().getValue(), Double
-				.parseDouble(display.getSalary().getValue()), display
-				.getAddress().getValue(), display.getPhoneNumber().getValue()),
-				new AsyncCallback<String>() {
-					@Override
-					public void onFailure(final Throwable caught) {
-						Window.alert("can't save");
-						display.stopWait();
-						caught.printStackTrace();
-					}
+		wait.add(service.execute(Action.saveEmployee, new FullEmployee(key,
+				display.getName().getValue(), display.getPost().getValue(),
+				Double.parseDouble(display.getSalary().getValue()), display
+						.getAddress().getValue(), display.getPhoneNumber()
+						.getValue()), new AsyncCallback<String>() {
+			@Override
+			public void onFailure(final Throwable caught) {
+				Window.alert("can't save");
+				caught.printStackTrace();
+			}
 
-					@Override
-					public void onSuccess(final String result) {
-						display.stopWait();
-						eventBus.fireEvent(new EditEmployeeFinishedEvent());
-					}
-				});
+			@Override
+			public void onSuccess(final String result) {
+				eventBus.fireEvent(new EditEmployeeFinishedEvent());
+			}
+		}, "Сохранение"));
 	}
 
 	private void fetchEmployeeDetails() {
-		display.startWait("Загрузка информации о работнике");
-
-		service.execute(Action.getEmployee, key,
+		wait.add(service.execute(Action.getEmployee, key,
 				new AsyncCallback<FullEmployee>() {
 
 					@Override
 					public void onFailure(final Throwable caught) {
 						Window.alert("Can't fetch employee info");
 						caught.printStackTrace();
-						display.stopWait();
 					}
 
 					@Override
 					public void onSuccess(final FullEmployee result) {
 						displayData(result);
-						display.stopWait();
 					}
-				});
+				}, "Загрузка информации о работнике"));
 	}
 
 	@Override
@@ -138,25 +134,22 @@ public class EditEmployeePresenter implements Presenter {
 		container.clear();
 		container.add(display.asWidget());
 
-		display.startWait("Загрузка списка должностей");
-		service.execute(Action.getAppointments, null,
+		wait.add(service.execute(Action.getAppointments, null,
 				new AsyncCallback<ArrayList<String>>() {
 					@Override
 					public void onFailure(final Throwable caught) {
 						Window.alert("Can't fetch appointments list");
 						caught.printStackTrace();
-						display.stopWait();
 					}
 
 					@Override
 					public void onSuccess(final ArrayList<String> result) {
 						display.getPost().setVariants(result, true);
-						display.stopWait();
-
-						if (key != null) {
-							fetchEmployeeDetails();
-						}
 					}
-				});
+				}, "Загрузка списка должностей"));
+
+		if (key != null) {
+			fetchEmployeeDetails();
+		}
 	}
 }
