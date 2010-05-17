@@ -50,12 +50,7 @@ public class AsyncRequest<Req extends Serializable, Resp extends Serializable> {
 			@Override
 			public void onSuccess(final Resp result) {
 				executing = false;
-				complete();
-				try {
-					managed.onSuccess(AsyncRequest.this);
-				} finally {
-					getCallback().onSuccess(result);
-				}
+				managed.onSuccess(AsyncRequest.this, result);
 			}
 		});
 	}
