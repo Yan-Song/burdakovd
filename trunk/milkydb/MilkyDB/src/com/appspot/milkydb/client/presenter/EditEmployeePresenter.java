@@ -60,7 +60,7 @@ public class EditEmployeePresenter implements Presenter {
 		this.service = service;
 		this.eventBus = eventBus;
 		this.key = key;
-		wait = new Wait(eventBus);
+		wait = new Wait(eventBus, service);
 
 		bind();
 	}
