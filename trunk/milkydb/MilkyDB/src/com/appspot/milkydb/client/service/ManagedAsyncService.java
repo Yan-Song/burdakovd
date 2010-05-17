@@ -88,7 +88,8 @@ public class ManagedAsyncService {
 
 	private void executeAll() {
 		for (final AsyncRequest<?, ?> request : requests) {
-			assert !request.isCompleted();
+			assert !request.isCompleted() : "найден completed request в очереди: "
+					+ request.getName();
 			if (!request.isExecuting()) {
 				request.execute();
 			}
@@ -127,17 +128,16 @@ public class ManagedAsyncService {
 		} else {
 			request.complete();
 			requests.remove(request);
+			onSuccessfulInvocation();
 			eventBus.fireEvent(new RpcFailureEvent(request, failure));
 			request.getCallback().onFailure(failure);
-			onSuccessfulInvocation();
 		}
 	}
 
 	void onSuccess(final AsyncRequest<?, ?> request) {
 		requests.remove(request);
-		eventBus.fireEvent(new RpcSuccessEvent(request));
 		onSuccessfulInvocation();
-
+		eventBus.fireEvent(new RpcSuccessEvent(request));
 	}
 
 	private void onSuccessfulInvocation() {

@@ -1,8 +1,12 @@
 package com.appspot.milkydb.client.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.appspot.milkydb.client.presenter.EditEmployeePresenter;
+import com.appspot.milkydb.client.ui.FormField;
 import com.appspot.milkydb.client.ui.FreeListBox;
-import com.appspot.milkydb.client.ui.Labeled;
+import com.appspot.milkydb.client.validation.ValidationException;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -13,22 +17,25 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
+@SuppressWarnings("serial")
 public class EditEmployeeView extends Composite implements
 		EditEmployeePresenter.Display {
 
-	private final Labeled<TextBox> name = new Labeled<TextBox>("ФИО",
+	private static final String VALIDATION_FAILED_CLASS = "validation-failed";
+
+	private final FormField<TextBox> name = new FormField<TextBox>("ФИО",
 			new TextBox());
 
-	private final Labeled<FreeListBox> post = new Labeled<FreeListBox>(
+	private final FormField<FreeListBox> post = new FormField<FreeListBox>(
 			"Должность", new FreeListBox());
 
-	private final Labeled<TextBox> salary = new Labeled<TextBox>("Оклад, руб.",
-			new TextBox());
+	private final FormField<TextBox> salary = new FormField<TextBox>(
+			"Оклад, руб.", new TextBox());
 
-	private final Labeled<TextArea> address = new Labeled<TextArea>("Адрес",
-			new TextArea());
+	private final FormField<TextArea> address = new FormField<TextArea>(
+			"Адрес", new TextArea());
 
-	private final Labeled<TextBox> phone = new Labeled<TextBox>("Телефон",
+	private final FormField<TextBox> phone = new FormField<TextBox>("Телефон",
 			new TextBox());
 
 	private final Button submitButton = new Button("Сохранить");
@@ -43,19 +50,28 @@ public class EditEmployeeView extends Composite implements
 		}
 	};
 
+	private final HashMap<String, FormField<?>> fields = new HashMap<String, FormField<?>>() {
+		{
+			put(EditEmployeePresenter.Display.fieldName, name);
+			put(EditEmployeePresenter.Display.fieldPost, post);
+			put(EditEmployeePresenter.Display.fieldSalary, salary);
+			put(EditEmployeePresenter.Display.fieldAddress, address);
+			put(EditEmployeePresenter.Display.fieldPhoneNumber, phone);
+		}
+	};
+
 	private final FlexTable form = new FlexTable() {
 		{
 			addStyleName("form");
-			setWidget(0, 0, name.getLabel());
-			setWidget(0, 1, name.getField());
-			setWidget(1, 0, post.getLabel());
-			setWidget(1, 1, post.getField());
-			setWidget(2, 0, salary.getLabel());
-			setWidget(2, 1, salary.getField());
-			setWidget(3, 0, address.getLabel());
-			setWidget(3, 1, address.getField());
-			setWidget(4, 0, phone.getLabel());
-			setWidget(4, 1, phone.getField());
+
+			final FormField<?>[] fields = new FormField<?>[] { name, post,
+					salary, address, phone };
+			for (int i = 0; i < fields.length; ++i) {
+				setWidget(i, 0, fields[i].getLabel());
+				setWidget(i, 1, fields[i].getField());
+				setWidget(i, 2, fields[i].getErrorLabel());
+			}
+
 			setWidget(5, 1, buttons);
 		}
 	};
@@ -67,6 +83,14 @@ public class EditEmployeeView extends Composite implements
 	@Override
 	public Widget asWidget() {
 		return this;
+	}
+
+	@Override
+	public void clearErrors() {
+		for (final FormField<?> w : fields.values()) {
+			w.getErrorLabel().setVisible(false);
+			w.getField().removeStyleName(VALIDATION_FAILED_CLASS);
+		}
 	}
 
 	@Override
@@ -102,5 +126,16 @@ public class EditEmployeeView extends Composite implements
 	@Override
 	public HasClickHandlers getSubmitButton() {
 		return submitButton;
+	}
+
+	@Override
+	public void showValidationError(final ValidationException exception) {
+		for (final Map.Entry<String, String> entry : exception.getErrors()
+				.entrySet()) {
+			final FormField<?> field = fields.get(entry.getKey());
+			field.getErrorLabel().setText(entry.getValue());
+			field.getErrorLabel().setVisible(true);
+			field.getField().addStyleName(VALIDATION_FAILED_CLASS);
+		}
 	}
 }

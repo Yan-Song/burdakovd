@@ -6,6 +6,8 @@ import com.appspot.milkydb.client.event.EditEmployeeFinishedEvent;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.ui.FreeListBox;
 import com.appspot.milkydb.client.ui.Wait;
+import com.appspot.milkydb.client.validation.CanDisplayValidationExceptions;
+import com.appspot.milkydb.client.validation.ValidationException;
 import com.appspot.milkydb.client.view.Waitable;
 import com.appspot.milkydb.shared.dto.FullEmployee;
 import com.appspot.milkydb.shared.services.Action;
@@ -21,7 +23,16 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class EditEmployeePresenter implements Presenter {
 
-	public interface Display {
+	public interface Display extends CanDisplayValidationExceptions {
+		final static String fieldName = "name";
+		final static String fieldPost = "post";
+		final static String fieldSalary = "salary";
+		final static String fieldAddress = "address";
+		final static String fieldPhoneNumber = "phoneNumber";
+
+		final static String[] fields = new String[] { fieldName, fieldPost,
+				fieldSalary, fieldAddress, fieldPhoneNumber };
+
 		Widget asWidget();
 
 		HasValue<String> getAddress();
@@ -45,9 +56,6 @@ public class EditEmployeePresenter implements Presenter {
 	private final HandlerManager eventBus;
 	private final String key;
 
-	/*
-	 * добавление служащего
-	 */
 	public EditEmployeePresenter(final Display editEmployeeView,
 			final ManagedAsyncService service, final HandlerManager eventBus) {
 		this(editEmployeeView, service, eventBus, null);
@@ -91,25 +99,34 @@ public class EditEmployeePresenter implements Presenter {
 
 	private void doSubmit() {
 
-		// тут может быть клиентская валидация
-		// ...
+		display.clearErrors();
+		try {
+			localValidate();
 
-		wait.add(service.execute(Action.saveEmployee, new FullEmployee(key,
-				display.getName().getValue(), display.getPost().getValue(),
-				Double.parseDouble(display.getSalary().getValue()), display
-						.getAddress().getValue(), display.getPhoneNumber()
-						.getValue()), new AsyncCallback<String>() {
-			@Override
-			public void onFailure(final Throwable caught) {
-				Window.alert("can't save");
-				caught.printStackTrace();
-			}
+			wait.add(service.execute(Action.saveEmployee, new FullEmployee(key,
+					display.getName().getValue(), display.getPost().getValue(),
+					Double.parseDouble(display.getSalary().getValue()), display
+							.getAddress().getValue(), display.getPhoneNumber()
+							.getValue()), new AsyncCallback<String>() {
+				@Override
+				public void onFailure(final Throwable caught) {
+					if (caught instanceof ValidationException) {
+						display
+								.showValidationError((ValidationException) caught);
+					} else {
+						Window.alert("Can't save");
+						caught.printStackTrace();
+					}
+				}
 
-			@Override
-			public void onSuccess(final String result) {
-				eventBus.fireEvent(new EditEmployeeFinishedEvent());
-			}
-		}, "Сохранение"));
+				@Override
+				public void onSuccess(final String result) {
+					eventBus.fireEvent(new EditEmployeeFinishedEvent());
+				}
+			}, "Сохранение"));
+		} catch (final ValidationException e) {
+			display.showValidationError(e);
+		}
 	}
 
 	private void fetchEmployeeDetails() {
@@ -150,6 +167,14 @@ public class EditEmployeePresenter implements Presenter {
 
 		if (key != null) {
 			fetchEmployeeDetails();
+		}
+	}
+
+	private void localValidate() throws ValidationException {
+		try {
+			Double.parseDouble(display.getSalary().getValue());
+		} catch (final NumberFormatException e) {
+			throw new ValidationException(Display.fieldSalary, "Введите число");
 		}
 	}
 }
