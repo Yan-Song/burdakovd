@@ -134,10 +134,13 @@ public class ManagedAsyncService {
 		}
 	}
 
-	void onSuccess(final AsyncRequest<?, ?> request) {
+	<Response extends Serializable> void onSuccess(
+			final AsyncRequest<?, Response> request, final Response result) {
+		request.complete();
 		requests.remove(request);
 		onSuccessfulInvocation();
 		eventBus.fireEvent(new RpcSuccessEvent(request));
+		request.getCallback().onSuccess(result);
 	}
 
 	private void onSuccessfulInvocation() {
