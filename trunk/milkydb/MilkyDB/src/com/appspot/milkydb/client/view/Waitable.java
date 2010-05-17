@@ -1,10 +1,12 @@
 package com.appspot.milkydb.client.view;
 
+import com.appspot.milkydb.client.service.AsyncRequest;
+
 /*
  * интерфейс, способный выдавать модальную табличку типа "Подождите" и убирать её
  */
 public interface Waitable {
-	void startWait(String text);
+	public void add(final AsyncRequest<?, ?> request);
 
-	void stopWait();
+	public void clear();
 }

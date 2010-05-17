@@ -42,7 +42,7 @@ public class Action<Req extends Serializable, Resp extends Serializable>
 	}
 
 	private Action(final String name) {
-		this.name = name;
+		this.setName(name);
 	}
 
 	@Override
@@ -57,23 +57,31 @@ public class Action<Req extends Serializable, Resp extends Serializable>
 			return false;
 		}
 		final Action<?, ?> other = (Action<?, ?>) obj;
-		if (name == null) {
-			if (other.name != null) {
+		if (getName() == null) {
+			if (other.getName() != null) {
 				return false;
 			}
-		} else if (!name.equals(other.name)) {
+		} else if (!getName().equals(other.getName())) {
 			return false;
 		}
 		return true;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	@Override
 	public int hashCode() {
-		return name.hashCode();
+		return getName().hashCode();
+	}
+
+	private void setName(final String name) {
+		this.name = name;
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getName() + '@' + name;
+		return getClass().getName() + '@' + getName();
 	}
 }

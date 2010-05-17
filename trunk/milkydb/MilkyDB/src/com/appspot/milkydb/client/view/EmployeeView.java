@@ -3,7 +3,6 @@ package com.appspot.milkydb.client.view;
 import java.util.List;
 
 import com.appspot.milkydb.client.presenter.EmployeePresenter;
-import com.appspot.milkydb.client.ui.Wait;
 import com.appspot.milkydb.shared.dto.LightEmployee;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -85,15 +84,5 @@ public class EmployeeView extends Composite implements
 			listing.setText(i + 1, 2, employees.get(i).salary.toString()
 					+ " руб.");
 		}
-	}
-
-	@Override
-	public void startWait(final String text) {
-		Wait.startWait(text);
-	}
-
-	@Override
-	public void stopWait() {
-		Wait.stopWait();
 	}
 }

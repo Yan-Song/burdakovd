@@ -3,7 +3,6 @@ package com.appspot.milkydb.client.view;
 import com.appspot.milkydb.client.presenter.EditEmployeePresenter;
 import com.appspot.milkydb.client.ui.FreeListBox;
 import com.appspot.milkydb.client.ui.Labeled;
-import com.appspot.milkydb.client.ui.Wait;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -103,15 +102,5 @@ public class EditEmployeeView extends Composite implements
 	@Override
 	public HasClickHandlers getSubmitButton() {
 		return submitButton;
-	}
-
-	@Override
-	public void startWait(final String text) {
-		Wait.startWait(text);
-	}
-
-	@Override
-	public void stopWait() {
-		Wait.stopWait();
 	}
 }

@@ -1,6 +1,7 @@
 package com.appspot.milkydb.client;
 
 import com.appspot.milkydb.client.presenter.ApplicationPresenter;
+import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.view.ApplicationView;
 import com.appspot.milkydb.shared.services.MilkyService;
 import com.appspot.milkydb.shared.services.MilkyServiceAsync;
@@ -16,7 +17,8 @@ public class MilkyClient implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		final HandlerManager eventBus = new HandlerManager(null);
-		final MilkyServiceAsync service = GWT.create(MilkyService.class);
+		final ManagedAsyncService service = new ManagedAsyncService(
+				(MilkyServiceAsync) GWT.create(MilkyService.class), eventBus);
 		final ApplicationPresenter app = new ApplicationPresenter(eventBus,
 				service, new ApplicationView());
 

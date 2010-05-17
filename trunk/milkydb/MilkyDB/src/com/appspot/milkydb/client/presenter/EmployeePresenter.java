@@ -5,10 +5,11 @@ import java.util.List;
 
 import com.appspot.milkydb.client.event.AddEmployeeEvent;
 import com.appspot.milkydb.client.event.EditEmployeeEvent;
+import com.appspot.milkydb.client.service.ManagedAsyncService;
+import com.appspot.milkydb.client.ui.Wait;
 import com.appspot.milkydb.client.view.Waitable;
 import com.appspot.milkydb.shared.dto.LightEmployee;
 import com.appspot.milkydb.shared.services.Action;
-import com.appspot.milkydb.shared.services.MilkyServiceAsync;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -20,7 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class EmployeePresenter implements Presenter {
 
-	public interface Display extends Waitable {
+	public interface Display {
 		Widget asWidget();
 
 		HasClickHandlers getAddButton();
@@ -32,16 +33,18 @@ public class EmployeePresenter implements Presenter {
 		void setData(final List<LightEmployee> employees);
 	}
 
+	private final Waitable wait;
 	private final Display display;
-	private final MilkyServiceAsync service;
+	private final ManagedAsyncService service;
 	private final HandlerManager eventBus;
 	private ArrayList<String> keys;
 
 	public EmployeePresenter(final Display display,
-			final MilkyServiceAsync service, final HandlerManager eventBus) {
+			final ManagedAsyncService service, final HandlerManager eventBus) {
 		this.display = display;
 		this.service = service;
 		this.eventBus = eventBus;
+		this.wait = new Wait(eventBus);
 
 		bind();
 	}
@@ -64,16 +67,13 @@ public class EmployeePresenter implements Presenter {
 	}
 
 	private void fetchEmployeeList() {
-		display.startWait("Загрузка списка служащих...");
-
-		service.execute(Action.getLightEmployeeList, null,
+		wait.add(service.execute(Action.getLightEmployeeList, null,
 				new AsyncCallback<ArrayList<LightEmployee>>() {
 
 					@Override
 					public void onFailure(final Throwable caught) {
 						Window.alert("Can't fetch employee list");
 						caught.printStackTrace();
-						display.stopWait();
 					}
 
 					@Override
@@ -83,10 +83,8 @@ public class EmployeePresenter implements Presenter {
 							keys.add(e.key);
 						}
 						display.setData(result);
-						display.stopWait();
 					}
-				});
-
+				}, "Получение списка работников"));
 	}
 
 	@Override
