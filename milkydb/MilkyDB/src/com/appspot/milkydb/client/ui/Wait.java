@@ -136,6 +136,7 @@ public class Wait implements Waitable {
 			}
 
 			wait = new PopupPanel(false, true);
+			wait.addStyleName("wait-popup-panel");
 			wait.setTitle("Ждите...");
 			final VerticalPanel vp = new VerticalPanel();
 			wait.add(vp);
