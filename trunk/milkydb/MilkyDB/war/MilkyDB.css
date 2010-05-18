@@ -75,6 +75,8 @@ table.listing {
 
 table.listing tbody tr {
 	border-top: 1px solid #dddddd;
+	border-left: 1px solid #dddddd;
+	border-right: 1px solid #dddddd;
 	cursor: pointer;
 }
 
@@ -87,7 +89,7 @@ table.listing tbody tr.even {
 }
 
 table.listing tbody tr:hover {
-	background: #eed;
+	background: #f1f1f0;
 }
 
 table.listing thead tr,table.listing tbody tr.header {
@@ -96,21 +98,30 @@ table.listing thead tr,table.listing tbody tr.header {
 }
 
 table.listing tbody td {
-	border: 1px solid #dddddd;
-	padding: 0.33em 0.5em;
+	border-top: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+	border-left: none;
+	border-right: none;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
 	vertical-align: middle;
 }
 
 table.listing thead th,table.listing tr.header td {
-	border-color: #d7d7d7 #d7d7d7 #999999;
-	border-style: solid;
-	border-width: 1px;
+	border-top-color: #d7d7d7;
+	border-bottom-color: #d7d7d7;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-left: none;
+	border-right: none;
 	font-size: 11px;
 	font-weight: bold;
-	padding-left: 1em;
 	padding-top: 2px;
 	padding-bottom: 2px;
-	padding-right: 1em;
 	vertical-align: middle;
 	text-align: left;
 }
