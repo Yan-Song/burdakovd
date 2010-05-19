@@ -25,7 +25,7 @@ public class ApplicationView extends Composite implements Display {
 
 	public ApplicationView() {
 		final DockLayoutPanel panel = new DockLayoutPanel(Unit.EM);
-		panel.addWest(navigationPanel, 20);
+		panel.addWest(navigationPanel, 15);
 		panel.add(contentPanel);
 		panel.addStyleName("application");
 		initWidget(panel);

@@ -14,7 +14,8 @@ public class GetEmployeeHandler implements ActionHandler<String, FullEmployee> {
 		final PersistenceManager pm = PMF.get();
 
 		try {
-			final Employee employee = pm.getObjectById(Employee.class, request);
+			final Employee employee = pm.getObjectById(Employee.class,
+					KeyFactory.stringToKey(request));
 
 			return new FullEmployee(KeyFactory.keyToString(employee.getKey()),
 					employee.getName(), employee.getAppointment(), employee

@@ -35,6 +35,9 @@ public class Action<Req extends Serializable, Resp extends Serializable>
 	public static final Action<SerializableVoid, ArrayList<String>> getAppointments = new Action<SerializableVoid, ArrayList<String>>(
 			"GetAppointmentsHandler");
 
+	public static final Action<ArrayList<String>, SerializableVoid> deleteEmployee = new Action<ArrayList<String>, SerializableVoid>(
+			"deleteEmployee");
+
 	/*
 	 * для GWT-RPC
 	 */
