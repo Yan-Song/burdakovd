@@ -168,6 +168,10 @@ textarea {
 	margin-top: 0.4em;
 }
 
+.buttons .gwt-Button {
+	margin: 2px;
+}
+
 .field-label {
 	text-align: right;
 }

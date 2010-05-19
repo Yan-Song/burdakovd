@@ -9,6 +9,7 @@ import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.ui.Wait;
 import com.appspot.milkydb.client.view.Waitable;
 import com.appspot.milkydb.shared.dto.LightEmployee;
+import com.appspot.milkydb.shared.dto.SerializableVoid;
 import com.appspot.milkydb.shared.services.Action;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -26,9 +27,15 @@ public class EmployeePresenter implements Presenter {
 
 		HasClickHandlers getAddButton();
 
+		HasClickHandlers getDeleteButton();
+
 		HasClickHandlers getEmployeeTable();
 
+		HasClickHandlers getRefreshButton();
+
 		int getRowIndexForEvent(ClickEvent event);
+
+		List<Integer> getSelectedRows();
 
 		void setData(final List<LightEmployee> employees);
 	}
@@ -64,6 +71,47 @@ public class EmployeePresenter implements Presenter {
 				onTableClick(event);
 			}
 		});
+
+		display.getRefreshButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(final ClickEvent event) {
+				fetchEmployeeList();
+			}
+		});
+
+		display.getDeleteButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(final ClickEvent event) {
+				doDelete(display.getSelectedRows());
+			}
+		});
+	}
+
+	private void doDelete(final List<Integer> selectedRows) {
+		if (selectedRows.isEmpty()) {
+			Window.alert("Не выбрано ни одного элемента");
+		} else if (Window.confirm("Вы действительно хотите удалить "
+				+ selectedRows.size() + " элементов?")) {
+
+			final ArrayList<String> selectedKeys = new ArrayList<String>();
+			for (final Integer i : selectedRows) {
+				selectedKeys.add(keys.get(i));
+			}
+
+			wait.add(service.execute(Action.deleteEmployee, selectedKeys,
+					new AsyncCallback<SerializableVoid>() {
+						@Override
+						public void onFailure(final Throwable caught) {
+							fetchEmployeeList();
+							Window.alert("Failed to delete");
+						}
+
+						@Override
+						public void onSuccess(final SerializableVoid result) {
+							fetchEmployeeList();
+						}
+					}, "Удаление"));
+		}
 	}
 
 	private void fetchEmployeeList() {
