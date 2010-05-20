@@ -23,17 +23,17 @@ public class Action<Req extends Serializable, Resp extends Serializable>
 
 	private String name;
 
+	public static final Action<SerializableVoid, ArrayList<String>> getAppointments = new Action<SerializableVoid, ArrayList<String>>(
+			"GetAppointmentsHandler");
+
 	public static final Action<SerializableVoid, ArrayList<LightEmployee>> getLightEmployeeList = new Action<SerializableVoid, ArrayList<LightEmployee>>(
 			"getLightEmployeeList");
 
 	public static final Action<String, FullEmployee> getEmployee = new Action<String, FullEmployee>(
-			"GetEmployeeHandler");
+			"GetEmployee");
 
 	public static final Action<FullEmployee, String> saveEmployee = new Action<FullEmployee, String>(
 			"saveEmployee");
-
-	public static final Action<SerializableVoid, ArrayList<String>> getAppointments = new Action<SerializableVoid, ArrayList<String>>(
-			"GetAppointmentsHandler");
 
 	public static final Action<ArrayList<String>, SerializableVoid> deleteEmployee = new Action<ArrayList<String>, SerializableVoid>(
 			"deleteEmployee");

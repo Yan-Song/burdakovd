@@ -12,6 +12,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import org.joda.time.Period;
 
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
@@ -19,7 +20,7 @@ import com.google.appengine.api.datastore.Text;
 public class BaseProductClass {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long id;
+	private Key key;
 
 	@Persistent
 	private String name;
@@ -31,7 +32,7 @@ public class BaseProductClass {
 	private Float calorificValue;
 
 	@Persistent
-	// (serialized = "true")
+	// ? (serialized = "true")
 	private Period storageLife;
 
 	@Persistent
@@ -61,8 +62,8 @@ public class BaseProductClass {
 		return ferments;
 	}
 
-	public Long getId() {
-		return id;
+	public Key getKey() {
+		return key;
 	}
 
 	public List<MicroElement> getMicroElements() {
@@ -99,6 +100,10 @@ public class BaseProductClass {
 
 	public void setFerments(final List<Ferment> ferments) {
 		this.ferments = ferments;
+	}
+
+	public void setKey(final Key key) {
+		this.key = key;
 	}
 
 	public void setMicroElements(final List<MicroElement> microElements) {
