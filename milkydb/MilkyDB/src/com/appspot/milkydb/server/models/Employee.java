@@ -7,10 +7,11 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import javax.persistence.Embedded;
 
+import com.appspot.milkydb.shared.dto.HasKey;
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class Employee {
+public class Employee implements HasKey<Key> {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key key;
