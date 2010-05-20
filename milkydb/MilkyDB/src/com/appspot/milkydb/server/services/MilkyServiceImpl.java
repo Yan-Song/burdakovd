@@ -3,9 +3,9 @@ package com.appspot.milkydb.server.services;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import com.appspot.milkydb.client.validation.ValidationException;
-import com.appspot.milkydb.shared.services.Action;
-import com.appspot.milkydb.shared.services.MilkyService;
+import com.appspot.milkydb.client.validation.ValidationError;
+import com.appspot.milkydb.shared.service.Action;
+import com.appspot.milkydb.shared.service.MilkyService;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
@@ -38,7 +38,7 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 	 */
 	public <Req extends Serializable, Resp extends Serializable> Resp execute(
 			final Action<Req, Resp> action, final Req request)
-			throws ValidationException {
+			throws ValidationError {
 
 		final ActionHandler<Req, Resp> handler = (ActionHandler<Req, Resp>) handlers
 				.get(action);

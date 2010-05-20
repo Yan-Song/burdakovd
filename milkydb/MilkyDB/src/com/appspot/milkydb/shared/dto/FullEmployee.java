@@ -3,7 +3,7 @@ package com.appspot.milkydb.shared.dto;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import com.appspot.milkydb.client.validation.ValidationException;
+import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.client.validation.Validator;
 
 @SuppressWarnings("serial")
@@ -43,7 +43,7 @@ public class FullEmployee extends LightEmployee implements Serializable,
 	}
 
 	@Override
-	public void validate() throws ValidationException {
+	public void validate() throws ValidationError {
 		final HashMap<String, String> errors = new HashMap<String, String>();
 
 		if (!Validator.validateString(this.name, 1, 50)) {
@@ -74,7 +74,7 @@ public class FullEmployee extends LightEmployee implements Serializable,
 		}
 
 		if (!errors.isEmpty()) {
-			throw new ValidationException(errors);
+			throw new ValidationError(errors);
 		}
 	}
 }

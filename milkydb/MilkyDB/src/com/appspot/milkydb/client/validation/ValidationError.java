@@ -4,22 +4,22 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 @SuppressWarnings("serial")
-public class ValidationException extends Exception implements Serializable {
+public class ValidationError extends Exception implements Serializable {
 	private HashMap<String, String> errors;
 
 	/*
 	 * for GWT-RPC
 	 */
 	@SuppressWarnings("unused")
-	private ValidationException() {
+	private ValidationError() {
 	}
 
-	public ValidationException(final HashMap<String, String> errors) {
+	public ValidationError(final HashMap<String, String> errors) {
 		this.setErrors(errors);
 
 	}
 
-	public ValidationException(final String where, final String error) {
+	public ValidationError(final String where, final String error) {
 		setErrors(new HashMap<String, String>() {
 			{
 				put(where, error);

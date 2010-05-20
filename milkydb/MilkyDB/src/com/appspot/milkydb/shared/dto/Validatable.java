@@ -1,13 +1,13 @@
 package com.appspot.milkydb.shared.dto;
 
-import com.appspot.milkydb.client.validation.ValidationException;
+import com.appspot.milkydb.client.validation.ValidationError;
 
 /*
  * DTO, который можно проверить на корректность его полей.
  * Проверка возможна и на клиентской стороне, и на серверной
  * 
  * Реализующие этот интерфейс классы также должны предоставить интерфейс Fields с списком полей,
- * которые потом будут использоваться для конструирования ValidationException 
+ * которые потом будут использоваться для конструирования ValidationError 
  */
 public interface Validatable {
 
@@ -20,5 +20,5 @@ public interface Validatable {
 	/*
 	 * должны выбрасывать исключения только для полей, определённых в Fields
 	 */
-	void validate() throws ValidationException;
+	void validate() throws ValidationError;
 }

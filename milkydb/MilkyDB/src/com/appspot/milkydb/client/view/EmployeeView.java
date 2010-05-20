@@ -92,7 +92,7 @@ public class EmployeeView extends Composite implements
 	}
 
 	@Override
-	public HasClickHandlers getEmployeeTable() {
+	public HasClickHandlers getEntitiesTable() {
 		return listing;
 	}
 
@@ -102,7 +102,7 @@ public class EmployeeView extends Composite implements
 	}
 
 	@Override
-	public int getRowIndexForEvent(final ClickEvent event) {
+	public int getRowForEvent(final ClickEvent event) {
 		final Cell cell = listing.getCellForEvent(event);
 
 		return cell == null ? -1 : cell.getRowIndex() - 1;

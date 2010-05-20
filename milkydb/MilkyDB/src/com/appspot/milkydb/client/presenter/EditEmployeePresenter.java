@@ -6,11 +6,11 @@ import com.appspot.milkydb.client.event.EditEmployeeFinishedEvent;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.ui.FreeListBox;
 import com.appspot.milkydb.client.ui.Wait;
-import com.appspot.milkydb.client.validation.CanDisplayValidationExceptions;
-import com.appspot.milkydb.client.validation.ValidationException;
+import com.appspot.milkydb.client.validation.CanDisplayValidationErrors;
+import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.client.view.Waitable;
 import com.appspot.milkydb.shared.dto.FullEmployee;
-import com.appspot.milkydb.shared.services.Action;
+import com.appspot.milkydb.shared.service.Action;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class EditEmployeePresenter implements Presenter {
 
-	public interface Display extends CanDisplayValidationExceptions {
+	public interface Display extends CanDisplayValidationErrors {
 		Widget asWidget();
 
 		HasValue<String> getAddress();
@@ -99,9 +99,9 @@ public class EditEmployeePresenter implements Presenter {
 					new AsyncCallback<String>() {
 						@Override
 						public void onFailure(final Throwable caught) {
-							if (caught instanceof ValidationException) {
+							if (caught instanceof ValidationError) {
 								display
-										.showValidationError((ValidationException) caught);
+										.showValidationError((ValidationError) caught);
 							} else {
 								Window.alert("Can't save");
 								caught.printStackTrace();
@@ -113,7 +113,7 @@ public class EditEmployeePresenter implements Presenter {
 							eventBus.fireEvent(new EditEmployeeFinishedEvent());
 						}
 					}, "Сохранение"));
-		} catch (final ValidationException e) {
+		} catch (final ValidationError e) {
 			display.showValidationError(e);
 		}
 	}
@@ -159,13 +159,13 @@ public class EditEmployeePresenter implements Presenter {
 		}
 	}
 
-	private FullEmployee makeDto() throws ValidationException {
+	private FullEmployee makeDto() throws ValidationError {
 		double salary;
 
 		try {
 			salary = Double.parseDouble(display.getSalary().getValue());
 		} catch (final NumberFormatException e) {
-			throw new ValidationException(FullEmployee.Fields.salary,
+			throw new ValidationError(FullEmployee.Fields.salary,
 					"Введите число");
 		}
 

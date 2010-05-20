@@ -3,7 +3,7 @@ package com.appspot.milkydb.server.services;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Transaction;
 
-import com.appspot.milkydb.client.validation.ValidationException;
+import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.server.PMF;
 import com.appspot.milkydb.shared.dto.HasKey;
 import com.appspot.milkydb.shared.dto.Validatable;
@@ -20,7 +20,7 @@ public abstract class AbstractSaveEntityHandler<Model extends HasKey<Key>, Dto e
 	}
 
 	@Override
-	public String execute(final Dto dto) throws ValidationException {
+	public String execute(final Dto dto) throws ValidationError {
 
 		dto.validate();
 

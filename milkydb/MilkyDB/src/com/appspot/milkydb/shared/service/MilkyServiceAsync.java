@@ -1,4 +1,4 @@
-package com.appspot.milkydb.shared.services;
+package com.appspot.milkydb.shared.service;
 
 import java.io.Serializable;
 
