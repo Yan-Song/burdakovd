@@ -9,12 +9,14 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import javax.persistence.Embedded;
 
+import com.google.appengine.api.datastore.Key;
+
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 public class Partner {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long id;
+	private Key key;
 
 	@Persistent
 	private String name;
@@ -27,8 +29,8 @@ public class Partner {
 		return contactInfo;
 	}
 
-	public Long getId() {
-		return id;
+	public Key getKey() {
+		return key;
 	}
 
 	public String getName() {
@@ -37,6 +39,10 @@ public class Partner {
 
 	public void setContactInfo(final ContactInfo contactInfo) {
 		this.contactInfo = contactInfo;
+	}
+
+	public void setKey(final Key key) {
+		this.key = key;
 	}
 
 	public void setName(final String name) {
