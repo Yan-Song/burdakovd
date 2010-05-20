@@ -7,6 +7,7 @@ import com.appspot.milkydb.client.presenter.EditEmployeePresenter;
 import com.appspot.milkydb.client.ui.FormField;
 import com.appspot.milkydb.client.ui.FreeListBox;
 import com.appspot.milkydb.client.validation.ValidationException;
+import com.appspot.milkydb.shared.dto.FullEmployee;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -52,11 +53,11 @@ public class EditEmployeeView extends Composite implements
 
 	private final HashMap<String, FormField<?>> fields = new HashMap<String, FormField<?>>() {
 		{
-			put(EditEmployeePresenter.Display.fieldName, name);
-			put(EditEmployeePresenter.Display.fieldPost, post);
-			put(EditEmployeePresenter.Display.fieldSalary, salary);
-			put(EditEmployeePresenter.Display.fieldAddress, address);
-			put(EditEmployeePresenter.Display.fieldPhoneNumber, phone);
+			put(FullEmployee.Fields.name, name);
+			put(FullEmployee.Fields.post, post);
+			put(FullEmployee.Fields.salary, salary);
+			put(FullEmployee.Fields.address, address);
+			put(FullEmployee.Fields.phoneNumber, phone);
 		}
 	};
 

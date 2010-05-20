@@ -24,15 +24,6 @@ import com.google.gwt.user.client.ui.Widget;
 public class EditEmployeePresenter implements Presenter {
 
 	public interface Display extends CanDisplayValidationExceptions {
-		final static String fieldName = "name";
-		final static String fieldPost = "post";
-		final static String fieldSalary = "salary";
-		final static String fieldAddress = "address";
-		final static String fieldPhoneNumber = "phoneNumber";
-
-		final static String[] fields = new String[] { fieldName, fieldPost,
-				fieldSalary, fieldAddress, fieldPhoneNumber };
-
 		Widget asWidget();
 
 		HasValue<String> getAddress();
@@ -98,32 +89,30 @@ public class EditEmployeePresenter implements Presenter {
 	}
 
 	private void doSubmit() {
-
 		display.clearErrors();
+
 		try {
-			localValidate();
+			final FullEmployee dto = makeDto();
+			dto.validate();
 
-			wait.add(service.execute(Action.saveEmployee, new FullEmployee(key,
-					display.getName().getValue(), display.getPost().getValue(),
-					Double.parseDouble(display.getSalary().getValue()), display
-							.getAddress().getValue(), display.getPhoneNumber()
-							.getValue()), new AsyncCallback<String>() {
-				@Override
-				public void onFailure(final Throwable caught) {
-					if (caught instanceof ValidationException) {
-						display
-								.showValidationError((ValidationException) caught);
-					} else {
-						Window.alert("Can't save");
-						caught.printStackTrace();
-					}
-				}
+			wait.add(service.execute(Action.saveEmployee, makeDto(),
+					new AsyncCallback<String>() {
+						@Override
+						public void onFailure(final Throwable caught) {
+							if (caught instanceof ValidationException) {
+								display
+										.showValidationError((ValidationException) caught);
+							} else {
+								Window.alert("Can't save");
+								caught.printStackTrace();
+							}
+						}
 
-				@Override
-				public void onSuccess(final String result) {
-					eventBus.fireEvent(new EditEmployeeFinishedEvent());
-				}
-			}, "Сохранение"));
+						@Override
+						public void onSuccess(final String result) {
+							eventBus.fireEvent(new EditEmployeeFinishedEvent());
+						}
+					}, "Сохранение"));
 		} catch (final ValidationException e) {
 			display.showValidationError(e);
 		}
@@ -170,11 +159,18 @@ public class EditEmployeePresenter implements Presenter {
 		}
 	}
 
-	private void localValidate() throws ValidationException {
+	private FullEmployee makeDto() throws ValidationException {
+		double salary;
+
 		try {
-			Double.parseDouble(display.getSalary().getValue());
+			salary = Double.parseDouble(display.getSalary().getValue());
 		} catch (final NumberFormatException e) {
-			throw new ValidationException(Display.fieldSalary, "Введите число");
+			throw new ValidationException(FullEmployee.Fields.salary,
+					"Введите число");
 		}
+
+		return new FullEmployee(key, display.getName().getValue(), display
+				.getPost().getValue(), salary, display.getAddress().getValue(),
+				display.getPhoneNumber().getValue());
 	}
 }
