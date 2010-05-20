@@ -23,6 +23,7 @@ public class SaveEmployeeHandler extends
 	@Override
 	public String execute(final FullEmployee request)
 			throws ValidationException {
+		request.validate();
 
 		final PersistenceManager pm = PMF.get();
 		try {
