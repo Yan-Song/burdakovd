@@ -3,7 +3,7 @@ package com.appspot.milkydb.shared.dto;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class LightEmployee implements Serializable {
+public class LightEmployee implements Serializable, HasKey<String> {
 	public String key;
 	public String name = "";
 	public String post = "";
@@ -18,5 +18,15 @@ public class LightEmployee implements Serializable {
 		this.name = name;
 		this.post = post;
 		this.salary = salary;
+	}
+
+	@Override
+	public String getKey() {
+		return key;
+	}
+
+	@Override
+	public void setKey(final String key) {
+		this.key = key;
 	}
 }

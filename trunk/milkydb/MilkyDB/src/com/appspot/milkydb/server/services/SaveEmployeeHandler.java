@@ -4,7 +4,7 @@ import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Transaction;
 
-import com.appspot.milkydb.client.validation.ValidationException;
+import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.server.PMF;
 import com.appspot.milkydb.server.models.Appointment;
 import com.appspot.milkydb.server.models.ContactInfo;
@@ -22,7 +22,7 @@ public class SaveEmployeeHandler extends
 
 	@Override
 	public String execute(final FullEmployee request)
-			throws ValidationException {
+			throws ValidationError {
 		request.validate();
 
 		final PersistenceManager pm = PMF.get();

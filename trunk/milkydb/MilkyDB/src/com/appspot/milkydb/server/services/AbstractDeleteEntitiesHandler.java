@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.jdo.PersistenceManager;
 
-import com.appspot.milkydb.client.validation.ValidationException;
+import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.server.PMF;
 import com.appspot.milkydb.shared.dto.SerializableVoid;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -28,7 +28,7 @@ public class AbstractDeleteEntitiesHandler<Model> implements
 
 	@Override
 	public SerializableVoid execute(final ArrayList<String> keys)
-			throws ValidationException {
+			throws ValidationError {
 
 		final PersistenceManager pm = PMF.get();
 

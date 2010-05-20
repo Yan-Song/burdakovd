@@ -2,8 +2,8 @@ package com.appspot.milkydb.client.service;
 
 import java.io.Serializable;
 
-import com.appspot.milkydb.shared.services.Action;
-import com.appspot.milkydb.shared.services.MilkyServiceAsync;
+import com.appspot.milkydb.shared.service.Action;
+import com.appspot.milkydb.shared.service.MilkyServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class AsyncRequest<Req extends Serializable, Resp extends Serializable> {

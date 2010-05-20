@@ -6,7 +6,7 @@ import java.util.Map;
 import com.appspot.milkydb.client.presenter.EditEmployeePresenter;
 import com.appspot.milkydb.client.ui.FormField;
 import com.appspot.milkydb.client.ui.FreeListBox;
-import com.appspot.milkydb.client.validation.ValidationException;
+import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.shared.dto.FullEmployee;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;
@@ -130,7 +130,7 @@ public class EditEmployeeView extends Composite implements
 	}
 
 	@Override
-	public void showValidationError(final ValidationException exception) {
+	public void showValidationError(final ValidationError exception) {
 		for (final Map.Entry<String, String> entry : exception.getErrors()
 				.entrySet()) {
 			final FormField<?> field = fields.get(entry.getKey());
