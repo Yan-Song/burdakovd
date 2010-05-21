@@ -2,7 +2,6 @@ package com.appspot.milkydb.client.presenter;
 
 import java.util.ArrayList;
 
-import com.appspot.milkydb.client.event.EditEmployeeFinishedEvent;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.ui.FreeListBox;
 import com.appspot.milkydb.client.validation.ValidationError;
@@ -10,7 +9,8 @@ import com.appspot.milkydb.shared.dto.DtoList;
 import com.appspot.milkydb.shared.dto.EncodedKey;
 import com.appspot.milkydb.shared.dto.FullEmployee;
 import com.appspot.milkydb.shared.dto.LightAppointment;
-import com.appspot.milkydb.shared.service.Action;
+import com.appspot.milkydb.shared.service.action.Action;
+import com.appspot.milkydb.shared.service.action.ManagerActionSet;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -34,14 +34,16 @@ public class EditEmployeePresenter extends AbstractEditPresenter<FullEmployee> {
 	private final Display display;
 
 	public EditEmployeePresenter(final Display display,
-			final ManagedAsyncService service, final HandlerManager eventBus) {
-		this(display, service, eventBus, null);
+			final ManagedAsyncService service,
+			final HandlerManager localEventBus, final HandlerManager eventBus) {
+		this(display, service, localEventBus, eventBus, null);
 	}
 
 	public EditEmployeePresenter(final Display display,
-			final ManagedAsyncService service, final HandlerManager eventBus,
-			final String key) {
-		super(display, service, eventBus, key);
+			final ManagedAsyncService service,
+			final HandlerManager localEventBus, final HandlerManager eventBus,
+			final EncodedKey key) {
+		super(display, service, localEventBus, eventBus, key);
 		this.display = display;
 	}
 
@@ -75,11 +77,6 @@ public class EditEmployeePresenter extends AbstractEditPresenter<FullEmployee> {
 	}
 
 	@Override
-	protected void fireEditFinishedEvent() {
-		eventBus.fireEvent(new EditEmployeeFinishedEvent());
-	}
-
-	@Override
 	public void go(final HasWidgets container) {
 		super.go(container);
 		fetchAppointments();
@@ -103,11 +100,11 @@ public class EditEmployeePresenter extends AbstractEditPresenter<FullEmployee> {
 
 	@Override
 	protected Action<EncodedKey, FullEmployee> provideGetEntityAction() {
-		return Action.getEmployee;
+		return ManagerActionSet.Employee.provideGetAction();
 	}
 
 	@Override
 	protected Action<FullEmployee, EncodedKey> provideSaveEntityAction() {
-		return Action.saveEmployee;
+		return ManagerActionSet.Employee.provideSaveAction();
 	}
 }

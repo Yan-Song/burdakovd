@@ -1,15 +1,15 @@
 package com.appspot.milkydb.client.presenter;
 
+import com.appspot.milkydb.client.entityManagers.AbstractEntityManager.Events.EditEntityFinishedEvent;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.ui.Wait;
+import com.appspot.milkydb.client.ui.Waitable;
 import com.appspot.milkydb.client.validation.CanDisplayValidationErrors;
 import com.appspot.milkydb.client.validation.ValidationError;
-import com.appspot.milkydb.client.view.Waitable;
-import com.appspot.milkydb.shared.HasKey;
 import com.appspot.milkydb.shared.Validatable;
 import com.appspot.milkydb.shared.dto.Dto;
 import com.appspot.milkydb.shared.dto.EncodedKey;
-import com.appspot.milkydb.shared.service.Action;
+import com.appspot.milkydb.shared.service.action.Action;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class AbstractEditPresenter<FullDto extends HasKey<String> & Dto & Validatable>
+public abstract class AbstractEditPresenter<FullDto extends Dto & Validatable>
 		implements Presenter {
 
 	public interface Display extends CanDisplayValidationErrors {
@@ -33,20 +33,22 @@ public abstract class AbstractEditPresenter<FullDto extends HasKey<String> & Dto
 	protected final Waitable wait;
 	private final Display display;
 	protected final ManagedAsyncService service;
-	protected final HandlerManager eventBus;
-	protected final String key;
+	protected final HandlerManager localEventBus;
+	protected final EncodedKey key;
 
 	public AbstractEditPresenter(final Display display,
-			final ManagedAsyncService service, final HandlerManager eventBus) {
-		this(display, service, eventBus, null);
+			final ManagedAsyncService service,
+			final HandlerManager localEventBus, final HandlerManager eventBus) {
+		this(display, service, localEventBus, eventBus, null);
 	}
 
 	public AbstractEditPresenter(final Display display,
-			final ManagedAsyncService service, final HandlerManager eventBus,
-			final String key) {
+			final ManagedAsyncService service,
+			final HandlerManager localEventBus, final HandlerManager eventBus,
+			final EncodedKey key) {
 		this.display = display;
 		this.service = service;
-		this.eventBus = eventBus;
+		this.localEventBus = localEventBus;
 		this.key = key;
 		this.wait = new Wait(eventBus, service);
 	}
@@ -91,7 +93,7 @@ public abstract class AbstractEditPresenter<FullDto extends HasKey<String> & Dto
 	}
 
 	private void fetchEntityDetails() {
-		wait.add(service.execute(provideGetEntityAction(), new EncodedKey(key),
+		wait.add(service.execute(provideGetEntityAction(), key,
 				new AsyncCallback<FullDto>() {
 
 					@Override
@@ -107,7 +109,9 @@ public abstract class AbstractEditPresenter<FullDto extends HasKey<String> & Dto
 				}, "Загрузка объекта"));
 	}
 
-	protected abstract void fireEditFinishedEvent();
+	private void fireEditFinishedEvent() {
+		localEventBus.fireEvent(new EditEntityFinishedEvent());
+	}
 
 	@Override
 	public void go(final HasWidgets container) {
@@ -132,6 +136,15 @@ public abstract class AbstractEditPresenter<FullDto extends HasKey<String> & Dto
 			doSave(dto);
 		} catch (final ValidationError e) {
 			display.showValidationError(e);
+		}
+	}
+
+	protected Float parseFloat(final String field, final String value)
+			throws ValidationError {
+		try {
+			return Float.parseFloat(value);
+		} catch (final NumberFormatException e) {
+			throw new ValidationError(field, "Введите вещественное число");
 		}
 	}
 

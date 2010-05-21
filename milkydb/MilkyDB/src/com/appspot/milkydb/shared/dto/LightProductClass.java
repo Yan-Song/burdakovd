@@ -3,31 +3,66 @@ package com.appspot.milkydb.shared.dto;
 import com.appspot.milkydb.shared.HasKey;
 
 @SuppressWarnings("serial")
-public class LightProductClass implements Dto, HasKey<String> {
+public class LightProductClass implements Dto, HasKey<EncodedKey> {
 
-	public String key;
-	public String name;
-	public Float fatness;
-	public Float calorificValue;
-	public TimeSpan storageLife;
+	private EncodedKey key;
+	private String name;
+	private Float fatness;
+	private Float calorificValue;
+	private TimeSpan storageLife;
 
-	public LightProductClass(final String key, final String name,
+	protected LightProductClass() {
+	}
+
+	public LightProductClass(final EncodedKey key, final String name,
 			final Float fatness, final Float calorificValue,
 			final TimeSpan storageLife) {
-		this.key = key;
-		this.name = name;
-		this.fatness = fatness;
-		this.calorificValue = calorificValue;
-		this.storageLife = storageLife;
+		this.setKey(key);
+		this.setName(name);
+		this.setFatness(fatness);
+		this.setCalorificValue(calorificValue);
+		this.setStorageLife(storageLife);
+	}
+
+	public Float getCalorificValue() {
+		return calorificValue;
+	}
+
+	public Float getFatness() {
+		return fatness;
 	}
 
 	@Override
-	public String getKey() {
+	public EncodedKey getKey() {
 		return key;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public TimeSpan getStorageLife() {
+		return storageLife;
+	}
+
+	public void setCalorificValue(final Float calorificValue) {
+		this.calorificValue = calorificValue;
+	}
+
+	public void setFatness(final Float fatness) {
+		this.fatness = fatness;
+	}
+
 	@Override
-	public void setKey(final String key) {
+	public void setKey(final EncodedKey key) {
 		this.key = key;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
+	}
+
+	public void setStorageLife(final TimeSpan storageLife) {
+		this.storageLife = storageLife;
 	}
 }

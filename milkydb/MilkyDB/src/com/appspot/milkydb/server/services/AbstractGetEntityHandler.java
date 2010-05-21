@@ -19,7 +19,7 @@ public abstract class AbstractGetEntityHandler<Model, FullDto extends Dto>
 	private FullDto doGet(final PersistenceManager pm,
 			final EncodedKey encodedKey) {
 		final Model model = pm.getObjectById(modelClass, KeyFactory
-				.stringToKey(encodedKey.getKey()));
+				.stringToKey(encodedKey.getValue()));
 		return makeDto(model);
 	}
 

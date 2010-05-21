@@ -1,13 +1,8 @@
-package com.appspot.milkydb.shared.service;
+package com.appspot.milkydb.shared.service.action;
 
 import com.appspot.milkydb.shared.dto.Dto;
 import com.appspot.milkydb.shared.dto.DtoList;
-import com.appspot.milkydb.shared.dto.EncodedKey;
-import com.appspot.milkydb.shared.dto.EncodedKeys;
-import com.appspot.milkydb.shared.dto.FullEmployee;
 import com.appspot.milkydb.shared.dto.LightAppointment;
-import com.appspot.milkydb.shared.dto.LightEmployee;
-import com.appspot.milkydb.shared.dto.LightProductClass;
 import com.appspot.milkydb.shared.dto.RpcRequest;
 import com.appspot.milkydb.shared.dto.RpcResponse;
 import com.appspot.milkydb.shared.dto.RpcVoid;
@@ -18,8 +13,8 @@ import com.appspot.milkydb.shared.dto.RpcVoid;
  * 
  * Пришлось для их различия сделать строковое имя, которое должно быть разным для разных команд.
  * 
- * Поэтому делаю конструктор приватным, и получать доступ к экземлярам команд можно только с помощью
- * статических полей этого класса, за которыми будет несложно уследить, чтобы не было коллизий имён.
+ * Поэтому делаю конструктор пакетной видимости, и получать доступ к экземлярам команд можно только с помощью
+ * статических полей этого класса, и классов этого пакета за которыми будет несложно уследить, чтобы не было коллизий имён.
  * 
  */
 @SuppressWarnings("serial")
@@ -31,31 +26,14 @@ public class Action<Req extends RpcRequest, Resp extends RpcResponse>
 	public static final Action<RpcVoid, DtoList<LightAppointment>> getAppointments = new Action<RpcVoid, DtoList<LightAppointment>>(
 			"getAppointments");
 
-	public static final Action<RpcVoid, DtoList<LightEmployee>> getLightEmployeeList = new Action<RpcVoid, DtoList<LightEmployee>>(
-			"getLightEmployeeList");
-
-	public static final Action<EncodedKey, FullEmployee> getEmployee = new Action<EncodedKey, FullEmployee>(
-			"getEmployee");
-
-	public static final Action<FullEmployee, EncodedKey> saveEmployee = new Action<FullEmployee, EncodedKey>(
-			"saveEmployee");
-
-	public static final Action<EncodedKeys, RpcVoid> deleteEmployee = new Action<EncodedKeys, RpcVoid>(
-			"deleteEmployee");
-
-	public static final Action<RpcVoid, DtoList<LightProductClass>> getRawMaterialsClasses = new Action<RpcVoid, DtoList<LightProductClass>>(
-			"getRawMaterialsClasses");
-
-	public static final Action<EncodedKeys, RpcVoid> deleteRawMaterialsClasses = new Action<EncodedKeys, RpcVoid>(
-			"deleteRawMaterialClasses");
-
 	/*
 	 * для GWT-RPC
 	 */
+	@SuppressWarnings("unused")
 	private Action() {
 	}
 
-	private Action(final String name) {
+	Action(final String name) {
 		this.setName(name);
 	}
 

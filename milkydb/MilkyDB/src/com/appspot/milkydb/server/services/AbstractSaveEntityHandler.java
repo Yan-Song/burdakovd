@@ -12,7 +12,7 @@ import com.appspot.milkydb.shared.dto.EncodedKey;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
-public abstract class AbstractSaveEntityHandler<Model extends HasKey<Key>, FullDto extends Validatable & HasKey<String> & Dto>
+public abstract class AbstractSaveEntityHandler<Model extends HasKey<Key>, FullDto extends Validatable & HasKey<EncodedKey> & Dto>
 		implements ActionHandler<FullDto, EncodedKey> {
 
 	private final Class<Model> modelClass;
@@ -30,7 +30,7 @@ public abstract class AbstractSaveEntityHandler<Model extends HasKey<Key>, FullD
 
 			final Model model = newModelInstance ? modelClass.newInstance()
 					: pm.getObjectById(modelClass, KeyFactory.stringToKey(dto
-							.getKey()));
+							.getKey().getValue()));
 
 			setData(model, dto);
 

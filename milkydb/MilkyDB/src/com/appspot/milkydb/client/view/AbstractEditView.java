@@ -1,6 +1,5 @@
 package com.appspot.milkydb.client.view;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.appspot.milkydb.client.presenter.AbstractEditPresenter;
@@ -50,7 +49,7 @@ public abstract class AbstractEditView extends Composite implements
 		return cancelButton;
 	}
 
-	protected abstract HashMap<String, FormField<?>> getFieldsMap();
+	protected abstract Map<String, FormField<?>> getFieldsMap();
 
 	@Override
 	public HasClickHandlers getSubmitButton() {
@@ -68,7 +67,7 @@ public abstract class AbstractEditView extends Composite implements
 					setWidget(i, 2, fields[i].getErrorLabel());
 				}
 
-				setWidget(5, 1, buttons);
+				setWidget(fields.length, 1, buttons);
 			}
 		});
 	}

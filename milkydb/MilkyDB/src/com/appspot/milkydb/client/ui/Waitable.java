@@ -1,4 +1,4 @@
-package com.appspot.milkydb.client.view;
+package com.appspot.milkydb.client.ui;
 
 import com.appspot.milkydb.client.service.AsyncRequest;
 

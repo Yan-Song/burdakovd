@@ -3,6 +3,7 @@ package com.appspot.milkydb.server.services;
 import javax.jdo.Query;
 
 import com.appspot.milkydb.server.models.Employee;
+import com.appspot.milkydb.shared.dto.EncodedKey;
 import com.appspot.milkydb.shared.dto.LightEmployee;
 import com.google.appengine.api.datastore.KeyFactory;
 
@@ -15,9 +16,9 @@ public class GetEmployeesHandler extends
 
 	@Override
 	protected LightEmployee makeLightDto(final Employee employee) {
-		return new LightEmployee(KeyFactory.keyToString(employee.getKey()),
-				employee.getName(), employee.getAppointment(), employee
-						.getSalary());
+		return new LightEmployee(new EncodedKey(KeyFactory.keyToString(employee
+				.getKey())), employee.getName(), employee.getAppointment(),
+				employee.getSalary());
 	}
 
 	@Override

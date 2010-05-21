@@ -3,10 +3,16 @@ package com.appspot.milkydb.server.services;
 import java.util.HashMap;
 
 import com.appspot.milkydb.client.validation.ValidationError;
+import com.appspot.milkydb.shared.dto.Dto;
+import com.appspot.milkydb.shared.dto.DtoList;
+import com.appspot.milkydb.shared.dto.EncodedKey;
+import com.appspot.milkydb.shared.dto.EncodedKeys;
 import com.appspot.milkydb.shared.dto.RpcRequest;
 import com.appspot.milkydb.shared.dto.RpcResponse;
-import com.appspot.milkydb.shared.service.Action;
+import com.appspot.milkydb.shared.dto.RpcVoid;
 import com.appspot.milkydb.shared.service.MilkyService;
+import com.appspot.milkydb.shared.service.action.Action;
+import com.appspot.milkydb.shared.service.action.ManagerActionSet;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
@@ -19,16 +25,24 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 	private final HashMap<Action<?, ?>, ActionHandler<?, ?>> handlers = new HashMap<Action<?, ?>, ActionHandler<?, ?>>();
 
 	public MilkyServiceImpl() {
-		registerActionHandler(Action.getLightEmployeeList,
-				new GetEmployeesHandler());
-		registerActionHandler(Action.getEmployee, new GetEmployeeHandler());
-		registerActionHandler(Action.saveEmployee, new SaveEmployeeHandler());
 		registerActionHandler(Action.getAppointments,
 				new GetAppointmentsHandler());
-		registerActionHandler(Action.deleteEmployee,
-				new DeleteEmployeeHandler());
-		registerActionHandler(Action.getRawMaterialsClasses,
-				new GetRawMaterialsClassesHandler());
+
+		registerManagerActionSetHandlers(ManagerActionSet.Employee,
+				new DeleteEmployeeHandler(), new GetEmployeeHandler(),
+				new GetEmployeesHandler(), new SaveEmployeeHandler());
+
+		registerManagerActionSetHandlers(ManagerActionSet.RawMaterialClass,
+				new DeleteRawMaterialClassHandler(),
+				new GetRawMaterialClassHandler(),
+				new GetRawMaterialClassesHandler(),
+				new SaveRawMaterialClassHandler());
+
+		registerManagerActionSetHandlers(ManagerActionSet.FinalProductClass,
+				new DeleteFinalProductClassHandler(),
+				new GetFinalProductClassHandler(),
+				new GetFinalProductClassesHandler(),
+				new SaveFinalProductClassHandler());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -59,5 +73,18 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 			final ActionHandler<Req, Resp> handler) {
 
 		handlers.put(action, handler);
+	}
+
+	private <LightDto extends Dto, FullDto extends Dto> void registerManagerActionSetHandlers(
+			final ManagerActionSet<LightDto, FullDto> set,
+			final ActionHandler<EncodedKeys, RpcVoid> delete,
+			final ActionHandler<EncodedKey, FullDto> get,
+			final ActionHandler<RpcVoid, DtoList<LightDto>> getAll,
+			final ActionHandler<FullDto, EncodedKey> save) {
+
+		registerActionHandler(set.provideDeleteAction(), delete);
+		registerActionHandler(set.provideGetAction(), get);
+		registerActionHandler(set.provideGetAllAction(), getAll);
+		registerActionHandler(set.provideSaveAction(), save);
 	}
 }

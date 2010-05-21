@@ -10,13 +10,14 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.appspot.milkydb.shared.HasKey;
 import com.appspot.milkydb.shared.dto.TimeSpan;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
-public class BaseProductClass {
+public class BaseProductClass implements HasKey<Key> {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key key;
@@ -43,10 +44,10 @@ public class BaseProductClass {
 	private Text transportationConstraints;
 
 	@Persistent
-	private List<Ferment> ferments;
+	private List<String> ferments;
 
 	@Persistent
-	private List<MicroElement> microElements;
+	private List<String> microElements;
 
 	public Float getCalorificValue() {
 		return calorificValue;
@@ -56,7 +57,7 @@ public class BaseProductClass {
 		return fatness;
 	}
 
-	public List<Ferment> getFerments() {
+	public List<String> getFerments() {
 		return ferments;
 	}
 
@@ -64,7 +65,7 @@ public class BaseProductClass {
 		return key;
 	}
 
-	public List<MicroElement> getMicroElements() {
+	public List<String> getMicroElements() {
 		return microElements;
 	}
 
@@ -96,7 +97,7 @@ public class BaseProductClass {
 		this.fatness = fatness;
 	}
 
-	public void setFerments(final List<Ferment> ferments) {
+	public void setFerments(final List<String> ferments) {
 		this.ferments = ferments;
 	}
 
@@ -104,7 +105,7 @@ public class BaseProductClass {
 		this.key = key;
 	}
 
-	public void setMicroElements(final List<MicroElement> microElements) {
+	public void setMicroElements(final List<String> microElements) {
 		this.microElements = microElements;
 	}
 

@@ -2,10 +2,10 @@ package com.appspot.milkydb.server.services;
 
 import com.appspot.milkydb.server.models.RawMaterialClass;
 
-public class GetRawMaterialsClassesHandler extends
-		GetProductClassesHandler<RawMaterialClass> {
+public class GetRawMaterialClassesHandler extends
+		AbstractGetProductClassesHandler<RawMaterialClass> {
 
-	public GetRawMaterialsClassesHandler() {
+	public GetRawMaterialClassesHandler() {
 		super(RawMaterialClass.class);
 	}
 
