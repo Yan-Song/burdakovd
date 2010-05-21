@@ -1,9 +1,9 @@
 package com.appspot.milkydb.shared.dto;
 
-import java.io.Serializable;
+import com.appspot.milkydb.shared.HasKey;
 
 @SuppressWarnings("serial")
-public class LightEmployee implements Serializable, HasKey<String> {
+public class LightEmployee implements Dto, HasKey<String> {
 	public String key;
 	public String name = "";
 	public String post = "";

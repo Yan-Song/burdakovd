@@ -1,5 +1,8 @@
 package com.appspot.milkydb.client.presenter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.appspot.milkydb.client.event.AddEmployeeEvent;
 import com.appspot.milkydb.client.event.AddEmployeeEventHandler;
 import com.appspot.milkydb.client.event.EditEmployeeEvent;
@@ -11,6 +14,7 @@ import com.appspot.milkydb.client.view.EditEmployeeView;
 import com.appspot.milkydb.client.view.EmployeeView;
 import com.appspot.milkydb.client.view.HomeView;
 import com.appspot.milkydb.client.view.NavigationView;
+import com.appspot.milkydb.client.view.RawMaterialClassesView;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -19,6 +23,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
+@SuppressWarnings("serial")
 public class ApplicationPresenter implements Presenter,
 		ValueChangeHandler<String> {
 
@@ -30,12 +35,71 @@ public class ApplicationPresenter implements Presenter,
 		HasWidgets getNavigationPanel();
 	}
 
-	static final String defaultHistoryToken = "home";
+	private abstract class EntityManager {
+		String prefix;
 
+		public EntityManager(final String prefix) {
+			this.prefix = prefix;
+		}
+
+		abstract Presenter getEditPresenter(String key);
+
+		abstract Presenter getListPresenter();
+
+		abstract Presenter getNewPresenter();
+	}
+
+	static final String defaultHistoryToken = "home";
 	private final HandlerManager eventBus;
+
 	private final ManagedAsyncService service;
 
 	private final Display display;
+	private final List<EntityManager> entityManagers = new ArrayList<EntityManager>() {
+		{
+			add(new EntityManager("employee") {
+
+				@Override
+				public Presenter getEditPresenter(final String key) {
+					return new EditEmployeePresenter(new EditEmployeeView(),
+							service, eventBus, key);
+				}
+
+				@Override
+				public Presenter getListPresenter() {
+					return new EmployeePresenter(new EmployeeView(), service,
+							eventBus);
+				}
+
+				@Override
+				public Presenter getNewPresenter() {
+					return new EditEmployeePresenter(new EditEmployeeView(),
+							service, eventBus);
+				}
+			});
+
+			add(new EntityManager("rawMaterialsClasses") {
+
+				@Override
+				public Presenter getEditPresenter(final String key) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+
+				@Override
+				public Presenter getListPresenter() {
+					return new RawMaterialClassesPresenter(
+							new RawMaterialClassesView(), service, eventBus);
+				}
+
+				@Override
+				public Presenter getNewPresenter() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+			});
+		}
+	};
 
 	public ApplicationPresenter(final HandlerManager eventBus,
 			final ManagedAsyncService service, final Display display) {
@@ -102,20 +166,22 @@ public class ApplicationPresenter implements Presenter,
 
 		Presenter presenter = null;
 
-		final String editEmployeePrefix = "employee/edit/";
-
 		if (token.equals("home")) {
 			presenter = new HomePresenter(new HomeView());
-		} else if (token.equals("employee")) {
-			presenter = new EmployeePresenter(new EmployeeView(), service,
-					eventBus);
-		} else if (token.equals("employee/new")) {
-			presenter = new EditEmployeePresenter(new EditEmployeeView(),
-					service, eventBus);
-		} else if (token.startsWith(editEmployeePrefix)) {
-			presenter = new EditEmployeePresenter(new EditEmployeeView(),
-					service, eventBus, token.substring(editEmployeePrefix
-							.length()));
+		} else {
+			for (final EntityManager manager : entityManagers) {
+				if (token.equals(manager.prefix)) {
+					presenter = manager.getListPresenter();
+				} else if (token.equals(manager.prefix + "/new")) {
+					presenter = manager.getNewPresenter();
+				} else {
+					final String prefix = manager.prefix + "/edit/";
+					if (token.startsWith(prefix)) {
+						final String key = token.substring(prefix.length());
+						presenter = manager.getEditPresenter(key);
+					}
+				}
+			}
 		}
 
 		if (presenter == null) {
@@ -125,5 +191,6 @@ public class ApplicationPresenter implements Presenter,
 		} else {
 			presenter.go(display.getContentPanel());
 		}
+
 	}
 }

@@ -1,12 +1,12 @@
 package com.appspot.milkydb.client.service;
 
-import java.io.Serializable;
-
+import com.appspot.milkydb.shared.dto.RpcRequest;
+import com.appspot.milkydb.shared.dto.RpcResponse;
 import com.appspot.milkydb.shared.service.Action;
 import com.appspot.milkydb.shared.service.MilkyServiceAsync;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class AsyncRequest<Req extends Serializable, Resp extends Serializable> {
+public class AsyncRequest<Req extends RpcRequest, Resp extends RpcResponse> {
 
 	private final MilkyServiceAsync realService;
 	private final ManagedAsyncService managed;

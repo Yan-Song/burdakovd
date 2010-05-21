@@ -8,7 +8,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import org.joda.time.Period;
+import com.appspot.milkydb.shared.dto.TimeSpan;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
@@ -17,8 +17,8 @@ public class Contract {
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
 
-	@Persistent
-	private Period frequency;
+	@Persistent(serialized = "true")
+	private TimeSpan frequency;
 
 	@Persistent
 	private Integer count;
@@ -27,7 +27,7 @@ public class Contract {
 		return count;
 	}
 
-	public Period getFrequency() {
+	public TimeSpan getFrequency() {
 		return frequency;
 	}
 
@@ -39,7 +39,7 @@ public class Contract {
 		this.count = count;
 	}
 
-	public void setFrequency(final Period frequency) {
+	public void setFrequency(final TimeSpan frequency) {
 		this.frequency = frequency;
 	}
 

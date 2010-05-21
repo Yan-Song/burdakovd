@@ -1,10 +1,11 @@
 package com.appspot.milkydb.client.validation;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
+import com.appspot.milkydb.shared.dto.Dto;
+
 @SuppressWarnings("serial")
-public class ValidationError extends Exception implements Serializable {
+public class ValidationError extends Exception implements Dto {
 	private HashMap<String, String> errors;
 
 	/*

@@ -10,8 +10,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import org.joda.time.Period;
-
+import com.appspot.milkydb.shared.dto.TimeSpan;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
 
@@ -31,9 +30,8 @@ public class BaseProductClass {
 	@Persistent
 	private Float calorificValue;
 
-	@Persistent
-	// ? (serialized = "true")
-	private Period storageLife;
+	@Persistent(serialized = "true")
+	private TimeSpan storageLife;
 
 	@Persistent
 	private String packing;
@@ -82,7 +80,7 @@ public class BaseProductClass {
 		return storageConstraints;
 	}
 
-	public Period getStorageLife() {
+	public TimeSpan getStorageLife() {
 		return storageLife;
 	}
 
@@ -122,7 +120,7 @@ public class BaseProductClass {
 		this.storageConstraints = storageConstraints;
 	}
 
-	public void setStorageLife(final Period storageLife) {
+	public void setStorageLife(final TimeSpan storageLife) {
 		this.storageLife = storageLife;
 	}
 

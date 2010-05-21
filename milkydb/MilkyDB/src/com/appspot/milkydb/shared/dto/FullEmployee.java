@@ -1,14 +1,15 @@
 package com.appspot.milkydb.shared.dto;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.client.validation.Validator;
+import com.appspot.milkydb.shared.HasKey;
+import com.appspot.milkydb.shared.Validatable;
 
 @SuppressWarnings("serial")
-public class FullEmployee extends LightEmployee implements Serializable,
-		Validatable, HasKey<String> {
+public class FullEmployee extends LightEmployee implements Dto, Validatable,
+		HasKey<String> {
 
 	public interface Fields extends Validatable.Fields {
 		final static String name = "name";

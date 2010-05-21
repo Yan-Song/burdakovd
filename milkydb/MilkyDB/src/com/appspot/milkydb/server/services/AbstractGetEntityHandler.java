@@ -1,14 +1,14 @@
 package com.appspot.milkydb.server.services;
 
-import java.io.Serializable;
-
 import javax.jdo.PersistenceManager;
 
 import com.appspot.milkydb.server.PMF;
+import com.appspot.milkydb.shared.dto.Dto;
+import com.appspot.milkydb.shared.dto.EncodedKey;
 import com.google.appengine.api.datastore.KeyFactory;
 
-public abstract class AbstractGetEntityHandler<Model, Dto extends Serializable>
-		implements ActionHandler<String, Dto> {
+public abstract class AbstractGetEntityHandler<Model, FullDto extends Dto>
+		implements ActionHandler<EncodedKey, FullDto> {
 
 	private final Class<Model> modelClass;
 
@@ -16,8 +16,15 @@ public abstract class AbstractGetEntityHandler<Model, Dto extends Serializable>
 		this.modelClass = modelClass;
 	}
 
+	private FullDto doGet(final PersistenceManager pm,
+			final EncodedKey encodedKey) {
+		final Model model = pm.getObjectById(modelClass, KeyFactory
+				.stringToKey(encodedKey.getKey()));
+		return makeDto(model);
+	}
+
 	@Override
-	public Dto execute(final String request) {
+	public FullDto execute(final EncodedKey request) {
 		final PersistenceManager pm = PMF.get();
 
 		try {
@@ -27,14 +34,8 @@ public abstract class AbstractGetEntityHandler<Model, Dto extends Serializable>
 		}
 	}
 
-	private Dto doGet(final PersistenceManager pm, final String request) {
-		final Model model = pm.getObjectById(modelClass, KeyFactory
-				.stringToKey(request));
-		return makeDto(model);
-	}
-
 	/*
 	 * наследующие классы должны создавать здесь DTO из модели
 	 */
-	protected abstract Dto makeDto(Model model);
+	protected abstract FullDto makeDto(Model model);
 }

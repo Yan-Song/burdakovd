@@ -9,6 +9,7 @@ import com.appspot.milkydb.server.PMF;
 import com.appspot.milkydb.server.models.Appointment;
 import com.appspot.milkydb.server.models.ContactInfo;
 import com.appspot.milkydb.server.models.Employee;
+import com.appspot.milkydb.shared.dto.EncodedKey;
 import com.appspot.milkydb.shared.dto.FullEmployee;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -21,7 +22,7 @@ public class SaveEmployeeHandler extends
 	}
 
 	@Override
-	public String execute(final FullEmployee request)
+	public EncodedKey execute(final FullEmployee request)
 			throws ValidationError {
 		request.validate();
 
