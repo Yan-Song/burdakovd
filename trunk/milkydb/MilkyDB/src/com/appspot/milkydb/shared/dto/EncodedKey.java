@@ -2,22 +2,22 @@ package com.appspot.milkydb.shared.dto;
 
 @SuppressWarnings("serial")
 public class EncodedKey implements Dto {
-	private String key;
+	private String value;
 
 	@SuppressWarnings("unused")
 	private EncodedKey() {
 
 	}
 
-	public EncodedKey(final String key) {
-		this.key = key;
+	public EncodedKey(final String encoded) {
+		this.value = encoded;
 	}
 
-	public String getKey() {
-		return key;
+	public String getValue() {
+		return value;
 	}
 
-	public void setKey(final String key) {
-		this.key = key;
+	public void setValue(final String key) {
+		this.value = key;
 	}
 }

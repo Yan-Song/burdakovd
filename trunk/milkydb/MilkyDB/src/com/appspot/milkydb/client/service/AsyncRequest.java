@@ -2,8 +2,8 @@ package com.appspot.milkydb.client.service;
 
 import com.appspot.milkydb.shared.dto.RpcRequest;
 import com.appspot.milkydb.shared.dto.RpcResponse;
-import com.appspot.milkydb.shared.service.Action;
 import com.appspot.milkydb.shared.service.MilkyServiceAsync;
+import com.appspot.milkydb.shared.service.action.Action;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class AsyncRequest<Req extends RpcRequest, Resp extends RpcResponse> {

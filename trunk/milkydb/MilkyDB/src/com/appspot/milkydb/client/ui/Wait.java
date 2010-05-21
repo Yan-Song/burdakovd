@@ -15,7 +15,6 @@ import com.appspot.milkydb.client.event.RpcSuccessEvent;
 import com.appspot.milkydb.client.event.RpcSuccessEventHandler;
 import com.appspot.milkydb.client.service.AsyncRequest;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
-import com.appspot.milkydb.client.view.Waitable;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.LIElement;

@@ -4,6 +4,7 @@ import javax.jdo.PersistenceManager;
 
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.server.PMF;
+import com.appspot.milkydb.shared.dto.EncodedKey;
 import com.appspot.milkydb.shared.dto.EncodedKeys;
 import com.appspot.milkydb.shared.dto.RpcVoid;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -18,9 +19,9 @@ public class AbstractDeleteEntitiesHandler<Model> implements
 	}
 
 	private void doDelete(final PersistenceManager pm, final EncodedKeys keys) {
-		for (final String key : keys) {
+		for (final EncodedKey key : keys) {
 			pm.deletePersistent(pm.getObjectById(modelClass, KeyFactory
-					.stringToKey(key)));
+					.stringToKey(key.getValue())));
 		}
 	}
 

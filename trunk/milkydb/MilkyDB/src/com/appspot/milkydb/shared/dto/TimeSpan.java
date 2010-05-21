@@ -1,6 +1,5 @@
 package com.appspot.milkydb.shared.dto;
 
-
 @SuppressWarnings("serial")
 public class TimeSpan implements Dto {
 
@@ -16,6 +15,10 @@ public class TimeSpan implements Dto {
 
 	public long getMilliSeconds() {
 		return milliseconds;
+	}
+
+	public long getSeconds() {
+		return getMilliSeconds() / 1000;
 	}
 
 	@Override

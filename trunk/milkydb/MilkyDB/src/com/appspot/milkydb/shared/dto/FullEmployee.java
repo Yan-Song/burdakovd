@@ -4,12 +4,10 @@ import java.util.HashMap;
 
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.client.validation.Validator;
-import com.appspot.milkydb.shared.HasKey;
 import com.appspot.milkydb.shared.Validatable;
 
 @SuppressWarnings("serial")
-public class FullEmployee extends LightEmployee implements Dto, Validatable,
-		HasKey<String> {
+public class FullEmployee extends LightEmployee implements Validatable {
 
 	public interface Fields extends Validatable.Fields {
 		final static String name = "name";
@@ -26,21 +24,12 @@ public class FullEmployee extends LightEmployee implements Dto, Validatable,
 		super();
 	}
 
-	public FullEmployee(final String key, final String name, final String post,
-			final double salary, final String address, final String phone) {
+	public FullEmployee(final EncodedKey key, final String name,
+			final String post, final double salary, final String address,
+			final String phone) {
 		super(key, name, post, salary);
 		this.address = address;
 		this.phone = phone;
-	}
-
-	@Override
-	public String getKey() {
-		return this.key;
-	}
-
-	@Override
-	public void setKey(final String key) {
-		this.key = key;
 	}
 
 	@Override
