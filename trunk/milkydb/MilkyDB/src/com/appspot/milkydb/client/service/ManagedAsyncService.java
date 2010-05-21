@@ -1,6 +1,5 @@
 package com.appspot.milkydb.client.service;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +8,8 @@ import com.appspot.milkydb.client.event.EnteredDelayedModeEvent;
 import com.appspot.milkydb.client.event.LeavedDelayedModeEvent;
 import com.appspot.milkydb.client.event.RpcFailureEvent;
 import com.appspot.milkydb.client.event.RpcSuccessEvent;
+import com.appspot.milkydb.shared.dto.RpcRequest;
+import com.appspot.milkydb.shared.dto.RpcResponse;
 import com.appspot.milkydb.shared.service.Action;
 import com.appspot.milkydb.shared.service.MilkyServiceAsync;
 import com.google.gwt.event.shared.HandlerManager;
@@ -67,13 +68,13 @@ public class ManagedAsyncService {
 		eventBus.fireEvent(new EnteredDelayedModeEvent(this));
 	}
 
-	public <Req extends Serializable, Resp extends Serializable> AsyncRequest<Req, Resp> execute(
+	public <Req extends RpcRequest, Resp extends RpcResponse> AsyncRequest<Req, Resp> execute(
 			final Action<Req, Resp> action, final Req request,
 			final AsyncCallback<Resp> callback) {
 		return execute(action, request, callback, action.getName());
 	}
 
-	public <Req extends Serializable, Resp extends Serializable> AsyncRequest<Req, Resp> execute(
+	public <Req extends RpcRequest, Resp extends RpcResponse> AsyncRequest<Req, Resp> execute(
 			final Action<Req, Resp> action, final Req request,
 			final AsyncCallback<Resp> callback, final String name) {
 
@@ -134,7 +135,7 @@ public class ManagedAsyncService {
 		}
 	}
 
-	<Response extends Serializable> void onSuccess(
+	<Response extends RpcResponse> void onSuccess(
 			final AsyncRequest<?, Response> request, final Response result) {
 		request.complete();
 		requests.remove(request);

@@ -6,7 +6,10 @@ import com.appspot.milkydb.client.event.EditEmployeeFinishedEvent;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.ui.FreeListBox;
 import com.appspot.milkydb.client.validation.ValidationError;
+import com.appspot.milkydb.shared.dto.DtoList;
+import com.appspot.milkydb.shared.dto.EncodedKey;
 import com.appspot.milkydb.shared.dto.FullEmployee;
+import com.appspot.milkydb.shared.dto.LightAppointment;
 import com.appspot.milkydb.shared.service.Action;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
@@ -53,7 +56,7 @@ public class EditEmployeePresenter extends AbstractEditPresenter<FullEmployee> {
 
 	private void fetchAppointments() {
 		wait.add(service.execute(Action.getAppointments, null,
-				new AsyncCallback<ArrayList<String>>() {
+				new AsyncCallback<DtoList<LightAppointment>>() {
 					@Override
 					public void onFailure(final Throwable caught) {
 						Window.alert("Can't fetch appointments list");
@@ -61,8 +64,12 @@ public class EditEmployeePresenter extends AbstractEditPresenter<FullEmployee> {
 					}
 
 					@Override
-					public void onSuccess(final ArrayList<String> result) {
-						display.getPost().setVariants(result, true);
+					public void onSuccess(final DtoList<LightAppointment> result) {
+						final ArrayList<String> variants = new ArrayList<String>();
+						for (final LightAppointment a : result) {
+							variants.add(a.getAppointment());
+						}
+						display.getPost().setVariants(variants, true);
 					}
 				}, "Загрузка списка должностей"));
 	}
@@ -95,12 +102,12 @@ public class EditEmployeePresenter extends AbstractEditPresenter<FullEmployee> {
 	}
 
 	@Override
-	protected Action<String, FullEmployee> provideGetEntityAction() {
+	protected Action<EncodedKey, FullEmployee> provideGetEntityAction() {
 		return Action.getEmployee;
 	}
 
 	@Override
-	protected Action<FullEmployee, String> provideSaveEntityAction() {
+	protected Action<FullEmployee, EncodedKey> provideSaveEntityAction() {
 		return Action.saveEmployee;
 	}
 }

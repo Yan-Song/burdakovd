@@ -1,4 +1,4 @@
-package com.appspot.milkydb.shared.dto;
+package com.appspot.milkydb.shared;
 
 import com.appspot.milkydb.client.validation.ValidationError;
 

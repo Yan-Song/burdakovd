@@ -7,7 +7,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import javax.persistence.Embedded;
 
-import com.appspot.milkydb.shared.dto.HasKey;
+import com.appspot.milkydb.shared.HasKey;
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)

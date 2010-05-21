@@ -1,16 +1,15 @@
 package com.appspot.milkydb.server.services;
 
-import java.util.ArrayList;
-
 import javax.jdo.PersistenceManager;
 
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.server.PMF;
-import com.appspot.milkydb.shared.dto.SerializableVoid;
+import com.appspot.milkydb.shared.dto.EncodedKeys;
+import com.appspot.milkydb.shared.dto.RpcVoid;
 import com.google.appengine.api.datastore.KeyFactory;
 
 public class AbstractDeleteEntitiesHandler<Model> implements
-		ActionHandler<ArrayList<String>, SerializableVoid> {
+		ActionHandler<EncodedKeys, RpcVoid> {
 
 	private final Class<Model> modelClass;
 
@@ -18,8 +17,7 @@ public class AbstractDeleteEntitiesHandler<Model> implements
 		this.modelClass = modelClass;
 	}
 
-	private void doDelete(final PersistenceManager pm,
-			final ArrayList<String> keys) {
+	private void doDelete(final PersistenceManager pm, final EncodedKeys keys) {
 		for (final String key : keys) {
 			pm.deletePersistent(pm.getObjectById(modelClass, KeyFactory
 					.stringToKey(key)));
@@ -27,8 +25,7 @@ public class AbstractDeleteEntitiesHandler<Model> implements
 	}
 
 	@Override
-	public SerializableVoid execute(final ArrayList<String> keys)
-			throws ValidationError {
+	public RpcVoid execute(final EncodedKeys keys) throws ValidationError {
 
 		final PersistenceManager pm = PMF.get();
 

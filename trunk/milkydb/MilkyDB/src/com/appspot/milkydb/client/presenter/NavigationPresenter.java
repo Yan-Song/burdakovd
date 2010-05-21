@@ -33,6 +33,7 @@ public class NavigationPresenter implements Presenter,
 		{
 			add(new NavigationLink("home", "Домашняя страница"));
 			add(new NavigationLink("employee", "Служащие"));
+			add(new NavigationLink("rawMaterialsClasses", "Классы сырья"));
 		}
 	};
 

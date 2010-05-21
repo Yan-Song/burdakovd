@@ -1,9 +1,10 @@
 package com.appspot.milkydb.server.services;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
 import com.appspot.milkydb.client.validation.ValidationError;
+import com.appspot.milkydb.shared.dto.RpcRequest;
+import com.appspot.milkydb.shared.dto.RpcResponse;
 import com.appspot.milkydb.shared.service.Action;
 import com.appspot.milkydb.shared.service.MilkyService;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -26,6 +27,8 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 				new GetAppointmentsHandler());
 		registerActionHandler(Action.deleteEmployee,
 				new DeleteEmployeeHandler());
+		registerActionHandler(Action.getRawMaterialsClasses,
+				new GetRawMaterialsClassesHandler());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -36,7 +39,7 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 	 * оказаться не могут, так как handlers имеет модификатор private, а метод
 	 * RegisterActionHandler параметризован
 	 */
-	public <Req extends Serializable, Resp extends Serializable> Resp execute(
+	public <Req extends RpcRequest, Resp extends RpcResponse> Resp execute(
 			final Action<Req, Resp> action, final Req request)
 			throws ValidationError {
 
@@ -51,7 +54,7 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 		}
 	}
 
-	private <Req extends Serializable, Resp extends Serializable> void registerActionHandler(
+	private <Req extends RpcRequest, Resp extends RpcResponse> void registerActionHandler(
 			final Action<Req, Resp> action,
 			final ActionHandler<Req, Resp> handler) {
 

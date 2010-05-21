@@ -1,6 +1,5 @@
 package com.appspot.milkydb.client.presenter;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +7,11 @@ import com.appspot.milkydb.client.service.AsyncRequest;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.ui.Wait;
 import com.appspot.milkydb.client.view.Waitable;
-import com.appspot.milkydb.shared.dto.HasKey;
-import com.appspot.milkydb.shared.dto.SerializableVoid;
+import com.appspot.milkydb.shared.HasKey;
+import com.appspot.milkydb.shared.dto.Dto;
+import com.appspot.milkydb.shared.dto.DtoList;
+import com.appspot.milkydb.shared.dto.EncodedKeys;
+import com.appspot.milkydb.shared.dto.RpcVoid;
 import com.appspot.milkydb.shared.service.Action;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -20,7 +22,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class AbstractEntitiesTablePresenter<LightDto extends Serializable & HasKey<String>>
+public abstract class AbstractEntitiesTablePresenter<LightDto extends Dto & HasKey<String>>
 		implements Presenter {
 
 	public interface Display<LightDto> {
@@ -89,10 +91,10 @@ public abstract class AbstractEntitiesTablePresenter<LightDto extends Serializab
 		});
 	}
 
-	private AsyncRequest<ArrayList<String>, SerializableVoid> doDelete(
+	private AsyncRequest<EncodedKeys, RpcVoid> doDelete(
 			final ArrayList<String> keys) {
-		return service.execute(provideDeleteAction(), keys,
-				new AsyncCallback<SerializableVoid>() {
+		return service.execute(provideDeleteAction(), new EncodedKeys(keys),
+				new AsyncCallback<RpcVoid>() {
 					@Override
 					public void onFailure(final Throwable caught) {
 						fetchEntities();
@@ -100,7 +102,7 @@ public abstract class AbstractEntitiesTablePresenter<LightDto extends Serializab
 					}
 
 					@Override
-					public void onSuccess(final SerializableVoid result) {
+					public void onSuccess(final RpcVoid result) {
 						fetchEntities();
 					}
 				}, "Удаление");
@@ -108,7 +110,7 @@ public abstract class AbstractEntitiesTablePresenter<LightDto extends Serializab
 
 	private void fetchEntities() {
 		wait.add(service.execute(provideGetAction(), null,
-				new AsyncCallback<ArrayList<LightDto>>() {
+				new AsyncCallback<DtoList<LightDto>>() {
 
 					@Override
 					public void onFailure(final Throwable caught) {
@@ -117,7 +119,7 @@ public abstract class AbstractEntitiesTablePresenter<LightDto extends Serializab
 					}
 
 					@Override
-					public void onSuccess(final ArrayList<LightDto> result) {
+					public void onSuccess(final DtoList<LightDto> result) {
 						keys = new ArrayList<String>();
 						for (final LightDto e : result) {
 							keys.add(e.getKey());
@@ -161,7 +163,7 @@ public abstract class AbstractEntitiesTablePresenter<LightDto extends Serializab
 		}
 	}
 
-	protected abstract Action<ArrayList<String>, SerializableVoid> provideDeleteAction();
+	protected abstract Action<EncodedKeys, RpcVoid> provideDeleteAction();
 
-	protected abstract Action<SerializableVoid, ArrayList<LightDto>> provideGetAction();
+	protected abstract Action<RpcVoid, DtoList<LightDto>> provideGetAction();
 }

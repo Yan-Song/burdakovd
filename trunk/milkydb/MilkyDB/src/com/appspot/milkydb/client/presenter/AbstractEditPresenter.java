@@ -1,14 +1,14 @@
 package com.appspot.milkydb.client.presenter;
 
-import java.io.Serializable;
-
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.ui.Wait;
 import com.appspot.milkydb.client.validation.CanDisplayValidationErrors;
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.client.view.Waitable;
-import com.appspot.milkydb.shared.dto.HasKey;
-import com.appspot.milkydb.shared.dto.Validatable;
+import com.appspot.milkydb.shared.HasKey;
+import com.appspot.milkydb.shared.Validatable;
+import com.appspot.milkydb.shared.dto.Dto;
+import com.appspot.milkydb.shared.dto.EncodedKey;
 import com.appspot.milkydb.shared.service.Action;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class AbstractEditPresenter<Dto extends HasKey<String> & Serializable & Validatable>
+public abstract class AbstractEditPresenter<FullDto extends HasKey<String> & Dto & Validatable>
 		implements Presenter {
 
 	public interface Display extends CanDisplayValidationErrors {
@@ -67,11 +67,11 @@ public abstract class AbstractEditPresenter<Dto extends HasKey<String> & Seriali
 		});
 	}
 
-	protected abstract void displayDto(final Dto data);
+	protected abstract void displayDto(final FullDto data);
 
-	private void doSave(final Dto dto) throws ValidationError {
+	private void doSave(final FullDto dto) throws ValidationError {
 		wait.add(service.execute(provideSaveEntityAction(), dto,
-				new AsyncCallback<String>() {
+				new AsyncCallback<EncodedKey>() {
 					@Override
 					public void onFailure(final Throwable caught) {
 						if (caught instanceof ValidationError) {
@@ -84,15 +84,15 @@ public abstract class AbstractEditPresenter<Dto extends HasKey<String> & Seriali
 					}
 
 					@Override
-					public void onSuccess(final String result) {
+					public void onSuccess(final EncodedKey result) {
 						fireEditFinishedEvent();
 					}
 				}, "Сохранение"));
 	}
 
 	private void fetchEntityDetails() {
-		wait.add(service.execute(provideGetEntityAction(), key,
-				new AsyncCallback<Dto>() {
+		wait.add(service.execute(provideGetEntityAction(), new EncodedKey(key),
+				new AsyncCallback<FullDto>() {
 
 					@Override
 					public void onFailure(final Throwable caught) {
@@ -101,7 +101,7 @@ public abstract class AbstractEditPresenter<Dto extends HasKey<String> & Seriali
 					}
 
 					@Override
-					public void onSuccess(final Dto result) {
+					public void onSuccess(final FullDto result) {
 						displayDto(result);
 					}
 				}, "Загрузка объекта"));
@@ -121,13 +121,13 @@ public abstract class AbstractEditPresenter<Dto extends HasKey<String> & Seriali
 		}
 	}
 
-	protected abstract Dto makeDto() throws ValidationError;
+	protected abstract FullDto makeDto() throws ValidationError;
 
 	private void onSubmit() {
 		display.clearErrors();
 
 		try {
-			final Dto dto = makeDto();
+			final FullDto dto = makeDto();
 			dto.validate();
 			doSave(dto);
 		} catch (final ValidationError e) {
@@ -135,7 +135,7 @@ public abstract class AbstractEditPresenter<Dto extends HasKey<String> & Seriali
 		}
 	}
 
-	protected abstract Action<String, Dto> provideGetEntityAction();
+	protected abstract Action<EncodedKey, FullDto> provideGetEntityAction();
 
-	protected abstract Action<Dto, String> provideSaveEntityAction();
+	protected abstract Action<FullDto, EncodedKey> provideSaveEntityAction();
 }
