@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.appspot.milkydb.client.presenter.EditEmployeePresenter;
 import com.appspot.milkydb.client.ui.FormField;
 import com.appspot.milkydb.client.ui.FreeListBox;
+import com.appspot.milkydb.shared.Validatable;
 import com.appspot.milkydb.shared.dto.FullEmployee;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.TextArea;
@@ -40,8 +41,8 @@ public class EditEmployeeView extends AbstractEditView implements
 	}
 
 	@Override
-	protected HashMap<String, FormField<?>> getFieldsMap() {
-		return new HashMap<String, FormField<?>>() {
+	protected HashMap<Enum<? extends Validatable.Fields>, FormField<?>> getFieldsMap() {
+		return new HashMap<Enum<? extends Validatable.Fields>, FormField<?>>() {
 			{
 				put(FullEmployee.Fields.name, name);
 				put(FullEmployee.Fields.post, post);

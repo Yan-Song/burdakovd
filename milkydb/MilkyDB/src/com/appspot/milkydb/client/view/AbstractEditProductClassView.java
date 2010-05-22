@@ -1,12 +1,12 @@
 package com.appspot.milkydb.client.view;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import com.appspot.milkydb.client.presenter.AbstractEditProductClassPresenter;
 import com.appspot.milkydb.client.ui.FormField;
 import com.appspot.milkydb.client.ui.FreeMultiListBox;
 import com.appspot.milkydb.client.ui.TimeSpanSelector;
+import com.appspot.milkydb.shared.Validatable.Fields;
 import com.appspot.milkydb.shared.dto.FullProductClass;
 import com.appspot.milkydb.shared.dto.TimeSpan;
 import com.google.gwt.user.client.ui.HasValue;
@@ -67,8 +67,8 @@ public abstract class AbstractEditProductClassView extends AbstractEditView
 
 	@SuppressWarnings("serial")
 	@Override
-	protected Map<String, FormField<?>> getFieldsMap() {
-		return new HashMap<String, FormField<?>>() {
+	protected HashMap<Enum<? extends Fields>, FormField<?>> getFieldsMap() {
+		return new HashMap<Enum<? extends Fields>, FormField<?>>() {
 			{
 				put(FullProductClass.Fields.name, name);
 				put(FullProductClass.Fields.fatness, fatness);

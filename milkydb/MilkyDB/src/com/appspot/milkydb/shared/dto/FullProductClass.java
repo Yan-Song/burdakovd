@@ -13,16 +13,8 @@ import com.appspot.milkydb.shared.Validatable;
 public class FullProductClass extends LightProductClass implements Validatable,
 		Serializable {
 
-	public interface Fields extends Validatable.Fields {
-		public static final String name = "name";
-		public static final String fatness = "fatness";
-		public static final String calorificValue = "calorificValue";
-		public static final String storageLife = "storageLife";
-		public static final String packing = "packing";
-		public static final String storageConstraints = "storageConstraints";
-		public static final String transportationConstraints = "transportationConstraints";
-		public static final String ferments = "ferments";
-		public static final String microElements = "microElements";
+	public enum Fields implements Validatable.Fields {
+		name, fatness, calorificValue, storageLife, packing, storageConstraints, transportationConstraints, ferments, microElements
 	}
 
 	private String packing;
@@ -96,7 +88,7 @@ public class FullProductClass extends LightProductClass implements Validatable,
 
 	@Override
 	public void validate() throws ValidationError {
-		final HashMap<String, String> errors = new HashMap<String, String>();
+		final HashMap<Enum<? extends Validatable.Fields>, String> errors = new HashMap<Enum<? extends Validatable.Fields>, String>();
 
 		if (!Validator.validateFloat(getCalorificValue(), 0f, 1000000000f)) {
 			errors.put(Fields.calorificValue,
@@ -136,12 +128,14 @@ public class FullProductClass extends LightProductClass implements Validatable,
 		if (!Validator.validateString(getTransportationConstraints(), 0, 300)) {
 			errors.put(Fields.transportationConstraints,
 					"Строка от 0 до 300 символов");
+
 		}
 
 		if (!Validator.validateTimeSpan(getStorageLife(), 0, 86400 * 365 * 10)) {
 			errors
 					.put(Fields.storageLife,
 							"Срок хранения должен быть положительным и не более 10 лет");
+
 		}
 
 		if (!errors.isEmpty()) {

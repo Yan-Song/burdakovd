@@ -1,10 +1,13 @@
 package com.appspot.milkydb.client.view;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.appspot.milkydb.client.presenter.AbstractEditPresenter;
 import com.appspot.milkydb.client.ui.FormField;
 import com.appspot.milkydb.client.validation.ValidationError;
+import com.appspot.milkydb.shared.Validatable;
+import com.appspot.milkydb.shared.Validatable.Fields;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -49,7 +52,7 @@ public abstract class AbstractEditView extends Composite implements
 		return cancelButton;
 	}
 
-	protected abstract Map<String, FormField<?>> getFieldsMap();
+	protected abstract HashMap<Enum<? extends Fields>, FormField<?>> getFieldsMap();
 
 	@Override
 	public HasClickHandlers getSubmitButton() {
@@ -74,8 +77,8 @@ public abstract class AbstractEditView extends Composite implements
 
 	@Override
 	public void showValidationError(final ValidationError error) {
-		for (final Map.Entry<String, String> entry : error.getErrors()
-				.entrySet()) {
+		for (final Map.Entry<Enum<? extends Validatable.Fields>, String> entry : error
+				.getErrors().entrySet()) {
 			final FormField<?> field = getFieldsMap().get(entry.getKey());
 			field.getErrorLabel().setText(entry.getValue());
 			field.getErrorLabel().setVisible(true);

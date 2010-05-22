@@ -139,8 +139,8 @@ public abstract class AbstractEditPresenter<FullDto extends Dto & Validatable>
 		}
 	}
 
-	protected Float parseFloat(final String field, final String value)
-			throws ValidationError {
+	protected Float parseFloat(final Enum<? extends Validatable.Fields> field,
+			final String value) throws ValidationError {
 		try {
 			return Float.parseFloat(value);
 		} catch (final NumberFormatException e) {
