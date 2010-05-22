@@ -9,12 +9,8 @@ import com.appspot.milkydb.shared.Validatable;
 @SuppressWarnings("serial")
 public class FullEmployee extends LightEmployee implements Validatable {
 
-	public interface Fields extends Validatable.Fields {
-		final static String name = "name";
-		final static String post = "post";
-		final static String salary = "salary";
-		final static String address = "address";
-		final static String phoneNumber = "phoneNumber";
+	public enum Fields implements Validatable.Fields {
+		name, post, salary, address, phoneNumber
 	}
 
 	public String address = "";
@@ -34,7 +30,7 @@ public class FullEmployee extends LightEmployee implements Validatable {
 
 	@Override
 	public void validate() throws ValidationError {
-		final HashMap<String, String> errors = new HashMap<String, String>();
+		final HashMap<Enum<? extends Validatable.Fields>, String> errors = new HashMap<Enum<? extends Validatable.Fields>, String>();
 
 		if (!Validator.validateString(this.name, 1, 50)) {
 			errors.put(Fields.name,
