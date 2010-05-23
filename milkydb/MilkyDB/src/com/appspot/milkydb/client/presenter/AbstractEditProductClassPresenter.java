@@ -65,12 +65,14 @@ public abstract class AbstractEditProductClassPresenter extends
 
 	@Override
 	protected BaseProductClass makeDto() throws ValidationError {
-		return new BaseProductClass(key.getValue(), display.getName()
-				.getValue(), parseFloat(BaseProductClass.Fields.fatness,
-				display.getFatness().getValue()), parseFloat(
-				BaseProductClass.Fields.calorificValue, display
-						.getCalorificValue().getValue()), display
-				.getStorageLife().getValue(), display.getPacking().getValue(),
+		return new BaseProductClass(key == null ? null : key.getValue(),
+				display.getName().getValue(), parseFloat(
+						BaseProductClass.Fields.fatness, display.getFatness()
+								.getValue()), parseFloat(
+						BaseProductClass.Fields.calorificValue, display
+								.getCalorificValue().getValue()), display
+						.getStorageLife().getValue(), display.getPacking()
+						.getValue(),
 				display.getStorageConstraints().getValue(), display
 						.getTransportationConstraints().getValue(), display
 						.getFerments().getValue(), display.getMicroElements()

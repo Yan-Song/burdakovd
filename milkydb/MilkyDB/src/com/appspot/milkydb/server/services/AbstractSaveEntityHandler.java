@@ -3,13 +3,15 @@ package com.appspot.milkydb.server.services;
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.server.DAO;
 import com.appspot.milkydb.shared.HasKey;
+import com.appspot.milkydb.shared.HasOwner;
+import com.appspot.milkydb.shared.Model;
 import com.appspot.milkydb.shared.Validatable;
 import com.appspot.milkydb.shared.dto.Dto;
 import com.appspot.milkydb.shared.dto.SingleKey;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 
-public abstract class AbstractSaveEntityHandler<M extends HasKey<Long>, FullDto extends Validatable & HasKey<Long> & Dto>
+public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model & HasOwner, FullDto extends Validatable & HasKey<Long> & Dto>
 		implements ActionHandler<FullDto, SingleKey> {
 
 	private final Class<M> modelClass;
@@ -23,13 +25,20 @@ public abstract class AbstractSaveEntityHandler<M extends HasKey<Long>, FullDto 
 		try {
 			final boolean newModelInstance = dto.getKey() == null;
 
-			final M model = newModelInstance ? modelClass.newInstance() : ofy
-					.get(new Key<M>(DAO.rootKey, modelClass, dto.getKey()));
+			M model;
+			if (newModelInstance) {
+				model = modelClass.newInstance();
+				model.setOwner(DAO.rootKey);
+			} else {
+				model = ofy.get(new Key<M>(DAO.rootKey, modelClass, dto
+						.getKey()));
+			}
 
 			setData(model, dto);
-
 			ofy.put(model);
+
 			return model;
+
 		} catch (final InstantiationException e) {
 			throw new RuntimeException(e);
 		} catch (final IllegalAccessException e) {

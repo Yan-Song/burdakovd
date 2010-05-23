@@ -8,12 +8,16 @@ import javax.persistence.Id;
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.client.validation.Validator;
 import com.appspot.milkydb.shared.HasKey;
+import com.appspot.milkydb.shared.HasOwner;
 import com.appspot.milkydb.shared.Model;
 import com.appspot.milkydb.shared.Validatable;
 import com.appspot.milkydb.shared.dto.Dto;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Parent;
 
 @SuppressWarnings("serial")
-public class Employee implements HasKey<Long>, Validatable, Dto, Model {
+public class Employee implements HasKey<Long>, Validatable, Dto, Model,
+		HasOwner {
 
 	public enum Fields implements Validatable.Fields {
 		name, post, salary, address, phoneNumber
@@ -21,6 +25,9 @@ public class Employee implements HasKey<Long>, Validatable, Dto, Model {
 
 	@Id
 	private Long key;
+
+	@Parent
+	private Key<?> owner;
 
 	private String name;
 
@@ -61,6 +68,10 @@ public class Employee implements HasKey<Long>, Validatable, Dto, Model {
 		return name;
 	}
 
+	public Key<?> getOwner() {
+		return owner;
+	}
+
 	public double getSalary() {
 		return salary;
 	}
@@ -79,6 +90,10 @@ public class Employee implements HasKey<Long>, Validatable, Dto, Model {
 
 	public void setName(final String name) {
 		this.name = name;
+	}
+
+	public void setOwner(final Key<?> owner) {
+		this.owner = owner;
 	}
 
 	public void setSalary(final double salary) {

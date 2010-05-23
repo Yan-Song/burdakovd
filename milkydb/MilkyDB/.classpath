@@ -4,6 +4,10 @@
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Objectify"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-2.2.jar" sourcepath="F:/data/progr/workspace/objectify-2.2/src">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/F:/data/progr/workspace/objectify-2.2/javadoc/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

@@ -8,15 +8,19 @@ import javax.persistence.Id;
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.client.validation.Validator;
 import com.appspot.milkydb.shared.HasKey;
+import com.appspot.milkydb.shared.HasOwner;
 import com.appspot.milkydb.shared.Model;
 import com.appspot.milkydb.shared.Validatable;
 import com.appspot.milkydb.shared.dto.Dto;
 import com.appspot.milkydb.shared.dto.TimeSpan;
 import com.google.appengine.api.datastore.Text;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.annotation.Serialized;
 
 @SuppressWarnings("serial")
-public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable {
+public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
+		HasOwner {
 
 	public enum Fields implements Validatable.Fields {
 		name, fatness, calorificValue, storageLife, packing, storageConstraints, transportationConstraints, ferments, microElements
@@ -24,6 +28,9 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable {
 
 	@Id
 	private Long key;
+
+	@Parent
+	private Key<?> owner;
 
 	private String name;
 
@@ -102,6 +109,10 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable {
 		return name;
 	}
 
+	public Key<?> getOwner() {
+		return owner;
+	}
+
 	public String getPacking() {
 		return packing;
 	}
@@ -140,6 +151,10 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable {
 
 	public void setName(final String name) {
 		this.name = name;
+	}
+
+	public void setOwner(final Key<?> owner) {
+		this.owner = owner;
 	}
 
 	public void setPacking(final String packing) {
