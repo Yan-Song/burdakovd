@@ -1,14 +1,14 @@
-<!-- Indices written at Sun, 23 May 2010 16:29:00 UTC -->
+<!-- Indices written at Sun, 23 May 2010 18:40:17 UTC -->
 
 <datastore-indexes>
 
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="RawMaterialClass" ancestor="true" source="auto">
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="FinalProductClass" ancestor="true" source="auto">
         <property name="name" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="FinalProductClass" ancestor="true" source="auto">
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="RawMaterialClass" ancestor="true" source="auto">
         <property name="name" direction="asc"/>
     </datastore-index>
 

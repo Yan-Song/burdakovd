@@ -10,12 +10,12 @@ import com.google.appengine.repackaged.com.google.common.base.Function;
 import com.google.appengine.repackaged.com.google.common.collect.Iterables;
 import com.googlecode.objectify.Key;
 
-public class AbstractDeleteEntitiesHandler<M extends Model> implements
+public class SimpleDeleteEntitiesHandler<M extends Model> implements
 		ActionHandler<KeyList, RpcVoid> {
 
 	private final Class<M> modelClass;
 
-	public AbstractDeleteEntitiesHandler(final Class<M> modelClass) {
+	public SimpleDeleteEntitiesHandler(final Class<M> modelClass) {
 		this.modelClass = modelClass;
 	}
 

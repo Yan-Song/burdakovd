@@ -10,6 +10,12 @@ import com.appspot.milkydb.shared.dto.RpcRequest;
 import com.appspot.milkydb.shared.dto.RpcResponse;
 import com.appspot.milkydb.shared.dto.RpcVoid;
 import com.appspot.milkydb.shared.dto.SingleKey;
+import com.appspot.milkydb.shared.models.Appointment;
+import com.appspot.milkydb.shared.models.Employee;
+import com.appspot.milkydb.shared.models.Ferment;
+import com.appspot.milkydb.shared.models.FinalProductClass;
+import com.appspot.milkydb.shared.models.MicroElement;
+import com.appspot.milkydb.shared.models.RawMaterialClass;
 import com.appspot.milkydb.shared.service.MilkyService;
 import com.appspot.milkydb.shared.service.action.Action;
 import com.appspot.milkydb.shared.service.action.ManagerActionSet;
@@ -26,23 +32,40 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 
 	public MilkyServiceImpl() {
 		registerActionHandler(Action.getAppointments,
-				new GetAppointmentsHandler());
+				new SimpleGetAllEntitiesHandler<Appointment>(Appointment.class,
+						"name"));
 
 		registerManagerActionSetHandlers(ManagerActionSet.Employee,
-				new DeleteEmployeeHandler(), new GetEmployeeHandler(),
+				new SimpleDeleteEntitiesHandler<Employee>(Employee.class),
+				new SimpleGetEntityHandler<Employee>(Employee.class),
 				new GetEmployeesHandler(), new SaveEmployeeHandler());
 
 		registerManagerActionSetHandlers(ManagerActionSet.RawMaterialClass,
-				new DeleteRawMaterialClassHandler(),
-				new GetRawMaterialClassHandler(),
-				new GetRawMaterialClassesHandler(),
-				new SaveRawMaterialClassHandler());
+				new SimpleDeleteEntitiesHandler<RawMaterialClass>(
+						RawMaterialClass.class),
+				new SimpleGetEntityHandler<RawMaterialClass>(
+						RawMaterialClass.class),
+				new GetProductClassesHandler<RawMaterialClass>(
+						RawMaterialClass.class),
+				new SaveProductClassHandler<RawMaterialClass>(
+						RawMaterialClass.class));
 
 		registerManagerActionSetHandlers(ManagerActionSet.FinalProductClass,
-				new DeleteFinalProductClassHandler(),
-				new GetFinalProductClassHandler(),
-				new GetFinalProductClassesHandler(),
-				new SaveFinalProductClassHandler());
+				new SimpleDeleteEntitiesHandler<FinalProductClass>(
+						FinalProductClass.class),
+				new SimpleGetEntityHandler<FinalProductClass>(
+						FinalProductClass.class),
+				new GetProductClassesHandler<FinalProductClass>(
+						FinalProductClass.class),
+				new SaveProductClassHandler<FinalProductClass>(
+						FinalProductClass.class));
+
+		registerActionHandler(Action.getFerments,
+				new SimpleGetAllEntitiesHandler<Ferment>(Ferment.class, "name"));
+
+		registerActionHandler(Action.getMicroElements,
+				new SimpleGetAllEntitiesHandler<MicroElement>(
+						MicroElement.class, "name"));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -70,7 +93,7 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 
 	private <Req extends RpcRequest, Resp extends RpcResponse> void registerActionHandler(
 			final Action<Req, Resp> action,
-			final ActionHandler<Req, Resp> handler) {
+			final ActionHandler<Req, ? extends Resp> handler) {
 
 		handlers.put(action, handler);
 	}
@@ -78,7 +101,7 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 	private <LightDto extends Dto, FullDto extends Dto> void registerManagerActionSetHandlers(
 			final ManagerActionSet<LightDto, FullDto> set,
 			final ActionHandler<KeyList, RpcVoid> delete,
-			final ActionHandler<SingleKey, FullDto> get,
+			final ActionHandler<SingleKey, ? extends FullDto> get,
 			final ActionHandler<RpcVoid, DtoList<LightDto>> getAll,
 			final ActionHandler<FullDto, SingleKey> save) {
 

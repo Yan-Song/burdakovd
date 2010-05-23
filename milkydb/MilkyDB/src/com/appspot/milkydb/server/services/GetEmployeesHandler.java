@@ -5,7 +5,7 @@ import com.appspot.milkydb.shared.dto.SingleKey;
 import com.appspot.milkydb.shared.models.Employee;
 
 public class GetEmployeesHandler extends
-		AbstractGetEntitiesHandler<Employee, LightEmployee> {
+		AbstractGetAllEntitiesHandler<Employee, LightEmployee> {
 
 	public GetEmployeesHandler() {
 		super(Employee.class);

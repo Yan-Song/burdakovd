@@ -6,6 +6,8 @@ import com.appspot.milkydb.shared.dto.RpcRequest;
 import com.appspot.milkydb.shared.dto.RpcResponse;
 import com.appspot.milkydb.shared.dto.RpcVoid;
 import com.appspot.milkydb.shared.models.Appointment;
+import com.appspot.milkydb.shared.models.Ferment;
+import com.appspot.milkydb.shared.models.MicroElement;
 
 /*
  * Нужно различать различные команды, и пользоваться оператором == нельзя,
@@ -25,6 +27,12 @@ public class Action<Req extends RpcRequest, Resp extends RpcResponse>
 
 	public static final Action<RpcVoid, DtoList<Appointment>> getAppointments = new Action<RpcVoid, DtoList<Appointment>>(
 			"getAppointments");
+
+	public static final Action<RpcVoid, DtoList<MicroElement>> getMicroElements = new Action<RpcVoid, DtoList<MicroElement>>(
+			"getMicroElements");
+
+	public static final Action<RpcVoid, DtoList<Ferment>> getFerments = new Action<RpcVoid, DtoList<Ferment>>(
+			"getFerments");
 
 	/*
 	 * для GWT-RPC

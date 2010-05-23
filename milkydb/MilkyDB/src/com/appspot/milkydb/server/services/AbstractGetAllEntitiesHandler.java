@@ -8,12 +8,12 @@ import com.appspot.milkydb.shared.dto.RpcVoid;
 import com.google.appengine.repackaged.com.google.common.base.Function;
 import com.google.appengine.repackaged.com.google.common.collect.Iterables;
 
-public abstract class AbstractGetEntitiesHandler<M extends Model, LightDto extends Dto>
+public abstract class AbstractGetAllEntitiesHandler<M extends Model, LightDto extends Dto>
 		implements ActionHandler<RpcVoid, DtoList<LightDto>> {
 
 	private final Class<M> modelClass;
 
-	public AbstractGetEntitiesHandler(final Class<M> modelClass) {
+	public AbstractGetAllEntitiesHandler(final Class<M> modelClass) {
 		this.modelClass = modelClass;
 	}
 
