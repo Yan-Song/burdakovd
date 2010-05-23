@@ -3,11 +3,11 @@ package com.appspot.milkydb.server.services;
 import com.appspot.milkydb.shared.dto.LightProductClass;
 import com.appspot.milkydb.shared.models.BaseProductClass;
 
-public class AbstractGetProductClassesHandler<ProductClassModel extends BaseProductClass>
+public class GetProductClassesHandler<ProductClassModel extends BaseProductClass>
 		extends
-		AbstractGetEntitiesHandler<ProductClassModel, LightProductClass> {
+		AbstractGetAllEntitiesHandler<ProductClassModel, LightProductClass> {
 
-	public AbstractGetProductClassesHandler(
+	public GetProductClassesHandler(
 			final Class<ProductClassModel> modelClass) {
 		super(modelClass);
 	}

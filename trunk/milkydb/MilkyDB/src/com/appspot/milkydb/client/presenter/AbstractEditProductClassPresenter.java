@@ -1,13 +1,22 @@
 package com.appspot.milkydb.client.presenter;
 
+import java.util.ArrayList;
+
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.ui.FreeMultiListBox;
 import com.appspot.milkydb.client.validation.ValidationError;
+import com.appspot.milkydb.shared.dto.DtoList;
 import com.appspot.milkydb.shared.dto.SingleKey;
 import com.appspot.milkydb.shared.dto.TimeSpan;
 import com.appspot.milkydb.shared.models.BaseProductClass;
+import com.appspot.milkydb.shared.models.Ferment;
+import com.appspot.milkydb.shared.models.MicroElement;
+import com.appspot.milkydb.shared.service.action.Action;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasValue;
+import com.google.gwt.user.client.ui.HasWidgets;
 
 public abstract class AbstractEditProductClassPresenter extends
 		AbstractEditPresenter<BaseProductClass> {
@@ -61,6 +70,47 @@ public abstract class AbstractEditProductClassPresenter extends
 		display.getPacking().setValue(data.getPacking());
 		display.getFerments().setValue(data.getFerments());
 		display.getMicroElements().setValue(data.getMicroElements());
+	}
+
+	@Override
+	public void go(final HasWidgets container) {
+		super.go(container);
+
+		wait.add(service.execute(Action.getFerments, null,
+				new AsyncCallback<DtoList<Ferment>>() {
+					@Override
+					public void onFailure(final Throwable caught) {
+						Window.alert(caught.toString());
+					}
+
+					@Override
+					public void onSuccess(final DtoList<Ferment> result) {
+						final ArrayList<String> v = new ArrayList<String>();
+						for (final Ferment f : result) {
+							v.add(f.getName());
+						}
+
+						display.getFerments().setVariants(v);
+					}
+				}, "Загрузка списка ферментов"));
+
+		wait.add(service.execute(Action.getMicroElements, null,
+				new AsyncCallback<DtoList<MicroElement>>() {
+					@Override
+					public void onFailure(final Throwable caught) {
+						Window.alert(caught.toString());
+					}
+
+					@Override
+					public void onSuccess(final DtoList<MicroElement> result) {
+						final ArrayList<String> v = new ArrayList<String>();
+						for (final MicroElement f : result) {
+							v.add(f.getName());
+						}
+
+						display.getMicroElements().setVariants(v);
+					}
+				}, "Загрузка списка микроэлементов"));
 	}
 
 	@Override

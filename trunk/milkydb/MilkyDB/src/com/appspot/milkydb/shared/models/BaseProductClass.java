@@ -1,5 +1,6 @@
 package com.appspot.milkydb.shared.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,9 +48,9 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 
 	private Text transportationConstraints;
 
-	private List<String> ferments;
+	private List<String> ferments = new ArrayList<String>();
 
-	private List<String> microElements;
+	private List<String> microElements = new ArrayList<String>();
 
 	public BaseProductClass() {
 

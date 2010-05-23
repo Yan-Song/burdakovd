@@ -65,6 +65,10 @@ public class FreeMultiListBox extends Composite implements
 		});
 	}
 
+	private void clear() {
+		list.clear();
+	}
+
 	private void clearSelection() {
 		for (int i = 0; i < list.getItemCount(); ++i) {
 			list.setItemSelected(i, false);
@@ -135,5 +139,16 @@ public class FreeMultiListBox extends Composite implements
 		if (fireEvents) {
 			doFireEvents();
 		}
+	}
+
+	public void setVariants(final List<String> variants) {
+		final List<String> oldValue = getValue();
+
+		clear();
+		for (final String variant : variants) {
+			addVariant(variant);
+		}
+
+		setValue(oldValue);
 	}
 }
