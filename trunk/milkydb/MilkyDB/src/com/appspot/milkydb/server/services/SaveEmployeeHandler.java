@@ -34,6 +34,7 @@ public class SaveEmployeeHandler extends
 			appointment = ofy.get(key);
 		} catch (final NotFoundException e) {
 			appointment = new Appointment();
+			appointment.setOwner(DAO.rootKey);
 			appointment.setName(appointmentName);
 			ofy.put(appointment);
 		}

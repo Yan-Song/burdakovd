@@ -22,12 +22,13 @@ public abstract class AbstractGetEntitiesHandler<M extends Model, LightDto exten
 		final DAO dao = new DAO();
 
 		return new DtoList<LightDto>(Iterables.transform(dao.ofy().query(
-				modelClass).order(getOrdering()), new Function<M, LightDto>() {
-			@Override
-			public LightDto apply(final M model) {
-				return makeLightDto(model);
-			}
-		}));
+				modelClass).order(getOrdering()).ancestor(DAO.rootKey),
+				new Function<M, LightDto>() {
+					@Override
+					public LightDto apply(final M model) {
+						return makeLightDto(model);
+					}
+				}));
 	}
 
 	/*

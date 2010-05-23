@@ -1,8 +1,10 @@
 package com.appspot.milkydb.shared.models;
 
+import com.appspot.milkydb.shared.dto.Dto;
 import com.google.appengine.api.datastore.Text;
 
-public class ContactInfo {
+@SuppressWarnings("serial")
+public class ContactInfo implements Dto {
 	private Text address;
 
 	private String phoneNumber;

@@ -97,8 +97,9 @@ public class EditEmployeePresenter extends AbstractEditPresenter<Employee> {
 
 		final ContactInfo contactInfo = new ContactInfo(display.getAddress()
 				.getValue(), display.getPhoneNumber().getValue());
-		return new Employee(key.getValue(), display.getName().getValue(),
-				contactInfo, display.getPost().getValue(), salary);
+		return new Employee(key == null ? null : key.getValue(), display
+				.getName().getValue(), contactInfo, display.getPost()
+				.getValue(), salary);
 	}
 
 	@Override

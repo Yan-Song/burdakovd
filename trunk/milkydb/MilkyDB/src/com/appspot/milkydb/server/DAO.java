@@ -1,5 +1,7 @@
 package com.appspot.milkydb.server;
 
+import javax.persistence.Id;
+
 import com.appspot.milkydb.server.models.FinalProductClass;
 import com.appspot.milkydb.server.models.RawMaterialClass;
 import com.appspot.milkydb.shared.models.Appointment;
@@ -9,17 +11,27 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.helper.DAOBase;
 
 public class DAO extends DAOBase {
+	static class Dummy {
+		@Id
+		String key;
+	}
+
 	static {
-		ObjectifyService.register(Appointment.class);
-		ObjectifyService.register(Employee.class);
-		ObjectifyService.register(RawMaterialClass.class);
-		ObjectifyService.register(FinalProductClass.class);
+		registerModels();
 	}
 
 	/*
 	 * по этому ключу ничего не будет храниться, он нужен только чтоб
 	 * использовать его в качестве родительского
 	 */
-	public static Key<?> rootKey = new Key<DAO>(DAO.class, "root");
+	public static Key<?> rootKey = new Key<Dummy>(Dummy.class, "root");
+
+	private static void registerModels() {
+		ObjectifyService.register(Dummy.class);
+		ObjectifyService.register(Appointment.class);
+		ObjectifyService.register(Employee.class);
+		ObjectifyService.register(RawMaterialClass.class);
+		ObjectifyService.register(FinalProductClass.class);
+	}
 
 }
