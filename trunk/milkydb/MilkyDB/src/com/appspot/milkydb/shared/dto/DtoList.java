@@ -10,6 +10,13 @@ public class DtoList<Model extends Dto> extends ArrayList<Model> implements Dto 
 		super();
 	}
 
+	public DtoList(final Iterable<Model> it) {
+		super();
+		for (final Model m : it) {
+			add(m);
+		}
+	}
+
 	public DtoList(final List<Model> l) {
 		super(l);
 	}

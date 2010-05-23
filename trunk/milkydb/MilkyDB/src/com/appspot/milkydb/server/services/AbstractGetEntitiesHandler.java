@@ -1,57 +1,43 @@
 package com.appspot.milkydb.server.services;
 
-import java.util.List;
-
-import javax.jdo.PersistenceManager;
-
-import com.appspot.milkydb.server.PMF;
+import com.appspot.milkydb.server.DAO;
+import com.appspot.milkydb.shared.Model;
 import com.appspot.milkydb.shared.dto.Dto;
 import com.appspot.milkydb.shared.dto.DtoList;
 import com.appspot.milkydb.shared.dto.RpcVoid;
 import com.google.appengine.repackaged.com.google.common.base.Function;
-import com.google.appengine.repackaged.com.google.common.collect.Lists;
+import com.google.appengine.repackaged.com.google.common.collect.Iterables;
 
-public abstract class AbstractGetEntitiesHandler<Model, LightDto extends Dto>
+public abstract class AbstractGetEntitiesHandler<M extends Model, LightDto extends Dto>
 		implements ActionHandler<RpcVoid, DtoList<LightDto>> {
 
-	private final Class<Model> modelClass;
+	private final Class<M> modelClass;
 
-	public AbstractGetEntitiesHandler(final Class<Model> modelClass) {
+	public AbstractGetEntitiesHandler(final Class<M> modelClass) {
 		this.modelClass = modelClass;
 	}
 
-	@SuppressWarnings("unchecked")
-	private DtoList<LightDto> doGet(final PersistenceManager pm) {
-		final javax.jdo.Query query = pm.newQuery(modelClass);
-		setOrdering(query);
+	public DtoList<LightDto> execute(final RpcVoid _) {
 
-		return new DtoList<LightDto>(Lists.transform((List<Model>) query
-				.execute(), new Function<Model, LightDto>() {
+		final DAO dao = new DAO();
+
+		return new DtoList<LightDto>(Iterables.transform(dao.ofy().query(
+				modelClass).order(getOrdering()), new Function<M, LightDto>() {
 			@Override
-			public LightDto apply(final Model model) {
+			public LightDto apply(final M model) {
 				return makeLightDto(model);
 			}
 		}));
 	}
 
-	public DtoList<LightDto> execute(final RpcVoid _) {
-		final PersistenceManager pm = PMF.get();
-
-		try {
-			return doGet(pm);
-		} finally {
-			pm.close();
-		}
-	}
+	/*
+	 * здесь наследующие классы должны определить порядок сортировки
+	 */
+	protected abstract String getOrdering();
 
 	/*
 	 * Здесь наследующие классы должны создать light data transfer object из
 	 * модели
 	 */
-	protected abstract LightDto makeLightDto(Model model);
-
-	/*
-	 * здесь наследующие классы должны определить порядок сортировки
-	 */
-	protected abstract void setOrdering(final javax.jdo.Query query);
+	protected abstract LightDto makeLightDto(M model);
 }

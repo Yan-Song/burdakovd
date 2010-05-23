@@ -6,7 +6,7 @@ import com.appspot.milkydb.client.presenter.EditEmployeePresenter;
 import com.appspot.milkydb.client.ui.FormField;
 import com.appspot.milkydb.client.ui.FreeListBox;
 import com.appspot.milkydb.shared.Validatable;
-import com.appspot.milkydb.shared.dto.FullEmployee;
+import com.appspot.milkydb.shared.models.Employee;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -44,11 +44,11 @@ public class EditEmployeeView extends AbstractEditView implements
 	protected HashMap<Enum<? extends Validatable.Fields>, FormField<?>> getFieldsMap() {
 		return new HashMap<Enum<? extends Validatable.Fields>, FormField<?>>() {
 			{
-				put(FullEmployee.Fields.name, name);
-				put(FullEmployee.Fields.post, post);
-				put(FullEmployee.Fields.salary, salary);
-				put(FullEmployee.Fields.address, address);
-				put(FullEmployee.Fields.phoneNumber, phone);
+				put(Employee.Fields.name, name);
+				put(Employee.Fields.post, post);
+				put(Employee.Fields.salary, salary);
+				put(Employee.Fields.address, address);
+				put(Employee.Fields.phoneNumber, phone);
 			}
 		};
 	}

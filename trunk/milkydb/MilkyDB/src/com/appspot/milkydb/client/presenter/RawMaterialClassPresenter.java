@@ -2,7 +2,7 @@ package com.appspot.milkydb.client.presenter;
 
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.shared.dto.DtoList;
-import com.appspot.milkydb.shared.dto.EncodedKeys;
+import com.appspot.milkydb.shared.dto.KeyList;
 import com.appspot.milkydb.shared.dto.LightProductClass;
 import com.appspot.milkydb.shared.dto.RpcVoid;
 import com.appspot.milkydb.shared.service.action.Action;
@@ -23,7 +23,7 @@ public class RawMaterialClassPresenter extends
 	}
 
 	@Override
-	protected Action<EncodedKeys, RpcVoid> provideDeleteAction() {
+	protected Action<KeyList, RpcVoid> provideDeleteAction() {
 		return ManagerActionSet.RawMaterialClass.provideDeleteAction();
 	}
 

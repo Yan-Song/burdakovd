@@ -7,6 +7,7 @@ import com.appspot.milkydb.shared.dto.Dto;
 
 @SuppressWarnings("serial")
 public class ValidationError extends Exception implements Dto {
+
 	private HashMap<Enum<? extends Validatable.Fields>, String> errors = new HashMap<Enum<? extends Validatable.Fields>, String>();
 
 	/*

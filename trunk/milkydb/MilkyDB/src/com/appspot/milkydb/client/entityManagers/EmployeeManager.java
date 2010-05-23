@@ -6,7 +6,7 @@ import com.appspot.milkydb.client.presenter.Presenter;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.view.EditEmployeeView;
 import com.appspot.milkydb.client.view.EmployeeView;
-import com.appspot.milkydb.shared.dto.EncodedKey;
+import com.appspot.milkydb.shared.dto.SingleKey;
 import com.google.gwt.event.shared.HandlerManager;
 
 public class EmployeeManager extends AbstractEntityManager {
@@ -22,7 +22,7 @@ public class EmployeeManager extends AbstractEntityManager {
 	}
 
 	@Override
-	protected Presenter getEditPresenter(final EncodedKey key) {
+	protected Presenter getEditPresenter(final SingleKey key) {
 		return new EditEmployeePresenter(new EditEmployeeView(), service,
 				getLocalEventBus(), eventBus, key);
 	}

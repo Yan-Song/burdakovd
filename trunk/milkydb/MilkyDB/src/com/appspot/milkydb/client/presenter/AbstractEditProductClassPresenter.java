@@ -3,14 +3,14 @@ package com.appspot.milkydb.client.presenter;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.ui.FreeMultiListBox;
 import com.appspot.milkydb.client.validation.ValidationError;
-import com.appspot.milkydb.shared.dto.EncodedKey;
-import com.appspot.milkydb.shared.dto.FullProductClass;
+import com.appspot.milkydb.shared.dto.SingleKey;
 import com.appspot.milkydb.shared.dto.TimeSpan;
+import com.appspot.milkydb.shared.models.BaseProductClass;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasValue;
 
 public abstract class AbstractEditProductClassPresenter extends
-		AbstractEditPresenter<FullProductClass> {
+		AbstractEditPresenter<BaseProductClass> {
 
 	public interface Display extends AbstractEditPresenter.Display {
 		HasValue<String> getCalorificValue();
@@ -43,13 +43,13 @@ public abstract class AbstractEditProductClassPresenter extends
 	public AbstractEditProductClassPresenter(final Display display,
 			final ManagedAsyncService service,
 			final HandlerManager localEventBus, final HandlerManager eventBus,
-			final EncodedKey key) {
+			final SingleKey key) {
 		super(display, service, localEventBus, eventBus, key);
 		this.display = display;
 	}
 
 	@Override
-	protected void displayDto(final FullProductClass data) {
+	protected void displayDto(final BaseProductClass data) {
 		display.getName().setValue(data.getName());
 		display.getFatness().setValue(data.getFatness().toString());
 		display.getCalorificValue().setValue(
@@ -64,14 +64,13 @@ public abstract class AbstractEditProductClassPresenter extends
 	}
 
 	@Override
-	protected FullProductClass makeDto() throws ValidationError {
-		return new FullProductClass(key, display.getName().getValue(),
-				parseFloat(FullProductClass.Fields.fatness, display
-						.getFatness().getValue()), parseFloat(
-						FullProductClass.Fields.calorificValue, display
-								.getCalorificValue().getValue()), display
-						.getStorageLife().getValue(), display.getPacking()
-						.getValue(),
+	protected BaseProductClass makeDto() throws ValidationError {
+		return new BaseProductClass(key.getValue(), display.getName()
+				.getValue(), parseFloat(BaseProductClass.Fields.fatness,
+				display.getFatness().getValue()), parseFloat(
+				BaseProductClass.Fields.calorificValue, display
+						.getCalorificValue().getValue()), display
+				.getStorageLife().getValue(), display.getPacking().getValue(),
 				display.getStorageConstraints().getValue(), display
 						.getTransportationConstraints().getValue(), display
 						.getFerments().getValue(), display.getMicroElements()

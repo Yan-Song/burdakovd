@@ -1,24 +1,21 @@
 package com.appspot.milkydb.server.services;
 
-import javax.jdo.Query;
-
-import com.appspot.milkydb.server.models.Appointment;
-import com.appspot.milkydb.shared.dto.LightAppointment;
+import com.appspot.milkydb.shared.models.Appointment;
 
 public class GetAppointmentsHandler extends
-		AbstractGetEntitiesHandler<Appointment, LightAppointment> {
+		AbstractGetEntitiesHandler<Appointment, Appointment> {
 
 	public GetAppointmentsHandler() {
 		super(Appointment.class);
 	}
 
 	@Override
-	protected LightAppointment makeLightDto(final Appointment model) {
-		return new LightAppointment(model.getKey().getName());
+	protected String getOrdering() {
+		return "name";
 	}
 
 	@Override
-	protected void setOrdering(final Query query) {
-		query.setOrdering("key asc");
+	protected Appointment makeLightDto(final Appointment model) {
+		return model;
 	}
 }

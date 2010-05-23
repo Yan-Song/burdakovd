@@ -1,8 +1,8 @@
 package com.appspot.milkydb.client.presenter;
 
 import com.appspot.milkydb.client.service.ManagedAsyncService;
-import com.appspot.milkydb.shared.dto.EncodedKey;
-import com.appspot.milkydb.shared.dto.FullProductClass;
+import com.appspot.milkydb.shared.dto.SingleKey;
+import com.appspot.milkydb.shared.models.BaseProductClass;
 import com.appspot.milkydb.shared.service.action.Action;
 import com.appspot.milkydb.shared.service.action.ManagerActionSet;
 import com.google.gwt.event.shared.HandlerManager;
@@ -22,17 +22,17 @@ public class EditRawMaterialClassPresenter extends
 	public EditRawMaterialClassPresenter(final Display display,
 			final ManagedAsyncService service,
 			final HandlerManager localEventBus, final HandlerManager eventBus,
-			final EncodedKey key) {
+			final SingleKey key) {
 		super(display, service, localEventBus, eventBus, key);
 	}
 
 	@Override
-	protected Action<EncodedKey, FullProductClass> provideGetEntityAction() {
+	protected Action<SingleKey, BaseProductClass> provideGetEntityAction() {
 		return ManagerActionSet.RawMaterialClass.provideGetAction();
 	}
 
 	@Override
-	protected Action<FullProductClass, EncodedKey> provideSaveEntityAction() {
+	protected Action<BaseProductClass, SingleKey> provideSaveEntityAction() {
 		return ManagerActionSet.RawMaterialClass.provideSaveAction();
 	}
 

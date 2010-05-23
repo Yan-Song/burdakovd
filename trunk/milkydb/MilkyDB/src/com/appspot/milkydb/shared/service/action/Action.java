@@ -2,10 +2,10 @@ package com.appspot.milkydb.shared.service.action;
 
 import com.appspot.milkydb.shared.dto.Dto;
 import com.appspot.milkydb.shared.dto.DtoList;
-import com.appspot.milkydb.shared.dto.LightAppointment;
 import com.appspot.milkydb.shared.dto.RpcRequest;
 import com.appspot.milkydb.shared.dto.RpcResponse;
 import com.appspot.milkydb.shared.dto.RpcVoid;
+import com.appspot.milkydb.shared.models.Appointment;
 
 /*
  * Нужно различать различные команды, и пользоваться оператором == нельзя,
@@ -23,7 +23,7 @@ public class Action<Req extends RpcRequest, Resp extends RpcResponse>
 
 	private String name;
 
-	public static final Action<RpcVoid, DtoList<LightAppointment>> getAppointments = new Action<RpcVoid, DtoList<LightAppointment>>(
+	public static final Action<RpcVoid, DtoList<Appointment>> getAppointments = new Action<RpcVoid, DtoList<Appointment>>(
 			"getAppointments");
 
 	/*

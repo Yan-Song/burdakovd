@@ -1,56 +1,105 @@
-package com.appspot.milkydb.shared.dto;
+package com.appspot.milkydb.shared.models;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.persistence.Id;
+
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.client.validation.Validator;
+import com.appspot.milkydb.shared.HasKey;
+import com.appspot.milkydb.shared.Model;
 import com.appspot.milkydb.shared.Validatable;
+import com.appspot.milkydb.shared.dto.Dto;
+import com.appspot.milkydb.shared.dto.TimeSpan;
+import com.google.appengine.api.datastore.Text;
+import com.googlecode.objectify.annotation.Serialized;
 
 @SuppressWarnings("serial")
-public class FullProductClass extends LightProductClass implements Validatable,
-		Serializable {
+public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable {
 
 	public enum Fields implements Validatable.Fields {
 		name, fatness, calorificValue, storageLife, packing, storageConstraints, transportationConstraints, ferments, microElements
 	}
 
+	@Id
+	private Long key;
+
+	private String name;
+
+	private Float fatness;
+
+	private Float calorificValue;
+
+	@Serialized
+	private TimeSpan storageLife;
+
 	private String packing;
 
-	private String storageConstraints;
+	private Text storageConstraints;
 
-	private String transportationConstraints;
+	private Text transportationConstraints;
 
-	private ArrayList<String> ferments;
+	private List<String> ferments;
 
-	private ArrayList<String> microElements;
+	private List<String> microElements;
 
-	protected FullProductClass() {
-		super();
+	public BaseProductClass() {
+
 	}
 
-	public FullProductClass(final EncodedKey key, final String name,
+	/**
+	 * @param key
+	 * @param name
+	 * @param fatness
+	 * @param calorificValue
+	 * @param storageLife
+	 * @param packing
+	 * @param storageConstraints
+	 * @param transportationConstraints
+	 * @param ferments
+	 * @param microElements
+	 */
+	public BaseProductClass(final Long key, final String name,
 			final Float fatness, final Float calorificValue,
 			final TimeSpan storageLife, final String packing,
 			final String storageConstraints,
 			final String transportationConstraints,
 			final List<String> ferments, final List<String> microElements) {
-		super(key, name, fatness, calorificValue, storageLife);
+		this.key = key;
+		this.name = name;
+		this.fatness = fatness;
+		this.calorificValue = calorificValue;
+		this.storageLife = storageLife;
 		this.packing = packing;
-		this.storageConstraints = storageConstraints;
-		this.transportationConstraints = transportationConstraints;
-		this.ferments = new ArrayList<String>(ferments);
-		this.microElements = new ArrayList<String>(microElements);
+		this.storageConstraints = new Text(storageConstraints);
+		this.transportationConstraints = new Text(transportationConstraints);
+		this.ferments = ferments;
+		this.microElements = microElements;
+	}
+
+	public Float getCalorificValue() {
+		return calorificValue;
+	}
+
+	public Float getFatness() {
+		return fatness;
 	}
 
 	public List<String> getFerments() {
 		return ferments;
 	}
 
-	public ArrayList<String> getMicroElements() {
+	public Long getKey() {
+		return key;
+	}
+
+	public List<String> getMicroElements() {
 		return microElements;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public String getPacking() {
@@ -58,19 +107,39 @@ public class FullProductClass extends LightProductClass implements Validatable,
 	}
 
 	public String getStorageConstraints() {
-		return storageConstraints;
+		return storageConstraints.getValue();
+	}
+
+	public TimeSpan getStorageLife() {
+		return storageLife;
 	}
 
 	public String getTransportationConstraints() {
-		return transportationConstraints;
+		return transportationConstraints.getValue();
 	}
 
-	public void setFerments(final ArrayList<String> ferments) {
+	public void setCalorificValue(final Float calorificValue) {
+		this.calorificValue = calorificValue;
+	}
+
+	public void setFatness(final Float fatness) {
+		this.fatness = fatness;
+	}
+
+	public void setFerments(final List<String> ferments) {
 		this.ferments = ferments;
 	}
 
-	public void setMicroElements(final ArrayList<String> microElements) {
+	public void setKey(final Long key) {
+		this.key = key;
+	}
+
+	public void setMicroElements(final List<String> microElements) {
 		this.microElements = microElements;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
 	}
 
 	public void setPacking(final String packing) {
@@ -78,12 +147,16 @@ public class FullProductClass extends LightProductClass implements Validatable,
 	}
 
 	public void setStorageConstraints(final String storageConstraints) {
-		this.storageConstraints = storageConstraints;
+		this.storageConstraints = new Text(storageConstraints);
+	}
+
+	public void setStorageLife(final TimeSpan storageLife) {
+		this.storageLife = storageLife;
 	}
 
 	public void setTransportationConstraints(
 			final String transportationConstraints) {
-		this.transportationConstraints = transportationConstraints;
+		this.transportationConstraints = new Text(transportationConstraints);
 	}
 
 	@Override
