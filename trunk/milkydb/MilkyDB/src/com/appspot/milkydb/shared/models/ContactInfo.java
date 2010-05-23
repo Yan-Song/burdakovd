@@ -5,9 +5,9 @@ import com.google.appengine.api.datastore.Text;
 
 @SuppressWarnings("serial")
 public class ContactInfo implements Dto {
-	private Text address;
+	private Text address = new Text("");
 
-	private String phoneNumber;
+	private String phoneNumber = "";
 
 	@SuppressWarnings("unused")
 	private ContactInfo() {
