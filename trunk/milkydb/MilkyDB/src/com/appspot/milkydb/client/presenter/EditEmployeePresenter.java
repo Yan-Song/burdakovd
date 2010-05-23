@@ -53,8 +53,7 @@ public class EditEmployeePresenter extends AbstractEditPresenter<Employee> {
 		display.getName().setValue(data.getName());
 		display.getPost().setValue(data.getAppointment());
 		display.getSalary().setValue(String.valueOf(data.getSalary()));
-		display.getAddress().setValue(
-				data.getContactInfo().getAddress().toString());
+		display.getAddress().setValue(data.getContactInfo().getAddress());
 		display.getPhoneNumber().setValue(
 				data.getContactInfo().getPhoneNumber());
 	}

@@ -18,16 +18,16 @@ public class ContactInfo implements Dto {
 		this.phoneNumber = phone;
 	}
 
-	public Text getAddress() {
-		return address;
+	public String getAddress() {
+		return address.getValue();
 	}
 
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setAddress(final Text address) {
-		this.address = address;
+	public void setAddress(final String address) {
+		this.address = new Text(address);
 	}
 
 	public void setPhoneNumber(final String phoneNumber) {
