@@ -1,41 +1,38 @@
 package com.appspot.milkydb.server.services;
 
-import javax.jdo.PersistenceManager;
-
 import com.appspot.milkydb.client.validation.ValidationError;
-import com.appspot.milkydb.server.PMF;
-import com.appspot.milkydb.shared.dto.EncodedKey;
-import com.appspot.milkydb.shared.dto.EncodedKeys;
+import com.appspot.milkydb.server.DAO;
+import com.appspot.milkydb.shared.Model;
+import com.appspot.milkydb.shared.dto.KeyList;
 import com.appspot.milkydb.shared.dto.RpcVoid;
-import com.google.appengine.api.datastore.KeyFactory;
+import com.appspot.milkydb.shared.dto.SingleKey;
+import com.google.appengine.repackaged.com.google.common.base.Function;
+import com.google.appengine.repackaged.com.google.common.collect.Iterables;
+import com.googlecode.objectify.Key;
 
-public class AbstractDeleteEntitiesHandler<Model> implements
-		ActionHandler<EncodedKeys, RpcVoid> {
+public class AbstractDeleteEntitiesHandler<M extends Model> implements
+		ActionHandler<KeyList, RpcVoid> {
 
-	private final Class<Model> modelClass;
+	private final Class<M> modelClass;
 
-	public AbstractDeleteEntitiesHandler(final Class<Model> modelClass) {
+	public AbstractDeleteEntitiesHandler(final Class<M> modelClass) {
 		this.modelClass = modelClass;
 	}
 
-	private void doDelete(final PersistenceManager pm, final EncodedKeys keys) {
-		for (final EncodedKey key : keys) {
-			pm.deletePersistent(pm.getObjectById(modelClass, KeyFactory
-					.stringToKey(key.getValue())));
-		}
-	}
-
 	@Override
-	public RpcVoid execute(final EncodedKeys keys) throws ValidationError {
+	public RpcVoid execute(final KeyList keys) throws ValidationError {
 
-		final PersistenceManager pm = PMF.get();
+		final DAO dao = new DAO();
 
-		try {
-			doDelete(pm, keys);
-			return null;
-		} finally {
-			pm.close();
-		}
+		dao.ofy().delete(
+				Iterables.transform(keys, new Function<SingleKey, Key<M>>() {
+					@Override
+					public Key<M> apply(final SingleKey single) {
+						return new Key<M>(DAO.rootKey, modelClass, single
+								.getValue());
+					}
+				}));
+
+		return null;
 	}
-
 }

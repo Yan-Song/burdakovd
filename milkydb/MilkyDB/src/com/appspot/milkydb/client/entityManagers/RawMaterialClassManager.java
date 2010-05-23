@@ -6,7 +6,7 @@ import com.appspot.milkydb.client.presenter.RawMaterialClassPresenter;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.view.EditRawMaterialClassView;
 import com.appspot.milkydb.client.view.RawMaterialClassView;
-import com.appspot.milkydb.shared.dto.EncodedKey;
+import com.appspot.milkydb.shared.dto.SingleKey;
 import com.google.gwt.event.shared.HandlerManager;
 
 public class RawMaterialClassManager extends AbstractEntityManager {
@@ -22,7 +22,7 @@ public class RawMaterialClassManager extends AbstractEntityManager {
 	}
 
 	@Override
-	protected Presenter getEditPresenter(final EncodedKey key) {
+	protected Presenter getEditPresenter(final SingleKey key) {
 		return new EditRawMaterialClassPresenter(
 				new EditRawMaterialClassView(), service, getLocalEventBus(),
 				eventBus, key);

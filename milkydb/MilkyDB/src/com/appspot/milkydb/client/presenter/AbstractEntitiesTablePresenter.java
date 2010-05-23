@@ -12,9 +12,9 @@ import com.appspot.milkydb.client.ui.Waitable;
 import com.appspot.milkydb.shared.HasKey;
 import com.appspot.milkydb.shared.dto.Dto;
 import com.appspot.milkydb.shared.dto.DtoList;
-import com.appspot.milkydb.shared.dto.EncodedKey;
-import com.appspot.milkydb.shared.dto.EncodedKeys;
+import com.appspot.milkydb.shared.dto.KeyList;
 import com.appspot.milkydb.shared.dto.RpcVoid;
+import com.appspot.milkydb.shared.dto.SingleKey;
 import com.appspot.milkydb.shared.service.action.Action;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -25,7 +25,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class AbstractEntitiesTablePresenter<LightDto extends Dto & HasKey<EncodedKey>>
+public abstract class AbstractEntitiesTablePresenter<LightDto extends Dto & HasKey<Long>>
 		implements Presenter {
 
 	public interface Display<LightDto> {
@@ -50,7 +50,7 @@ public abstract class AbstractEntitiesTablePresenter<LightDto extends Dto & HasK
 	private final ManagedAsyncService service;
 	private final HandlerManager localEventBus;
 	private final Waitable wait;
-	private ArrayList<EncodedKey> keys;
+	private ArrayList<SingleKey> keys;
 
 	public AbstractEntitiesTablePresenter(final Display<LightDto> display,
 			final ManagedAsyncService service,
@@ -95,21 +95,21 @@ public abstract class AbstractEntitiesTablePresenter<LightDto extends Dto & HasK
 		});
 	}
 
-	private AsyncRequest<EncodedKeys, RpcVoid> doDelete(
-			final ArrayList<EncodedKey> selectedKeys) {
-		return service.execute(provideDeleteAction(), new EncodedKeys(
-				selectedKeys), new AsyncCallback<RpcVoid>() {
-			@Override
-			public void onFailure(final Throwable caught) {
-				fetchEntities();
-				Window.alert("Failed to delete");
-			}
+	private AsyncRequest<KeyList, RpcVoid> doDelete(
+			final ArrayList<SingleKey> selectedKeys) {
+		return service.execute(provideDeleteAction(),
+				new KeyList(selectedKeys), new AsyncCallback<RpcVoid>() {
+					@Override
+					public void onFailure(final Throwable caught) {
+						fetchEntities();
+						Window.alert("Failed to delete");
+					}
 
-			@Override
-			public void onSuccess(final RpcVoid result) {
-				fetchEntities();
-			}
-		}, "Удаление");
+					@Override
+					public void onSuccess(final RpcVoid result) {
+						fetchEntities();
+					}
+				}, "Удаление");
 	}
 
 	private void fetchEntities() {
@@ -124,9 +124,9 @@ public abstract class AbstractEntitiesTablePresenter<LightDto extends Dto & HasK
 
 					@Override
 					public void onSuccess(final DtoList<LightDto> result) {
-						keys = new ArrayList<EncodedKey>();
+						keys = new ArrayList<SingleKey>();
 						for (final LightDto e : result) {
-							keys.add(e.getKey());
+							keys.add(new SingleKey(e.getKey()));
 						}
 						display.setData(result);
 					}
@@ -137,8 +137,8 @@ public abstract class AbstractEntitiesTablePresenter<LightDto extends Dto & HasK
 		localEventBus.fireEvent(new AddEntityEvent());
 	}
 
-	private void fireEditEntityEvent(final EncodedKey encodedKey) {
-		localEventBus.fireEvent(new EditEntityEvent(encodedKey));
+	private void fireEditEntityEvent(final SingleKey singleKey) {
+		localEventBus.fireEvent(new EditEntityEvent(singleKey));
 	}
 
 	@Override
@@ -155,7 +155,7 @@ public abstract class AbstractEntitiesTablePresenter<LightDto extends Dto & HasK
 		} else if (Window.confirm("Вы действительно хотите удалить "
 				+ selectedRows.size() + " элементов?")) {
 
-			final ArrayList<EncodedKey> selectedKeys = new ArrayList<EncodedKey>();
+			final ArrayList<SingleKey> selectedKeys = new ArrayList<SingleKey>();
 			for (final Integer i : selectedRows) {
 				selectedKeys.add(keys.get(i));
 			}
@@ -171,7 +171,7 @@ public abstract class AbstractEntitiesTablePresenter<LightDto extends Dto & HasK
 		}
 	}
 
-	protected abstract Action<EncodedKeys, RpcVoid> provideDeleteAction();
+	protected abstract Action<KeyList, RpcVoid> provideDeleteAction();
 
 	protected abstract Action<RpcVoid, DtoList<LightDto>> provideGetAction();
 }

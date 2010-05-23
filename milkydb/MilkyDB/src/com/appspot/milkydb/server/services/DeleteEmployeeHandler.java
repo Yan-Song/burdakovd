@@ -1,6 +1,6 @@
 package com.appspot.milkydb.server.services;
 
-import com.appspot.milkydb.server.models.Employee;
+import com.appspot.milkydb.shared.models.Employee;
 
 public class DeleteEmployeeHandler extends
 		AbstractDeleteEntitiesHandler<Employee> {

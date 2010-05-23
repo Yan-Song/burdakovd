@@ -1,75 +1,51 @@
 package com.appspot.milkydb.server.services;
 
-import javax.jdo.JDOObjectNotFoundException;
-import javax.jdo.PersistenceManager;
-import javax.jdo.Transaction;
-
-import com.appspot.milkydb.client.validation.ValidationError;
-import com.appspot.milkydb.server.PMF;
-import com.appspot.milkydb.server.models.Appointment;
-import com.appspot.milkydb.server.models.ContactInfo;
-import com.appspot.milkydb.server.models.Employee;
-import com.appspot.milkydb.shared.dto.EncodedKey;
-import com.appspot.milkydb.shared.dto.FullEmployee;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
+import com.appspot.milkydb.server.DAO;
+import com.appspot.milkydb.shared.models.Appointment;
+import com.appspot.milkydb.shared.models.Employee;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.NotFoundException;
+import com.googlecode.objectify.Objectify;
 
 public class SaveEmployeeHandler extends
-		AbstractSaveEntityHandler<Employee, FullEmployee> {
+		AbstractSaveEntityHandler<Employee, Employee> {
 
 	public SaveEmployeeHandler() {
 		super(Employee.class);
 	}
 
 	@Override
-	public EncodedKey execute(final FullEmployee request)
-			throws ValidationError {
-		request.validate();
+	protected Employee doSave(final Employee dto, final Objectify ofy) {
 
-		final PersistenceManager pm = PMF.get();
-		try {
-			getOrCreateAppointment(request.post, pm);
-		} finally {
-			pm.close();
-		}
+		getOrCreateAppointment(ofy, dto.getAppointment());
 
-		return super.execute(request);
+		return super.doSave(dto, ofy);
 	}
 
-	private Appointment getOrCreateAppointment(final String appointmentName,
-			final PersistenceManager pm) {
+	private Appointment getOrCreateAppointment(final Objectify ofy,
+			final String appointmentName) {
 
-		final Key key = KeyFactory.createKey(Appointment.class.getSimpleName(),
-				appointmentName);
+		final Key<Appointment> key = new Key<Appointment>(DAO.rootKey,
+				Appointment.class, appointmentName);
+
 		Appointment appointment;
-		final Transaction t = pm.currentTransaction();
+
 		try {
-			t.begin();
-
-			try {
-				appointment = pm.getObjectById(Appointment.class, key);
-			} catch (final JDOObjectNotFoundException e) {
-				appointment = new Appointment();
-				appointment.setKey(key);
-				pm.makePersistent(appointment);
-			}
-
-			t.commit();
-		} finally {
-			if (t.isActive()) {
-				t.rollback();
-			}
+			appointment = ofy.get(key);
+		} catch (final NotFoundException e) {
+			appointment = new Appointment();
+			appointment.setName(appointmentName);
+			ofy.put(appointment);
 		}
 
 		return appointment;
 	}
 
 	@Override
-	protected void setData(final Employee employee, final FullEmployee request) {
-		employee.setName(request.name);
-		employee.setAppointment(request.post);
-		employee.setSalary(request.salary);
-		employee
-				.setContactInfo(new ContactInfo(request.address, request.phone));
+	protected void setData(final Employee employee, final Employee request) {
+		employee.setName(request.getName());
+		employee.setAppointment(request.getAppointment());
+		employee.setSalary(request.getSalary());
+		employee.setContactInfo(request.getContactInfo());
 	}
 }

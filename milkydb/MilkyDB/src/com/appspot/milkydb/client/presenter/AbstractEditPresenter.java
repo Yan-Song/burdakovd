@@ -8,7 +8,7 @@ import com.appspot.milkydb.client.validation.CanDisplayValidationErrors;
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.shared.Validatable;
 import com.appspot.milkydb.shared.dto.Dto;
-import com.appspot.milkydb.shared.dto.EncodedKey;
+import com.appspot.milkydb.shared.dto.SingleKey;
 import com.appspot.milkydb.shared.service.action.Action;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -34,7 +34,7 @@ public abstract class AbstractEditPresenter<FullDto extends Dto & Validatable>
 	private final Display display;
 	protected final ManagedAsyncService service;
 	protected final HandlerManager localEventBus;
-	protected final EncodedKey key;
+	protected final SingleKey key;
 
 	public AbstractEditPresenter(final Display display,
 			final ManagedAsyncService service,
@@ -45,7 +45,7 @@ public abstract class AbstractEditPresenter<FullDto extends Dto & Validatable>
 	public AbstractEditPresenter(final Display display,
 			final ManagedAsyncService service,
 			final HandlerManager localEventBus, final HandlerManager eventBus,
-			final EncodedKey key) {
+			final SingleKey key) {
 		this.display = display;
 		this.service = service;
 		this.localEventBus = localEventBus;
@@ -73,7 +73,7 @@ public abstract class AbstractEditPresenter<FullDto extends Dto & Validatable>
 
 	private void doSave(final FullDto dto) throws ValidationError {
 		wait.add(service.execute(provideSaveEntityAction(), dto,
-				new AsyncCallback<EncodedKey>() {
+				new AsyncCallback<SingleKey>() {
 					@Override
 					public void onFailure(final Throwable caught) {
 						if (caught instanceof ValidationError) {
@@ -86,7 +86,7 @@ public abstract class AbstractEditPresenter<FullDto extends Dto & Validatable>
 					}
 
 					@Override
-					public void onSuccess(final EncodedKey result) {
+					public void onSuccess(final SingleKey result) {
 						fireEditFinishedEvent();
 					}
 				}, "Сохранение"));
@@ -148,7 +148,7 @@ public abstract class AbstractEditPresenter<FullDto extends Dto & Validatable>
 		}
 	}
 
-	protected abstract Action<EncodedKey, FullDto> provideGetEntityAction();
+	protected abstract Action<SingleKey, FullDto> provideGetEntityAction();
 
-	protected abstract Action<FullDto, EncodedKey> provideSaveEntityAction();
+	protected abstract Action<FullDto, SingleKey> provideSaveEntityAction();
 }

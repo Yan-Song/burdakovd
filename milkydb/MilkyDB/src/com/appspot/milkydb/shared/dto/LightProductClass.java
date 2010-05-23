@@ -3,9 +3,9 @@ package com.appspot.milkydb.shared.dto;
 import com.appspot.milkydb.shared.HasKey;
 
 @SuppressWarnings("serial")
-public class LightProductClass implements Dto, HasKey<EncodedKey> {
+public class LightProductClass implements Dto, HasKey<Long> {
 
-	private EncodedKey key;
+	private Long key;
 	private String name;
 	private Float fatness;
 	private Float calorificValue;
@@ -14,7 +14,7 @@ public class LightProductClass implements Dto, HasKey<EncodedKey> {
 	protected LightProductClass() {
 	}
 
-	public LightProductClass(final EncodedKey key, final String name,
+	public LightProductClass(final Long key, final String name,
 			final Float fatness, final Float calorificValue,
 			final TimeSpan storageLife) {
 		this.setKey(key);
@@ -33,7 +33,7 @@ public class LightProductClass implements Dto, HasKey<EncodedKey> {
 	}
 
 	@Override
-	public EncodedKey getKey() {
+	public Long getKey() {
 		return key;
 	}
 
@@ -54,7 +54,7 @@ public class LightProductClass implements Dto, HasKey<EncodedKey> {
 	}
 
 	@Override
-	public void setKey(final EncodedKey key) {
+	public void setKey(final Long key) {
 		this.key = key;
 	}
 

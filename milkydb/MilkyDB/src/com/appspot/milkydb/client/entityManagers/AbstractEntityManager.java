@@ -7,7 +7,7 @@ import com.appspot.milkydb.client.entityManagers.AbstractEntityManager.Events.Ed
 import com.appspot.milkydb.client.entityManagers.AbstractEntityManager.Events.EditEntityFinishedEvent;
 import com.appspot.milkydb.client.entityManagers.AbstractEntityManager.Events.EditEntityFinishedEventHandler;
 import com.appspot.milkydb.client.presenter.Presenter;
-import com.appspot.milkydb.shared.dto.EncodedKey;
+import com.appspot.milkydb.shared.dto.SingleKey;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
@@ -44,9 +44,9 @@ public abstract class AbstractEntityManager {
 				GwtEvent<EditEntityEventHandler> {
 			public static final Type<EditEntityEventHandler> TYPE = new Type<EditEntityEventHandler>();
 
-			private final EncodedKey key;
+			private final SingleKey key;
 
-			public EditEntityEvent(final EncodedKey key) {
+			public EditEntityEvent(final SingleKey key) {
 				this.key = key;
 			}
 
@@ -60,7 +60,7 @@ public abstract class AbstractEntityManager {
 				return TYPE;
 			}
 
-			public EncodedKey getKey() {
+			public SingleKey getKey() {
 				return key;
 			}
 		}
@@ -136,9 +136,9 @@ public abstract class AbstractEntityManager {
 		return baseUrl;
 	}
 
-	protected abstract Presenter getEditPresenter(EncodedKey key);
+	protected abstract Presenter getEditPresenter(SingleKey key);
 
-	private String getEditUrl(final EncodedKey key) {
+	private String getEditUrl(final SingleKey key) {
 		return getEditUrlPrefix() + key.getValue();
 	}
 
@@ -166,8 +166,8 @@ public abstract class AbstractEntityManager {
 		} else if (token.equals(getNewUrl())) {
 			presenter = getNewPresenter();
 		} else if (token.startsWith(getEditUrlPrefix())) {
-			presenter = getEditPresenter(new EncodedKey(token
-					.substring(getEditUrlPrefix().length())));
+			presenter = getEditPresenter(new SingleKey(Long.parseLong(token
+					.substring(getEditUrlPrefix().length()))));
 		}
 
 		return presenter;
@@ -177,7 +177,7 @@ public abstract class AbstractEntityManager {
 		History.newItem(getNewUrl());
 	}
 
-	private void goToEdit(final EncodedKey key) {
+	private void goToEdit(final SingleKey key) {
 		History.newItem(getEditUrl(key));
 	}
 

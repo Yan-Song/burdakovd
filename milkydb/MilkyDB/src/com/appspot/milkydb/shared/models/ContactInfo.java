@@ -1,19 +1,15 @@
-package com.appspot.milkydb.server.models;
-
-import javax.jdo.annotations.EmbeddedOnly;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
+package com.appspot.milkydb.shared.models;
 
 import com.google.appengine.api.datastore.Text;
 
-@PersistenceCapable
-@EmbeddedOnly
 public class ContactInfo {
-	@Persistent
 	private Text address;
 
-	@Persistent
 	private String phoneNumber;
+
+	@SuppressWarnings("unused")
+	private ContactInfo() {
+	}
 
 	public ContactInfo(final String address, final String phone) {
 		this.address = new Text(address);

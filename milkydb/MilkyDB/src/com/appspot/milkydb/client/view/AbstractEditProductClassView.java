@@ -7,8 +7,8 @@ import com.appspot.milkydb.client.ui.FormField;
 import com.appspot.milkydb.client.ui.FreeMultiListBox;
 import com.appspot.milkydb.client.ui.TimeSpanSelector;
 import com.appspot.milkydb.shared.Validatable.Fields;
-import com.appspot.milkydb.shared.dto.FullProductClass;
 import com.appspot.milkydb.shared.dto.TimeSpan;
+import com.appspot.milkydb.shared.models.BaseProductClass;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -70,16 +70,16 @@ public abstract class AbstractEditProductClassView extends AbstractEditView
 	protected HashMap<Enum<? extends Fields>, FormField<?>> getFieldsMap() {
 		return new HashMap<Enum<? extends Fields>, FormField<?>>() {
 			{
-				put(FullProductClass.Fields.name, name);
-				put(FullProductClass.Fields.fatness, fatness);
-				put(FullProductClass.Fields.calorificValue, calorificValue);
-				put(FullProductClass.Fields.ferments, ferments);
-				put(FullProductClass.Fields.microElements, microElements);
-				put(FullProductClass.Fields.packing, packing);
-				put(FullProductClass.Fields.storageConstraints,
+				put(BaseProductClass.Fields.name, name);
+				put(BaseProductClass.Fields.fatness, fatness);
+				put(BaseProductClass.Fields.calorificValue, calorificValue);
+				put(BaseProductClass.Fields.ferments, ferments);
+				put(BaseProductClass.Fields.microElements, microElements);
+				put(BaseProductClass.Fields.packing, packing);
+				put(BaseProductClass.Fields.storageConstraints,
 						storageConstraints);
-				put(FullProductClass.Fields.storageLife, storageLife);
-				put(FullProductClass.Fields.transportationConstraints,
+				put(BaseProductClass.Fields.storageLife, storageLife);
+				put(BaseProductClass.Fields.transportationConstraints,
 						transportationConstraints);
 			}
 		};

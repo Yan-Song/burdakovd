@@ -1,7 +1,8 @@
 package com.appspot.milkydb.shared.dto;
 
-@SuppressWarnings("serial")
 public class TimeSpan implements Dto {
+
+	private static final long serialVersionUID = 1L;
 
 	private long milliseconds;
 

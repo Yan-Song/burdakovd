@@ -5,11 +5,11 @@ import java.util.HashMap;
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.shared.dto.Dto;
 import com.appspot.milkydb.shared.dto.DtoList;
-import com.appspot.milkydb.shared.dto.EncodedKey;
-import com.appspot.milkydb.shared.dto.EncodedKeys;
+import com.appspot.milkydb.shared.dto.KeyList;
 import com.appspot.milkydb.shared.dto.RpcRequest;
 import com.appspot.milkydb.shared.dto.RpcResponse;
 import com.appspot.milkydb.shared.dto.RpcVoid;
+import com.appspot.milkydb.shared.dto.SingleKey;
 import com.appspot.milkydb.shared.service.MilkyService;
 import com.appspot.milkydb.shared.service.action.Action;
 import com.appspot.milkydb.shared.service.action.ManagerActionSet;
@@ -77,10 +77,10 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 
 	private <LightDto extends Dto, FullDto extends Dto> void registerManagerActionSetHandlers(
 			final ManagerActionSet<LightDto, FullDto> set,
-			final ActionHandler<EncodedKeys, RpcVoid> delete,
-			final ActionHandler<EncodedKey, FullDto> get,
+			final ActionHandler<KeyList, RpcVoid> delete,
+			final ActionHandler<SingleKey, FullDto> get,
 			final ActionHandler<RpcVoid, DtoList<LightDto>> getAll,
-			final ActionHandler<FullDto, EncodedKey> save) {
+			final ActionHandler<FullDto, SingleKey> save) {
 
 		registerActionHandler(set.provideDeleteAction(), delete);
 		registerActionHandler(set.provideGetAction(), get);

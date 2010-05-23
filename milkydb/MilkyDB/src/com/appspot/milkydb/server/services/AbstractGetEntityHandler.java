@@ -1,41 +1,32 @@
 package com.appspot.milkydb.server.services;
 
-import javax.jdo.PersistenceManager;
-
-import com.appspot.milkydb.server.PMF;
+import com.appspot.milkydb.server.DAO;
+import com.appspot.milkydb.shared.Model;
 import com.appspot.milkydb.shared.dto.Dto;
-import com.appspot.milkydb.shared.dto.EncodedKey;
-import com.google.appengine.api.datastore.KeyFactory;
+import com.appspot.milkydb.shared.dto.SingleKey;
+import com.googlecode.objectify.Key;
 
-public abstract class AbstractGetEntityHandler<Model, FullDto extends Dto>
-		implements ActionHandler<EncodedKey, FullDto> {
+public abstract class AbstractGetEntityHandler<M extends Model, FullDto extends Dto>
+		implements ActionHandler<SingleKey, FullDto> {
 
-	private final Class<Model> modelClass;
+	private final Class<M> modelClass;
 
-	public AbstractGetEntityHandler(final Class<Model> modelClass) {
+	public AbstractGetEntityHandler(final Class<M> modelClass) {
 		this.modelClass = modelClass;
 	}
 
-	private FullDto doGet(final PersistenceManager pm,
-			final EncodedKey encodedKey) {
-		final Model model = pm.getObjectById(modelClass, KeyFactory
-				.stringToKey(encodedKey.getValue()));
-		return makeDto(model);
-	}
-
 	@Override
-	public FullDto execute(final EncodedKey request) {
-		final PersistenceManager pm = PMF.get();
+	public FullDto execute(final SingleKey single) {
 
-		try {
-			return doGet(pm, request);
-		} finally {
-			pm.close();
-		}
+		final DAO dao = new DAO();
+
+		final Key<M> key = new Key<M>(DAO.rootKey, modelClass, single
+				.getValue());
+		return makeDto(dao.ofy().get(key));
 	}
 
 	/*
 	 * наследующие классы должны создавать здесь DTO из модели
 	 */
-	protected abstract FullDto makeDto(Model model);
+	protected abstract FullDto makeDto(M model);
 }
