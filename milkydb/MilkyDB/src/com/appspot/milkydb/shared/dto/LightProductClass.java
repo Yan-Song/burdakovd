@@ -1,6 +1,7 @@
 package com.appspot.milkydb.shared.dto;
 
 import com.appspot.milkydb.shared.HasKey;
+import com.appspot.milkydb.shared.models.TimeSpan;
 
 @SuppressWarnings("serial")
 public class LightProductClass implements Dto, HasKey<Long> {

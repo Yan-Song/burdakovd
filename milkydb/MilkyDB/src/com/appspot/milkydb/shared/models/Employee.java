@@ -29,14 +29,14 @@ public class Employee implements HasKey<Long>, Validatable, Dto, Model,
 	@Parent
 	private Key<?> owner;
 
-	private String name;
+	private String name = "";
 
 	@Embedded
-	private ContactInfo contactInfo;
+	private ContactInfo contactInfo = new ContactInfo("", "");
 
-	private String appointment;
+	private String appointment = "";
 
-	private double salary;
+	private double salary = 0f;
 
 	public Employee() {
 	}

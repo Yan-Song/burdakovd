@@ -1,6 +1,6 @@
 package com.appspot.milkydb.client.validation;
 
-import com.appspot.milkydb.shared.dto.TimeSpan;
+import com.appspot.milkydb.shared.models.TimeSpan;
 import com.google.appengine.api.datastore.Text;
 
 public class Validator {

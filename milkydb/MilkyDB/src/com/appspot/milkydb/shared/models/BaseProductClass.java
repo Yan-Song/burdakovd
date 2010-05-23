@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 
 import com.appspot.milkydb.client.validation.ValidationError;
@@ -13,11 +14,9 @@ import com.appspot.milkydb.shared.HasOwner;
 import com.appspot.milkydb.shared.Model;
 import com.appspot.milkydb.shared.Validatable;
 import com.appspot.milkydb.shared.dto.Dto;
-import com.appspot.milkydb.shared.dto.TimeSpan;
 import com.google.appengine.api.datastore.Text;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Parent;
-import com.googlecode.objectify.annotation.Serialized;
 
 @SuppressWarnings("serial")
 public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
@@ -33,20 +32,20 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 	@Parent
 	private Key<?> owner;
 
-	private String name;
+	private String name = "";
 
-	private Float fatness;
+	private Float fatness = 0f;
 
-	private Float calorificValue;
+	private Float calorificValue = 0f;
 
-	@Serialized
-	private TimeSpan storageLife;
+	@Embedded
+	private TimeSpan storageLife = new TimeSpan(0);
 
-	private String packing;
+	private String packing = "";
 
-	private Text storageConstraints;
+	private Text storageConstraints = new Text("");
 
-	private Text transportationConstraints;
+	private Text transportationConstraints = new Text("");
 
 	private List<String> ferments = new ArrayList<String>();
 

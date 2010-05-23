@@ -1,8 +1,9 @@
-package com.appspot.milkydb.shared.dto;
+package com.appspot.milkydb.shared.models;
 
+import com.appspot.milkydb.shared.dto.Dto;
+
+@SuppressWarnings("serial")
 public class TimeSpan implements Dto {
-
-	private static final long serialVersionUID = 1L;
 
 	private long milliseconds;
 
