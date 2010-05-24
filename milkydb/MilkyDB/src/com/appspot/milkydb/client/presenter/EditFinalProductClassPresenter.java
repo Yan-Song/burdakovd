@@ -29,12 +29,12 @@ public class EditFinalProductClassPresenter extends
 
 	@Override
 	protected Action<SingleKey, BaseProductClass> provideGetEntityAction() {
-		return ManagerActionSet.FinalProductClass.provideGetAction();
+		return ManagerActionSet.finalProductClass.provideGetAction();
 	}
 
 	@Override
 	protected Action<BaseProductClass, SingleKey> provideSaveEntityAction() {
-		return ManagerActionSet.FinalProductClass.provideSaveAction();
+		return ManagerActionSet.finalProductClass.provideSaveAction();
 	}
 
 }

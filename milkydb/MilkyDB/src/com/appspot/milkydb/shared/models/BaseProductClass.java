@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.client.validation.Validator;
 import com.appspot.milkydb.shared.HasKey;
-import com.appspot.milkydb.shared.HasOwner;
+import com.appspot.milkydb.shared.HasParent;
 import com.appspot.milkydb.shared.Model;
 import com.appspot.milkydb.shared.Validatable;
 import com.appspot.milkydb.shared.dto.Dto;
@@ -20,7 +20,7 @@ import com.googlecode.objectify.annotation.Parent;
 
 @SuppressWarnings("serial")
 public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
-		HasOwner {
+		HasParent {
 
 	public enum Fields implements Validatable.Fields {
 		name, fatness, calorificValue, storageLife, packing, storageConstraints, transportationConstraints, ferments, microElements
@@ -30,7 +30,7 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 	private Long key;
 
 	@Parent
-	private Key<?> owner;
+	private Key<?> parent;
 
 	private String name = "";
 
@@ -109,12 +109,12 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 		return name;
 	}
 
-	public Key<?> getOwner() {
-		return owner;
-	}
-
 	public String getPacking() {
 		return packing;
+	}
+
+	public Key<?> getParent() {
+		return parent;
 	}
 
 	public String getStorageConstraints() {
@@ -153,12 +153,12 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 		this.name = name;
 	}
 
-	public void setOwner(final Key<?> owner) {
-		this.owner = owner;
-	}
-
 	public void setPacking(final String packing) {
 		this.packing = packing;
+	}
+
+	public void setParent(final Key<?> parent) {
+		this.parent = parent;
 	}
 
 	public void setStorageConstraints(final String storageConstraints) {

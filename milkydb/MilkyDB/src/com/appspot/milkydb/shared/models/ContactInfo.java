@@ -9,8 +9,7 @@ public class ContactInfo implements Dto {
 
 	private String phoneNumber = "";
 
-	@SuppressWarnings("unused")
-	private ContactInfo() {
+	public ContactInfo() {
 	}
 
 	public ContactInfo(final String address, final String phone) {

@@ -18,9 +18,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HasWidgets;
 
-public class EditEmployeePresenter extends AbstractEditPresenter<Employee> {
+public class EditEmployeePresenter extends AbstractEditEntityPresenter<Employee> {
 
-	public interface Display extends AbstractEditPresenter.Display {
+	public interface Display extends AbstractEditEntityPresenter.Display {
 		HasValue<String> getAddress();
 
 		HasValue<String> getName();
@@ -103,11 +103,11 @@ public class EditEmployeePresenter extends AbstractEditPresenter<Employee> {
 
 	@Override
 	protected Action<SingleKey, Employee> provideGetEntityAction() {
-		return ManagerActionSet.Employee.provideGetAction();
+		return ManagerActionSet.employee.provideGetAction();
 	}
 
 	@Override
 	protected Action<Employee, SingleKey> provideSaveEntityAction() {
-		return ManagerActionSet.Employee.provideSaveAction();
+		return ManagerActionSet.employee.provideSaveAction();
 	}
 }

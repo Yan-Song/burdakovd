@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 
-public abstract class AbstractEditProductClassView extends AbstractEditView
+public abstract class AbstractEditProductClassView extends AbstractEditEntityView
 		implements AbstractEditProductClassPresenter.Display {
 
 	private final FormField<TextBox> name = new FormField<TextBox>("Название",

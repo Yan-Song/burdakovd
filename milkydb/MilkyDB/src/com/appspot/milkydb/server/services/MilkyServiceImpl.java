@@ -14,8 +14,10 @@ import com.appspot.milkydb.shared.models.Appointment;
 import com.appspot.milkydb.shared.models.Employee;
 import com.appspot.milkydb.shared.models.Ferment;
 import com.appspot.milkydb.shared.models.FinalProductClass;
+import com.appspot.milkydb.shared.models.FinalProductReseller;
 import com.appspot.milkydb.shared.models.MicroElement;
 import com.appspot.milkydb.shared.models.RawMaterialClass;
+import com.appspot.milkydb.shared.models.RawMaterialProvider;
 import com.appspot.milkydb.shared.service.MilkyService;
 import com.appspot.milkydb.shared.service.action.Action;
 import com.appspot.milkydb.shared.service.action.ManagerActionSet;
@@ -35,12 +37,12 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 				new SimpleGetAllEntitiesHandler<Appointment>(Appointment.class,
 						"name"));
 
-		registerManagerActionSetHandlers(ManagerActionSet.Employee,
+		registerManagerActionSetHandlers(ManagerActionSet.employee,
 				new SimpleDeleteEntitiesHandler<Employee>(Employee.class),
 				new SimpleGetEntityHandler<Employee>(Employee.class),
 				new GetEmployeesHandler(), new SaveEmployeeHandler());
 
-		registerManagerActionSetHandlers(ManagerActionSet.RawMaterialClass,
+		registerManagerActionSetHandlers(ManagerActionSet.rawMaterialClass,
 				new SimpleDeleteEntitiesHandler<RawMaterialClass>(
 						RawMaterialClass.class),
 				new SimpleGetEntityHandler<RawMaterialClass>(
@@ -50,7 +52,7 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 				new SaveProductClassHandler<RawMaterialClass>(
 						RawMaterialClass.class));
 
-		registerManagerActionSetHandlers(ManagerActionSet.FinalProductClass,
+		registerManagerActionSetHandlers(ManagerActionSet.finalProductClass,
 				new SimpleDeleteEntitiesHandler<FinalProductClass>(
 						FinalProductClass.class),
 				new SimpleGetEntityHandler<FinalProductClass>(
@@ -66,6 +68,23 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 		registerActionHandler(Action.getMicroElements,
 				new SimpleGetAllEntitiesHandler<MicroElement>(
 						MicroElement.class, "name"));
+
+		registerManagerActionSetHandlers(ManagerActionSet.rawMaterialProvider,
+				new DeleteRawMaterialProviders(),
+				new SimpleGetEntityHandler<RawMaterialProvider>(
+						RawMaterialProvider.class),
+				new SimpleGetAllEntitiesHandler<RawMaterialProvider>(
+						RawMaterialProvider.class, "name"),
+				new SavePartner<RawMaterialProvider>(RawMaterialProvider.class));
+
+		registerManagerActionSetHandlers(ManagerActionSet.finalProductReseller,
+				new DeleteFinalProductResellers(),
+				new SimpleGetEntityHandler<FinalProductReseller>(
+						FinalProductReseller.class),
+				new SimpleGetAllEntitiesHandler<FinalProductReseller>(
+						FinalProductReseller.class, "name"),
+				new SavePartner<FinalProductReseller>(
+						FinalProductReseller.class));
 	}
 
 	@SuppressWarnings("unchecked")

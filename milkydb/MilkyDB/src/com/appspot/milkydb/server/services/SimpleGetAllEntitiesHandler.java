@@ -2,9 +2,12 @@ package com.appspot.milkydb.server.services;
 
 import com.appspot.milkydb.shared.Model;
 import com.appspot.milkydb.shared.dto.Dto;
+import com.appspot.milkydb.shared.dto.DtoList;
+import com.appspot.milkydb.shared.dto.RpcVoid;
 
 public class SimpleGetAllEntitiesHandler<M extends Model & Dto> extends
-		AbstractGetAllEntitiesHandler<M, M> {
+		AbstractGetAllEntitiesHandler<M, M> implements
+		ActionHandler<RpcVoid, DtoList<M>> {
 
 	private final String orderExpression;
 

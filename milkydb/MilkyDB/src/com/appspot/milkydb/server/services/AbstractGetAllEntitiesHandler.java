@@ -7,6 +7,7 @@ import com.appspot.milkydb.shared.dto.DtoList;
 import com.appspot.milkydb.shared.dto.RpcVoid;
 import com.google.appengine.repackaged.com.google.common.base.Function;
 import com.google.appengine.repackaged.com.google.common.collect.Iterables;
+import com.googlecode.objectify.Query;
 
 public abstract class AbstractGetAllEntitiesHandler<M extends Model, LightDto extends Dto>
 		implements ActionHandler<RpcVoid, DtoList<LightDto>> {
@@ -21,14 +22,18 @@ public abstract class AbstractGetAllEntitiesHandler<M extends Model, LightDto ex
 
 		final DAO dao = new DAO();
 
-		return new DtoList<LightDto>(Iterables.transform(dao.ofy().query(
-				modelClass).order(getOrdering()).ancestor(DAO.rootKey),
-				new Function<M, LightDto>() {
+		final Query<M> query = dao.ofy().query(modelClass).order(getOrdering())
+				.ancestor(DAO.rootKey);
+
+		final DtoList<LightDto> dtoList = new DtoList<LightDto>(Iterables
+				.transform(query, new Function<M, LightDto>() {
 					@Override
 					public LightDto apply(final M model) {
 						return makeLightDto(model);
 					}
 				}));
+
+		return dtoList;
 	}
 
 	/*

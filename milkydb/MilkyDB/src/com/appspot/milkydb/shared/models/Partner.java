@@ -9,51 +9,42 @@ import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.client.validation.Validator;
 import com.appspot.milkydb.shared.HasKey;
 import com.appspot.milkydb.shared.HasParent;
-import com.appspot.milkydb.shared.Model;
 import com.appspot.milkydb.shared.Validatable;
 import com.appspot.milkydb.shared.dto.Dto;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Parent;
 
 @SuppressWarnings("serial")
-public class Employee implements HasKey<Long>, Validatable, Dto, Model,
-		HasParent {
+public class Partner implements Dto, HasKey<Long>, HasParent, Validatable {
 
-	public enum Fields implements Validatable.Fields {
-		name, post, salary, address, phoneNumber
+	public static enum Fields implements Validatable.Fields {
+		name, address, phoneNumber
 	}
-
-	@Id
-	private Long key;
 
 	@Parent
 	private Key<?> parent;
 
+	@Id
+	private Long key;
+
 	private String name = "";
 
 	@Embedded
-	private ContactInfo contactInfo = new ContactInfo("", "");
+	private ContactInfo contactInfo = new ContactInfo();
 
-	private String appointment = "";
-
-	private double salary = 0f;
-
-	public Employee() {
+	/**
+	 * 
+	 */
+	public Partner() {
 	}
 
-	public Employee(final Long key, final String name,
-			final ContactInfo contactInfo, final String appointment,
-			final double salary) {
-		super();
-		this.key = key;
+	/**
+	 * @param name
+	 * @param contactInfo
+	 */
+	public Partner(final String name, final ContactInfo contactInfo) {
 		this.name = name;
 		this.contactInfo = contactInfo;
-		this.appointment = appointment;
-		this.salary = salary;
-	}
-
-	public String getAppointment() {
-		return appointment;
 	}
 
 	public ContactInfo getContactInfo() {
@@ -72,14 +63,6 @@ public class Employee implements HasKey<Long>, Validatable, Dto, Model,
 		return parent;
 	}
 
-	public double getSalary() {
-		return salary;
-	}
-
-	public void setAppointment(final String appointment) {
-		this.appointment = appointment;
-	}
-
 	public void setContactInfo(final ContactInfo contactInfo) {
 		this.contactInfo = contactInfo;
 	}
@@ -96,28 +79,13 @@ public class Employee implements HasKey<Long>, Validatable, Dto, Model,
 		this.parent = parent;
 	}
 
-	public void setSalary(final double salary) {
-		this.salary = salary;
-	}
-
 	@Override
 	public void validate() throws ValidationError {
-
 		final HashMap<Enum<? extends Validatable.Fields>, String> errors = new HashMap<Enum<? extends Validatable.Fields>, String>();
 
 		if (!Validator.validateString(this.name, 1, 50)) {
 			errors.put(Fields.name,
 					"Имя должно быть непустой строкой не длиннее 50 символов");
-		}
-
-		if (!Validator.validateString(this.appointment, 1, 50)) {
-			errors
-					.put(Fields.post,
-							"Должность должна быть непустой строкой не длиннее 50 символов");
-		}
-
-		if (!Validator.validateDouble(this.salary, 0.0, 1000000.0)) {
-			errors.put(Fields.salary, "Оклад должен быть положительным числом");
 		}
 
 		if (!Validator.validateString(this.contactInfo.getAddress(), 1, 500)) {
@@ -136,4 +104,5 @@ public class Employee implements HasKey<Long>, Validatable, Dto, Model,
 			throw new ValidationError(errors);
 		}
 	}
+
 }

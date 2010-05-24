@@ -2,20 +2,20 @@ package com.appspot.milkydb.shared.models;
 
 import javax.persistence.Id;
 
-import com.appspot.milkydb.shared.HasOwner;
+import com.appspot.milkydb.shared.HasParent;
 import com.appspot.milkydb.shared.Model;
 import com.appspot.milkydb.shared.dto.Dto;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Parent;
 
 @SuppressWarnings("serial")
-public class SingleStringModel implements Model, Dto, HasOwner {
+public class SingleStringModel implements Model, Dto, HasParent {
 
 	@Id
 	private String name;
 
 	@Parent
-	private Key<?> owner;
+	private Key<?> parent;
 
 	public SingleStringModel() {
 		super();
@@ -25,16 +25,16 @@ public class SingleStringModel implements Model, Dto, HasOwner {
 		return name;
 	}
 
-	public Key<?> getOwner() {
-		return owner;
+	public Key<?> getParent() {
+		return parent;
 	}
 
 	public void setName(final String name) {
 		this.name = name;
 	}
 
-	public void setOwner(final Key<?> owner) {
-		this.owner = owner;
+	public void setParent(final Key<?> parent) {
+		this.parent = parent;
 	}
 
 }

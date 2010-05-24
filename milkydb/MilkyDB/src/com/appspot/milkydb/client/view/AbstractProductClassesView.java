@@ -3,7 +3,7 @@ package com.appspot.milkydb.client.view;
 import com.appspot.milkydb.shared.dto.LightProductClass;
 import com.google.gwt.user.client.ui.Grid;
 
-public abstract class AbstractProductClassView extends
+public abstract class AbstractProductClassesView extends
 		AbstractEntitiesTableView<LightProductClass> {
 
 	@Override

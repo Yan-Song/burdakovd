@@ -3,7 +3,7 @@ package com.appspot.milkydb.client.view;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.appspot.milkydb.client.presenter.AbstractEditPresenter;
+import com.appspot.milkydb.client.presenter.AbstractEditEntityPresenter;
 import com.appspot.milkydb.client.ui.FormField;
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.shared.Validatable;
@@ -15,8 +15,8 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class AbstractEditView extends Composite implements
-		AbstractEditPresenter.Display {
+public abstract class AbstractEditEntityView extends Composite implements
+		AbstractEditEntityPresenter.Display {
 
 	private static final String validationFailedClass = "validation-failed";
 
@@ -31,7 +31,7 @@ public abstract class AbstractEditView extends Composite implements
 		}
 	};
 
-	public AbstractEditView() {
+	public AbstractEditEntityView() {
 	}
 
 	@Override

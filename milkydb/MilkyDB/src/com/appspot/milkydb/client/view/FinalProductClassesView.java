@@ -1,8 +1,8 @@
 package com.appspot.milkydb.client.view;
 
-import com.appspot.milkydb.client.presenter.FinalProductClassPresenter.Display;
+import com.appspot.milkydb.client.presenter.FinalProductClassesPresenter.Display;
 
-public class FinalProductClassView extends AbstractProductClassView implements
+public class FinalProductClassesView extends AbstractProductClassesView implements
 		Display {
 
 	@Override
