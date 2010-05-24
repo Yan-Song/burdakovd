@@ -9,17 +9,26 @@ import com.appspot.milkydb.shared.dto.RpcVoid;
 import com.appspot.milkydb.shared.dto.SingleKey;
 import com.appspot.milkydb.shared.models.BaseProductClass;
 import com.appspot.milkydb.shared.models.Employee;
+import com.appspot.milkydb.shared.models.FinalProductReseller;
+import com.appspot.milkydb.shared.models.Partner;
+import com.appspot.milkydb.shared.models.RawMaterialProvider;
 
 public class ManagerActionSet<LightDto extends Dto, FullDto extends Dto> {
 
-	public static ManagerActionSet<LightEmployee, Employee> Employee = new ManagerActionSet<LightEmployee, Employee>(
-			"Employee");
+	public static ManagerActionSet<LightEmployee, Employee> employee = new ManagerActionSet<LightEmployee, Employee>(
+			"employee");
 
-	public static ManagerActionSet<LightProductClass, BaseProductClass> RawMaterialClass = new ManagerActionSet<LightProductClass, BaseProductClass>(
-			"RawMaterialClass");
+	public static ManagerActionSet<LightProductClass, BaseProductClass> rawMaterialClass = new ManagerActionSet<LightProductClass, BaseProductClass>(
+			"rawMaterialClass");
 
-	public static ManagerActionSet<LightProductClass, BaseProductClass> FinalProductClass = new ManagerActionSet<LightProductClass, BaseProductClass>(
-			"FinalProductClass");
+	public static ManagerActionSet<LightProductClass, BaseProductClass> finalProductClass = new ManagerActionSet<LightProductClass, BaseProductClass>(
+			"finalProductClass");
+
+	public static ManagerActionSet<RawMaterialProvider, Partner> rawMaterialProvider = new ManagerActionSet<RawMaterialProvider, Partner>(
+			"rawMaterialProvider");
+
+	public static ManagerActionSet<FinalProductReseller, Partner> finalProductReseller = new ManagerActionSet<FinalProductReseller, Partner>(
+			"finalProductReseller");
 
 	private final Action<RpcVoid, DtoList<LightDto>> getAll;
 	private final Action<SingleKey, FullDto> get;

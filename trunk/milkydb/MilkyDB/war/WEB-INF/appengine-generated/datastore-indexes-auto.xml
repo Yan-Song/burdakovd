@@ -1,14 +1,19 @@
-<!-- Indices written at Sun, 23 May 2010 19:22:16 UTC -->
+<!-- Indices written at Mon, 24 May 2010 17:05:26 UTC -->
 
 <datastore-indexes>
 
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="Employee" ancestor="true" source="auto">
+    <!-- Used 8 times in query history -->
+    <datastore-index kind="RawMaterialProvider" ancestor="true" source="auto">
         <property name="name" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 1 time in query history -->
+    <!-- Used 5 times in query history -->
     <datastore-index kind="FinalProductClass" ancestor="true" source="auto">
+        <property name="name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="FinalProductReseller" ancestor="true" source="auto">
         <property name="name" direction="asc"/>
     </datastore-index>
 

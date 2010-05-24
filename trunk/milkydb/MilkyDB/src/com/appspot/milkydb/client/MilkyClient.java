@@ -1,6 +1,5 @@
 package com.appspot.milkydb.client;
 
-import com.appspot.milkydb.client.presenter.ApplicationPresenter;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.view.ApplicationView;
 import com.appspot.milkydb.shared.service.MilkyService;

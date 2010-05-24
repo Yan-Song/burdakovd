@@ -43,16 +43,17 @@ public abstract class AbstractEntitiesTablePresenter<LightDto extends Dto & HasK
 
 		List<Integer> getSelectedRows();
 
-		void setData(final List<LightDto> data);
+		void setData(final List<? extends LightDto> data);
 	}
 
-	private final Display<LightDto> display;
+	private final Display<? super LightDto> display;
 	private final ManagedAsyncService service;
 	private final HandlerManager localEventBus;
 	private final Waitable wait;
 	private ArrayList<SingleKey> keys;
 
-	public AbstractEntitiesTablePresenter(final Display<LightDto> display,
+	public AbstractEntitiesTablePresenter(
+			final Display<? super LightDto> display,
 			final ManagedAsyncService service,
 			final HandlerManager localEventBus, final HandlerManager eventBus) {
 

@@ -1,11 +1,11 @@
 package com.appspot.milkydb.client.entityManagers;
 
 import com.appspot.milkydb.client.presenter.EditFinalProductClassPresenter;
-import com.appspot.milkydb.client.presenter.FinalProductClassPresenter;
+import com.appspot.milkydb.client.presenter.FinalProductClassesPresenter;
 import com.appspot.milkydb.client.presenter.Presenter;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.view.EditFinalProductClassView;
-import com.appspot.milkydb.client.view.FinalProductClassView;
+import com.appspot.milkydb.client.view.FinalProductClassesView;
 import com.appspot.milkydb.shared.dto.SingleKey;
 import com.google.gwt.event.shared.HandlerManager;
 
@@ -30,7 +30,7 @@ public class FinalProductClassManager extends AbstractEntityManager {
 
 	@Override
 	protected Presenter getListPresenter() {
-		return new FinalProductClassPresenter(new FinalProductClassView(),
+		return new FinalProductClassesPresenter(new FinalProductClassesView(),
 				service, getLocalEventBus(), eventBus);
 	}
 

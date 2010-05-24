@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 
 @SuppressWarnings("serial")
-public class EditEmployeeView extends AbstractEditView implements
+public class EditEmployeeView extends AbstractEditEntityView implements
 		EditEmployeePresenter.Display {
 
 	private final FormField<TextBox> name = new FormField<TextBox>("ФИО",

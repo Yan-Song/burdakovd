@@ -1,4 +1,4 @@
-package com.appspot.milkydb.client.presenter;
+package com.appspot.milkydb.client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,12 @@ import java.util.List;
 import com.appspot.milkydb.client.entityManagers.AbstractEntityManager;
 import com.appspot.milkydb.client.entityManagers.EmployeeManager;
 import com.appspot.milkydb.client.entityManagers.FinalProductClassManager;
+import com.appspot.milkydb.client.entityManagers.FinalProductResellerManager;
 import com.appspot.milkydb.client.entityManagers.RawMaterialClassManager;
+import com.appspot.milkydb.client.entityManagers.RawMaterialProviderManager;
+import com.appspot.milkydb.client.presenter.HomePresenter;
+import com.appspot.milkydb.client.presenter.NavigationPresenter;
+import com.appspot.milkydb.client.presenter.Presenter;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.view.HomeView;
 import com.appspot.milkydb.client.view.NavigationView;
@@ -81,6 +86,10 @@ public class ApplicationPresenter implements Presenter,
 				"Классы сырья");
 		addEntityManager(new FinalProductClassManager(service, eventBus),
 				"Классы готовой продукции");
+		addEntityManager(new RawMaterialProviderManager(service, eventBus),
+				"Поставщики сырья");
+		addEntityManager(new FinalProductResellerManager(service, eventBus),
+				"Покупатели готовой продукции");
 	}
 
 	@Override

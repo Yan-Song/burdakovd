@@ -5,6 +5,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
 import com.appspot.milkydb.shared.models.FinalProductClass;
+import com.appspot.milkydb.shared.models.FinalProductReseller;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class FinalProductSet extends ProductSet {

@@ -5,6 +5,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
 import com.appspot.milkydb.shared.models.RawMaterialClass;
+import com.appspot.milkydb.shared.models.RawMaterialProvider;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class RawMaterialSet extends ProductSet {

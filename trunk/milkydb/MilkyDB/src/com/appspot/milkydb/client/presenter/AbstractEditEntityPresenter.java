@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class AbstractEditPresenter<FullDto extends Dto & Validatable>
+public abstract class AbstractEditEntityPresenter<FullDto extends Dto & Validatable>
 		implements Presenter {
 
 	public interface Display extends CanDisplayValidationErrors {
@@ -36,13 +36,13 @@ public abstract class AbstractEditPresenter<FullDto extends Dto & Validatable>
 	protected final HandlerManager localEventBus;
 	protected final SingleKey key;
 
-	public AbstractEditPresenter(final Display display,
+	public AbstractEditEntityPresenter(final Display display,
 			final ManagedAsyncService service,
 			final HandlerManager localEventBus, final HandlerManager eventBus) {
 		this(display, service, localEventBus, eventBus, null);
 	}
 
-	public AbstractEditPresenter(final Display display,
+	public AbstractEditEntityPresenter(final Display display,
 			final ManagedAsyncService service,
 			final HandlerManager localEventBus, final HandlerManager eventBus,
 			final SingleKey key) {

@@ -19,9 +19,9 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HasWidgets;
 
 public abstract class AbstractEditProductClassPresenter extends
-		AbstractEditPresenter<BaseProductClass> {
+		AbstractEditEntityPresenter<BaseProductClass> {
 
-	public interface Display extends AbstractEditPresenter.Display {
+	public interface Display extends AbstractEditEntityPresenter.Display {
 		HasValue<String> getCalorificValue();
 
 		HasValue<String> getFatness();

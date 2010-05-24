@@ -11,6 +11,10 @@ import com.appspot.milkydb.client.validation.ValidationError;
  */
 public interface Validatable {
 
+	public enum Delete implements Fields {
+		canNotDelete
+	}
+
 	public interface Fields {
 	}
 

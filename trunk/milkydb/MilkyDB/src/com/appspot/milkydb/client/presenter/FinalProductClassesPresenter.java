@@ -9,14 +9,14 @@ import com.appspot.milkydb.shared.service.action.Action;
 import com.appspot.milkydb.shared.service.action.ManagerActionSet;
 import com.google.gwt.event.shared.HandlerManager;
 
-public class FinalProductClassPresenter extends
+public class FinalProductClassesPresenter extends
 		AbstractEntitiesTablePresenter<LightProductClass> {
 
 	public interface Display extends
 			AbstractEntitiesTablePresenter.Display<LightProductClass> {
 	}
 
-	public FinalProductClassPresenter(final Display display,
+	public FinalProductClassesPresenter(final Display display,
 			final ManagedAsyncService service,
 			final HandlerManager localEventBus, final HandlerManager eventBus) {
 		super(display, service, localEventBus, eventBus);
@@ -24,12 +24,12 @@ public class FinalProductClassPresenter extends
 
 	@Override
 	protected Action<KeyList, RpcVoid> provideDeleteAction() {
-		return ManagerActionSet.FinalProductClass.provideDeleteAction();
+		return ManagerActionSet.finalProductClass.provideDeleteAction();
 	}
 
 	@Override
 	protected Action<RpcVoid, DtoList<LightProductClass>> provideGetAction() {
-		return ManagerActionSet.FinalProductClass.provideGetAllAction();
+		return ManagerActionSet.finalProductClass.provideGetAllAction();
 	}
 
 }

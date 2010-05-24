@@ -1,5 +1,6 @@
 package com.appspot.milkydb.server.services;
 
+import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.server.DAO;
 import com.appspot.milkydb.shared.models.BaseProductClass;
 import com.appspot.milkydb.shared.models.Ferment;
@@ -14,7 +15,8 @@ public class SaveProductClassHandler<Model extends BaseProductClass> extends
 	}
 
 	@Override
-	protected Model doSave(final BaseProductClass dto, final Objectify ofy) {
+	protected Model doSave(final BaseProductClass dto, final Objectify ofy)
+			throws ValidationError {
 		for (final String microElement : dto.getMicroElements()) {
 			DAO.getOrCreate(MicroElement.class, ofy, microElement);
 		}

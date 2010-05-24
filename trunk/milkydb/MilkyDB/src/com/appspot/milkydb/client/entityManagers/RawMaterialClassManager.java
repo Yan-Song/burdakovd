@@ -2,10 +2,10 @@ package com.appspot.milkydb.client.entityManagers;
 
 import com.appspot.milkydb.client.presenter.EditRawMaterialClassPresenter;
 import com.appspot.milkydb.client.presenter.Presenter;
-import com.appspot.milkydb.client.presenter.RawMaterialClassPresenter;
+import com.appspot.milkydb.client.presenter.RawMaterialClassesPresenter;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.view.EditRawMaterialClassView;
-import com.appspot.milkydb.client.view.RawMaterialClassView;
+import com.appspot.milkydb.client.view.RawMaterialClassesView;
 import com.appspot.milkydb.shared.dto.SingleKey;
 import com.google.gwt.event.shared.HandlerManager;
 
@@ -30,7 +30,7 @@ public class RawMaterialClassManager extends AbstractEntityManager {
 
 	@Override
 	protected Presenter getListPresenter() {
-		return new RawMaterialClassPresenter(new RawMaterialClassView(),
+		return new RawMaterialClassesPresenter(new RawMaterialClassesView(),
 				service, getLocalEventBus(), eventBus);
 	}
 

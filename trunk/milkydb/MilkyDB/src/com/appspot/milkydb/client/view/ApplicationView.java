@@ -1,6 +1,6 @@
 package com.appspot.milkydb.client.view;
 
-import com.appspot.milkydb.client.presenter.ApplicationPresenter.Display;
+import com.appspot.milkydb.client.ApplicationPresenter.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockLayoutPanel;

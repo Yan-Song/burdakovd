@@ -3,7 +3,7 @@ package com.appspot.milkydb.server.services;
 import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.server.DAO;
 import com.appspot.milkydb.shared.HasKey;
-import com.appspot.milkydb.shared.HasOwner;
+import com.appspot.milkydb.shared.HasParent;
 import com.appspot.milkydb.shared.Model;
 import com.appspot.milkydb.shared.Validatable;
 import com.appspot.milkydb.shared.dto.Dto;
@@ -11,7 +11,7 @@ import com.appspot.milkydb.shared.dto.SingleKey;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 
-public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model & HasOwner, FullDto extends Validatable & HasKey<Long> & Dto>
+public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model & HasParent, FullDto extends Validatable & HasKey<Long> & Dto>
 		implements ActionHandler<FullDto, SingleKey> {
 
 	private final Class<M> modelClass;
@@ -20,7 +20,8 @@ public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model &
 		this.modelClass = modelClass;
 	}
 
-	protected M doSave(final FullDto dto, final Objectify ofy) {
+	protected M doSave(final FullDto dto, final Objectify ofy)
+			throws ValidationError {
 
 		try {
 			final boolean newModelInstance = dto.getKey() == null;
@@ -28,7 +29,7 @@ public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model &
 			M model;
 			if (newModelInstance) {
 				model = modelClass.newInstance();
-				model.setOwner(DAO.rootKey);
+				model.setParent(DAO.rootKey);
 			} else {
 				model = ofy.get(new Key<M>(DAO.rootKey, modelClass, dto
 						.getKey()));
@@ -56,11 +57,11 @@ public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model &
 		final Objectify ofy = dao.fact().beginTransaction();
 
 		try {
-			final M model = doSave(dto, ofy);
+			final M savedModel = doSave(dto, ofy);
 
 			ofy.getTxn().commit();
 
-			return new SingleKey(model.getKey());
+			return new SingleKey(savedModel.getKey());
 
 		} finally {
 			if (ofy.getTxn().isActive()) {
@@ -69,5 +70,16 @@ public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model &
 		}
 	}
 
-	protected abstract void setData(M model, FullDto dto);
+	/**
+	 * Скопировать поля полученного dto в поля модели, кроме ключа. Ключ
+	 * копировать не надо, так как он будет сгенерирован или получен из
+	 * хранилища. Также не следует заполнять поле owner.
+	 * 
+	 * @param model
+	 *            - куда нужно сохранить
+	 * @param dto
+	 *            - полученные данные
+	 */
+	protected abstract void setData(M model, FullDto dto)
+			throws ValidationError;
 }

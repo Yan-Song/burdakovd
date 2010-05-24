@@ -147,7 +147,7 @@ public abstract class AbstractEntitiesTableView<Entity> extends Composite
 	}
 
 	@Override
-	public void setData(final List<Entity> entities) {
+	public void setData(final List<? extends Entity> entities) {
 		resizeListing(entities.size());
 		createCheckboxes(entities.size());
 		for (int i = 0; i < entities.size(); ++i) {
