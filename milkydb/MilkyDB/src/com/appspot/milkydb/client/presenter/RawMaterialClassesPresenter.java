@@ -3,17 +3,17 @@ package com.appspot.milkydb.client.presenter;
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.shared.dto.DtoList;
 import com.appspot.milkydb.shared.dto.KeyList;
-import com.appspot.milkydb.shared.dto.LightProductClass;
 import com.appspot.milkydb.shared.dto.RpcVoid;
+import com.appspot.milkydb.shared.models.RawMaterialClass;
 import com.appspot.milkydb.shared.service.action.Action;
 import com.appspot.milkydb.shared.service.action.ManagerActionSet;
 import com.google.gwt.event.shared.HandlerManager;
 
 public class RawMaterialClassesPresenter extends
-		AbstractEntitiesTablePresenter<LightProductClass> {
+		AbstractEntitiesTablePresenter<RawMaterialClass> {
 
 	public interface Display extends
-			AbstractEntitiesTablePresenter.Display<LightProductClass> {
+			AbstractEntitiesTablePresenter.Display<RawMaterialClass> {
 	}
 
 	public RawMaterialClassesPresenter(final Display display,
@@ -28,7 +28,7 @@ public class RawMaterialClassesPresenter extends
 	}
 
 	@Override
-	protected Action<RpcVoid, DtoList<LightProductClass>> provideGetAction() {
+	protected Action<RpcVoid, DtoList<RawMaterialClass>> provideGetAction() {
 		return ManagerActionSet.rawMaterialClass.provideGetAllAction();
 	}
 }

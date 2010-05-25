@@ -28,6 +28,10 @@ public class SimpleDeleteEntitiesHandler<M extends Model> implements
 		this.modelClass = modelClass;
 	}
 
+	protected void beforeDelete(final DAO dao, final Objectify ofy,
+			final Iterable<Key<M>> tKeys) {
+	}
+
 	/**
 	 * Эта функция должна проверять, можем ли мы удалить объекты с указанными
 	 * ключами, и если не можем - выбрасывать исключение с причиной. Функция
@@ -61,6 +65,8 @@ public class SimpleDeleteEntitiesHandler<M extends Model> implements
 					});
 
 			checkIfCanDelete(dao, t, tKeys);
+
+			beforeDelete(dao, t, tKeys);
 
 			t.delete(tKeys);
 

@@ -1,6 +1,7 @@
 package com.appspot.milkydb.client.presenter;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.appspot.milkydb.client.service.ManagedAsyncService;
 import com.appspot.milkydb.client.ui.FreeMultiListBox;
@@ -85,7 +86,7 @@ public abstract class AbstractEditProductClassPresenter extends
 
 					@Override
 					public void onSuccess(final DtoList<Ferment> result) {
-						final ArrayList<String> v = new ArrayList<String>();
+						final Set<String> v = new HashSet<String>();
 						for (final Ferment f : result) {
 							v.add(f.getName());
 						}
@@ -103,7 +104,7 @@ public abstract class AbstractEditProductClassPresenter extends
 
 					@Override
 					public void onSuccess(final DtoList<MicroElement> result) {
-						final ArrayList<String> v = new ArrayList<String>();
+						final Set<String> v = new HashSet<String>();
 						for (final MicroElement f : result) {
 							v.add(f.getName());
 						}

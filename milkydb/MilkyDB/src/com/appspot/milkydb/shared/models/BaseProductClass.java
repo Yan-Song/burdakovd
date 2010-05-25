@@ -1,8 +1,8 @@
 package com.appspot.milkydb.shared.models;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -47,9 +47,9 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 
 	private Text transportationConstraints = new Text("");
 
-	private List<String> ferments = new ArrayList<String>();
+	private Set<String> ferments = new HashSet<String>();
 
-	private List<String> microElements = new ArrayList<String>();
+	private Set<String> microElements = new HashSet<String>();
 
 	public BaseProductClass() {
 
@@ -71,8 +71,8 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 			final Float fatness, final Float calorificValue,
 			final TimeSpan storageLife, final String packing,
 			final String storageConstraints,
-			final String transportationConstraints,
-			final List<String> ferments, final List<String> microElements) {
+			final String transportationConstraints, final Set<String> ferments,
+			final Set<String> microElements) {
 		this.key = key;
 		this.name = name;
 		this.fatness = fatness;
@@ -93,7 +93,7 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 		return fatness;
 	}
 
-	public List<String> getFerments() {
+	public Set<String> getFerments() {
 		return ferments;
 	}
 
@@ -101,7 +101,7 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 		return key;
 	}
 
-	public List<String> getMicroElements() {
+	public Set<String> getMicroElements() {
 		return microElements;
 	}
 
@@ -137,7 +137,7 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 		this.fatness = fatness;
 	}
 
-	public void setFerments(final List<String> ferments) {
+	public void setFerments(final Set<String> ferments) {
 		this.ferments = ferments;
 	}
 
@@ -145,7 +145,7 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 		this.key = key;
 	}
 
-	public void setMicroElements(final List<String> microElements) {
+	public void setMicroElements(final Set<String> microElements) {
 		this.microElements = microElements;
 	}
 
@@ -189,12 +189,12 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 							"Введите вещественное число от 0 до 100");
 		}
 
-		if (!ValidWordList(getFerments())) {
+		if (!validWords(getFerments())) {
 			errors.put(Fields.ferments,
 					"Список непустых слов. Пробелы недопустимы");
 		}
 
-		if (!ValidWordList(getMicroElements())) {
+		if (!validWords(getMicroElements())) {
 			errors.put(Fields.microElements,
 					"Список непустых слов. Пробелы недопустимы");
 		}
@@ -231,7 +231,7 @@ public class BaseProductClass implements Model, HasKey<Long>, Dto, Validatable,
 		}
 	}
 
-	private boolean ValidWordList(final List<String> words) {
+	private boolean validWords(final Set<String> words) {
 		for (final String word : words) {
 			if (!Validator.validateWord(word)) {
 				return false;
