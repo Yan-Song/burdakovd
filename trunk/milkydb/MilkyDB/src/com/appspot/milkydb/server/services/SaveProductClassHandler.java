@@ -1,6 +1,5 @@
 package com.appspot.milkydb.server.services;
 
-import com.appspot.milkydb.client.validation.ValidationError;
 import com.appspot.milkydb.server.DAO;
 import com.appspot.milkydb.shared.models.BaseProductClass;
 import com.appspot.milkydb.shared.models.Ferment;
@@ -15,21 +14,14 @@ public class SaveProductClassHandler<Model extends BaseProductClass> extends
 	}
 
 	@Override
-	protected Model doSave(final BaseProductClass dto, final Objectify ofy)
-			throws ValidationError {
-		for (final String microElement : dto.getMicroElements()) {
-			DAO.getOrCreate(MicroElement.class, ofy, microElement);
-		}
+	protected void setData(final Objectify ofy, final Model model,
+			final BaseProductClass dto) {
 
-		for (final String ferment : dto.getFerments()) {
-			DAO.getOrCreate(Ferment.class, ofy, ferment);
-		}
+		DAO.updateDictionaryFields(ofy, Ferment.class, model.getFerments(), dto
+				.getFerments());
+		DAO.updateDictionaryFields(ofy, MicroElement.class, model
+				.getMicroElements(), dto.getMicroElements());
 
-		return super.doSave(dto, ofy);
-	}
-
-	@Override
-	protected void setData(final Model model, final BaseProductClass dto) {
 		model.setCalorificValue(dto.getCalorificValue());
 		model.setFatness(dto.getFatness());
 		model.setFerments(dto.getFerments());
@@ -40,5 +32,4 @@ public class SaveProductClassHandler<Model extends BaseProductClass> extends
 		model.setStorageLife(dto.getStorageLife());
 		model.setTransportationConstraints(dto.getTransportationConstraints());
 	}
-
 }

@@ -1,6 +1,6 @@
 package com.appspot.milkydb.shared.models;
 
 @SuppressWarnings("serial")
-public class MicroElement extends SingleStringModel {
+public class MicroElement extends DictionaryModel {
 
 }

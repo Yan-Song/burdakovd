@@ -38,27 +38,27 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 						"name"));
 
 		registerManagerActionSetHandlers(ManagerActionSet.employee,
-				new SimpleDeleteEntitiesHandler<Employee>(Employee.class),
+				new DeleteEmployeeHandler(),
 				new SimpleGetEntityHandler<Employee>(Employee.class),
 				new GetEmployeesHandler(), new SaveEmployeeHandler());
 
 		registerManagerActionSetHandlers(ManagerActionSet.rawMaterialClass,
-				new SimpleDeleteEntitiesHandler<RawMaterialClass>(
+				new DeleteProductClassesHandler<RawMaterialClass>(
 						RawMaterialClass.class),
 				new SimpleGetEntityHandler<RawMaterialClass>(
 						RawMaterialClass.class),
-				new GetProductClassesHandler<RawMaterialClass>(
-						RawMaterialClass.class),
+				new SimpleGetAllEntitiesHandler<RawMaterialClass>(
+						RawMaterialClass.class, "name"),
 				new SaveProductClassHandler<RawMaterialClass>(
 						RawMaterialClass.class));
 
 		registerManagerActionSetHandlers(ManagerActionSet.finalProductClass,
-				new SimpleDeleteEntitiesHandler<FinalProductClass>(
+				new DeleteProductClassesHandler<FinalProductClass>(
 						FinalProductClass.class),
 				new SimpleGetEntityHandler<FinalProductClass>(
 						FinalProductClass.class),
-				new GetProductClassesHandler<FinalProductClass>(
-						FinalProductClass.class),
+				new SimpleGetAllEntitiesHandler<FinalProductClass>(
+						FinalProductClass.class, "name"),
 				new SaveProductClassHandler<FinalProductClass>(
 						FinalProductClass.class));
 
@@ -70,21 +70,25 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 						MicroElement.class, "name"));
 
 		registerManagerActionSetHandlers(ManagerActionSet.rawMaterialProvider,
-				new DeleteRawMaterialProviders(),
+				new RelationsCheckedDeleteEntitiesHandler<RawMaterialProvider>(
+						RawMaterialProvider.class),
 				new SimpleGetEntityHandler<RawMaterialProvider>(
 						RawMaterialProvider.class),
 				new SimpleGetAllEntitiesHandler<RawMaterialProvider>(
 						RawMaterialProvider.class, "name"),
 				new SavePartner<RawMaterialProvider>(RawMaterialProvider.class));
 
-		registerManagerActionSetHandlers(ManagerActionSet.finalProductReseller,
-				new DeleteFinalProductResellers(),
+		registerManagerActionSetHandlers(
+				ManagerActionSet.finalProductReseller,
+				new RelationsCheckedDeleteEntitiesHandler<FinalProductReseller>(
+						FinalProductReseller.class),
 				new SimpleGetEntityHandler<FinalProductReseller>(
 						FinalProductReseller.class),
 				new SimpleGetAllEntitiesHandler<FinalProductReseller>(
 						FinalProductReseller.class, "name"),
 				new SavePartner<FinalProductReseller>(
 						FinalProductReseller.class));
+
 	}
 
 	@SuppressWarnings("unchecked")

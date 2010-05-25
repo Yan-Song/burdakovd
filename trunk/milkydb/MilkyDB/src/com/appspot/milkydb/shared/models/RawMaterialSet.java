@@ -1,10 +1,10 @@
 package com.appspot.milkydb.shared.models;
 
-import com.appspot.milkydb.shared.dto.Dto;
+import java.util.Date;
+
 import com.googlecode.objectify.Key;
 
-@SuppressWarnings("serial")
-public class Supply extends Contract implements Dto {
+public class RawMaterialSet extends ProductSet {
 
 	private Key<RawMaterialClass> materialClass;
 
@@ -13,8 +13,17 @@ public class Supply extends Contract implements Dto {
 	/**
 	 * 
 	 */
-	public Supply() {
+	public RawMaterialSet() {
 		super();
+	}
+
+	/**
+	 * @param manufacturingDate
+	 * @param expirationDate
+	 */
+	public RawMaterialSet(final Date manufacturingDate,
+			final Date expirationDate) {
+		super(manufacturingDate, expirationDate);
 	}
 
 	public Key<RawMaterialClass> getMaterialClass() {
@@ -32,4 +41,5 @@ public class Supply extends Contract implements Dto {
 	public void setProvider(final Key<RawMaterialProvider> provider) {
 		this.provider = provider;
 	}
+
 }

@@ -20,7 +20,7 @@ public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model &
 		this.modelClass = modelClass;
 	}
 
-	protected M doSave(final FullDto dto, final Objectify ofy)
+	protected M doSave(final DAO dao, final FullDto dto, final Objectify ofy)
 			throws ValidationError {
 
 		try {
@@ -35,7 +35,7 @@ public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model &
 						.getKey()));
 			}
 
-			setData(model, dto);
+			setData(ofy, model, dto);
 			ofy.put(model);
 
 			return model;
@@ -57,7 +57,7 @@ public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model &
 		final Objectify ofy = dao.fact().beginTransaction();
 
 		try {
-			final M savedModel = doSave(dto, ofy);
+			final M savedModel = doSave(dao, dto, ofy);
 
 			ofy.getTxn().commit();
 
@@ -75,11 +75,16 @@ public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model &
 	 * копировать не надо, так как он будет сгенерирован или получен из
 	 * хранилища. Также не следует заполнять поле owner.
 	 * 
+	 * Помимо того можно выполнить и другие действия помимо копирования полей.
+	 * Например создать объекты, ссылки на которые копируются, удалить ненужные.
+	 * 
 	 * @param model
 	 *            - куда нужно сохранить
 	 * @param dto
 	 *            - полученные данные
+	 * @throws ValidationError
 	 */
-	protected abstract void setData(M model, FullDto dto)
+
+	protected abstract void setData(Objectify ofy, M model, FullDto dto)
 			throws ValidationError;
 }

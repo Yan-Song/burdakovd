@@ -1,7 +1,7 @@
 package com.appspot.milkydb.shared.models;
 
 @SuppressWarnings("serial")
-public class Appointment extends SingleStringModel {
+public class Appointment extends DictionaryModel {
 	public Appointment() {
 	}
 }

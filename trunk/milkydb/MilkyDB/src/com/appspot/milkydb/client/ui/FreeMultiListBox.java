@@ -1,7 +1,7 @@
 package com.appspot.milkydb.client.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 
 public class FreeMultiListBox extends Composite implements
-		HasValue<List<String>> {
+		HasValue<Set<String>> {
 
 	private final ListBox list = new ListBox(true);
 	private final Button button = new Button("Другое...");
@@ -39,7 +39,7 @@ public class FreeMultiListBox extends Composite implements
 
 	@Override
 	public HandlerRegistration addValueChangeHandler(
-			final ValueChangeHandler<List<String>> handler) {
+			final ValueChangeHandler<Set<String>> handler) {
 		return addHandler(handler, ValueChangeEvent.getType());
 	}
 
@@ -80,8 +80,8 @@ public class FreeMultiListBox extends Composite implements
 	}
 
 	@Override
-	public List<String> getValue() {
-		final ArrayList<String> ans = new ArrayList<String>();
+	public Set<String> getValue() {
+		final HashSet<String> ans = new HashSet<String>();
 		for (int i = 0; i < list.getItemCount(); ++i) {
 			if (list.isItemSelected(i)) {
 				ans.add(list.getItemText(i));
@@ -118,7 +118,8 @@ public class FreeMultiListBox extends Composite implements
 		}
 	}
 
-	public void setValue(final List<String> values) {
+	@Override
+	public void setValue(final Set<String> values) {
 		for (final String value : values) {
 			if (!hasVariant(value)) {
 				addVariant(value);
@@ -133,7 +134,7 @@ public class FreeMultiListBox extends Composite implements
 	}
 
 	@Override
-	public void setValue(final List<String> value, final boolean fireEvents) {
+	public void setValue(final Set<String> value, final boolean fireEvents) {
 		setValue(value);
 
 		if (fireEvents) {
@@ -141,8 +142,8 @@ public class FreeMultiListBox extends Composite implements
 		}
 	}
 
-	public void setVariants(final List<String> variants) {
-		final List<String> oldValue = getValue();
+	public void setVariants(final Set<String> variants) {
+		final Set<String> oldValue = getValue();
 
 		clear();
 		for (final String variant : variants) {

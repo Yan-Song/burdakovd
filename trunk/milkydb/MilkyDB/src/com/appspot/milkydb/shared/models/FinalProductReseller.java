@@ -1,20 +1,32 @@
 package com.appspot.milkydb.shared.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import com.appspot.milkydb.shared.HasRelations;
 import com.appspot.milkydb.shared.Model;
 import com.googlecode.objectify.Key;
 
 @SuppressWarnings("serial")
-public class FinalProductReseller extends Partner implements Model {
-	private List<Key<Demand>> demands = new ArrayList<Key<Demand>>();
+public class FinalProductReseller extends Partner implements Model,
+		HasRelations {
+	private Set<Key<Demand>> demands = new HashSet<Key<Demand>>();
 
-	public List<Key<Demand>> getDemands() {
+	public Set<Key<Demand>> getDemands() {
 		return demands;
 	}
 
-	public void setDemands(final List<Key<Demand>> demands) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.appspot.milkydb.shared.HasRelations#hasRelations()
+	 */
+	@Override
+	public boolean hasRelations() {
+		return !demands.isEmpty();
+	}
+
+	public void setDemands(final Set<Key<Demand>> demands) {
 		this.demands = demands;
 	}
 }
