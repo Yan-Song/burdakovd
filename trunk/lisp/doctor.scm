@@ -49,6 +49,7 @@
 
 ;  ((pred3 lambda3) (pred4 lambda4) (pred5 lambda5)) ; приоритет поменьше
 ; )
+
 (define (reply user-response phrases)
   (let (
         (strategies
@@ -66,19 +67,30 @@
           ); -- чуть меньше - проверка ключевых слов
           
           (list
-           (list (lambda () #t) (lambda () (append (qualifier) (change-person user-response))))
-           (list (lambda () #t) hedge)
+           (list
+            (lambda () #t)
+            (lambda () (append (qualifier) (change-person user-response))))
+           (list
+            (lambda () #t)
+            hedge)
            (list (lambda () (not (null? phrases))) (lambda () (append '(earlier you said that) (change-person (pick-random phrases)) )))
            (list (lambda () (not (null? someTree))) (lambda () (treeGeneratePhrase someTree)))
           ); -- минимальный приоритет имеют общие фразы
-         
-        )
-        
-        
+        )        
        )
       )
     
-    ((pick-random (car (filter (lambda (l) (not (null? l))) (map (lambda (l) (map cadr (filter (lambda (x) ((car x))) l))) strategies)))))
+    ((pick-random
+      (car
+       (filter
+        (lambda (l) (not (null? l)))
+        (map 
+         (lambda (l) (map
+                      cadr
+                      (filter
+                       (lambda (x) ((car x)))
+                       l)))
+         strategies)))))
   )
 )
 
