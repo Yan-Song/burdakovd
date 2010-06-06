@@ -20,6 +20,11 @@ public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model &
 		this.modelClass = modelClass;
 	}
 
+	protected void afterSave(final Objectify ofy, final M oldModel,
+			final M newModel) {
+
+	}
+
 	protected M doSave(final DAO dao, final FullDto dto, final Objectify ofy)
 			throws ValidationError {
 
@@ -37,6 +42,9 @@ public abstract class AbstractSaveEntityHandler<M extends HasKey<Long> & Model &
 
 			setData(ofy, model, dto);
 			ofy.put(model);
+			final M old = newModelInstance ? modelClass.newInstance() : ofy
+					.get(new Key<M>(DAO.rootKey, modelClass, model.getKey()));
+			afterSave(ofy, old, model);
 
 			return model;
 

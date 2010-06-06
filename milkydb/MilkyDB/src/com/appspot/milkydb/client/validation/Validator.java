@@ -14,6 +14,11 @@ public class Validator {
 		return d != null && d >= minValue && d <= maxValue;
 	}
 
+	public static boolean validateInteger(final Integer d,
+			final Integer minValue, final Integer maxValue) {
+		return d != null && d >= minValue && d <= maxValue;
+	}
+
 	public static boolean validateString(final String s, final int minLength,
 			final int maxLength) {
 		return s != null && s.length() >= minLength && s.length() <= maxLength;
@@ -38,4 +43,5 @@ public class Validator {
 	public static boolean validateWord(final String word) {
 		return validateString(word, 1, 50) && !word.contains(" ");
 	}
+
 }

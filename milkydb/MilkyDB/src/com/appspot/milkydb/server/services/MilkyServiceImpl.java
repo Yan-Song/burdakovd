@@ -18,6 +18,7 @@ import com.appspot.milkydb.shared.models.FinalProductReseller;
 import com.appspot.milkydb.shared.models.MicroElement;
 import com.appspot.milkydb.shared.models.RawMaterialClass;
 import com.appspot.milkydb.shared.models.RawMaterialProvider;
+import com.appspot.milkydb.shared.models.Supply;
 import com.appspot.milkydb.shared.service.MilkyService;
 import com.appspot.milkydb.shared.service.action.Action;
 import com.appspot.milkydb.shared.service.action.ManagerActionSet;
@@ -88,6 +89,12 @@ public class MilkyServiceImpl extends RemoteServiceServlet implements
 						FinalProductReseller.class, "name"),
 				new SavePartner<FinalProductReseller>(
 						FinalProductReseller.class));
+
+		registerManagerActionSetHandlers(ManagerActionSet.supply,
+				new SupplyDeleteHandler(), new SimpleGetEntityHandler<Supply>(
+						Supply.class), new SimpleGetAllEntitiesHandler<Supply>(
+						Supply.class, "provider, materialClass"),
+				new SaveSupplyHandler());
 
 	}
 

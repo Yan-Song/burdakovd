@@ -1,10 +1,12 @@
 package com.appspot.milkydb.shared.models;
 
+import com.appspot.milkydb.shared.Model;
+import com.appspot.milkydb.shared.Validatable;
 import com.appspot.milkydb.shared.dto.Dto;
 import com.googlecode.objectify.Key;
 
 @SuppressWarnings("serial")
-public class Supply extends Contract implements Dto {
+public class Supply extends Contract implements Dto, Model, Validatable {
 
 	private Key<RawMaterialClass> materialClass;
 
@@ -15,6 +17,16 @@ public class Supply extends Contract implements Dto {
 	 */
 	public Supply() {
 		super();
+	}
+
+	/**
+	 * @param materialClass
+	 * @param provider
+	 */
+	public Supply(final Key<RawMaterialClass> materialClass,
+			final Key<RawMaterialProvider> provider) {
+		this.materialClass = materialClass;
+		this.provider = provider;
 	}
 
 	public Key<RawMaterialClass> getMaterialClass() {
@@ -32,4 +44,5 @@ public class Supply extends Contract implements Dto {
 	public void setProvider(final Key<RawMaterialProvider> provider) {
 		this.provider = provider;
 	}
+
 }
