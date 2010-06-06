@@ -2,16 +2,28 @@ package com.appspot.milkydb.shared.models;
 
 import javax.persistence.Id;
 
+import com.appspot.milkydb.client.validation.ValidationError;
+import com.appspot.milkydb.client.validation.Validator;
 import com.appspot.milkydb.shared.HasKey;
+import com.appspot.milkydb.shared.HasParent;
+import com.appspot.milkydb.shared.Validatable;
+import com.appspot.milkydb.shared.dto.Dto;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Parent;
 
-public class Contract implements HasKey<Long> {
+@SuppressWarnings("serial")
+public abstract class Contract implements HasKey<Long>, HasParent, Validatable,
+		Dto {
+
+	public static enum Fields implements Validatable.Fields {
+		frequency, count
+	}
+
 	@Id
 	private Long key;
 
 	@Parent
-	private Key<?> owner;
+	private Key<?> parent;
 
 	private TimeSpan frequency = new TimeSpan(0);
 
@@ -35,8 +47,8 @@ public class Contract implements HasKey<Long> {
 		return key;
 	}
 
-	public Key<?> getOwner() {
-		return owner;
+	public Key<?> getParent() {
+		return parent;
 	}
 
 	public void setCount(final Integer count) {
@@ -51,8 +63,23 @@ public class Contract implements HasKey<Long> {
 		this.key = key;
 	}
 
-	public void setOwner(final Key<?> owner) {
-		this.owner = owner;
+	public void setParent(final Key<?> parent) {
+		this.parent = parent;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.appspot.milkydb.shared.Validatable#validate()
+	 */
+	@Override
+	public void validate() throws ValidationError {
+		if (!Validator.validateInteger(count, 1, 1000000)) {
+			throw new ValidationError(Fields.count, "");
+		}
+
+		if (!Validator.validateTimeSpan(frequency, 0, 86400 * 365 * 10)) {
+			throw new ValidationError(Fields.frequency, "");
+		}
+	}
 }

@@ -17,8 +17,14 @@ public class FreeListBox extends Composite implements HasValue<String> {
 	private final static String createText = "Создать...";
 	private final static String notSelectedText = "(не выбрано)";
 	private final ListBox listBox = new ListBox();
+	private final boolean canCreate;
 
 	public FreeListBox() {
+		this(true);
+	}
+
+	public FreeListBox(final boolean canCreate) {
+		this.canCreate = canCreate;
 		initWidget(listBox);
 		setVariants(new ArrayList<String>(), false);
 		setValue(null);
@@ -42,15 +48,20 @@ public class FreeListBox extends Composite implements HasValue<String> {
 		});
 	}
 
+	public int getSelectedIndex() {
+		return listBox.getSelectedIndex() - 1;
+	}
+
 	@Override
 	public String getValue() {
 		final int i = listBox.getSelectedIndex();
-		assert i < listBox.getItemCount() - 1;
+		assert i < listBox.getItemCount() - (canCreate ? 1 : 0);
 		return i == 0 ? null : listBox.getItemText(i);
 	}
 
 	private void onListboxChange(final ChangeEvent event) {
-		if (listBox.getSelectedIndex() == listBox.getItemCount() - 1) {
+		if (canCreate
+				&& listBox.getSelectedIndex() == listBox.getItemCount() - 1) {
 			final String s = Window.prompt("Введите новое значение", "");
 			if (s != null && !s.isEmpty()) {
 				setValue(s, true);
@@ -73,15 +84,15 @@ public class FreeListBox extends Composite implements HasValue<String> {
 			return;
 		}
 
-		for (int i = 1; i < listBox.getItemCount() - 1; ++i) {
+		for (int i = 1; i < listBox.getItemCount() - (canCreate ? 1 : 0); ++i) {
 			if (listBox.getItemText(i).equals(value)) {
 				listBox.setSelectedIndex(i);
 				return;
 			}
 		}
 
-		listBox.insertItem(value, listBox.getItemCount() - 1);
-		listBox.setSelectedIndex(listBox.getItemCount() - 2);
+		listBox.insertItem(value, listBox.getItemCount() - (canCreate ? 1 : 0));
+		listBox.setSelectedIndex(listBox.getItemCount() - (canCreate ? 2 : 1));
 	}
 
 	@Override
