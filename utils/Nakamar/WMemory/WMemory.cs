@@ -210,7 +210,8 @@ namespace WoWMemoryManager
         {
             get
             {
-                string state = BM.ReadASCIIString(Patterns.GameState, 100);
+                uint gameStatePtr = BM.ReadUInt(FindPattern(Patterns.GameState));
+                string state = BM.ReadASCIIString(gameStatePtr, 100);
                 if (state == "login")
                     return GameState.Login;
 
