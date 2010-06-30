@@ -1,6 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Binaries", "Binaries", "{7BB8E694-86A2-4447-8BDE-79421B030684}"
+	ProjectSection(SolutionItems) = preProject
+		Binaries\fasmdll_managed.dll = Binaries\fasmdll_managed.dll
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nakamar", "Nakamar\Nakamar.csproj", "{55CC75A6-9C4A-4D62-99B1-DC84FF4A82FC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{49BAC39E-1E89-41DC-8079-6DF67B60A634} = {49BAC39E-1E89-41DC-8079-6DF67B60A634}
@@ -15,11 +20,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiniteStateMachine", "FiniteStateMachine\FiniteStateMachine.csproj", "{78DF6A81-A7AC-44DF-8F8F-278E0D119903}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "Logger\Util.csproj", "{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Binaries", "Binaries", "{7BB8E694-86A2-4447-8BDE-79421B030684}"
-	ProjectSection(SolutionItems) = preProject
-		Binaries\fasmdll_managed.dll = Binaries\fasmdll_managed.dll
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugins", "NakamarStates\Plugins.csproj", "{4A688F33-BA30-477B-A651-5918C1603D2F}"
 EndProject

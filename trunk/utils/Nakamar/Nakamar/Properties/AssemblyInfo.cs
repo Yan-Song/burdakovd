@@ -7,11 +7,11 @@ using System.Resources;
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 [assembly: AssemblyTitle("Nakamar")]
-[assembly: AssemblyDescription("Nakamar trading software for WoW 3.3.0")]
+[assembly: AssemblyDescription("Nakamar trading software for WoW 3.3.5")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MSU")]
 [assembly: AssemblyProduct("Nakamar")]
-[assembly: AssemblyCopyright("Copyright © MSU 2009")]
+[assembly: AssemblyCopyright("Copyright © MSU 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

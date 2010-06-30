@@ -13,18 +13,6 @@ namespace WoWMemoryManager
 {
     public class KeyBoard
     {
-        /*/// <summary>
-        /// тут могут быть проблемы если окно не просто на заднем плане, а ещё и свёрнуто,
-        /// то эта функция его не разворачивает, а активирует прямо свёрнутое, после чего оно ведёт себя странно
-        /// </summary>
-        public void CheckForeground()
-        {
-            if (Extern.GetForegroundWindow() != window)
-            {
-                Extern.SetForegroundWindow(window);
-            }
-        }*/
-
         private void PostOrSendMessageSafe(UInt32 msg, UInt32 wParam, UInt32 lParam, bool wait)
         {
             if (wait)
