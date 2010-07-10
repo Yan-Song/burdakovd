@@ -1,32 +1,22 @@
-package codeforces._20100624;
-
+package codeforces._20100709;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class A {
 
-    static class Team {
-	final String name;
-	int points = 0;
-	int good = 0;
-	int bad = 0;
-
-	Team(final String name) {
-	    this.name = name;
+    static {
+	final Locale us = Locale.US;
+	if (!Locale.getDefault().equals(us)) {
+	    Locale.setDefault(us);
 	}
     }
 
-    static {
-	Locale.setDefault(Locale.US);
-    }
-
-    static boolean file = true;
+    static boolean file = false;
 
     static Scanner in;
     static {
@@ -54,30 +44,43 @@ public class A {
      */
     public static void main(final String[] args) {
 	try {
-	    final long t = in.nextInt();
-	    for (long i = 0; i < t; ++i) {
-		solve(i + 1);
-		if (file) {
-		    System.out.println(i + 1 + "/" + t);
-		    System.out.flush();
-		}
-		if (!file) {
-		    out.flush();
-		}
+
+	    solve();
+	    if (file) {
+		System.out.flush();
 	    }
+	    if (!file) {
+		out.flush();
+	    }
+
 	} finally {
 	    in.close();
 	    out.close();
 	}
     }
 
-    private static void solve(final long testId) {
-	final HashMap<String, Team> teams = new HashMap<String, Team>();
+    private static void solve() {
+	final String s = in.next();
 
-	final int n = in.nextInt();
+	int ans = 0;
+	for (int l = 0; l < s.length(); ++l) {
+	    for (int r = l; r < s.length(); ++r) {
+		for (int p = l + 1; p - l + r < s.length(); ++p) {
+		    boolean ok = true;
 
-	for (int i = 0; i < n; ++i) {
-	    // teams[in.]
+		    for (int q = l, qq = p; q <= r; ++q, ++qq) {
+			if (s.charAt(q) != s.charAt(qq)) {
+			    ok = false;
+			}
+		    }
+
+		    if (ok) {
+			ans = Math.max(ans, r - l + 1);
+		    }
+		}
+	    }
 	}
+
+	out.println(ans);
     }
 }

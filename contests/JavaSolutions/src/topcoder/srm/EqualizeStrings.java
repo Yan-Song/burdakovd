@@ -1,4 +1,5 @@
 package topcoder.srm;
+
 public class EqualizeStrings {
 
     // Begin cut here
