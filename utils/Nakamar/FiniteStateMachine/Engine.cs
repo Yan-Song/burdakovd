@@ -133,7 +133,7 @@ namespace FiniteStateMachine
 
                 try
                 {
-                    Memory.KB.KeyUpAll();
+                    Memory.KeyBoard.KeyUpAll();
                 }
                 catch
                 {

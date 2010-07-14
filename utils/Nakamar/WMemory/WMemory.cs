@@ -73,7 +73,7 @@ namespace WoWMemoryManager
     public class MemoryManager
     {
         public BlackMagic BM;
-        public KeyBoard KB;
+        public KeyBoard KeyBoard;
         private Dictionary<ComparableListOfDouble, uint> DynamicDoublePatternCache = new Dictionary<ComparableListOfDouble, uint>();
         private static ComparableListOfDouble signature = new ComparableListOfDouble(901791, 349667, 371721, 139443, 213674);
         private AddonMessage LastMessage;
@@ -119,7 +119,7 @@ namespace WoWMemoryManager
         public MemoryManager(int id)
         {
             BM = new BlackMagic(id);
-            KB = new KeyBoard(BM.WindowHandle);
+            KeyBoard = new KeyBoard(BM.WindowHandle);
             LastMessage = null;
             foreach (var kvp in Settings.Default.AddonSignatureStatistics)
                 DynamicDoublePatternCache[kvp.Key] = kvp.Value.Last();
@@ -212,9 +212,10 @@ namespace WoWMemoryManager
             {
                 uint gameStatePtr = BM.ReadUInt(FindPattern(Patterns.GameState));
                 string state = BM.ReadASCIIString(gameStatePtr, 100);
+
                 if (state == "login")
                     return GameState.Login;
-
+    
                 else if (state == "realmwizard")
                     return GameState.RealmWizard;
 
@@ -240,7 +241,7 @@ namespace WoWMemoryManager
             do
             {
                 DateTime before = DateTime.Now;
-                KB.PressKey(Key.LeftCtrl, true);
+                KeyBoard.PressKey(Key.LeftCtrl, true);
                 responseTime = DateTime.Now - before;
             }
             while (responseTime.TotalSeconds > 1);

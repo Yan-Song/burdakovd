@@ -101,7 +101,7 @@ namespace Plugins
         {
             Thread.Sleep(5000); // загрузка списка персонажей
             Log("Выбор персонажа, нажимаю Enter");
-            Memory.KB.PressKey(Key.Enter, true);
+            Memory.KeyBoard.PressKey(Key.Enter, true);
             CharacterSelected = true;
             Log("Жду загрузки игрового мира");
             Memory.WaitForInputIdle();
@@ -111,9 +111,9 @@ namespace Plugins
         private void EnterPassword()
         {
             Log(string.Format("Ввожу пароль для аккаунта {0}", profile.AccountName));
-            Memory.KB.SendText(profile.Password, true);
+            Memory.KeyBoard.SendText(profile.Password, true);
             Thread.Sleep(500); // на всякий случай
-            Memory.KB.PressKey(Key.Enter, true);
+            Memory.KeyBoard.PressKey(Key.Enter, true);
             PasswordEntered = true;
             Log("Пароль введён, жду авторизации");
         }

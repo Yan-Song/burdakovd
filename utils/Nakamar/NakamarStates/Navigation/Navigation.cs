@@ -534,7 +534,7 @@ namespace Plugins
                 else // точно застрял
                 {
                     Log("Совсем застрял!!! Делаю скриншот");
-                    Memory.KB.PressKey(KeyBindings.PrintScreen, true);
+                    Memory.KeyBoard.PressKey(KeyBindings.PrintScreen, true);
                     Thread.Sleep(1000);
 
                     if (DateTime.Now - LastStuck < TimeSpan.FromMinutes(5))
@@ -565,7 +565,7 @@ namespace Plugins
 
         private void Jump()
         {
-            Memory.KB.PressKey(KeyBindings.Jump, false);
+            Memory.KeyBoard.PressKey(KeyBindings.Jump, false);
         }
 
         private void SetTurningState(double relativeAngle, double turnMinAngle)
@@ -594,15 +594,15 @@ namespace Plugins
 
             // отменяем предыдущий поворот если он был
             if (CurrentTurningState == TurningState.Left)
-                Memory.KB.KeyUp(KeyBindings.TurnLeft, false);
+                Memory.KeyBoard.KeyUp(KeyBindings.TurnLeft, false);
             else if (CurrentTurningState == TurningState.Right)
-                Memory.KB.KeyUp(KeyBindings.TurnRight, false);
+                Memory.KeyBoard.KeyUp(KeyBindings.TurnRight, false);
 
             // делаем новый если не None
             if (turningState == TurningState.Left)
-                Memory.KB.KeyDown(KeyBindings.TurnLeft, false);
+                Memory.KeyBoard.KeyDown(KeyBindings.TurnLeft, false);
             else if (turningState == TurningState.Right)
-                Memory.KB.KeyDown(KeyBindings.TurnRight, false);
+                Memory.KeyBoard.KeyDown(KeyBindings.TurnRight, false);
 
             CurrentTurningState = turningState;
         }
@@ -615,12 +615,12 @@ namespace Plugins
                 if (isMoving)
                 {
                     //Log("startMovement");
-                    Memory.KB.KeyDown(KeyBindings.MoveForward, false);
+                    Memory.KeyBoard.KeyDown(KeyBindings.MoveForward, false);
                 }
                 else
                 {
                     //Log("stopMovement");
-                    Memory.KB.KeyUp(KeyBindings.MoveForward, false);
+                    Memory.KeyBoard.KeyUp(KeyBindings.MoveForward, false);
                 }
             }
         }
@@ -659,12 +659,12 @@ namespace Plugins
 
                 if (target == npc.Name)
                 {
-                    Memory.KB.PressKey(KeyBindings.Interact, true);
+                    Memory.KeyBoard.PressKey(KeyBindings.Interact, true);
                     return InteractResult.Success;
                 }
                 else
                 {
-                    Memory.KB.PressKey(KeyBindings.SelectNearestFriend, true);
+                    Memory.KeyBoard.PressKey(KeyBindings.SelectNearestFriend, true);
                     nextNPCInteractTry = DateTime.Now + TimeSpan.FromMilliseconds((new Random()).Next(1200, 2400));
                     return InteractResult.Wait;
                 }
@@ -689,7 +689,7 @@ namespace Plugins
             for (int i = 0; i < 20; i++)
                 zoomInKeys.Add(KeyBindings.CameraZoomIn);
 
-            Memory.KB.PressKeys(zoomInKeys, true); // приблизить камеру на максимум
+            Memory.KeyBoard.PressKeys(zoomInKeys, true); // приблизить камеру на максимум
             
             Thread.Sleep(2000);
             
@@ -700,8 +700,8 @@ namespace Plugins
                 Thread.Sleep(1000);
             }
 
-            Memory.KB.PressKey(KeyBindings.MouseInteract, true);
-            Memory.KB.PressKey(KeyBindings.CameraNormal, false); // вернуть камеру в нормальное положение
+            Memory.KeyBoard.PressKey(KeyBindings.MouseInteract, true);
+            Memory.KeyBoard.PressKey(KeyBindings.CameraNormal, false); // вернуть камеру в нормальное положение
 
             return InteractResult.Success;
         }
@@ -715,7 +715,7 @@ namespace Plugins
             if ((DateTime.Now - (DateTime)tryInteractStartTime).TotalSeconds > 30)
             {
                 Log("Не получилось сделать Interact c " + current + " в течение 30 секунд, делаю скриншот");
-                Memory.KB.PressKey(KeyBindings.PrintScreen, true);
+                Memory.KeyBoard.PressKey(KeyBindings.PrintScreen, true);
                 Thread.Sleep(1000);
                 return InteractResult.Failed;
             }
@@ -795,7 +795,7 @@ namespace Plugins
             InteractTryInterval = null;
             rememberedWaypoint = null;
             cleanupInteractTry();
-            Memory.KB.KeyUpAll();
+            Memory.KeyBoard.KeyUpAll();
         }
 
         private void MakeRoute(string query)
