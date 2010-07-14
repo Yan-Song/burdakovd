@@ -33,7 +33,7 @@ namespace Plugins
         {
             lastRandomPetDecisionTime = DateTime.Now;
             if ((new Random()).Next(1, 1200) == 1)
-                Memory.KB.PressKey(KeyBindings.RandomPet, false);
+                Memory.KeyBoard.PressKey(KeyBindings.RandomPet, false);
         }
 
     }

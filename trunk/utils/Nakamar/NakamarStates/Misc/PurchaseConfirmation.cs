@@ -33,7 +33,7 @@ namespace Plugins
 
         public override void Run()
         {
-            Memory.KB.PressKey(KeyBindings.ConfirmPurchase, false);
+            Memory.KeyBoard.PressKey(KeyBindings.ConfirmPurchase, false);
             nextPurchaseConfirmationTime = DateTime.Now + TimeSpan.FromMilliseconds((new Random()).Next(600, 1200));
         }
     }
