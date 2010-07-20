@@ -1,4 +1,5 @@
 package topcoder.srm;
+
 public class TwoRegisters {
 
     // Begin cut here
@@ -204,6 +205,7 @@ public class TwoRegisters {
 	}
 
 	String ans = null;
+	@SuppressWarnings("unused")
 	int ansy = -1;
 
 	for (int ey = 1; ey < r; ++ey) {
