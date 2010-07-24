@@ -1,3 +1,4 @@
+package topcoder.srm;
 import java.util.Arrays;
 
 public class Badgers {

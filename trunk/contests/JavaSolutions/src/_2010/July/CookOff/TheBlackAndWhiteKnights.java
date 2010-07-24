@@ -1,23 +1,15 @@
-package templates;
-
+package _2010.July.CookOff;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Locale;
+import java.math.BigInteger;
 import java.util.Scanner;
 
-public class Template {
+public class TheBlackAndWhiteKnights {
 
-	static {
-		final Locale us = Locale.US;
-		if (!Locale.getDefault().equals(us)) {
-			Locale.setDefault(us);
-		}
-	}
-
-	static boolean file = true;
+	static boolean file = false;
 
 	static Scanner in;
 	static {
@@ -65,6 +57,22 @@ public class Template {
 	}
 
 	private static void solve(final long testId) {
+		final long n = in.nextInt(), m = in.nextInt();
 
+		final BigInteger bn = new BigInteger(String.valueOf(n));
+		final BigInteger bm = new BigInteger(String.valueOf(m));
+		final BigInteger N = bn.multiply(bm);
+		final BigInteger K = N.multiply(N.subtract(BigInteger.ONE));
+
+		out.println(K.subtract(new BigInteger("4")
+				.multiply(square(m - 2, n - 1).add(square(m - 1, n - 2)))));
+	}
+
+	private static BigInteger square(final long l, final long m) {
+		if (l < 0 || m <= 0) {
+			return BigInteger.ZERO;
+		} else {
+			return new BigInteger(String.valueOf(l * m));
+		}
 	}
 }
