@@ -1,4 +1,4 @@
-package _2010.July.CookOff;
+package codechef._2010.July.CookOff;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
