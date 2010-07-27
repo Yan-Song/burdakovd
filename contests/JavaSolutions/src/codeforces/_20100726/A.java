@@ -1,5 +1,4 @@
-package templates;
-
+package codeforces._20100726;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -8,7 +7,7 @@ import java.io.PrintWriter;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class Template {
+public class A {
 
 	static {
 		final Locale us = Locale.US;
@@ -48,23 +47,51 @@ public class Template {
 	 */
 	public static void main(final String[] args) {
 		try {
-			final long t = in.nextInt();
-			for (long i = 0; i < t; ++i) {
-				solve(i + 1);
-				if (file) {
-					System.out.println(i + 1 + "/" + t);
-					System.out.flush();
-				}
-				if (!file) {
-					out.flush();
-				}
-			}
+			solve();
 		} finally {
 			out.flush();
 		}
 	}
 
-	private static void solve(final long testId) {
+	private static void solve() {
+		final int n = in.nextInt();
+		final int[] a = new int[n];
+		final int[] b = new int[n];
+		final int[] c = new int[n];
+		final boolean[] used = new boolean[n];
 
+		int total = 0;
+		for (int i = 0; i < n; ++i) {
+			a[i] = in.nextInt() - 1;
+			b[i] = in.nextInt() - 1;
+			c[i] = in.nextInt();
+			used[i] = false;
+			total += c[i];
+		}
+
+		int current = 0;
+		int first = 0;
+
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < n; ++j) {
+				if (!used[j]) {
+					if (current == a[j]) {
+						current = b[j];
+						used[j] = true;
+						break;
+					} else if (current == b[j]) {
+						first += c[j];
+						current = a[j];
+						used[j] = true;
+						break;
+					}
+				}
+			}
+		}
+
+		assert current == 0;
+		final int second = total - first;
+
+		out.println(Math.min(first, second));
 	}
 }
