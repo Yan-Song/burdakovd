@@ -1,3 +1,4 @@
+#include <iostream>
 #include <SDL.h>
 #include "Timer.h"
 #include "Utils.h"
@@ -15,7 +16,8 @@ void Timer::Start()
 
 void Timer::Stop()
 {
-	started = paused = false;
+	started = false;
+	paused = false;
 }
 
 void Timer::Pause()
@@ -30,10 +32,10 @@ void Timer::Pause()
 void Timer::Resume()
 {
 	assert(started);
-	
+
 	if(paused)
 	{
-		Uint32 cticks = SDL_GetTicks();
+		const Uint32 cticks = SDL_GetTicks();
 		assert(cticks >= ticks);
 
 		ticks = cticks - ticks;
@@ -52,11 +54,17 @@ Uint32 Timer::GetTicks() const
 	}
 	else
 	{
-		Uint32 cticks = SDL_GetTicks();
+		const Uint32 cticks = SDL_GetTicks();
 
-		assert(cticks >= ticks);
-
-		return cticks - ticks;
+		if(cticks < ticks)
+		{
+			std::cerr << "SDL_GetTicks decreased!!! Something is definitely wrong" << std::endl;
+			return ticks;
+		}
+		else
+		{
+			return cticks - ticks;
+		}
 	}
 }
 

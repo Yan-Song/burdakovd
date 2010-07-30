@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "CountingWorm.h"
 
-CountingWorm::CountingWorm() : Worm(), forbidden()
+CountingWorm::CountingWorm() : Worm(), forbidden(), cache()
 {
 }
 
@@ -38,7 +38,7 @@ double CountingWorm::value(const SimplePoint& position, const int movesLeft)
 	}
 	else
 	{
-		// варианты
+		// РІР°СЂРёР°РЅС‚С‹
 		forbidden.push_back(position);
 
 		const SimplePoint pleft = SimplePoint(position.X - 1, position.Y);
