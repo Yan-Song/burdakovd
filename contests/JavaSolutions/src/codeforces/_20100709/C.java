@@ -119,7 +119,6 @@ public class C {
 
 		Arrays.sort(boxes, new Comparator<Box>() {
 
-			@Override
 			public int compare(final Box arg0, final Box arg1) {
 				return (int) Math.signum(-arg0.getApples() * 1.0
 						/ (ta == 0 ? 1.0 : ta) + arg1.getOranges() * 1.0
