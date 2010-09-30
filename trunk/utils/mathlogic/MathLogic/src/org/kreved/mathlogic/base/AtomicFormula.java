@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.kreved.mathlogic.util.Util;
+
 /**
  * Атомарная формула вида P^{(m)}(t_1, t_2, ..., t_m).
  * <ul>
@@ -36,9 +38,28 @@ public final class AtomicFormula implements Formula {
      * @param arguments
      *            список аргументов предиката
      */
-    public AtomicFormula(final PredicateSymbol predicateSymbol, final List<Term> arguments) {
+    public AtomicFormula(final PredicateSymbol predicateSymbol, final List<? extends Term> arguments) {
         this.predicateSymbol = predicateSymbol;
         this.arguments = Collections.unmodifiableList(new ArrayList<Term>(arguments));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Substitutable#applySubstitution(org.kreved.
+     * mathlogic.base.Substitution)
+     */
+    @Override
+    public Formula applySubstitution(final Substitution substitution) {
+
+        final List<Term> substitutedArguments = new ArrayList<Term>();
+
+        for (final Term argument : arguments) {
+            substitutedArguments.add(argument.applySubstitution(substitution));
+        }
+
+        return new AtomicFormula(predicateSymbol, substitutedArguments);
     }
 
     @Override
@@ -108,6 +129,18 @@ public final class AtomicFormula implements Formula {
         result = prime * result + (arguments == null ? 0 : arguments.hashCode());
         result = prime * result + (predicateSymbol == null ? 0 : predicateSymbol.hashCode());
         return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Formula#isVariableFreeForTerm(org.kreved.mathlogic
+     * .base.Variable, org.kreved.mathlogic.base.Term)
+     */
+    @Override
+    public boolean isVariableFreeForTerm(final Variable variable, final Term term) {
+        return true;
     }
 
     /*

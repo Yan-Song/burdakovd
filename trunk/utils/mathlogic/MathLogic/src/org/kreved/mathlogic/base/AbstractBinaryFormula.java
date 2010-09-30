@@ -49,6 +49,30 @@ public abstract class AbstractBinaryFormula implements Formula {
     /*
      * (non-Javadoc)
      * 
+     * @see
+     * org.kreved.mathlogic.base.Substitutable#applySubstitution(org.kreved.
+     * mathlogic.base.Substitution)
+     */
+    @Override
+    public final Formula applySubstitution(final Substitution substitution) {
+        return create(left.applySubstitution(substitution), right.applySubstitution(substitution));
+    }
+
+    /**
+     * Используется {@link AbstractBinaryFormula} для применения подстановок.
+     * 
+     * @param left
+     *            левая часть формулы
+     * @param right
+     *            правая часть
+     * @return формулу с заданными левой и правой частью и с той же операцией,
+     *         что и текущая формула
+     */
+    protected abstract Formula create(Formula left, Formula right);
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -133,6 +157,22 @@ public abstract class AbstractBinaryFormula implements Formula {
         result = prime * result + (operation == null ? 0 : operation.hashCode());
         result = prime * result + (right == null ? 0 : right.hashCode());
         return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Formula#isVariableFreeForTerm(org.kreved.mathlogic
+     * .base.Variable, org.kreved.mathlogic.base.Term)
+     */
+    @Override
+    public final boolean isVariableFreeForTerm(final Variable variable, final Term term) {
+
+        // переменная будет свободна тогда и только тогда, когда она свободна в
+        // обоих частях формулы
+        return left.isVariableFreeForTerm(variable, term)
+                && right.isVariableFreeForTerm(variable, term);
     }
 
     /*

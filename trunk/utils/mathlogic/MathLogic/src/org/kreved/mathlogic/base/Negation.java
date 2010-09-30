@@ -31,6 +31,18 @@ public final class Negation implements Formula {
     /*
      * (non-Javadoc)
      * 
+     * @see
+     * org.kreved.mathlogic.base.Substitutable#applySubstitution(org.kreved.
+     * mathlogic.base.Substitution)
+     */
+    @Override
+    public Formula applySubstitution(final Substitution substitution) {
+        return new Negation(negated.applySubstitution(substitution));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -76,6 +88,18 @@ public final class Negation implements Formula {
         int result = 1;
         result = prime * result + (negated == null ? 0 : negated.hashCode());
         return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Formula#isVariableFreeForTerm(org.kreved.mathlogic
+     * .base.Variable, org.kreved.mathlogic.base.Term)
+     */
+    @Override
+    public boolean isVariableFreeForTerm(final Variable variable, final Term term) {
+        return negated.isVariableFreeForTerm(variable, term);
     }
 
     /*

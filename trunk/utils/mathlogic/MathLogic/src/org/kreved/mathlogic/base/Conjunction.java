@@ -18,4 +18,16 @@ public final class Conjunction extends AbstractBinaryFormula {
         super("&", left, right);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.AbstractBinaryFormula#create(org.kreved.mathlogic
+     * .base.Formula, org.kreved.mathlogic.base.Formula)
+     */
+    @Override
+    protected Formula create(final Formula left, final Formula right) {
+        return new Conjunction(left, right);
+    }
+
 }

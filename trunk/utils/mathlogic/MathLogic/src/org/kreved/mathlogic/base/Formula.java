@@ -6,7 +6,7 @@ import java.util.Set;
  * @author burdakovd
  * 
  */
-public interface Formula {
+public interface Formula extends Substitutable<Formula> {
 
     /**
      * @param object
@@ -30,4 +30,22 @@ public interface Formula {
      */
     @Override
     int hashCode();
+
+    /**
+     * Проверяет верно ли, что переменная <code>variable</code> свободна для
+     * терма <code>term</code> в формуле <code>this</code>.
+     * <p>
+     * По определению это значит, что любое свободное вхождение переменной
+     * <code>variable</code> в формуле <code>this</code> не лежит в области
+     * действия ни одного квантора, связывающего переменную из множества
+     * <code>Var_{term}</code>
+     * 
+     * @param variable
+     *            переменная, которую нужно заменить на терм
+     * @param term
+     *            терм
+     * @return верно ли, что переменная <code>variable</code> свободна для терма
+     *         <code>term</code> в формуле <code>this</code>
+     */
+    boolean isVariableFreeForTerm(Variable variable, Term term);
 }

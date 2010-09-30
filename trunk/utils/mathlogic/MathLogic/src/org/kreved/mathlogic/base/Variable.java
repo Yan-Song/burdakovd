@@ -2,6 +2,8 @@ package org.kreved.mathlogic.base;
 
 import java.util.Set;
 
+import org.kreved.mathlogic.util.Util;
+
 /**
  * Предметная переменная.
  * 
@@ -21,6 +23,18 @@ public final class Variable implements Term {
      */
     public Variable(final String name) {
         this.name = name;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Substitutable#applySubstitution(org.kreved.
+     * mathlogic.base.Substitution)
+     */
+    @Override
+    public Term applySubstitution(final Substitution substitution) {
+        return substitution.apply(this);
     }
 
     /*
@@ -60,6 +74,16 @@ public final class Variable implements Term {
     /*
      * (non-Javadoc)
      * 
+     * @see org.kreved.mathlogic.base.Term#vars()
+     */
+    @Override
+    public Set<Variable> getVariables() {
+        return Util.unmodifiableSet(this);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -78,16 +102,6 @@ public final class Variable implements Term {
     @Override
     public String toString() {
         return name;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.kreved.mathlogic.base.Term#vars()
-     */
-    @Override
-    public Set<Variable> getVariables() {
-        return Util.unmodifiableSet(this);
     }
 
 }

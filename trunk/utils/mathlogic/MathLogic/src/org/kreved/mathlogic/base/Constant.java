@@ -29,6 +29,18 @@ public final class Constant implements Term {
     /*
      * (non-Javadoc)
      * 
+     * @see
+     * org.kreved.mathlogic.base.Substitutable#applySubstitution(org.kreved.
+     * mathlogic.base.Substitution)
+     */
+    @Override
+    public Term applySubstitution(final Substitution substitution) {
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -63,6 +75,16 @@ public final class Constant implements Term {
     /*
      * (non-Javadoc)
      * 
+     * @see org.kreved.mathlogic.base.Term#vars()
+     */
+    @Override
+    public Set<Variable> getVariables() {
+        return Collections.emptySet();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -81,16 +103,6 @@ public final class Constant implements Term {
     @Override
     public String toString() {
         return name;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.kreved.mathlogic.base.Term#vars()
-     */
-    @Override
-    public Set<Variable> getVariables() {
-        return Collections.emptySet();
     }
 
 }

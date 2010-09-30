@@ -2,11 +2,13 @@ package org.kreved.mathlogic.base;
 
 import java.util.Set;
 
+import org.kreved.mathlogic.util.Util;
+
 /**
  * @author burdakovd
  * 
  */
-public class AbstractQuantoredFormula implements Formula {
+public abstract class AbstractQuantoredFormula implements Formula {
 
     /**
      * Строковое представление квантора. Используется для hashCode, equals,
@@ -40,6 +42,43 @@ public class AbstractQuantoredFormula implements Formula {
         this.variable = variable;
         this.formula = formula;
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Substitutable#applySubstitution(org.kreved.
+     * mathlogic.base.Substitution)
+     */
+    @Override
+    public final Formula applySubstitution(final Substitution substitution) {
+
+        // применяем подстановку ко всем переменным, кроме связанной квантором
+
+        final Substitution modifiedSubstitution = new Substitution() {
+            @Override
+            public Term apply(final Variable variable) {
+                return variable.equals(AbstractQuantoredFormula.this.variable) ? variable
+                        : substitution.apply(variable);
+            }
+        };
+
+        final Formula substitutedFormula = formula.applySubstitution(modifiedSubstitution);
+
+        return create(variable, substitutedFormula);
+    }
+
+    /**
+     * Используется {@link AbstractQuantoredFormula} для применения подстановок.
+     * 
+     * @param variable
+     *            переменная, связуемая квантором
+     * @param formula
+     *            формула, к которой применяется квантор
+     * @return новая формула с тем же квантором, но с заданной переменной и
+     *         формулой к которой квантор будет применяться
+     */
+    protected abstract Formula create(Variable variable, Formula formula);
 
     /*
      * (non-Javadoc)
@@ -126,6 +165,39 @@ public class AbstractQuantoredFormula implements Formula {
         result = prime * result + (quantor == null ? 0 : quantor.hashCode());
         result = prime * result + (variable == null ? 0 : variable.hashCode());
         return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Formula#isVariableFreeForTerm(org.kreved.mathlogic
+     * .base.Variable, org.kreved.mathlogic.base.Term)
+     */
+    @Override
+    public final boolean isVariableFreeForTerm(final Variable variable, final Term term) {
+
+        if (variable.equals(this.variable)) {
+
+            // эта переменная связывается, внутри свободных её вхождений не
+            // будет
+            return true;
+
+        } else if (term.getVariables().contains(this.variable)) {
+
+            // этот квантор связывает одну из переменных, используемых термом
+            // значит подставлять его внутри формулы нельзя
+            // значит внутренняя формула не должна содержать свободных вхождений
+            // переменной, которую предстоит заменить
+            return !formula.getFreeVariables().contains(variable);
+
+        } else {
+
+            // этот квантор не связывает ни заменяемую переменную, ни какую-либо
+            // из переменных терма
+            // значит этот квантор ни на что не влияет
+            return formula.isVariableFreeForTerm(variable, term);
+        }
     }
 
     /*
