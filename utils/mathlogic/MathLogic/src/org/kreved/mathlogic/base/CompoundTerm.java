@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.kreved.mathlogic.util.Util;
+
 /**
  * Составной терм.
  * <p>
@@ -37,9 +39,30 @@ public final class CompoundTerm implements Term {
      * @param arguments
      *            списк аргументов
      */
-    public CompoundTerm(final FunctionalSymbol functionalSymbol, final List<Term> arguments) {
+    public CompoundTerm(final FunctionalSymbol functionalSymbol,
+            final List<? extends Term> arguments) {
+
         this.functionalSymbol = functionalSymbol;
         this.arguments = Collections.unmodifiableList(new ArrayList<Term>(arguments));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Substitutable#applySubstitution(org.kreved.
+     * mathlogic.base.Substitution)
+     */
+    @Override
+    public Term applySubstitution(final Substitution substitution) {
+
+        final List<Term> substitutedArguments = new ArrayList<Term>();
+
+        for (final Term argument : arguments) {
+            substitutedArguments.add(argument.applySubstitution(substitution));
+        }
+
+        return new CompoundTerm(functionalSymbol, substitutedArguments);
     }
 
     /*
@@ -76,6 +99,20 @@ public final class CompoundTerm implements Term {
         return true;
     }
 
+    /**
+     * @return the arguments
+     */
+    public List<Term> getArguments() {
+        return arguments;
+    }
+
+    /**
+     * @return the functionalSymbol
+     */
+    public FunctionalSymbol getFunctionalSymbol() {
+        return functionalSymbol;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -91,20 +128,6 @@ public final class CompoundTerm implements Term {
         }
 
         return Collections.unmodifiableSet(answer);
-    }
-
-    /**
-     * @return the arguments
-     */
-    public List<Term> getArguments() {
-        return arguments;
-    }
-
-    /**
-     * @return the functionalSymbol
-     */
-    public FunctionalSymbol getFunctionalSymbol() {
-        return functionalSymbol;
     }
 
     /*

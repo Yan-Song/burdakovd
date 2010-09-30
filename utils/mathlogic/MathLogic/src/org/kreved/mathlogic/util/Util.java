@@ -1,4 +1,4 @@
-package org.kreved.mathlogic.base;
+package org.kreved.mathlogic.util;
 
 import java.util.Collections;
 import java.util.HashSet;

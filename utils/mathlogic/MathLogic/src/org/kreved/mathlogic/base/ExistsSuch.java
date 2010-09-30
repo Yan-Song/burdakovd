@@ -4,7 +4,7 @@ package org.kreved.mathlogic.base;
  * @author burdakovd
  * 
  */
-public class ExistsSuch extends AbstractQuantoredFormula {
+public final class ExistsSuch extends AbstractQuantoredFormula {
 
     /**
      * Создаёт формулу
@@ -17,6 +17,18 @@ public class ExistsSuch extends AbstractQuantoredFormula {
      */
     public ExistsSuch(final Variable variable, final Formula formula) {
         super("exists", variable, formula);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.AbstractQuantoredFormula#create(org.kreved.
+     * mathlogic.base.Variable, org.kreved.mathlogic.base.Formula)
+     */
+    @Override
+    protected Formula create(final Variable variable, final Formula formula) {
+        return new ExistsSuch(variable, formula);
     }
 
 }
