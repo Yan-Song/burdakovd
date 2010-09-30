@@ -66,6 +66,6 @@ namespace WoWMemoryManager
             new Pattern("55 8B EC 8B 45 08 81 EC 00 01 00 00 56 8B 75 0C 57 8B 7D 10 8B CE 0B CF A3 FF" + 
                 " FF FF FF 0F 84 FF FF FF FF D9 E8",
                 "xxxxxxxxxxxxxxxxxxxxxxxxx????xx????xx", 25);
-
+        
     }
 }

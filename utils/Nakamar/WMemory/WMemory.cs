@@ -339,7 +339,6 @@ namespace WoWMemoryManager
 
             int finish = (int)readDoubles - pattern.Count;
 
-
             for (int i = 0; i < finish; ++i)
             {
                 bool ok = true;
