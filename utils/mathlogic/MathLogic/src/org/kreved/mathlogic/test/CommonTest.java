@@ -1,4 +1,4 @@
-package org.kreved.mathlogic.base;
+package org.kreved.mathlogic.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -6,6 +6,17 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.kreved.mathlogic.base.AtomicFormula;
+import org.kreved.mathlogic.base.CompoundTerm;
+import org.kreved.mathlogic.base.Constant;
+import org.kreved.mathlogic.base.ExistsSuch;
+import org.kreved.mathlogic.base.ForAny;
+import org.kreved.mathlogic.base.Formula;
+import org.kreved.mathlogic.base.FunctionalSymbol;
+import org.kreved.mathlogic.base.Implication;
+import org.kreved.mathlogic.base.Negation;
+import org.kreved.mathlogic.base.PredicateSymbol;
+import org.kreved.mathlogic.base.Variable;
 import org.kreved.mathlogic.util.Parser;
 import org.kreved.mathlogic.util.Util;
 
@@ -66,8 +77,19 @@ public final class CommonTest {
             assertEquals(parsedFormula, stage2);
 
             // дополнительная ручная проверка
-            System.out.println(String.format("'%s' parsed as '%s'", stringFormula, parsedFormula));
+            // System.out.println(String.format("'%s' parsed as '%s'",
+            // stringFormula, parsedFormula));
         }
+
+        // пример правильного восстановления скобок
+        final String shortened =
+                "any x1 !P(x1) & exists x2 R(x1, x2) -> exists x1 (!P(x1) || P(x2))";
+        final String full =
+                "(((any x1 (!P(x1))) & (exists x2 R(x1, x2))) -> (exists x1 ((!P(x1)) || P(x2))))";
+        assertEquals(Parser.parseFormula(shortened), Parser.parseFormula(full));
+        // System.out.println(String.format("'%s' shortened as '%s'", full,
+        // Parser.parseFormula(full)
+        // .toString()));
     }
 
     /**
