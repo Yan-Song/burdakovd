@@ -3,6 +3,7 @@ package org.kreved.mathlogic.base;
 import java.util.Set;
 
 /**
+ * 
  * @author burdakovd
  * 
  */
@@ -21,6 +22,12 @@ public interface Formula extends Substitutable<Formula> {
      * @return множество свободных переменных этой формулы
      */
     Set<Variable> getFreeVariables();
+
+    /**
+     * 
+     * @return приоритет внешней операции этой формулы
+     */
+    int getPriority();
 
     /**
      * 

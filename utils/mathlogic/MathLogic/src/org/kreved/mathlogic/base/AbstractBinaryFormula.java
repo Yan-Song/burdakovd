@@ -59,6 +59,16 @@ public abstract class AbstractBinaryFormula implements Formula {
     }
 
     /**
+     * @param part
+     *            часть формулы (левая или правая)
+     * @return строковое представление этой части, если нужно, окруженное
+     *         скобками
+     */
+    private String bracesIfNeeded(final Formula part) {
+        return neededBraces(part) ? "(" + part + ")" : part.toString();
+    }
+
+    /**
      * Используется {@link AbstractBinaryFormula} для применения подстановок.
      * 
      * @param left
@@ -175,13 +185,17 @@ public abstract class AbstractBinaryFormula implements Formula {
                 && right.isVariableFreeForTerm(variable, term);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
+    /**
+     * @param part
+     *            часть формулы (левая или правая)
+     * @return нужны ли скобки вокруг неё
      */
+    protected abstract boolean neededBraces(Formula part);
+
     @Override
     public final String toString() {
-        return String.format("(%s %s %s)", left, operation, right);
+        return String.format("%s %s %s", bracesIfNeeded(getLeft()), getOperation(),
+                bracesIfNeeded(getRight()));
     }
+
 }

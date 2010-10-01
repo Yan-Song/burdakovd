@@ -4,7 +4,7 @@ package org.kreved.mathlogic.base;
  * @author burdakovd
  * 
  */
-public final class ForAny extends AbstractQuantoredFormula {
+public final class ForAny extends AbstractQuantifiedFormula {
 
     /**
      * Создаёт формулу "для любого значения variable верно formula".
@@ -22,7 +22,7 @@ public final class ForAny extends AbstractQuantoredFormula {
      * (non-Javadoc)
      * 
      * @see
-     * org.kreved.mathlogic.base.AbstractQuantoredFormula#create(org.kreved.
+     * org.kreved.mathlogic.base.AbstractQuantifiedFormula#create(org.kreved.
      * mathlogic.base.Variable, org.kreved.mathlogic.base.Formula)
      */
     @Override
