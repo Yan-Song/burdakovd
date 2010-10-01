@@ -8,7 +8,12 @@ import org.kreved.mathlogic.util.Util;
  * @author burdakovd
  * 
  */
-public abstract class AbstractQuantoredFormula implements Formula {
+public abstract class AbstractQuantifiedFormula implements Formula {
+
+    /**
+     * 
+     */
+    private static final int PRIORITY = 5;
 
     /**
      * Строковое представление квантора. Используется для hashCode, equals,
@@ -35,7 +40,7 @@ public abstract class AbstractQuantoredFormula implements Formula {
      * @param formula
      *            Формула, к которой прменяется квантор.
      */
-    public AbstractQuantoredFormula(final String quantor, final Variable variable,
+    public AbstractQuantifiedFormula(final String quantor, final Variable variable,
             final Formula formula) {
 
         this.quantor = quantor;
@@ -58,7 +63,7 @@ public abstract class AbstractQuantoredFormula implements Formula {
         final Substitution modifiedSubstitution = new Substitution() {
             @Override
             public Term apply(final Variable variable) {
-                return variable.equals(AbstractQuantoredFormula.this.variable) ? variable
+                return variable.equals(AbstractQuantifiedFormula.this.variable) ? variable
                         : substitution.apply(variable);
             }
         };
@@ -69,7 +74,8 @@ public abstract class AbstractQuantoredFormula implements Formula {
     }
 
     /**
-     * Используется {@link AbstractQuantoredFormula} для применения подстановок.
+     * Используется {@link AbstractQuantifiedFormula} для применения
+     * подстановок.
      * 
      * @param variable
      *            переменная, связуемая квантором
@@ -96,7 +102,7 @@ public abstract class AbstractQuantoredFormula implements Formula {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final AbstractQuantoredFormula other = (AbstractQuantoredFormula) obj;
+        final AbstractQuantifiedFormula other = (AbstractQuantifiedFormula) obj;
         if (formula == null) {
             if (other.formula != null) {
                 return false;
@@ -136,6 +142,11 @@ public abstract class AbstractQuantoredFormula implements Formula {
     @Override
     public final Set<Variable> getFreeVariables() {
         return Util.excluding(formula.getFreeVariables(), variable);
+    }
+
+    @Override
+    public final int getPriority() {
+        return PRIORITY;
     }
 
     /**
@@ -200,14 +211,9 @@ public abstract class AbstractQuantoredFormula implements Formula {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
     @Override
     public final String toString() {
-        return String.format("(%s %s %s)", quantor, variable, formula);
+        return String.format(getFormula().getPriority() >= getPriority() ? "%s %s %s"
+                : "%s %s (%s)", getQuantor(), getVariable(), getFormula());
     }
-
 }

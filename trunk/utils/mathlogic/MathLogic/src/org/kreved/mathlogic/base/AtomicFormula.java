@@ -23,6 +23,11 @@ import org.kreved.mathlogic.util.Util;
 public final class AtomicFormula implements Formula {
 
     /**
+     * 
+     */
+    private static final int PRIORITY = 7;
+
+    /**
      * Предикатный cимвол.
      */
     private final PredicateSymbol predicateSymbol;
@@ -120,6 +125,16 @@ public final class AtomicFormula implements Formula {
      */
     public PredicateSymbol getPredicateSymbol() {
         return predicateSymbol;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.Formula#getPriority()
+     */
+    @Override
+    public int getPriority() {
+        return PRIORITY;
     }
 
     @Override

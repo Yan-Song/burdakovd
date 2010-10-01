@@ -11,6 +11,11 @@ public final class Negation implements Formula {
     /**
      * 
      */
+    private static final int PRIORITY = 6;
+
+    /**
+     * 
+     */
     private static final String NEGATION_SYMBOL = "!";
 
     /**
@@ -80,6 +85,16 @@ public final class Negation implements Formula {
     /*
      * (non-Javadoc)
      * 
+     * @see org.kreved.mathlogic.base.Formula#getPriority()
+     */
+    @Override
+    public int getPriority() {
+        return PRIORITY;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -109,6 +124,7 @@ public final class Negation implements Formula {
      */
     @Override
     public String toString() {
-        return String.format("(%s %s)", NEGATION_SYMBOL, negated);
+        return String.format(negated.getPriority() > getPriority() ? "%s%s" : "%s(%s)",
+                NEGATION_SYMBOL, negated);
     }
 }
