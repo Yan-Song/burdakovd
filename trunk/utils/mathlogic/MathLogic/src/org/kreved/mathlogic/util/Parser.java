@@ -111,6 +111,11 @@ public final class Parser {
     }
 
     /**
+     * 
+     */
+    private static final PrefixMatcher DEFAULT_CONSTANT_MATCHER = new PrefixMatcher("c");
+
+    /**
      * Создаёт формулу из строки. Константами считаются символы, начинающиеся с
      * латинской "c".
      * 
@@ -119,7 +124,7 @@ public final class Parser {
      * @return формула, полученная из входной строки
      */
     public static Formula parseFormula(final String input) {
-        return parseFormula(input, new PrefixMatcher("c"));
+        return parseFormula(input, DEFAULT_CONSTANT_MATCHER);
     }
 
     /**
@@ -138,6 +143,36 @@ public final class Parser {
 
         if (parser.hasTokens()) {
             throw new IllegalArgumentException("лишний текст после формулы: '"
+                    + parser.getRemainder() + "'");
+        }
+
+        return ans;
+    }
+
+    /**
+     * @param input
+     *            входная строка
+     * @return терм
+     */
+    public static Term parseTerm(final String input) {
+        return parseTerm(input, DEFAULT_CONSTANT_MATCHER);
+    }
+
+    /**
+     * @param input
+     *            входная строка
+     * @param constantMatcher
+     *            набор констант
+     * @return терм, полученный из входной строки
+     */
+    public static Term parseTerm(final String input, final ConstantMatcher constantMatcher) {
+
+        final Parser parser = new Parser(input, constantMatcher);
+
+        final Term ans = parser.nextTerm();
+
+        if (parser.hasTokens()) {
+            throw new IllegalArgumentException("лишний текст после терма: '"
                     + parser.getRemainder() + "'");
         }
 

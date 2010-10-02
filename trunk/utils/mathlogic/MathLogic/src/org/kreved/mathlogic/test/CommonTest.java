@@ -1,6 +1,7 @@
 package org.kreved.mathlogic.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -106,5 +107,18 @@ public final class CommonTest {
                                 new Constant("c2")))));
 
         assertTrue("это основной терм", compoundTerm.getVariables().isEmpty());
+    }
+
+    /**
+     * Тест со слайдов.
+     */
+    @Test
+    public void testVariableFreeForTerm() {
+
+        final Formula formula =
+                Parser.parseFormula("any x (P(x) -> !R(y)) -> R(f(x)) || exists y P(y)");
+
+        assertFalse(formula.isVariableFreeForTerm(new Variable("y"), Parser.parseTerm("f(x, z)")));
+        assertTrue(formula.isVariableFreeForTerm(new Variable("y"), Parser.parseTerm("f(y, z)")));
     }
 }

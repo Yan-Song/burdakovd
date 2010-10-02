@@ -8,7 +8,7 @@ import org.kreved.mathlogic.util.Util;
  * @author burdakovd
  * 
  */
-public abstract class AbstractQuantifiedFormula implements Formula {
+public abstract class AbstractQuantifiedFormula extends AbstractCompoundFormula {
 
     /**
      * 
@@ -66,6 +66,12 @@ public abstract class AbstractQuantifiedFormula implements Formula {
                 return variable.equals(AbstractQuantifiedFormula.this.variable) ? variable
                         : substitution.apply(variable);
             }
+
+            @Override
+            public boolean isCorrectFor(final Formula formula) {
+                throw new UnsupportedOperationException();
+            }
+
         };
 
         final Formula substitutedFormula = formula.applySubstitution(modifiedSubstitution);

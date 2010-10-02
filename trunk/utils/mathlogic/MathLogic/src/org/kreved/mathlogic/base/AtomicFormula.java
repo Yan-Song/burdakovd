@@ -149,6 +149,16 @@ public final class AtomicFormula implements Formula {
     /*
      * (non-Javadoc)
      * 
+     * @see org.kreved.mathlogic.base.Formula#isAtomic()
+     */
+    @Override
+    public boolean isAtomic() {
+        return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see
      * org.kreved.mathlogic.base.Formula#isVariableFreeForTerm(org.kreved.mathlogic
      * .base.Variable, org.kreved.mathlogic.base.Term)

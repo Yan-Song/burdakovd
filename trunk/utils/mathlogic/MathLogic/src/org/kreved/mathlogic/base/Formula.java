@@ -39,6 +39,11 @@ public interface Formula extends Substitutable<Formula> {
     int hashCode();
 
     /**
+     * @return атомарна ли формула
+     */
+    boolean isAtomic();
+
+    /**
      * Проверяет верно ли, что переменная <code>variable</code> свободна для
      * терма <code>term</code> в формуле <code>this</code>.
      * <p>

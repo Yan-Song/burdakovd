@@ -83,6 +83,25 @@ public final class FiniteSubstitution implements Substitution {
     /*
      * (non-Javadoc)
      * 
+     * @see
+     * org.kreved.mathlogic.base.Substitution#isCorrectFor(org.kreved.mathlogic
+     * .base.Formula)
+     */
+    @Override
+    public boolean isCorrectFor(final Formula formula) {
+
+        for (final Entry<Variable, Term> bunch : bunches.entrySet()) {
+            if (!formula.isVariableFreeForTerm(bunch.getKey(), bunch.getValue())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#toString()
      */
     @Override
