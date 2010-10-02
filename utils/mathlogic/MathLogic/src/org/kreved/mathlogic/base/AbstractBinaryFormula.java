@@ -10,7 +10,7 @@ import java.util.Set;
  * @author burdakovd
  * 
  */
-public abstract class AbstractBinaryFormula implements Formula {
+public abstract class AbstractBinaryFormula extends AbstractCompoundFormula {
 
     /**
      * Строковое представление внешней бинарной операции этой формулы.

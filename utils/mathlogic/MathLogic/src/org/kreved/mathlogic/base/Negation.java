@@ -6,7 +6,7 @@ import java.util.Set;
  * @author burdakovd
  * 
  */
-public final class Negation implements Formula {
+public final class Negation extends AbstractCompoundFormula {
 
     /**
      * 
