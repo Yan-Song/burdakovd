@@ -3,6 +3,8 @@ package org.kreved.mathlogic.base;
 import java.util.Collections;
 import java.util.Set;
 
+import org.kreved.mathlogic.util.MathUtil;
+
 /**
  * Предметная константа.
  * <p>
@@ -63,6 +65,16 @@ public final class Constant implements Term {
             return false;
         }
         return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.HasConstants#getConstants()
+     */
+    @Override
+    public Set<Constant> getConstants() {
+        return MathUtil.unmodifiableSet(this);
     }
 
     /**

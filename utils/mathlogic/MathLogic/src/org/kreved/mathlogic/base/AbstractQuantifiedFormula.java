@@ -2,7 +2,7 @@ package org.kreved.mathlogic.base;
 
 import java.util.Set;
 
-import org.kreved.mathlogic.util.Util;
+import org.kreved.mathlogic.util.MathUtil;
 
 /**
  * @author burdakovd
@@ -133,6 +133,16 @@ public abstract class AbstractQuantifiedFormula extends AbstractCompoundFormula 
         return true;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.Formula#getConstants()
+     */
+    @Override
+    public final Set<Constant> getConstants() {
+        return formula.getConstants();
+    }
+
     /**
      * @return the formula
      */
@@ -147,7 +157,7 @@ public abstract class AbstractQuantifiedFormula extends AbstractCompoundFormula 
      */
     @Override
     public final Set<Variable> getFreeVariables() {
-        return Util.excluding(formula.getFreeVariables(), variable);
+        return MathUtil.excluding(formula.getFreeVariables(), variable);
     }
 
     @Override

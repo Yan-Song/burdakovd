@@ -1,8 +1,9 @@
 package org.kreved.mathlogic.base;
 
+import java.util.Collections;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.Util;
+import org.kreved.mathlogic.util.MathUtil;
 
 /**
  * Предметная переменная.
@@ -64,6 +65,16 @@ public final class Variable implements Term {
         return true;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.HasConstants#getConstants()
+     */
+    @Override
+    public Set<Constant> getConstants() {
+        return Collections.emptySet();
+    }
+
     /**
      * @return the name
      */
@@ -78,7 +89,7 @@ public final class Variable implements Term {
      */
     @Override
     public Set<Variable> getVariables() {
-        return Util.unmodifiableSet(this);
+        return MathUtil.unmodifiableSet(this);
     }
 
     /*

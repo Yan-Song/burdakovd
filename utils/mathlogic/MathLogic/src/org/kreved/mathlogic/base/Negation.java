@@ -1,6 +1,10 @@
 package org.kreved.mathlogic.base;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Set;
+
+import org.kreved.mathlogic.util.MathUtil;
 
 /**
  * @author burdakovd
@@ -45,6 +49,20 @@ public final class Negation extends AbstractCompoundFormula {
         return new Negation(negated.applySubstitution(substitution));
     }
 
+    @Override
+    public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
+            final Iterable<? extends Term> terms) {
+        return MathUtil.unmodifiableSet(new SemanticTable(Collections.<Formula> emptySet(),
+                MathUtil.unmodifiableSet(negated)));
+    }
+
+    @Override
+    public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
+            final Iterable<? extends Term> terms) {
+        return MathUtil.unmodifiableSet(new SemanticTable(MathUtil.unmodifiableSet(negated),
+                Collections.<Formula> emptySet()));
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -70,6 +88,16 @@ public final class Negation extends AbstractCompoundFormula {
             return false;
         }
         return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.Formula#getConstants()
+     */
+    @Override
+    public Set<Constant> getConstants() {
+        return negated.getConstants();
     }
 
     /*

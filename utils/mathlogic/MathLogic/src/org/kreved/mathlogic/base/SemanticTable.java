@@ -1,23 +1,28 @@
 package org.kreved.mathlogic.base;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import org.kreved.mathlogic.util.MathUtil;
 
 /**
  * @author burdakovd
  * 
  */
-public final class SemanticTable {
+public final class SemanticTable implements HasConstants {
     /**
      * Множество формул, которые мы хотим считать истинными.
      */
-    private final Set<Formula> gamma;
+    private final List<Formula> gamma;
 
     /**
      * Множеств формул, которые мы хотим считатть ложными.
      */
-    private final Set<Formula> delta;
+    private final List<Formula> delta;
 
     /**
      * @param gamma
@@ -25,9 +30,11 @@ public final class SemanticTable {
      * @param delta
      *            Множеств формул, которые мы хотим считатть ложными.
      */
-    public SemanticTable(final Set<Formula> gamma, final Set<Formula> delta) {
-        this.gamma = Collections.unmodifiableSet(new HashSet<Formula>(gamma));
-        this.delta = Collections.unmodifiableSet(new HashSet<Formula>(delta));
+    public SemanticTable(final Collection<? extends Formula> gamma,
+            final Collection<? extends Formula> delta) {
+
+        this.gamma = Collections.unmodifiableList(new ArrayList<Formula>(gamma));
+        this.delta = Collections.unmodifiableList(new ArrayList<Formula>(delta));
     }
 
     /*
@@ -65,16 +72,36 @@ public final class SemanticTable {
     }
 
     /**
+     * 
+     * @return множество констант, использованных в таблице
+     */
+    @Override
+    public Set<Constant> getConstants() {
+
+        final Set<Constant> ans = new HashSet<Constant>();
+
+        for (final Formula formula : gamma) {
+            ans.addAll(formula.getConstants());
+        }
+
+        for (final Formula formula : delta) {
+            ans.addAll(formula.getConstants());
+        }
+
+        return Collections.unmodifiableSet(ans);
+    }
+
+    /**
      * @return the delta
      */
-    public Set<Formula> getDelta() {
+    public List<Formula> getDelta() {
         return delta;
     }
 
     /**
      * @return the gamma
      */
-    public Set<Formula> getGamma() {
+    public List<Formula> getGamma() {
         return gamma;
     }
 
@@ -101,13 +128,13 @@ public final class SemanticTable {
     }
 
     /**
-     * @param set
+     * @param gamma
      *            множество формул
      * @return все ли формулы в множестве атомарны
      */
-    private boolean isAtomic(final Set<Formula> set) {
+    private boolean isAtomic(final List<Formula> gamma) {
 
-        for (final Formula formula : set) {
+        for (final Formula formula : gamma) {
             if (!formula.isAtomic()) {
                 return false;
             }
@@ -122,8 +149,10 @@ public final class SemanticTable {
      */
     public boolean isClosed() {
 
+        final Set<Formula> sDelta = new HashSet<Formula>(delta);
+
         for (final Formula left : gamma) {
-            if (delta.contains(left)) {
+            if (sDelta.contains(left)) {
                 return true;
             }
         }
@@ -138,6 +167,7 @@ public final class SemanticTable {
      */
     @Override
     public String toString() {
-        return String.format("<%s; %s>", gamma, delta);
+        return String.format("< %s | %s >", gamma.isEmpty() ? "null" : MathUtil.join(", ", gamma),
+                delta.isEmpty() ? "null" : MathUtil.join(", ", delta));
     }
 }
