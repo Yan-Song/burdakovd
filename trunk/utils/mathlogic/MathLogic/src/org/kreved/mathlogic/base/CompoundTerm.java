@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.Util;
+import org.kreved.mathlogic.util.MathUtil;
 
 /**
  * Составной терм.
@@ -106,6 +106,23 @@ public final class CompoundTerm implements Term {
         return arguments;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.HasConstants#getConstants()
+     */
+    @Override
+    public Set<Constant> getConstants() {
+
+        final Set<Constant> ans = new HashSet<Constant>();
+
+        for (final Term term : arguments) {
+            ans.addAll(term.getConstants());
+        }
+
+        return Collections.unmodifiableSet(ans);
+    }
+
     /**
      * @return the functionalSymbol
      */
@@ -151,6 +168,6 @@ public final class CompoundTerm implements Term {
      */
     @Override
     public String toString() {
-        return String.format("%s(%s)", functionalSymbol, Util.join(", ", arguments));
+        return String.format("%s(%s)", functionalSymbol, MathUtil.join(", ", arguments));
     }
 }

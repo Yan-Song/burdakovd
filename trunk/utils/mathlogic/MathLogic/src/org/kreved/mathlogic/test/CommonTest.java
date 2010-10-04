@@ -19,7 +19,7 @@ import org.kreved.mathlogic.base.Negation;
 import org.kreved.mathlogic.base.PredicateSymbol;
 import org.kreved.mathlogic.base.Variable;
 import org.kreved.mathlogic.util.Parser;
-import org.kreved.mathlogic.util.Util;
+import org.kreved.mathlogic.util.MathUtil;
 
 /**
  * @author burdakovd
@@ -44,7 +44,7 @@ public final class CommonTest {
     @Test
     public void formulaGetVariables() {
 
-        assertEquals(Util.unmodifiableSet(new Variable("x1")), BIG_FORMULA.getFreeVariables());
+        assertEquals(MathUtil.unmodifiableSet(new Variable("x1")), BIG_FORMULA.getFreeVariables());
 
     }
 

@@ -1,5 +1,11 @@
 package org.kreved.mathlogic.base;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Set;
+
+import org.kreved.mathlogic.util.MathUtil;
+
 /**
  * @author burdakovd
  * 
@@ -21,6 +27,27 @@ public final class Implication extends AbstractBinaryFormula {
      */
     public Implication(final Formula left, final Formula right) {
         super("->", left, right);
+    }
+
+    @Override
+    public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
+            final Iterable<? extends Term> terms) {
+
+        return MathUtil.unmodifiableSet(
+
+        new SemanticTable(MathUtil.unmodifiableSet(getRight()), Collections.<Formula> emptySet()),
+
+        new SemanticTable(Collections.<Formula> emptySet(), MathUtil.unmodifiableSet(getLeft()))
+
+        );
+    }
+
+    @Override
+    public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
+            final Iterable<? extends Term> terms) {
+
+        return MathUtil.unmodifiableSet(new SemanticTable(MathUtil.unmodifiableSet(getLeft()),
+                MathUtil.unmodifiableSet(getRight())));
     }
 
     /*

@@ -3,10 +3,11 @@ package org.kreved.mathlogic.base;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.Util;
+import org.kreved.mathlogic.util.MathUtil;
 
 /**
  * Атомарная формула вида P^{(m)}(t_1, t_2, ..., t_m).
@@ -68,6 +69,21 @@ public final class AtomicFormula implements Formula {
     }
 
     @Override
+    public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
+            final Iterable<? extends Term> terms) {
+        return MathUtil.unmodifiableSet(new SemanticTable(MathUtil.<Formula> unmodifiableSet(this),
+                Collections.<Formula> emptySet()));
+    }
+
+    @Override
+    public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
+            final Iterable<? extends Term> terms) {
+
+        return MathUtil.unmodifiableSet(new SemanticTable(Collections.<Formula> emptySet(),
+                MathUtil.<Formula> unmodifiableSet(this)));
+    }
+
+    @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
@@ -101,6 +117,23 @@ public final class AtomicFormula implements Formula {
      */
     public List<Term> getArguments() {
         return arguments;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.Formula#getConstants()
+     */
+    @Override
+    public Set<Constant> getConstants() {
+
+        final Set<Constant> ans = new HashSet<Constant>();
+
+        for (final Term term : arguments) {
+            ans.addAll(term.getConstants());
+        }
+
+        return Collections.unmodifiableSet(ans);
     }
 
     /*
@@ -175,6 +208,6 @@ public final class AtomicFormula implements Formula {
      */
     @Override
     public String toString() {
-        return String.format("%s(%s)", predicateSymbol, Util.join(", ", arguments));
+        return String.format("%s(%s)", predicateSymbol, MathUtil.join(", ", arguments));
     }
 }

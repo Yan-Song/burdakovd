@@ -1,5 +1,6 @@
 package org.kreved.mathlogic.base;
 
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -7,7 +8,31 @@ import java.util.Set;
  * @author burdakovd
  * 
  */
-public interface Formula extends Substitutable<Formula> {
+public interface Formula extends Substitutable<Formula>, HasConstants {
+
+    /**
+     * @param constantProvider
+     *            итератор по множеству ранее не использованных констант
+     * @param terms
+     *            последовательность термов для подстановки
+     * @return набор таблиц, в которые преобразуется данная формула при
+     *         применении соответствующего правила табличного вывода, если она
+     *         стоит слева
+     */
+    Set<SemanticTable> applyTableDeductionLeft(Iterator<Constant> constantProvider,
+            Iterable<? extends Term> terms);
+
+    /**
+     * @param constantProvider
+     *            итератор по множеству ранее не использованных констант
+     * @param terms
+     *            последовательность термов для подстановки
+     * @return набор таблиц, в которые преобразуется данная формула при
+     *         применении соответствующего правила табличного вывода, если она
+     *         стоит справа
+     */
+    Set<SemanticTable> applyTableDeductionRight(Iterator<Constant> constantProvider,
+            Iterable<? extends Term> terms);
 
     /**
      * @param object
@@ -16,6 +41,12 @@ public interface Formula extends Substitutable<Formula> {
      */
     @Override
     boolean equals(Object object);
+
+    /**
+     * @return множество констант, использованных в формуле
+     */
+    @Override
+    Set<Constant> getConstants();
 
     /**
      * 

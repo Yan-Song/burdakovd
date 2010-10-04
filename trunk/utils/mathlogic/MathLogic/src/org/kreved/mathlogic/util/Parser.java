@@ -32,7 +32,7 @@ public final class Parser {
      * @author burdakovd
      * 
      */
-    interface ConstantMatcher {
+    public interface ConstantMatcher {
 
         /**
          * Определяет по имени, константа ли это или переменная.

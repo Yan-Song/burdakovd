@@ -8,7 +8,7 @@ import java.util.Set;
  * @author burdakovd
  * 
  */
-public interface Term extends Substitutable<Term> {
+public interface Term extends Substitutable<Term>, HasConstants {
 
     /**
      * 

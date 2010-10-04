@@ -1,5 +1,11 @@
 package org.kreved.mathlogic.base;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Set;
+
+import org.kreved.mathlogic.util.MathUtil;
+
 /**
  * @author burdakovd
  * 
@@ -21,6 +27,26 @@ public final class Conjunction extends AbstractBinaryAssociativeFormula {
      */
     public Conjunction(final Formula left, final Formula right) {
         super("&", left, right);
+    }
+
+    @Override
+    public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
+            final Iterable<? extends Term> terms) {
+        return MathUtil.unmodifiableSet(new SemanticTable(MathUtil.unmodifiableSet(getLeft(),
+                getRight()), Collections.<Formula> emptySet()));
+    }
+
+    @Override
+    public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
+            final Iterable<? extends Term> terms) {
+
+        return MathUtil.unmodifiableSet(
+
+        new SemanticTable(Collections.<Formula> emptySet(), MathUtil.unmodifiableSet(getLeft())),
+
+        new SemanticTable(Collections.<Formula> emptySet(), MathUtil.unmodifiableSet(getRight()))
+
+        );
     }
 
     /*
