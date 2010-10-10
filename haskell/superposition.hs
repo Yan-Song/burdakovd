@@ -1,1 +1,0 @@
-data Expression = Variable Float | FunctionCall Name Arity Arguments
