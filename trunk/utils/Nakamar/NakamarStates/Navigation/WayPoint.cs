@@ -10,28 +10,28 @@ namespace Plugins
     /// <summary>
     /// http://www.mmowned.com/forums/c/237023-bot-developers-simple-waypoint-navigation-system-including-loading-saving.html
     /// </summary>
-    public class WayPoint : Point
+    public class WayPoint : Util.Point
     {
         private const double WayPointRange = 2.0;
 
         public virtual double Range { get { return WayPointRange; } }
 
-        public bool InRange(double range, Point other)
+        public bool InRange(double range, Util.Point other)
         {
             return Distance(other) < range;
         }
 
-        public virtual bool InRange(Point other)
+        public virtual bool InRange(Util.Point other)
         {
             return InRange(Range, other);
         }
 
-        public virtual bool InRange2D(Point other)
+        public virtual bool InRange2D(Util.Point other)
         {
             return InRange2D(Range, other);
         }
 
-        private bool InRange2D(double range, Point other)
+        private bool InRange2D(double range, Util.Point other)
         {
             return Distance2D(other) < range;
         }

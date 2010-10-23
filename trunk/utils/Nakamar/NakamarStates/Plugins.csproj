@@ -8,7 +8,7 @@
     <ProjectGuid>{4A688F33-BA30-477B-A651-5918C1603D2F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Plugins</RootNamespace>
+    <RootNamespace>NakamarStates</RootNamespace>
     <AssemblyName>NakamarStates</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -107,7 +107,6 @@
     <Compile Include="Navigation\DestinationPoint.cs" />
     <Compile Include="Navigation\Navigation.cs" />
     <Compile Include="Navigation\PlayerPoint.cs" />
-    <Compile Include="Navigation\Point.cs" />
     <Compile Include="Navigation\Route.cs" />
     <Compile Include="Navigation\WayPoint.cs" />
     <Compile Include="Navigation\WayPointSet.cs" />
