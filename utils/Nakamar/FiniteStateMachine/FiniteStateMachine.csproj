@@ -81,9 +81,9 @@
       <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
       <Name>Util</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WMemory\WMemory.csproj">
+    <ProjectReference Include="..\WMemory\WInteraction.csproj">
       <Project>{6E806492-5FFE-4C3C-BF20-22277FAED955}</Project>
-      <Name>WMemory</Name>
+      <Name>WInteraction</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
