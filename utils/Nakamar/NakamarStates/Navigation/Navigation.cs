@@ -402,7 +402,7 @@ namespace Plugins
         {
             try
             {
-                NpcObject target = (NpcObject)Memory.ObjectManager.ByGuid(Memory.ObjectManager.LocalPlayer.TargetGuid);
+                NpcObject target = Memory.ObjectManager.ByName(Memory.TargetName);
                 return new DestinationPoint(Memory.GetAddonMessage().Target, WayPointType.NPC, tag ?? "",
                     target.XPosition, target.YPosition, target.ZPosition);
             }
