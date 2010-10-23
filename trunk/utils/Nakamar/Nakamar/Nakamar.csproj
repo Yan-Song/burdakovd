@@ -139,9 +139,9 @@
       <Project>{4A688F33-BA30-477B-A651-5918C1603D2F}</Project>
       <Name>Plugins</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WMemory\WMemory.csproj">
+    <ProjectReference Include="..\WMemory\WInteraction.csproj">
       <Project>{6E806492-5FFE-4C3C-BF20-22277FAED955}</Project>
-      <Name>WMemory</Name>
+      <Name>WInteraction</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -25,14 +25,15 @@ namespace WoWMemoryManager.WoWObject
     {
         protected const uint
             DescriptorFieldsOffset = 0x8,
-            XPositionOffset = 0x798, // works for 3.1.3 //3.2.0
-            YPositionOffset = 0x79c, // works for 3.1.3 //3.2.0
-            ZPositionOffset = 0x7a0, // works for 3.1.3 //3.2.0
-            RotationOffset = 0x7a8; // works for 3.1.3 //3.2.0
+            XPositionOffset = 0x880,
+            YPositionOffset = 0x884,
+            ZPositionOffset = 0x888,
+            RotationOffset = 0x890,
+            typeOffset = 0x14;
 
         protected const uint // offsets in object descriptor table
-            descObjectFieldGuid = 0x0, // 3.2.0
-            descObjectFieldType = 0x2 * 4; // 3.2.0
+            descObjectFieldGuid = 0x0;
+            
             
         protected BlackMagic Reader;
 
@@ -63,7 +64,7 @@ namespace WoWMemoryManager.WoWObject
 
         public ObjectType Type
         {
-            get { return (ObjectType)Reader.ReadUInt(BaseAddress+0x14); }
+            get { return (ObjectType)Reader.ReadUInt(BaseAddress+typeOffset); }
         }
 
         public virtual ulong Guid
@@ -94,17 +95,9 @@ namespace WoWMemoryManager.WoWObject
 
     public abstract class CreatureObject : WoWObject
     {
-        protected const uint
-            descTargetGuidOffset = 0x12 * 4; // 3.2.0
-
         public CreatureObject(BlackMagic reader, uint baseAddress)
             : base(reader, baseAddress)
         { }
-
-        public ulong TargetGuid
-        {
-            get { return Reader.ReadUInt64(DescriptorFields + descTargetGuidOffset); }
-        }
     }
 
 
@@ -115,9 +108,8 @@ namespace WoWMemoryManager.WoWObject
         { }
 
         protected const uint
-            // http://www.mmowned.com/forums/wow-memory-editing/271736-wow-3-3-0-info-dump-thread.html#post1754547
-            NameOffset1 = 0x964, // 3.2.0
-            NameOffset2 = 0x5c; // 3.2.0
+            NameOffset1 = 0xa0c,
+            NameOffset2 = 0x60;
 
         public virtual string Name
         {
@@ -148,15 +140,15 @@ namespace WoWMemoryManager.WoWObject
     public class GameObject : WoWObject
     {
         protected const uint
-            NameOffset1 = 0x1a4, //3.2.0
-            NameOffset2 = 0x90; //3.2.0
+            NameOffset1 = 0x1cc,
+            NameOffset2 = 0x94;
 
         new protected const uint
-            XPositionOffset = 0x3A * 4; //3.1.3
+            XPositionOffset = 0x110;
         new protected const uint
-            YPositionOffset = 0x3B * 4; //3.1.3
+            YPositionOffset = 0x114;
         new protected const uint
-            ZPositionOffset = 0x3C * 4; //3.1.3
+            ZPositionOffset = 0x118;
 
         public GameObject(BlackMagic reader, uint baseAddress)
             : base(reader, baseAddress)

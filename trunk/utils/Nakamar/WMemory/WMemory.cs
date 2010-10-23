@@ -10,25 +10,6 @@ using WoWMemoryManager.WoWObject;
 using WoWMemoryManager.Properties;
 using System.Collections.Generic;
 
-/*
-// вычисляем оффсеты
-// 007C0799 - 8b 0d 80 9f 13 01          - mov ecx,[01139f80]
-// 007C079F - 89 81 34 2c 00 00          - mov [ecx+00002c34],eax
-
-// [[01139f80] + 00002c34]
-
-// FindPattern(Patterns.ClientConnection) - здесь находится вышеуказанный код, ~007C0799
-// WoW.ReadUInt(FindPattern(Patterns.ClientConnection)) - адрес указателя на ClientConnection, 01139f80
-// WoW.ReadUInt(WoW.ReadUInt(FindPattern(Patterns.ClientConnection))) указатель на ClientConnection 
-
-uint ppClientConnection = WoW.ReadUInt(WoW.ReadUInt(FindPattern(Patterns.ClientConnection)));         
-
-uint ObjectManagerOffset = WoW.ReadUInt(FindPattern(Patterns.ObjectManagerOffset));
-
-uint pObjectManager = WoW.ReadUInt(pClientConnection + ObjectManagerOffset);
-*/
-
-
 namespace WoWMemoryManager
 {
     public enum GameState { None, Login, RealmWizard, Character, World };
@@ -210,8 +191,10 @@ namespace WoWMemoryManager
         {
             get
             {
-                uint gameStatePtr = BM.ReadUInt(FindPattern(Patterns.GameState));
-                string state = BM.ReadASCIIString(gameStatePtr, 100);
+                uint gameStateIdPtr = BM.ReadUInt(FindPattern(Patterns.GAME_STATE_1));
+                uint gameStateId = BM.ReadUInt(gameStateIdPtr);
+                uint gameStateStringRepresentationsBase = BM.ReadUInt(FindPattern(Patterns.GAME_STATE_2));
+                string state = BM.ReadASCIIString(gameStateStringRepresentationsBase + 4 * gameStateId, 100);
 
                 if (state == "login")
                     return GameState.Login;

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("WoWMemory")]
+[assembly: AssemblyTitle("WInteraction")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MSU")]
-[assembly: AssemblyProduct("WoWMemory")]
+[assembly: AssemblyProduct("WInteraction")]
 [assembly: AssemblyCopyright("Copyright © MSU 2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
