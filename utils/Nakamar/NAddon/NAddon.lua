@@ -42,7 +42,9 @@ end
 function NKeepAlive()
 	if(time() - lastCommandTime > 300) then
 		NSendCommand("nop")
+		return true
 	end
+	return false
 end
 
 function NDoNotRestart(text)
@@ -80,6 +82,7 @@ data[7] = ""
 data[8] = ""
 data[9] = ""
 data[10] = "init"
+data[11] = "no"
 
 ----------------------
 local frame = CreateFrame("Frame")
