@@ -100,9 +100,10 @@ local print = function(s)
 		frameReference = DEFAULT_CHAT_FRAME
 	end
 	local prefix = date("[%H:%M:%S] ")
-	frameReference:AddMessage(prefix..tostring(s), 1.0, 1.0, 1.0)
+	local message = prefix..tostring(s)
+	frameReference:AddMessage(message, 1.0, 1.0, 1.0)
 	if not Nakamar.logs then Nakamar.logs = {} end
-	tinsert(Nakamar.logs, {time(), tostring(s)})
+	tinsert(Nakamar.logs, {time(), message})
 end
 private.print = print
 
@@ -198,7 +199,9 @@ end
 
 local saidAboutFullBank = false
 function private.everySecond()
-	NKeepAlive()
+	if NKeepAlive() then
+		print("KeepAlive")
+	end
 	
 	-- первые 100 фреймов ничего не делаем,
 	-- в надежде что за это время wow успеет нормально запуститься
