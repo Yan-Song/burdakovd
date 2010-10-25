@@ -1,5 +1,5 @@
 ## Title: Auc:Filter:Custom
-## Interface: 30200
+## Interface: 40000
 ## Dependancies: Auc-Advanced
 ## OptionalDependencies: Auc-Util-Appraiser, Auc-Util-SearchUI
 ##
