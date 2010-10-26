@@ -444,7 +444,7 @@ function private.everySecond()
 			return
 			
 		elseif private.state == "SCAN_BEFORE_POSTING" then
-			if time() - Nakamar.ScanCompletedTime[GetFaction()] < maxScanAge then
+			if AucAdvanced.API.GetScanStats() and (time() - (AucAdvanced.API.GetScanStats().LastFullScan or 0) < maxScanAge) then
 				private.doPosting()
 			elseif private.stateTime() > 7200 then
 				private.ERROR("сканирую уже больше двух часов, но до сих пор нет свежего скана")
@@ -482,7 +482,7 @@ function private.everySecond()
 		
 		else -- state ~= "POSTING" | "SCAN_BEFORE_POSTING" | "SCANNING" and auctionframe opened
 			local postable = #lib.batchItems()
-			local fresh = time() - Nakamar.ScanCompletedTime[GetFaction()] < maxScanAge
+			local fresh = AucAdvanced.API.GetScanStats() and (time() - (AucAdvanced.API.GetScanStats().LastFullScan or 0) < maxScanAge)
 			if postable > 0 then
 				if fresh then
 					private.doPosting()
@@ -661,9 +661,6 @@ function lib.OnLoad()
 		function() mailboxAvailable = false; mailboxOpened = false; NCurrentState("хз") end)
 	AucAdvanced.Settings.SetDefault("util.nakamar.printwindow", 1)
 	RegisterEvent("CHAT_MSG_WHISPER", private.Chat)
-	
-	Nakamar.ScanCompletedTime = Nakamar.ScanCompletedTime or {}
-	Nakamar.ScanCompletedTime[GetFaction()] = Nakamar.ScanCompletedTime[GetFaction()] or 0
 end
 
 function private.HookAH()
@@ -706,28 +703,6 @@ function private.allowedResume()
 	end
 	return false
 end
-
-function private.processScan(stats)
-	if not stats.wasIncomplete then
-		local matched = 0
-		local scandata = AucAdvanced.Scan.GetScanData()
-		
-		for pos, data in ipairs(scandata.image) do
-			if AucAdvanced.Scan.Private.IsInQuery(stats.query, data) then
-				matched = matched + 1
-			end
-		end
-				
-		--print(string.format("%d из %d лотов соответствует запросу", matched, #scandata.image))
-		if matched == #scandata.image then
-			print("Завершен полный скан")
-			Nakamar.ScanCompletedTime[GetFaction()] = time()
-		else
-			--print("Это был неполный скан")
-		end
-	end
-end
-
 function lib.Processor(callbackType, ...)
 	if (callbackType == "config") then
 		private.SetupConfigGui(...)
@@ -739,8 +714,6 @@ function lib.Processor(callbackType, ...)
 	elseif callbackType == "auctionclose" then
 		auctionAvailable=false
 		NCurrentState("хз")
-	elseif callbackType == "scanstats" then
-		private.processScan(...)
 	end
 end
 
