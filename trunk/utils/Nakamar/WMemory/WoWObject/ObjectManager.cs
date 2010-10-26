@@ -107,5 +107,16 @@ namespace WoWMemoryManager.WoWObject
             NpcObjects = new ObjectList<NpcObject>(Memory.BM, BaseAddress);
             Objects = new ObjectList<WoWObject>(Memory.BM, BaseAddress);
         }
+
+        public NpcObject ByName(string name)
+        {
+            foreach(NpcObject npc in NpcObjects)
+            {
+                if (npc.Name.Equals(name))
+                    return npc;
+            }
+
+            throw new KeyNotFoundException();
+        }
     }
 }

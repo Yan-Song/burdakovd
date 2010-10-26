@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.SaveSettingsTimer = new System.Windows.Forms.Timer(this.components);
             this.Tooltip = new System.Windows.Forms.ToolTip(this.components);
             this.NeededFPSSelector = new System.Windows.Forms.NumericUpDown();
             this.SelectStatesDirectoryButton = new System.Windows.Forms.Button();
@@ -82,11 +81,6 @@
             this.BlockedStatesGroup.SuspendLayout();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // SaveSettingsTimer
-            // 
-            this.SaveSettingsTimer.Interval = 60000;
-            this.SaveSettingsTimer.Tick += new System.EventHandler(this.SaveSettings);
             // 
             // NeededFPSSelector
             // 
@@ -518,7 +512,7 @@
             // 
             this.LastStateValue.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.LastStateValue.Name = "LastStateValue";
-            this.LastStateValue.Size = new System.Drawing.Size(794, 17);
+            this.LastStateValue.Size = new System.Drawing.Size(763, 17);
             this.LastStateValue.Spring = true;
             this.LastStateValue.Text = "state";
             this.LastStateValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -571,10 +565,10 @@
             this.Text = "Программа =)";
             this.TopMost = global::Nakamar.Properties.Settings.Default.TopMost;
             this.TransparencyKey = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(253)))), ((int)(((byte)(254)))));
-            this.Deactivate += new System.EventHandler(this.OnDeactivated);
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.Activated += new System.EventHandler(this.OnActivated);
+            this.Deactivate += new System.EventHandler(this.OnDeactivated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.NeededFPSSelector)).EndInit();
             this.StatesSettingsGroup.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.OpacityTrackBar)).EndInit();
@@ -594,7 +588,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Timer SaveSettingsTimer;
         private System.Windows.Forms.ToolTip Tooltip;
         private System.Windows.Forms.Timer MonitorTimer;
         private System.Windows.Forms.FolderBrowserDialog LogDirectoryBrowser;

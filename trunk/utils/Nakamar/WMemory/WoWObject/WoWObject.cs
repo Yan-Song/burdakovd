@@ -86,6 +86,12 @@ namespace WoWMemoryManager.WoWObject
         {
             get { return Reader.ReadFloat(BaseAddress + ZPositionOffset); }
         }
+
+        public Util.Point Location
+        {
+            get { return new Util.Point(XPosition, YPosition, ZPosition); }
+        }
+
         public float Rotation
         {
             get { return Reader.ReadFloat(BaseAddress + RotationOffset); }

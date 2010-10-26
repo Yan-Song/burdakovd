@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NakamarStates.Properties {
+namespace Plugins.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

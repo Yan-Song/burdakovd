@@ -46,7 +46,7 @@ namespace WoWMemoryManager
         public static Pattern ClientConnection =
             new Pattern("8B 15 FF FF FF FF 89 82 FF FF FF FF 89 81 08 00 00 " +
             "00 8B 0D FF FF FF FF 89 88 D8 00 00 00 " +
-            "C7 81 40 19 00 00 FF FF FF FF C7 81 40 39 00 00 FF FF FF FF 8B 88 D8 00 00 00 ",
+            "C7 81 40 19 00 00 FF FF FF FF C7 81 40 39 00 00 FF FF FF FF 8B 88 D8 00 00 00",
 
             "xx????xx????xxxxxxxx????xxxxxxxxxxxx????xxxxxx????xxxxxx", 2);
 
@@ -56,7 +56,7 @@ namespace WoWMemoryManager
         public static Pattern ObjectManagerOffset =
             new Pattern("8B 15 FF FF FF FF 89 82 FF FF FF FF 89 81 08 00 00 " +
             "00 8B 0D FF FF FF FF 89 88 D8 00 00 00 " +
-            "C7 81 40 19 00 00 FF FF FF FF C7 81 40 39 00 00 FF FF FF FF 8B 88 D8 00 00 00 ",
+            "C7 81 40 19 00 00 FF FF FF FF C7 81 40 39 00 00 FF FF FF FF 8B 88 D8 00 00 00",
 
             "xx????xx????xxxxxxxx????xxxxxxxxxxxx????xxxxxx????xxxxxx", 8);
 
@@ -64,7 +64,7 @@ namespace WoWMemoryManager
         /// Место в коде, где можно найти адрес gameStateId.
         /// </summary>
         public static Pattern GAME_STATE_1 = new Pattern(StringUtils.join(new String[] {"cc",
-            "83 3d FF FF FF FF 00", "75 11", "e8 FF FF FF ??", "8b 10", "8b c8",
+            "83 3d FF FF FF FF 00", "75 11", "e8 FF FF FF FF", "8b 10", "8b c8",
             "8b 82 FF 00 00 00", "ff e0", "c3", "cc" }, ' '),
             
             "xxx????xxxx????xxxxxx?xxxxxxx", 3);

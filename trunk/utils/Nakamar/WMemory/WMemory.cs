@@ -194,7 +194,7 @@ namespace WoWMemoryManager
                 uint gameStateIdPtr = BM.ReadUInt(FindPattern(Patterns.GAME_STATE_1));
                 uint gameStateId = BM.ReadUInt(gameStateIdPtr);
                 uint gameStateStringRepresentationsBase = BM.ReadUInt(FindPattern(Patterns.GAME_STATE_2));
-                string state = BM.ReadASCIIString(gameStateStringRepresentationsBase + 4 * gameStateId, 100);
+                string state = BM.ReadASCIIString(BM.ReadUInt(gameStateStringRepresentationsBase + 4 * gameStateId), 100);
 
                 if (state == "login")
                     return GameState.Login;
@@ -466,6 +466,5 @@ namespace WoWMemoryManager
                 return GetAddonMessage() == null ? null : GetAddonMessage().Target;
             }
         }
-
     }
 }

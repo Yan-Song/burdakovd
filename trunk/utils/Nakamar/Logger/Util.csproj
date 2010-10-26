@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Util</RootNamespace>
-    <AssemblyName>Logger</AssemblyName>
+    <AssemblyName>Util</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigWTF.cs" />
+    <Compile Include="Point.cs" />
     <Compile Include="Serialization.cs" />
     <Compile Include="ComparableListOfDouble.cs" />
     <Compile Include="Logger.cs" />
