@@ -20,7 +20,6 @@ local pairs = pairs
 local helptext = [[ Здесь будет справка ]]
 
 function lib.CommandHandler(command, ...)
-	local myFaction = GetFaction()
 	if (command == "help") then
 		print(helptext)
 	end
