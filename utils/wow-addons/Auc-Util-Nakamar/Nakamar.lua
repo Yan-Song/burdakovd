@@ -214,7 +214,7 @@ function private.everySecond()
 		end
 	end
 	
-	NNeedPurchaseConfirmation(lib.NeedPurchaseConfirmation())
+	NNeedAnyConfirmation(lib.NeedAnyConfirmation())
 	private.updateBankStats()
 	
 	local allowedResume = private.allowedResume()
@@ -452,7 +452,7 @@ function private.everySecond()
 			return
 			
 		elseif private.state == "POSTING" then
-			local left = #AucAdvanced.Post.Private.postRequests	
+			local left = AucAdvanced.Post.GetQueueLen()
 
 			if left == 0 then
 				local postable = #lib.batchItems()
@@ -536,9 +536,9 @@ function private.doScanning()
 end
 
 function private.doPosting()
-	if #AucAdvanced.Post.Private.postRequests > 0 then
+	if AucAdvanced.Post.GetQueueLen() > 0 then
 		print("что-то уже выкладывается, отменяю")
-		AucAdvanced.Post.Private.postRequests = {}
+		AucAdvanced.Post.CancelPostQueue()
 		return
 	end
 	private.changeState("POSTING")
@@ -857,9 +857,20 @@ function lib.NeedPurchaseConfirmation()
 	return AuctionFrame and AuctionFrame:IsVisible() and AucAdvanced.Buy.Private.Prompt:IsVisible()
 end
 
+function lib.NeedPostConfirmation()
+	return AuctionFrame and AuctionFrame:IsVisible() and AucAdvanced.Post.Private.Prompt:IsVisible()
+end
+
+function lib.NeedAnyConfirmation()
+    return lib.NeedPurchaseConfirmation() or lib.NeedPostConfirmation()
+end
+
 function lib.ConfirmPurchase()
 	if lib.NeedPurchaseConfirmation() then
 		AucAdvanced.Buy.Private.Prompt.Yes:Click()
+	end
+    if lib.NeedPostConfirmation() then
+		AucAdvanced.Post.Private.Prompt.Yes:Click()
 	end
 end
 
