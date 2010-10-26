@@ -61,7 +61,7 @@ function NGoTo(destination)
 	NSendCommand("goto", destination)
 end
 
-function NNeedPurchaseConfirmation(need)
+function NNeedAnyConfirmation(need)
 	if need then
 		data[9] = "need"
 	else
