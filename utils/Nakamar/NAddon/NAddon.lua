@@ -95,3 +95,16 @@ frame:SetScript("OnEvent",
 	)
 
 frame:RegisterEvent("PLAYER_TARGET_CHANGED")
+
+function NButtons()
+    local buttons = {"pause", "Cancel Quit", "reset", "взять всё", 
+        "положить всё", "уникальные взять", "банк (посмотреть", 
+        "Проверить почту", "профы", "Confirm Purchase", "", "питомец (random)"}
+    
+    for i, button in ipairs(buttons) do
+        if button ~= "" then
+            PickupMacro(button)
+            PlaceAction(i)
+        end
+    end
+end
