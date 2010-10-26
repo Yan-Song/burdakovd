@@ -101,7 +101,7 @@ function NButtons()
         "положить всё", "уникальные взять", "банк (посмотреть", 
         "Проверить почту", "профы", "Confirm Purchase", "", "питомец (random)"}
     
-    local offset = (GetBonusBarOffset() == 0) ? 0 : (NUM_ACTIONBAR_PAGES + GetBonusBarOffset() - 1) * NUM_ACTIONBAR_BUTTONS
+    local offset = (GetBonusBarOffset() == 0) and 0 or (NUM_ACTIONBAR_PAGES + GetBonusBarOffset() - 1) * NUM_ACTIONBAR_BUTTONS
     
     for i, button in ipairs(buttons) do
         if button ~= "" then
