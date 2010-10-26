@@ -15,27 +15,27 @@ namespace Util
         const int moveAccuracy = 10;
         static readonly Random generator = new Random();
 
-        public static Point ScreenCenter
+        public static System.Drawing.Point ScreenCenter
         {
             get
             {
                 Rectangle bounds = Screen.PrimaryScreen.Bounds;
-                return new Point(bounds.Left + bounds.Width / 2, bounds.Top + bounds.Height / 2);
+                return new System.Drawing.Point(bounds.Left + bounds.Width / 2, bounds.Top + bounds.Height / 2);
             }
         }
 
         [DllImport("user32.dll")]
         private static extern bool GetWindowRect(IntPtr hWnd, out Rectangle rect);
 
-        public static Point WindowCenter(IntPtr window)
+        public static System.Drawing.Point WindowCenter(IntPtr window)
         {
             Rectangle bounds = new Rectangle();
             Debug.Assert(GetWindowRect(window, out bounds)); // часто не работает
             // Это не настоящий прямоугольник, и вместо width && height там right && bottom
-            return new Point((bounds.Left + bounds.Width) / 2, (bounds.Top + bounds.Height) / 2);
+            return new System.Drawing.Point((bounds.Left + bounds.Width) / 2, (bounds.Top + bounds.Height) / 2);
         }
 
-        public static bool NearCenter(Point center)
+        public static bool NearCenter(System.Drawing.Point center)
         {
             return
                 Math.Abs(center.X - Cursor.Position.X) < checkAccuracy
@@ -54,7 +54,7 @@ namespace Util
 
         public static void MoveToWindowCenter(IntPtr window)
         {
-            Point position = WindowCenter(window);
+            System.Drawing.Point position = WindowCenter(window);
             position.X += generator.Next(-moveAccuracy, moveAccuracy);
             position.Y += generator.Next(-moveAccuracy, moveAccuracy);
             Cursor.Position = position;
@@ -62,7 +62,7 @@ namespace Util
 
         public static void MoveToScreenCenter()
         {
-            Point position = ScreenCenter;
+            System.Drawing.Point position = ScreenCenter;
             position.X += generator.Next(-moveAccuracy, moveAccuracy);
             position.Y += generator.Next(-moveAccuracy, moveAccuracy);
             Cursor.Position = position;

@@ -8,8 +8,8 @@
     <ProjectGuid>{4A688F33-BA30-477B-A651-5918C1603D2F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NakamarStates</RootNamespace>
-    <AssemblyName>NakamarStates</AssemblyName>
+    <RootNamespace>Plugins</RootNamespace>
+    <AssemblyName>Plugins</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>

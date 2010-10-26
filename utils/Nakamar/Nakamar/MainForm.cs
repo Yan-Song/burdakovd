@@ -122,11 +122,6 @@ namespace Nakamar
         {
             SaveWindowState();
             Settings.Default.Save();
-        }      
-        
-        private void SaveSettings(object sender, EventArgs e)
-        {
-            SaveSettings();
         }
 
         private void UpgradeSettings()
