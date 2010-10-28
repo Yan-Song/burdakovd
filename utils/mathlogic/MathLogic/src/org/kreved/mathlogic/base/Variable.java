@@ -3,7 +3,7 @@ package org.kreved.mathlogic.base;
 import java.util.Collections;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * Предметная переменная.
@@ -89,7 +89,7 @@ public final class Variable implements Term {
      */
     @Override
     public Set<Variable> getVariables() {
-        return MathUtil.singleElementSet(this);
+        return CommonUtils.singleElementSet(this);
     }
 
     /*

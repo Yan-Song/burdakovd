@@ -18,7 +18,7 @@ import org.kreved.mathlogic.base.Implication;
 import org.kreved.mathlogic.base.Negation;
 import org.kreved.mathlogic.base.PredicateSymbol;
 import org.kreved.mathlogic.base.Variable;
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 import org.kreved.mathlogic.util.Parser;
 
 /**
@@ -45,7 +45,7 @@ public final class CommonTest {
     @Test
     public void formulaGetVariables() {
 
-        assertEquals(MathUtil.singleElementSet(new Variable("x1")), BIG_FORMULA.getFreeVariables());
+        assertEquals(CommonUtils.singleElementSet(new Variable("x1")), BIG_FORMULA.getFreeVariables());
 
     }
 

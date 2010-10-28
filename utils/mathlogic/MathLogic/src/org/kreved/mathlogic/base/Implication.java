@@ -4,7 +4,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
+import org.kreved.mathlogic.util.Of;
 
 /**
  * @param <L>
@@ -38,12 +39,12 @@ public final class Implication<L extends Formula<? extends L>, R extends Formula
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
 
-        return MathUtil.unmodifiableSet(MathUtil.of(
+        return CommonUtils.unmodifiableSet(Of.of(
 
-                new SemanticTable(MathUtil.singleElementSet(getRight()), Collections
+                new SemanticTable(CommonUtils.singleElementSet(getRight()), Collections
                         .<Formula<?>> emptySet()),
 
-                new SemanticTable(Collections.<Formula<?>> emptySet(), MathUtil
+                new SemanticTable(Collections.<Formula<?>> emptySet(), CommonUtils
                         .singleElementSet(getLeft()))
 
         ));
@@ -53,8 +54,8 @@ public final class Implication<L extends Formula<? extends L>, R extends Formula
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
 
-        return MathUtil.singleElementSet(new SemanticTable(MathUtil.singleElementSet(getLeft()),
-                MathUtil.singleElementSet(getRight())));
+        return CommonUtils.singleElementSet(new SemanticTable(CommonUtils
+                .singleElementSet(getLeft()), CommonUtils.singleElementSet(getRight())));
     }
 
     /*

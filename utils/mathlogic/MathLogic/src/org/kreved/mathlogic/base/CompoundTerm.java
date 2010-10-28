@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * Составной терм.
@@ -168,6 +168,6 @@ public final class CompoundTerm implements Term {
      */
     @Override
     public String toString() {
-        return String.format("%s(%s)", functionalSymbol, MathUtil.join(", ", arguments));
+        return String.format("%s(%s)", functionalSymbol, CommonUtils.join(", ", arguments));
     }
 }

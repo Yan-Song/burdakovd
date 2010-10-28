@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * @author burdakovd
@@ -113,7 +113,7 @@ public final class FiniteSubstitution implements Substitution {
             stringBunches.add(String.format("%s/%s", bunch.getKey(), bunch.getValue()));
         }
 
-        return String.format("{%s}", MathUtil.join(", ", stringBunches));
+        return String.format("{%s}", CommonUtils.join(", ", stringBunches));
     }
 
 }

@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * @author burdakovd
@@ -168,7 +168,7 @@ public final class SemanticTable implements HasConstants {
      */
     @Override
     public String toString() {
-        return String.format("< %s | %s >", gamma.isEmpty() ? "null" : MathUtil.join(", ", gamma),
-                delta.isEmpty() ? "null" : MathUtil.join(", ", delta));
+        return String.format("< %s | %s >", gamma.isEmpty() ? "null" : CommonUtils.join(", ", gamma),
+                delta.isEmpty() ? "null" : CommonUtils.join(", ", delta));
     }
 }

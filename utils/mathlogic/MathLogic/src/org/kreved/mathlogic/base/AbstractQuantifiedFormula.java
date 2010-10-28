@@ -2,7 +2,7 @@ package org.kreved.mathlogic.base;
 
 import java.util.Set;
 
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * @param <I>
@@ -161,7 +161,7 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
      */
     @Override
     public final Set<Variable> getFreeVariables() {
-        return MathUtil.excluding(formula.getFreeVariables(), variable);
+        return CommonUtils.excluding(formula.getFreeVariables(), variable);
     }
 
     @Override

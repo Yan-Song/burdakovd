@@ -3,7 +3,7 @@ package org.kreved.mathlogic.base;
 import java.util.Collections;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * Предметная константа.
@@ -74,7 +74,7 @@ public final class Constant implements Term {
      */
     @Override
     public Set<Constant> getConstants() {
-        return MathUtil.singleElementSet(this);
+        return CommonUtils.singleElementSet(this);
     }
 
     /**

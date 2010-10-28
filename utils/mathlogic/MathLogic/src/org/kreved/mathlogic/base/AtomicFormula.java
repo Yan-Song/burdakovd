@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * Атомарная формула вида P^{(m)}(t_1, t_2, ..., t_m).
@@ -72,7 +72,7 @@ public final class AtomicFormula implements Formula<AtomicFormula> {
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
 
-        return MathUtil.singleElementSet(new SemanticTable(MathUtil
+        return CommonUtils.singleElementSet(new SemanticTable(CommonUtils
                 .<Formula<?>> singleElementSet(this), Collections.<Formula<?>> emptySet()));
     }
 
@@ -80,8 +80,8 @@ public final class AtomicFormula implements Formula<AtomicFormula> {
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
 
-        return MathUtil.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
-                MathUtil.<Formula<?>> singleElementSet(this)));
+        return CommonUtils.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
+                CommonUtils.<Formula<?>> singleElementSet(this)));
     }
 
     @Override
@@ -209,6 +209,6 @@ public final class AtomicFormula implements Formula<AtomicFormula> {
      */
     @Override
     public String toString() {
-        return String.format("%s(%s)", predicateSymbol, MathUtil.join(", ", arguments));
+        return String.format("%s(%s)", predicateSymbol, CommonUtils.join(", ", arguments));
     }
 }
