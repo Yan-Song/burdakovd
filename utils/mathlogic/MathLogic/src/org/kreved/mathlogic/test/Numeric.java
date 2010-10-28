@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
+import org.kreved.mathlogic.algorithm.TableDeduction;
 import org.kreved.mathlogic.base.Constant;
 import org.kreved.mathlogic.base.Formula;
 import org.kreved.mathlogic.base.PrefixedConstantProvider;
@@ -18,7 +19,6 @@ import org.kreved.mathlogic.util.CommonUtils;
 import org.kreved.mathlogic.util.Of;
 import org.kreved.mathlogic.util.Parser;
 import org.kreved.mathlogic.util.Parser.FiniteMatcher;
-import org.kreved.mathlogic.util.TableDeduction;
 
 /**
  * @author burdakovd

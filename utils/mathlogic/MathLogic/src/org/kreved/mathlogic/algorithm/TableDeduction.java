@@ -1,4 +1,4 @@
-package org.kreved.mathlogic.util;
+package org.kreved.mathlogic.algorithm;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +13,8 @@ import java.util.Set;
 import org.kreved.mathlogic.base.Constant;
 import org.kreved.mathlogic.base.Formula;
 import org.kreved.mathlogic.base.SemanticTable;
+import org.kreved.mathlogic.util.CommonUtils;
+import org.kreved.mathlogic.util.Of;
 
 /**
  * @author burdakovd
@@ -102,8 +104,8 @@ public final class TableDeduction {
                     }
                 }
 
-                System.out.println("Применяем правило вывода к [left=" + inLeft + "] " + candidate
-                        + ", получаем " + result);
+                System.out.println("Применяем правило вывода " + (inLeft ? "L" : "R") + " "
+                        + candidate.symbol());
 
                 return Collections.unmodifiableSet(ans);
             }

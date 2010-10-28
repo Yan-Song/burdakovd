@@ -3,6 +3,7 @@ package org.kreved.mathlogic.base;
 import java.util.Set;
 
 import org.kreved.mathlogic.util.CommonUtils;
+import org.kreved.mathlogic.util.Function;
 
 /**
  * @param <I>
@@ -19,12 +20,6 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
      * 
      */
     private static final int PRIORITY = 5;
-
-    /**
-     * Строковое представление квантора. Используется для hashCode, equals,
-     * toString
-     */
-    private final String quantor;
 
     /**
      * Переменная, связуемая квантором.
@@ -47,7 +42,7 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
      */
     public AbstractQuantifiedFormula(final String quantor, final Variable variable, final I formula) {
 
-        this.quantor = quantor;
+        super(quantor);
         this.variable = variable;
         this.formula = formula;
     }
@@ -120,11 +115,11 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
         } else if (!formula.equals(other.formula)) {
             return false;
         }
-        if (quantor == null) {
-            if (other.quantor != null) {
+        if (symbol() == null) {
+            if (other.symbol() != null) {
                 return false;
             }
-        } else if (!quantor.equals(other.quantor)) {
+        } else if (!symbol().equals(other.symbol())) {
             return false;
         }
         if (variable == null) {
@@ -173,7 +168,7 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
      * @return the quantor
      */
     public final String getQuantor() {
-        return quantor;
+        return symbol();
     }
 
     /**
@@ -193,7 +188,7 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
         final int prime = 31;
         int result = 1;
         result = prime * result + (formula == null ? 0 : formula.hashCode());
-        result = prime * result + (quantor == null ? 0 : quantor.hashCode());
+        result = prime * result + (symbol() == null ? 0 : symbol().hashCode());
         result = prime * result + (variable == null ? 0 : variable.hashCode());
         return result;
     }
@@ -229,6 +224,22 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
             // значит этот квантор ни на что не влияет
             return formula.isVariableFreeForTerm(variable, term);
         }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Formula#renameVariables(org.kreved.mathlogic
+     * .util.Function)
+     */
+    @Override
+    public final S renameVariables(final Function<Variable, Variable> renamer) {
+
+        final Variable newVariable = renamer.apply(variable);
+        final Substitution renamingSubstitution = new SingleSubstitution(variable, newVariable);
+        final I substitutedInnerFormula = formula.applySubstitution(renamingSubstitution);
+        return create(newVariable, substitutedInnerFormula.renameVariables(renamer));
     }
 
     @Override

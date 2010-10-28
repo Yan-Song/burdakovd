@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.kreved.mathlogic.util.CommonUtils;
+import org.kreved.mathlogic.util.Function;
 
 /**
  * Содержит методы, общие для всех бинарных формул.
@@ -13,19 +14,13 @@ import org.kreved.mathlogic.util.CommonUtils;
  *            тип левой части формулы
  * @param <R>
  *            тип правой части формулы
+ * @param <S>
+ *            тип результата применения подстановки к этой формуле
  * @author burdakovd
  * 
  */
-public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R extends Formula<? extends R>>
-        extends AbstractCompoundFormula<AbstractBinaryFormula<L, R>> {
-
-    /**
-     * Строковое представление внешней операции этой формулы.
-     * <p>
-     * Используется для преобразования формулы в строку, для вычисления хэша и
-     * для сравнения формул.
-     */
-    private final String operation;
+public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R extends Formula<? extends R>, S extends Formula<?>>
+        extends AbstractCompoundFormula<S> {
 
     /**
      * Левая часть формулы.
@@ -48,7 +43,7 @@ public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R ex
      *            правая часть формулы
      */
     public AbstractBinaryFormula(final String operation, final L left, final R right) {
-        this.operation = operation;
+        super(operation);
         this.left = left;
         this.right = right;
     }
@@ -61,7 +56,7 @@ public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R ex
      * mathlogic.base.Substitution)
      */
     @Override
-    public final AbstractBinaryFormula<L, R> applySubstitution(final Substitution substitution) {
+    public final S applySubstitution(final Substitution substitution) {
         return create(left.applySubstitution(substitution), right.applySubstitution(substitution));
     }
 
@@ -86,7 +81,7 @@ public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R ex
      * @return формулу с заданными левой и правой частью и с той же операцией,
      *         что и текущая формула
      */
-    protected abstract AbstractBinaryFormula<L, R> create(L left, R right);
+    protected abstract S create(L left, R right);
 
     /*
      * (non-Javadoc)
@@ -104,7 +99,7 @@ public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R ex
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final AbstractBinaryFormula<?, ?> other = (AbstractBinaryFormula<?, ?>) obj;
+        final AbstractBinaryFormula<?, ?, ?> other = (AbstractBinaryFormula<?, ?, ?>) obj;
         if (left == null) {
             if (other.left != null) {
                 return false;
@@ -112,11 +107,11 @@ public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R ex
         } else if (!left.equals(other.left)) {
             return false;
         }
-        if (operation == null) {
-            if (other.operation != null) {
+        if (symbol() == null) {
+            if (other.symbol() != null) {
                 return false;
             }
-        } else if (!operation.equals(other.operation)) {
+        } else if (!symbol().equals(other.symbol())) {
             return false;
         }
         if (right == null) {
@@ -159,13 +154,6 @@ public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R ex
     }
 
     /**
-     * @return the operation
-     */
-    public final String getOperation() {
-        return operation;
-    }
-
-    /**
      * @return the right
      */
     public final R getRight() {
@@ -182,7 +170,7 @@ public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R ex
         final int prime = 31;
         int result = 1;
         result = prime * result + (left == null ? 0 : left.hashCode());
-        result = prime * result + (operation == null ? 0 : operation.hashCode());
+        result = prime * result + (symbol() == null ? 0 : symbol().hashCode());
         result = prime * result + (right == null ? 0 : right.hashCode());
         return result;
     }
@@ -210,9 +198,21 @@ public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R ex
      */
     protected abstract boolean neededBraces(Formula<?> part);
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Formula#renameVariables(org.kreved.mathlogic
+     * .util.Function)
+     */
+    @Override
+    public final S renameVariables(final Function<Variable, Variable> renamer) {
+        return create(getLeft().renameVariables(renamer), getRight().renameVariables(renamer));
+    }
+
     @Override
     public final String toString() {
-        return String.format("%s %s %s", bracesIfNeeded(getLeft()), getOperation(),
+        return String.format("%s %s %s", bracesIfNeeded(getLeft()), symbol(),
                 bracesIfNeeded(getRight()));
     }
 

@@ -17,6 +17,8 @@ import org.kreved.mathlogic.base.FunctionalSymbol;
 import org.kreved.mathlogic.base.Implication;
 import org.kreved.mathlogic.base.Negation;
 import org.kreved.mathlogic.base.PredicateSymbol;
+import org.kreved.mathlogic.base.SingleSubstitution;
+import org.kreved.mathlogic.base.Substitution;
 import org.kreved.mathlogic.base.Variable;
 import org.kreved.mathlogic.util.CommonUtils;
 import org.kreved.mathlogic.util.Parser;
@@ -45,7 +47,8 @@ public final class CommonTest {
     @Test
     public void formulaGetVariables() {
 
-        assertEquals(CommonUtils.singleElementSet(new Variable("x1")), BIG_FORMULA.getFreeVariables());
+        assertEquals(CommonUtils.singleElementSet(new Variable("x1")),
+                BIG_FORMULA.getFreeVariables());
 
     }
 
@@ -108,6 +111,17 @@ public final class CommonTest {
                                 new Constant("c2")))));
 
         assertTrue("это основной терм", compoundTerm.getVariables().isEmpty());
+    }
+
+    /**
+     * 
+     */
+    @Test
+    public void testSubstitution() {
+        final Formula<?> source = Parser.parseFormula("P(x) => exists x Q(x)");
+        final Substitution sub = new SingleSubstitution(new Variable("x"), new Variable("x1"));
+        final Formula<?> shouldBe = Parser.parseFormula("P(x1) => exists x Q(x)");
+        assertEquals(shouldBe, source.applySubstitution(sub));
     }
 
     /**
