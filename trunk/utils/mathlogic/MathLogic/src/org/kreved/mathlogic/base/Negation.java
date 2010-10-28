@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.kreved.mathlogic.util.CommonUtils;
+import org.kreved.mathlogic.util.Function;
 
 /**
  * @param <I>
@@ -37,6 +38,7 @@ public final class Negation<I extends Formula<? extends I>> extends
      *            формула, к которой нужно применить отрицание
      */
     public Negation(final I negated) {
+        super(NEGATION_SYMBOL);
         this.negated = negated;
     }
 
@@ -62,8 +64,8 @@ public final class Negation<I extends Formula<? extends I>> extends
     @Override
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
-        return CommonUtils.singleElementSet(new SemanticTable(CommonUtils.singleElementSet(negated),
-                Collections.<Formula<?>> emptySet()));
+        return CommonUtils.singleElementSet(new SemanticTable(
+                CommonUtils.singleElementSet(negated), Collections.<Formula<?>> emptySet()));
     }
 
     /*
@@ -146,6 +148,18 @@ public final class Negation<I extends Formula<? extends I>> extends
     @Override
     public boolean isVariableFreeForTerm(final Variable variable, final Term term) {
         return negated.isVariableFreeForTerm(variable, term);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Formula#renameVariables(org.kreved.mathlogic
+     * .util.Function)
+     */
+    @Override
+    public Negation<I> renameVariables(final Function<Variable, Variable> renamer) {
+        return new Negation<I>(negated.renameVariables(renamer));
     }
 
     /*

@@ -7,9 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.kreved.mathlogic.util.CommonUtils;
 import org.kreved.mathlogic.util.Function;
 import org.kreved.mathlogic.util.Functional;
-import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * @param <O>
@@ -17,8 +17,8 @@ import org.kreved.mathlogic.util.CommonUtils;
  * @author burdakovd
  * 
  */
-public final class Conjunction<O extends Formula<? extends O>> extends
-        AbstractAssociativeOperator<O, Conjunction<O>> {
+public class Conjunction<O extends Formula<? extends O>> extends
+        AbstractPrimitiveOperator<O, Conjunction<O>> {
 
     /**
      * 
@@ -34,16 +34,16 @@ public final class Conjunction<O extends Formula<? extends O>> extends
     }
 
     @Override
-    public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
-            final Iterable<? extends Term> terms) {
+    public final Set<SemanticTable> applyTableDeductionLeft(
+            final Iterator<Constant> constantProvider, final Iterable<? extends Term> terms) {
 
         return CommonUtils.singleElementSet(new SemanticTable(getOperands(), Collections
                 .<Formula<?>> emptySet()));
     }
 
     @Override
-    public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
-            final Iterable<? extends Term> terms) {
+    public final Set<SemanticTable> applyTableDeductionRight(
+            final Iterator<Constant> constantProvider, final Iterable<? extends Term> terms) {
 
         return Collections.unmodifiableSet(new HashSet<SemanticTable>(Functional.mapList(
 
@@ -62,7 +62,7 @@ public final class Conjunction<O extends Formula<? extends O>> extends
     }
 
     @Override
-    protected Conjunction<O> create(final List<O> operands) {
+    protected final Conjunction<O> create(final List<O> operands) {
         return new Conjunction<O>(operands);
     }
 
@@ -72,8 +72,7 @@ public final class Conjunction<O extends Formula<? extends O>> extends
      * @see org.kreved.mathlogic.base.Formula#getPriority()
      */
     @Override
-    public int getPriority() {
+    public final int getPriority() {
         return PRIORITY;
     }
-
 }

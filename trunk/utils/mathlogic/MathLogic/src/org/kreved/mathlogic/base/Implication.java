@@ -16,7 +16,7 @@ import org.kreved.mathlogic.util.Of;
  * 
  */
 public final class Implication<L extends Formula<? extends L>, R extends Formula<? extends R>>
-        extends AbstractBinaryFormula<L, R> {
+        extends AbstractBinaryFormula<L, R, Implication<L, R>> {
 
     /**
      * 
@@ -66,7 +66,7 @@ public final class Implication<L extends Formula<? extends L>, R extends Formula
      * .base.Formula, org.kreved.mathlogic.base.Formula)
      */
     @Override
-    protected AbstractBinaryFormula<L, R> create(final L left, final R right) {
+    protected Implication<L, R> create(final L left, final R right) {
         return new Implication<L, R>(left, right);
     }
 

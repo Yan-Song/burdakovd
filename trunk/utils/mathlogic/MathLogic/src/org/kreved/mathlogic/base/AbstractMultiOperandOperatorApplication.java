@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.kreved.mathlogic.util.CommonUtils;
 import org.kreved.mathlogic.util.Function;
 import org.kreved.mathlogic.util.Functional;
-import org.kreved.mathlogic.util.CommonUtils;
 import org.kreved.mathlogic.util.Predicate;
 
 /**
@@ -22,19 +22,12 @@ import org.kreved.mathlogic.util.Predicate;
  *            тип операндов
  * @param <S>
  *            тип результата применения подстановки к этой формуле
+ * 
  * @author burdakovd
  * 
  */
 public abstract class AbstractMultiOperandOperatorApplication<O extends Formula<? extends O>, S extends Formula<?>>
         extends AbstractCompoundFormula<S> {
-
-    /**
-     * Строковое представление оператора.
-     * <p>
-     * Используется для преобразования формулы в строку, для вычисления хэша и
-     * для сравнения формул.
-     */
-    private final String operation;
 
     /**
      * Набор операндов.
@@ -50,7 +43,7 @@ public abstract class AbstractMultiOperandOperatorApplication<O extends Formula<
     public AbstractMultiOperandOperatorApplication(final String operation,
             final Collection<? extends O> operands) {
 
-        this.operation = operation;
+        super(operation);
         this.operands = Collections.unmodifiableList(new ArrayList<O>(operands));
     }
 
@@ -119,11 +112,11 @@ public abstract class AbstractMultiOperandOperatorApplication<O extends Formula<
         } else if (!operands.equals(other.operands)) {
             return false;
         }
-        if (operation == null) {
-            if (other.operation != null) {
+        if (symbol() == null) {
+            if (other.symbol() != null) {
                 return false;
             }
-        } else if (!operation.equals(other.operation)) {
+        } else if (!symbol().equals(other.symbol())) {
             return false;
         }
         return true;
@@ -166,13 +159,6 @@ public abstract class AbstractMultiOperandOperatorApplication<O extends Formula<
         return operands;
     }
 
-    /**
-     * @return the operation
-     */
-    public final String getOperation() {
-        return operation;
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -183,7 +169,7 @@ public abstract class AbstractMultiOperandOperatorApplication<O extends Formula<
         final int prime = 31;
         int result = 1;
         result = prime * result + (operands == null ? 0 : operands.hashCode());
-        result = prime * result + (operation == null ? 0 : operation.hashCode());
+        result = prime * result + (symbol() == null ? 0 : symbol().hashCode());
         return result;
     }
 
@@ -213,12 +199,30 @@ public abstract class AbstractMultiOperandOperatorApplication<O extends Formula<
      */
     protected abstract boolean neededBraces(O operand);
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Formula#renameVariables(org.kreved.mathlogic
+     * .util.Function)
+     */
+    @Override
+    public final S renameVariables(final Function<Variable, Variable> renamer) {
+        return create(Functional.mapList(getOperands(), new Function<O, O>() {
+
+            @Override
+            public O apply(final O argument) {
+                return argument.renameVariables(renamer);
+            }
+        }));
+    }
+
     @Override
     public final String toString() {
 
         return CommonUtils.join(
 
-        String.format(" %s ", operation),
+        String.format(" %s ", symbol()),
 
         Functional.map(operands, new Function<O, String>() {
             @Override

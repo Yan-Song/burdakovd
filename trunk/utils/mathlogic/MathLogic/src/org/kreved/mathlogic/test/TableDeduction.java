@@ -74,13 +74,13 @@ public final class TableDeduction {
      * @param formula
      *            формула
      * @return <code>true</code>, если удалось вывести, <code>false</code>, если
-     *         удалось найти контрпример, или зациклиться
+     *         удалось найти контрпример, или прувер зациклился
      */
     public boolean prove(final Formula<?> formula) {
 
         System.out.println("\nПытаемся доказать формулу " + formula);
 
-        return org.kreved.mathlogic.util.TableDeduction.doTableDeduction(new SemanticTable(
+        return org.kreved.mathlogic.algorithm.TableDeduction.doTableDeduction(new SemanticTable(
                 Collections.<Formula<?>> emptySet(), CommonUtils.singleElementSet(formula)),
                 new PrefixedConstantProvider("c", formula.getConstants()));
     }
@@ -88,7 +88,7 @@ public final class TableDeduction {
     /**
      * 
      * @param text
-     *            текст формулы
+     *            текст формулы, константами считаются только натуральные числа
      * @return общезначима ли формула
      */
     public boolean prove(final String text) {

@@ -168,7 +168,8 @@ public final class SemanticTable implements HasConstants {
      */
     @Override
     public String toString() {
-        return String.format("< %s | %s >", gamma.isEmpty() ? "null" : CommonUtils.join(", ", gamma),
-                delta.isEmpty() ? "null" : CommonUtils.join(", ", delta));
+        return String.format("< %s | %s >",
+                gamma.isEmpty() ? "null" : CommonUtils.join(", ", gamma), delta.isEmpty() ? "null"
+                        : CommonUtils.join(", ", delta));
     }
 }

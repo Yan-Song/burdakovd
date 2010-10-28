@@ -7,9 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.kreved.mathlogic.util.CommonUtils;
 import org.kreved.mathlogic.util.Function;
 import org.kreved.mathlogic.util.Functional;
-import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * @param <O>

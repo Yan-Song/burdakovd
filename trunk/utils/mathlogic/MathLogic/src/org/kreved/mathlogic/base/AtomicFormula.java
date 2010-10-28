@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.kreved.mathlogic.util.CommonUtils;
+import org.kreved.mathlogic.util.Function;
 
 /**
  * Атомарная формула вида P^{(m)}(t_1, t_2, ..., t_m).
@@ -200,6 +201,28 @@ public final class AtomicFormula implements Formula<AtomicFormula> {
     @Override
     public boolean isVariableFreeForTerm(final Variable variable, final Term term) {
         return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.Formula#renameVariables(org.kreved.mathlogic
+     * .util.Function)
+     */
+    @Override
+    public AtomicFormula renameVariables(final Function<Variable, Variable> renamer) {
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.Formula#symbol()
+     */
+    @Override
+    public String symbol() {
+        return "Atomic";
     }
 
     /*

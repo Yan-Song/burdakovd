@@ -3,6 +3,8 @@ package org.kreved.mathlogic.base;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.kreved.mathlogic.util.Function;
+
 /**
  * @param <T>
  *            тип результата применения подстановки к этой формуле
@@ -92,4 +94,36 @@ public interface Formula<T extends Formula<?>> extends Substitutable<T>, HasCons
      *         <code>term</code> в формуле <code>this</code>
      */
     boolean isVariableFreeForTerm(Variable variable, Term term);
+
+    /**
+     * Переименовать связанные кванторами переменные в формуле в соответствии с
+     * заданным правилом.
+     * <p>
+     * renamer <b>не</b> обязан возвращать одинаковый результат для
+     * повторяющихся вызовов с одним и тем же аргументом.
+     * <p>
+     * renamer будет вызван <b>один раз</b> для каждого квантора в формуле,
+     * переменная в кванторе и все её связанные вхождения будут заменены на
+     * результат этого вызова renamer.
+     * <p>
+     * Пример: если renamer возвращает <code>y</code> при первом вызове и
+     * <code>z</code> при втором, то применение этого метода к формулe
+     * <code>any x (P(x) => exists x P(x))</code> вернёт
+     * <code>any y (P(y) => exists z P(z))</code>
+     * <p>
+     * Замены (и соответственно вызовы renamer) происходят слева направо (в
+     * соответствии с нормальным порядком вычислений)
+     * 
+     * @param renamer
+     *            функция переименования
+     * @return результат переименования
+     */
+    T renameVariables(Function<Variable, Variable> renamer);
+
+    /**
+     * Представление для пользователя.
+     * 
+     * @return короткую строку, характеризующую класс этой формулы
+     */
+    String symbol();
 }
