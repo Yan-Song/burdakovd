@@ -5,10 +5,15 @@ import java.util.Set;
 import org.kreved.mathlogic.util.MathUtil;
 
 /**
+ * @param <I>
+ *            тип формулы под квантором
+ * @param <S>
+ *            тип результата применения подстановки к этой формуле
  * @author burdakovd
  * 
  */
-public abstract class AbstractQuantifiedFormula extends AbstractCompoundFormula {
+public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, S extends Formula<?>>
+        extends AbstractCompoundFormula<S> {
 
     /**
      * 
@@ -29,7 +34,7 @@ public abstract class AbstractQuantifiedFormula extends AbstractCompoundFormula 
     /**
      * Формула, к которой прменяется квантор.
      */
-    private final Formula formula;
+    private final I formula;
 
     /**
      * @param quantor
@@ -40,8 +45,7 @@ public abstract class AbstractQuantifiedFormula extends AbstractCompoundFormula 
      * @param formula
      *            Формула, к которой прменяется квантор.
      */
-    public AbstractQuantifiedFormula(final String quantor, final Variable variable,
-            final Formula formula) {
+    public AbstractQuantifiedFormula(final String quantor, final Variable variable, final I formula) {
 
         this.quantor = quantor;
         this.variable = variable;
@@ -56,7 +60,7 @@ public abstract class AbstractQuantifiedFormula extends AbstractCompoundFormula 
      * mathlogic.base.Substitution)
      */
     @Override
-    public final Formula applySubstitution(final Substitution substitution) {
+    public final S applySubstitution(final Substitution substitution) {
 
         // применяем подстановку ко всем переменным, кроме связанной квантором
 
@@ -68,13 +72,13 @@ public abstract class AbstractQuantifiedFormula extends AbstractCompoundFormula 
             }
 
             @Override
-            public boolean isCorrectFor(final Formula formula) {
+            public boolean isCorrectFor(final Formula<?> formula) {
                 throw new UnsupportedOperationException();
             }
 
         };
 
-        final Formula substitutedFormula = formula.applySubstitution(modifiedSubstitution);
+        final I substitutedFormula = formula.applySubstitution(modifiedSubstitution);
 
         return create(variable, substitutedFormula);
     }
@@ -90,7 +94,7 @@ public abstract class AbstractQuantifiedFormula extends AbstractCompoundFormula 
      * @return новая формула с тем же квантором, но с заданной переменной и
      *         формулой к которой квантор будет применяться
      */
-    protected abstract Formula create(Variable variable, Formula formula);
+    protected abstract S create(Variable variable, I formula);
 
     /*
      * (non-Javadoc)
@@ -108,7 +112,7 @@ public abstract class AbstractQuantifiedFormula extends AbstractCompoundFormula 
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final AbstractQuantifiedFormula other = (AbstractQuantifiedFormula) obj;
+        final AbstractQuantifiedFormula<?, ?> other = (AbstractQuantifiedFormula<?, ?>) obj;
         if (formula == null) {
             if (other.formula != null) {
                 return false;
@@ -146,7 +150,7 @@ public abstract class AbstractQuantifiedFormula extends AbstractCompoundFormula 
     /**
      * @return the formula
      */
-    public final Formula getFormula() {
+    public final I getFormula() {
         return formula;
     }
 

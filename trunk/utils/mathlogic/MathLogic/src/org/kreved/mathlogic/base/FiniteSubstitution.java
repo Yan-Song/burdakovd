@@ -88,7 +88,7 @@ public final class FiniteSubstitution implements Substitution {
      * .base.Formula)
      */
     @Override
-    public boolean isCorrectFor(final Formula formula) {
+    public boolean isCorrectFor(final Formula<?> formula) {
 
         for (final Entry<Variable, Term> bunch : bunches.entrySet()) {
             if (!formula.isVariableFreeForTerm(bunch.getKey(), bunch.getValue())) {

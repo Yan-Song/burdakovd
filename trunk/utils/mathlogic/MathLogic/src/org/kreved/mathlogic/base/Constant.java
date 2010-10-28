@@ -74,7 +74,7 @@ public final class Constant implements Term {
      */
     @Override
     public Set<Constant> getConstants() {
-        return MathUtil.unmodifiableSet(this);
+        return MathUtil.singleElementSet(this);
     }
 
     /**

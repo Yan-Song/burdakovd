@@ -7,10 +7,13 @@ import java.util.Set;
 import org.kreved.mathlogic.util.MathUtil;
 
 /**
+ * @param <I>
+ *            тип формулы под отрицанием
  * @author burdakovd
  * 
  */
-public final class Negation extends AbstractCompoundFormula {
+public final class Negation<I extends Formula<? extends I>> extends
+        AbstractCompoundFormula<Negation<I>> {
 
     /**
      * 
@@ -25,7 +28,7 @@ public final class Negation extends AbstractCompoundFormula {
     /**
      * 
      */
-    private final Formula negated;
+    private final I negated;
 
     /**
      * Создаёт формулу "Неверно, что negated".
@@ -33,7 +36,7 @@ public final class Negation extends AbstractCompoundFormula {
      * @param negated
      *            формула, к которой нужно применить отрицание
      */
-    public Negation(final Formula negated) {
+    public Negation(final I negated) {
         this.negated = negated;
     }
 
@@ -45,22 +48,22 @@ public final class Negation extends AbstractCompoundFormula {
      * mathlogic.base.Substitution)
      */
     @Override
-    public Formula applySubstitution(final Substitution substitution) {
-        return new Negation(negated.applySubstitution(substitution));
+    public Negation<I> applySubstitution(final Substitution substitution) {
+        return new Negation<I>(negated.applySubstitution(substitution));
     }
 
     @Override
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
-        return MathUtil.unmodifiableSet(new SemanticTable(Collections.<Formula> emptySet(),
-                MathUtil.unmodifiableSet(negated)));
+        return MathUtil.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
+                MathUtil.singleElementSet(negated)));
     }
 
     @Override
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
-        return MathUtil.unmodifiableSet(new SemanticTable(MathUtil.unmodifiableSet(negated),
-                Collections.<Formula> emptySet()));
+        return MathUtil.singleElementSet(new SemanticTable(MathUtil.singleElementSet(negated),
+                Collections.<Formula<?>> emptySet()));
     }
 
     /*
@@ -79,7 +82,7 @@ public final class Negation extends AbstractCompoundFormula {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Negation other = (Negation) obj;
+        final Negation<?> other = (Negation<?>) obj;
         if (negated == null) {
             if (other.negated != null) {
                 return false;

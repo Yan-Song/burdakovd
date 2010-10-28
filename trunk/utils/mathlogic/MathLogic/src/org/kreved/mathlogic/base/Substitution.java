@@ -27,5 +27,5 @@ public interface Substitution {
      *            подстановки
      * @return правильна ли эта подстановка для заданной формулы.
      */
-    boolean isCorrectFor(Formula formula);
+    boolean isCorrectFor(Formula<?> formula);
 }

@@ -4,11 +4,12 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * 
+ * @param <T>
+ *            тип результата применения подстановки к этой формуле
  * @author burdakovd
  * 
  */
-public interface Formula extends Substitutable<Formula>, HasConstants {
+public interface Formula<T extends Formula<?>> extends Substitutable<T>, HasConstants {
 
     /**
      * @param constantProvider

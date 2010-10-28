@@ -123,7 +123,7 @@ public final class Parser {
      *            входная строка
      * @return формула, полученная из входной строки
      */
-    public static Formula parseFormula(final String input) {
+    public static Formula<?> parseFormula(final String input) {
         return parseFormula(input, DEFAULT_CONSTANT_MATCHER);
     }
 
@@ -135,11 +135,11 @@ public final class Parser {
      *            набор констант
      * @return формула, полученная из входной строки
      */
-    public static Formula parseFormula(final String input, final ConstantMatcher matcher) {
+    public static Formula<?> parseFormula(final String input, final ConstantMatcher matcher) {
 
         final Parser parser = new Parser(input, matcher);
 
-        final Formula ans = parser.nextFormula();
+        final Formula<?> ans = parser.nextFormula();
 
         if (parser.hasTokens()) {
             throw new IllegalArgumentException("лишний текст после формулы: '"
@@ -362,27 +362,27 @@ public final class Parser {
     /**
      * @return следующую закрытую формулу
      */
-    private Formula nextClosedFormula() {
+    private Formula<?> nextClosedFormula() {
 
         if (tryEatString("(")) {
             // первый случай: формула в скобках
-            final Formula inner = nextFormula();
+            final Formula<?> inner = nextFormula();
             closeBrace();
             return inner;
 
         } else if (tryEatOneOf(NEGATION_SYMBOLS)) {
             // второй случай: отрицание
-            return new Negation(nextClosedFormula());
+            return new Negation<Formula<?>>(nextClosedFormula());
 
         } else if (tryEatOneOf(UNIVERSAL_QUANTIFIER_SYMBOLS)) {
             // третий случай: квантор всеобщности
             final Variable variable = nextVariable();
-            return new ForAny(variable, nextClosedFormula());
+            return new ForAny<Formula<?>>(variable, nextClosedFormula());
 
         } else if (tryEatOneOf(EXISTANCE_QUANTIFIER_SYMBOLS)) {
             // четвёртый случай: квантор существования
             final Variable variable = nextVariable();
-            return new ExistsSuch(variable, nextClosedFormula());
+            return new ExistsSuch<Formula<?>>(variable, nextClosedFormula());
 
         } else {
             // пятый случай: предикат
@@ -401,7 +401,7 @@ public final class Parser {
     /**
      * @return конъюнкцию
      */
-    private Formula nextConjunction() {
+    private Formula<?> nextConjunction() {
         // выше приоритет имеют только унарные операции
 
         // для рекурсии используем ассоциативность конъюнкции
@@ -411,39 +411,37 @@ public final class Parser {
         // формулы, возможно предварённые некоторым количеством кванторов и
         // отрицаний
 
-        final Formula firstAtom = nextClosedFormula();
+        final List<Formula<?>> operands = new ArrayList<Formula<?>>();
 
-        if (tryEatOneOf(CONJUNCTION_SYMBOLS)) {
-            // рекурсивно находим конъюнкцию оставшихся "закрытых" формул
-            final Formula tailConjunction = nextConjunction();
-            return new Conjunction(firstAtom, tailConjunction);
-        } else {
-            return firstAtom;
-        }
+        do {
+            operands.add(nextClosedFormula());
+        } while (tryEatOneOf(CONJUNCTION_SYMBOLS));
+
+        return operands.size() == 1 ? operands.iterator().next() : new Conjunction<Formula<?>>(
+                operands);
     }
 
     /**
      * @return дизъюнкцию
      */
-    private Formula nextDisjunction() {
+    private Formula<?> nextDisjunction() {
         // выше приоритет имеет конъюнкция
         // читаем дизъюнкцию некоторого (не меньше 1) набора конъюнкций
-        // дизъюнкция ассоциативна, поэтому можно врубить рекурсию
-        final Formula firstConjunction = nextConjunction();
 
-        if (tryEatOneOf(DISJUNCTION_SYMBOLS)) {
-            // рекурсивно находим дизъюнкцию оставшихся конъюнктов
-            final Formula tailDisjunction = nextDisjunction();
-            return new Disjunction(firstConjunction, tailDisjunction);
-        } else {
-            return firstConjunction;
-        }
+        final List<Formula<?>> operands = new ArrayList<Formula<?>>();
+
+        do {
+            operands.add(nextConjunction());
+        } while (tryEatOneOf(DISJUNCTION_SYMBOLS));
+
+        return operands.size() == 1 ? operands.iterator().next() : new Disjunction<Formula<?>>(
+                operands);
     }
 
     /**
      * @return формулу, записанную в входной строке
      */
-    private Formula nextFormula() {
+    private Formula<?> nextFormula() {
         // минимальный приоритет имеет импликация, так что рассматриваем формулу
         // как импликацию
         return nextImplication();
@@ -458,16 +456,16 @@ public final class Parser {
      * 
      * @return импликацию
      */
-    private Formula nextImplication() {
+    private Formula<?> nextImplication() {
 
         // после импликации бОльший приоритет имеет дизъюнкция, так что считаем
         // что у нас импликация двух дизъюнкций, или же просто одна дизъюнкция
-        final Formula firstDisjunction = nextDisjunction();
+        final Formula<?> firstDisjunction = nextDisjunction();
 
         // если далее идёт символ импликации, то случилась импликация
         if (tryEatOneOf(IMPLICATION_SYMBOLS)) {
-            final Formula secondDisjunction = nextDisjunction();
-            return new Implication(firstDisjunction, secondDisjunction);
+            final Formula<?> secondDisjunction = nextDisjunction();
+            return new Implication<Formula<?>, Formula<?>>(firstDisjunction, secondDisjunction);
         } else {
             return firstDisjunction;
         }

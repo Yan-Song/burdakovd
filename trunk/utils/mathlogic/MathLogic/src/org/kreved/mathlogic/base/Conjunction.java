@@ -1,16 +1,24 @@
 package org.kreved.mathlogic.base;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import org.kreved.mathlogic.util.Function;
+import org.kreved.mathlogic.util.Functional;
 import org.kreved.mathlogic.util.MathUtil;
 
 /**
+ * @param <O>
+ *            тип аргументов конъюнкции
  * @author burdakovd
  * 
  */
-public final class Conjunction extends AbstractBinaryAssociativeFormula {
+public final class Conjunction<O extends Formula<? extends O>> extends
+        AbstractAssociativeOperator<O, Conjunction<O>> {
 
     /**
      * 
@@ -18,47 +26,44 @@ public final class Conjunction extends AbstractBinaryAssociativeFormula {
     private static final int PRIORITY = 4;
 
     /**
-     * Создаёт формулу "left и right".
-     * 
-     * @param left
-     *            левая часть
-     * @param right
-     *            правая часть
+     * @param operands
+     *            операнды конъюнкции
      */
-    public Conjunction(final Formula left, final Formula right) {
-        super("&", left, right);
+    public Conjunction(final Collection<? extends O> operands) {
+        super("&", operands);
     }
 
     @Override
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
-        return MathUtil.unmodifiableSet(new SemanticTable(MathUtil.unmodifiableSet(getLeft(),
-                getRight()), Collections.<Formula> emptySet()));
+
+        return MathUtil.singleElementSet(new SemanticTable(getOperands(), Collections
+                .<Formula<?>> emptySet()));
     }
 
     @Override
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
 
-        return MathUtil.unmodifiableSet(
+        return Collections.unmodifiableSet(new HashSet<SemanticTable>(Functional.mapList(
 
-        new SemanticTable(Collections.<Formula> emptySet(), MathUtil.unmodifiableSet(getLeft())),
+        getOperands(),
 
-        new SemanticTable(Collections.<Formula> emptySet(), MathUtil.unmodifiableSet(getRight()))
+        new Function<O, SemanticTable>() {
 
-        );
+            @Override
+            public SemanticTable apply(final O operand) {
+                return new SemanticTable(Collections.<Formula<?>> emptySet(), MathUtil
+                        .singleElementSet(operand));
+            }
+        }
+
+        )));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.kreved.mathlogic.base.AbstractBinaryFormula#create(org.kreved.mathlogic
-     * .base.Formula, org.kreved.mathlogic.base.Formula)
-     */
     @Override
-    protected Formula create(final Formula left, final Formula right) {
-        return new Conjunction(left, right);
+    protected Conjunction<O> create(final List<O> operands) {
+        return new Conjunction<O>(operands);
     }
 
     /*
