@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.kreved.mathlogic.util.Function;
 import org.kreved.mathlogic.util.Functional;
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * @param <O>
@@ -45,7 +45,7 @@ public final class Disjunction<O extends Formula<? extends O>> extends
 
             @Override
             public SemanticTable apply(final O argument) {
-                return new SemanticTable(MathUtil.singleElementSet(argument), Collections
+                return new SemanticTable(CommonUtils.singleElementSet(argument), Collections
                         .<Formula<?>> emptySet());
             }
         })));
@@ -55,7 +55,7 @@ public final class Disjunction<O extends Formula<? extends O>> extends
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
 
-        return MathUtil.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
+        return CommonUtils.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
                 getOperands()));
     }
 

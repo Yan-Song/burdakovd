@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.kreved.mathlogic.base.Formula;
 import org.kreved.mathlogic.base.PrefixedConstantProvider;
 import org.kreved.mathlogic.base.SemanticTable;
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 import org.kreved.mathlogic.util.Parser;
 import org.kreved.mathlogic.util.Parser.ConstantMatcher;
 
@@ -80,8 +80,8 @@ public final class TableDeduction {
 
         System.out.println("\nПытаемся доказать формулу " + formula);
 
-        return MathUtil.doTableDeduction(new SemanticTable(Collections.<Formula<?>> emptySet(),
-                MathUtil.singleElementSet(formula)),
+        return org.kreved.mathlogic.util.TableDeduction.doTableDeduction(new SemanticTable(
+                Collections.<Formula<?>> emptySet(), CommonUtils.singleElementSet(formula)),
                 new PrefixedConstantProvider("c", formula.getConstants()));
     }
 

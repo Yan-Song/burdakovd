@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * @param <I>
@@ -46,7 +46,7 @@ public final class ForAny<I extends Formula<? extends I>> extends
             left.add(getFormula().applySubstitution(new SingleSubstitution(getVariable(), term)));
         }
 
-        return MathUtil.singleElementSet(new SemanticTable(left, Collections
+        return CommonUtils.singleElementSet(new SemanticTable(left, Collections
                 .<Formula<?>> emptySet()));
     }
 
@@ -64,8 +64,8 @@ public final class ForAny<I extends Formula<? extends I>> extends
         final Constant freshConstant = constantProvider.next();
         final Substitution substitution = new SingleSubstitution(getVariable(), freshConstant);
 
-        return MathUtil.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
-                MathUtil.singleElementSet(getFormula().applySubstitution(substitution))));
+        return CommonUtils.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
+                CommonUtils.singleElementSet(getFormula().applySubstitution(substitution))));
     }
 
     /*

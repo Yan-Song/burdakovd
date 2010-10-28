@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * @param <I>
@@ -43,7 +43,7 @@ public final class ExistsSuch<I extends Formula<? extends I>> extends
         final Constant freshConstant = constantProvider.next();
         final Substitution substitution = new SingleSubstitution(getVariable(), freshConstant);
 
-        return MathUtil.singleElementSet(new SemanticTable(MathUtil.singleElementSet(getFormula()
+        return CommonUtils.singleElementSet(new SemanticTable(CommonUtils.singleElementSet(getFormula()
                 .applySubstitution(substitution)), Collections.<Formula<?>> emptySet()));
     }
 
@@ -65,7 +65,7 @@ public final class ExistsSuch<I extends Formula<? extends I>> extends
             right.add(getFormula().applySubstitution(new SingleSubstitution(getVariable(), term)));
         }
 
-        return MathUtil.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
+        return CommonUtils.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
                 right));
     }
 

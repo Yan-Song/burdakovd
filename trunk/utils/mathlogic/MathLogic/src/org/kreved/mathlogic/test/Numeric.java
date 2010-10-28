@@ -14,9 +14,11 @@ import org.kreved.mathlogic.base.Constant;
 import org.kreved.mathlogic.base.Formula;
 import org.kreved.mathlogic.base.PrefixedConstantProvider;
 import org.kreved.mathlogic.base.SemanticTable;
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
+import org.kreved.mathlogic.util.Of;
 import org.kreved.mathlogic.util.Parser;
 import org.kreved.mathlogic.util.Parser.FiniteMatcher;
+import org.kreved.mathlogic.util.TableDeduction;
 
 /**
  * @author burdakovd
@@ -73,17 +75,16 @@ public final class Numeric {
      *            формула
      * @return является ли формула следствием базы знаний
      */
-    @SuppressWarnings("unchecked")
     public boolean checkFormula(final String formula) {
 
         final Formula<?> parsed = Parser.parseFormula(formula, EMPTY_MATCHER);
         assertTrue(parsed.getFreeVariables().isEmpty());
 
         final boolean ans =
-                MathUtil.doTableDeduction(
-                        new SemanticTable(base, MathUtil.singleElementSet(parsed)),
-                        new PrefixedConstantProvider("c", MathUtil.mergeWithMakingUnique(
-                                parsed.getConstants(), baseConstants)));
+                TableDeduction.doTableDeduction(
+                        new SemanticTable(base, CommonUtils.singleElementSet(parsed)),
+                        new PrefixedConstantProvider("c", CommonUtils.mergeWithMakingUnique(Of.of(
+                                parsed.getConstants(), baseConstants))));
 
         System.out.println(parsed + " == " + ans);
 

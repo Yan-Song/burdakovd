@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * @param <I>
@@ -55,14 +55,14 @@ public final class Negation<I extends Formula<? extends I>> extends
     @Override
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
-        return MathUtil.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
-                MathUtil.singleElementSet(negated)));
+        return CommonUtils.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
+                CommonUtils.singleElementSet(negated)));
     }
 
     @Override
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
-        return MathUtil.singleElementSet(new SemanticTable(MathUtil.singleElementSet(negated),
+        return CommonUtils.singleElementSet(new SemanticTable(CommonUtils.singleElementSet(negated),
                 Collections.<Formula<?>> emptySet()));
     }
 

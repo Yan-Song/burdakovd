@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * Содержит методы, общие для всех бинарных формул.
@@ -136,7 +136,7 @@ public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R ex
      */
     @Override
     public final Set<Constant> getConstants() {
-        return MathUtil.union(getLeft().getConstants(), getRight().getConstants());
+        return CommonUtils.union(getLeft().getConstants(), getRight().getConstants());
     }
 
     /*

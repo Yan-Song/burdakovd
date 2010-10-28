@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.kreved.mathlogic.util.Function;
 import org.kreved.mathlogic.util.Functional;
-import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.CommonUtils;
 import org.kreved.mathlogic.util.Predicate;
 
 /**
@@ -136,7 +136,7 @@ public abstract class AbstractMultiOperandOperatorApplication<O extends Formula<
      */
     @Override
     public final Set<Constant> getConstants() {
-        return MathUtil.union(Functional.map(operands, new Function<O, Set<Constant>>() {
+        return CommonUtils.union(Functional.map(operands, new Function<O, Set<Constant>>() {
             @Override
             public Set<Constant> apply(final O argument) {
                 return argument.getConstants();
@@ -151,7 +151,7 @@ public abstract class AbstractMultiOperandOperatorApplication<O extends Formula<
      */
     @Override
     public final Set<Variable> getFreeVariables() {
-        return MathUtil.union(Functional.map(operands, new Function<O, Set<Variable>>() {
+        return CommonUtils.union(Functional.map(operands, new Function<O, Set<Variable>>() {
             @Override
             public Set<Variable> apply(final O argument) {
                 return argument.getFreeVariables();
@@ -216,7 +216,7 @@ public abstract class AbstractMultiOperandOperatorApplication<O extends Formula<
     @Override
     public final String toString() {
 
-        return MathUtil.join(
+        return CommonUtils.join(
 
         String.format(" %s ", operation),
 
