@@ -51,7 +51,7 @@ public final class SingleSubstitution implements Substitution {
      * .base.Formula)
      */
     @Override
-    public boolean isCorrectFor(final Formula formula) {
+    public boolean isCorrectFor(final Formula<?> formula) {
         return formula.isVariableFreeForTerm(variable, term);
     }
 

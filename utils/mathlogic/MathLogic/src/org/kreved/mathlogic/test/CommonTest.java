@@ -18,8 +18,8 @@ import org.kreved.mathlogic.base.Implication;
 import org.kreved.mathlogic.base.Negation;
 import org.kreved.mathlogic.base.PredicateSymbol;
 import org.kreved.mathlogic.base.Variable;
-import org.kreved.mathlogic.util.Parser;
 import org.kreved.mathlogic.util.MathUtil;
+import org.kreved.mathlogic.util.Parser;
 
 /**
  * @author burdakovd
@@ -30,10 +30,11 @@ public final class CommonTest {
     /**
      * 
      */
-    private static final ExistsSuch BIG_FORMULA = new ExistsSuch(new Variable("x2"),
-            new Implication(new ForAny(new Variable("x1"), new Negation(new AtomicFormula(
-                    new PredicateSymbol("R"), Arrays.asList(new Variable("x1"))))),
-                    new AtomicFormula(new PredicateSymbol("P"), Arrays.asList(
+    private static final Formula<?> BIG_FORMULA = new ExistsSuch<Formula<?>>(new Variable("x2"),
+            new Implication<Formula<?>, Formula<?>>(new ForAny<Formula<?>>(new Variable("x1"),
+                    new Negation<Formula<?>>(new AtomicFormula(new PredicateSymbol("R"),
+                            Arrays.asList(new Variable("x1"))))), new AtomicFormula(
+                    new PredicateSymbol("P"), Arrays.asList(
                             new Variable("x1"),
                             new CompoundTerm(new FunctionalSymbol("f"), Arrays.asList(new Constant(
                                     "c"), new Variable("x2")))))));
@@ -44,7 +45,7 @@ public final class CommonTest {
     @Test
     public void formulaGetVariables() {
 
-        assertEquals(MathUtil.unmodifiableSet(new Variable("x1")), BIG_FORMULA.getFreeVariables());
+        assertEquals(MathUtil.singleElementSet(new Variable("x1")), BIG_FORMULA.getFreeVariables());
 
     }
 
@@ -54,7 +55,7 @@ public final class CommonTest {
     @Test
     public void formulaParsing() {
 
-        final Formula parsed = Parser.parseFormula(BIG_FORMULA.toString());
+        final Formula<?> parsed = Parser.parseFormula(BIG_FORMULA.toString());
         assertEquals(BIG_FORMULA, parsed);
 
         for (final String stringFormula : Arrays.asList(
@@ -70,8 +71,8 @@ public final class CommonTest {
         "(exists x2 ((any x1(!R(x1))) -> P(x1, f(c, x2))))"
 
         )) {
-            final Formula parsedFormula = Parser.parseFormula(stringFormula);
-            final Formula stage2 = Parser.parseFormula(stringFormula.toString());
+            final Formula<?> parsedFormula = Parser.parseFormula(stringFormula);
+            final Formula<?> stage2 = Parser.parseFormula(stringFormula.toString());
 
             // проверяем, что разбор строкового представления формулы совпадёт с
             // исходной формулой
@@ -115,7 +116,7 @@ public final class CommonTest {
     @Test
     public void testVariableFreeForTerm() {
 
-        final Formula formula =
+        final Formula<?> formula =
                 Parser.parseFormula("any x (P(x) -> !R(y)) -> R(f(x)) || exists y P(y)");
 
         assertFalse(formula.isVariableFreeForTerm(new Variable("y"), Parser.parseTerm("f(x, z)")));

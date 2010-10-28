@@ -76,12 +76,12 @@ public final class TableDeduction {
      * @return <code>true</code>, если удалось вывести, <code>false</code>, если
      *         удалось найти контрпример, или зациклиться
      */
-    public boolean prove(final Formula formula) {
+    public boolean prove(final Formula<?> formula) {
 
         System.out.println("\nПытаемся доказать формулу " + formula);
 
-        return MathUtil.doTableDeduction(new SemanticTable(Collections.<Formula> emptySet(),
-                MathUtil.unmodifiableSet(formula)),
+        return MathUtil.doTableDeduction(new SemanticTable(Collections.<Formula<?>> emptySet(),
+                MathUtil.singleElementSet(formula)),
                 new PrefixedConstantProvider("c", formula.getConstants()));
     }
 

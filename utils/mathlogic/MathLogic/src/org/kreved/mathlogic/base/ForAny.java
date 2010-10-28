@@ -8,10 +8,13 @@ import java.util.Set;
 import org.kreved.mathlogic.util.MathUtil;
 
 /**
+ * @param <I>
+ *            тип формулы под квантором
  * @author burdakovd
  * 
  */
-public final class ForAny extends AbstractQuantifiedFormula {
+public final class ForAny<I extends Formula<? extends I>> extends
+        AbstractQuantifiedFormula<I, ForAny<I>> {
 
     /**
      * Создаёт формулу "для любого значения variable верно formula".
@@ -21,7 +24,7 @@ public final class ForAny extends AbstractQuantifiedFormula {
      * @param formula
      *            формула
      */
-    public ForAny(final Variable variable, final Formula formula) {
+    public ForAny(final Variable variable, final I formula) {
         super("any", variable, formula);
     }
 
@@ -36,14 +39,15 @@ public final class ForAny extends AbstractQuantifiedFormula {
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
 
-        final Set<Formula> left = new HashSet<Formula>();
+        final Set<Formula<?>> left = new HashSet<Formula<?>>();
         left.add(this);
 
         for (final Term term : terms) {
             left.add(getFormula().applySubstitution(new SingleSubstitution(getVariable(), term)));
         }
 
-        return MathUtil.unmodifiableSet(new SemanticTable(left, Collections.<Formula> emptySet()));
+        return MathUtil.singleElementSet(new SemanticTable(left, Collections
+                .<Formula<?>> emptySet()));
     }
 
     /*
@@ -60,20 +64,20 @@ public final class ForAny extends AbstractQuantifiedFormula {
         final Constant freshConstant = constantProvider.next();
         final Substitution substitution = new SingleSubstitution(getVariable(), freshConstant);
 
-        return MathUtil.unmodifiableSet(new SemanticTable(Collections.<Formula> emptySet(),
-                MathUtil.unmodifiableSet(getFormula().applySubstitution(substitution))));
+        return MathUtil.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
+                MathUtil.singleElementSet(getFormula().applySubstitution(substitution))));
     }
 
     /*
      * (non-Javadoc)
      * 
      * @see
-     * org.kreved.mathlogic.base.AbstractQuantifiedFormula#create(org.kreved.
-     * mathlogic.base.Variable, org.kreved.mathlogic.base.Formula)
+     * org.kreved.mathlogic.base.AbstractQuantifiedFormula#create(org.kreved
+     * .mathlogic.base.Variable, org.kreved.mathlogic.base.Formula)
      */
     @Override
-    protected Formula create(final Variable variable, final Formula formula) {
-        return new ForAny(variable, formula);
+    protected ForAny<I> create(final Variable variable, final I formula) {
+        return new ForAny<I>(variable, formula);
     }
 
 }

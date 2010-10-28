@@ -8,10 +8,13 @@ import java.util.Set;
 import org.kreved.mathlogic.util.MathUtil;
 
 /**
+ * @param <I>
+ *            тип формулы под квантором
  * @author burdakovd
  * 
  */
-public final class ExistsSuch extends AbstractQuantifiedFormula {
+public final class ExistsSuch<I extends Formula<? extends I>> extends
+        AbstractQuantifiedFormula<I, ExistsSuch<I>> {
 
     /**
      * Создаёт формулу
@@ -22,7 +25,7 @@ public final class ExistsSuch extends AbstractQuantifiedFormula {
      * @param formula
      *            формула
      */
-    public ExistsSuch(final Variable variable, final Formula formula) {
+    public ExistsSuch(final Variable variable, final I formula) {
         super("exists", variable, formula);
     }
 
@@ -40,8 +43,8 @@ public final class ExistsSuch extends AbstractQuantifiedFormula {
         final Constant freshConstant = constantProvider.next();
         final Substitution substitution = new SingleSubstitution(getVariable(), freshConstant);
 
-        return MathUtil.unmodifiableSet(new SemanticTable(MathUtil.unmodifiableSet(getFormula()
-                .applySubstitution(substitution)), Collections.<Formula> emptySet()));
+        return MathUtil.singleElementSet(new SemanticTable(MathUtil.singleElementSet(getFormula()
+                .applySubstitution(substitution)), Collections.<Formula<?>> emptySet()));
     }
 
     /*
@@ -55,26 +58,27 @@ public final class ExistsSuch extends AbstractQuantifiedFormula {
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
 
-        final Set<Formula> right = new HashSet<Formula>();
+        final Set<Formula<?>> right = new HashSet<Formula<?>>();
         right.add(this);
 
         for (final Term term : terms) {
             right.add(getFormula().applySubstitution(new SingleSubstitution(getVariable(), term)));
         }
 
-        return MathUtil.unmodifiableSet(new SemanticTable(Collections.<Formula> emptySet(), right));
+        return MathUtil.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
+                right));
     }
 
     /*
      * (non-Javadoc)
      * 
      * @see
-     * org.kreved.mathlogic.base.AbstractQuantifiedFormula#create(org.kreved.
-     * mathlogic.base.Variable, org.kreved.mathlogic.base.Formula)
+     * org.kreved.mathlogic.base.AbstractQuantifiedFormula#create(org.kreved
+     * .mathlogic.base.Variable, org.kreved.mathlogic.base.Formula)
      */
     @Override
-    protected Formula create(final Variable variable, final Formula formula) {
-        return new ExistsSuch(variable, formula);
+    protected ExistsSuch<I> create(final Variable variable, final I formula) {
+        return new ExistsSuch<I>(variable, formula);
     }
 
 }

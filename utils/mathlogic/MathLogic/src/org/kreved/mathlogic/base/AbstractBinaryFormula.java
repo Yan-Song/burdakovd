@@ -9,13 +9,18 @@ import org.kreved.mathlogic.util.MathUtil;
 /**
  * Содержит методы, общие для всех бинарных формул.
  * 
+ * @param <L>
+ *            тип левой части формулы
+ * @param <R>
+ *            тип правой части формулы
  * @author burdakovd
  * 
  */
-public abstract class AbstractBinaryFormula extends AbstractCompoundFormula {
+public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R extends Formula<? extends R>>
+        extends AbstractCompoundFormula<AbstractBinaryFormula<L, R>> {
 
     /**
-     * Строковое представление внешней бинарной операции этой формулы.
+     * Строковое представление внешней операции этой формулы.
      * <p>
      * Используется для преобразования формулы в строку, для вычисления хэша и
      * для сравнения формул.
@@ -25,12 +30,12 @@ public abstract class AbstractBinaryFormula extends AbstractCompoundFormula {
     /**
      * Левая часть формулы.
      */
-    private final Formula left;
+    private final L left;
 
     /**
      * Правая часть формулы.
      */
-    private final Formula right;
+    private final R right;
 
     /**
      * @param operation
@@ -42,7 +47,7 @@ public abstract class AbstractBinaryFormula extends AbstractCompoundFormula {
      * @param right
      *            правая часть формулы
      */
-    public AbstractBinaryFormula(final String operation, final Formula left, final Formula right) {
+    public AbstractBinaryFormula(final String operation, final L left, final R right) {
         this.operation = operation;
         this.left = left;
         this.right = right;
@@ -56,7 +61,7 @@ public abstract class AbstractBinaryFormula extends AbstractCompoundFormula {
      * mathlogic.base.Substitution)
      */
     @Override
-    public final Formula applySubstitution(final Substitution substitution) {
+    public final AbstractBinaryFormula<L, R> applySubstitution(final Substitution substitution) {
         return create(left.applySubstitution(substitution), right.applySubstitution(substitution));
     }
 
@@ -66,12 +71,13 @@ public abstract class AbstractBinaryFormula extends AbstractCompoundFormula {
      * @return строковое представление этой части, если нужно, окруженное
      *         скобками
      */
-    private String bracesIfNeeded(final Formula part) {
+    private String bracesIfNeeded(final Formula<?> part) {
         return neededBraces(part) ? "(" + part + ")" : part.toString();
     }
 
     /**
-     * Используется {@link AbstractBinaryFormula} для применения подстановок.
+     * Этот метод используется в {@link AbstractBinaryFormula} для применения
+     * подстановок.
      * 
      * @param left
      *            левая часть формулы
@@ -80,7 +86,7 @@ public abstract class AbstractBinaryFormula extends AbstractCompoundFormula {
      * @return формулу с заданными левой и правой частью и с той же операцией,
      *         что и текущая формула
      */
-    protected abstract Formula create(Formula left, Formula right);
+    protected abstract AbstractBinaryFormula<L, R> create(L left, R right);
 
     /*
      * (non-Javadoc)
@@ -95,10 +101,10 @@ public abstract class AbstractBinaryFormula extends AbstractCompoundFormula {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof AbstractBinaryFormula)) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        final AbstractBinaryFormula other = (AbstractBinaryFormula) obj;
+        final AbstractBinaryFormula<?, ?> other = (AbstractBinaryFormula<?, ?>) obj;
         if (left == null) {
             if (other.left != null) {
                 return false;
@@ -128,7 +134,6 @@ public abstract class AbstractBinaryFormula extends AbstractCompoundFormula {
      * 
      * @see org.kreved.mathlogic.base.Formula#getConstants()
      */
-    @SuppressWarnings("unchecked")
     @Override
     public final Set<Constant> getConstants() {
         return MathUtil.union(getLeft().getConstants(), getRight().getConstants());
@@ -149,7 +154,7 @@ public abstract class AbstractBinaryFormula extends AbstractCompoundFormula {
     /**
      * @return the left
      */
-    public final Formula getLeft() {
+    public final L getLeft() {
         return left;
     }
 
@@ -163,7 +168,7 @@ public abstract class AbstractBinaryFormula extends AbstractCompoundFormula {
     /**
      * @return the right
      */
-    public final Formula getRight() {
+    public final R getRight() {
         return right;
     }
 
@@ -203,7 +208,7 @@ public abstract class AbstractBinaryFormula extends AbstractCompoundFormula {
      *            часть формулы (левая или правая)
      * @return нужны ли скобки вокруг неё
      */
-    protected abstract boolean neededBraces(Formula part);
+    protected abstract boolean neededBraces(Formula<?> part);
 
     @Override
     public final String toString() {

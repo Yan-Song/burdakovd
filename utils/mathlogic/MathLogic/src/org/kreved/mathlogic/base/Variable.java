@@ -89,7 +89,7 @@ public final class Variable implements Term {
      */
     @Override
     public Set<Variable> getVariables() {
-        return MathUtil.unmodifiableSet(this);
+        return MathUtil.singleElementSet(this);
     }
 
     /*

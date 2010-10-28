@@ -7,10 +7,15 @@ import java.util.Set;
 import org.kreved.mathlogic.util.MathUtil;
 
 /**
+ * @param <L>
+ *            тип посылки
+ * @param <R>
+ *            тип следствия
  * @author burdakovd
  * 
  */
-public final class Implication extends AbstractBinaryFormula {
+public final class Implication<L extends Formula<? extends L>, R extends Formula<? extends R>>
+        extends AbstractBinaryFormula<L, R> {
 
     /**
      * 
@@ -25,7 +30,7 @@ public final class Implication extends AbstractBinaryFormula {
      * @param right
      *            следствие
      */
-    public Implication(final Formula left, final Formula right) {
+    public Implication(final L left, final R right) {
         super("->", left, right);
     }
 
@@ -33,21 +38,23 @@ public final class Implication extends AbstractBinaryFormula {
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
 
-        return MathUtil.unmodifiableSet(
+        return MathUtil.unmodifiableSet(MathUtil.of(
 
-        new SemanticTable(MathUtil.unmodifiableSet(getRight()), Collections.<Formula> emptySet()),
+                new SemanticTable(MathUtil.singleElementSet(getRight()), Collections
+                        .<Formula<?>> emptySet()),
 
-        new SemanticTable(Collections.<Formula> emptySet(), MathUtil.unmodifiableSet(getLeft()))
+                new SemanticTable(Collections.<Formula<?>> emptySet(), MathUtil
+                        .singleElementSet(getLeft()))
 
-        );
+        ));
     }
 
     @Override
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
 
-        return MathUtil.unmodifiableSet(new SemanticTable(MathUtil.unmodifiableSet(getLeft()),
-                MathUtil.unmodifiableSet(getRight())));
+        return MathUtil.singleElementSet(new SemanticTable(MathUtil.singleElementSet(getLeft()),
+                MathUtil.singleElementSet(getRight())));
     }
 
     /*
@@ -58,8 +65,8 @@ public final class Implication extends AbstractBinaryFormula {
      * .base.Formula, org.kreved.mathlogic.base.Formula)
      */
     @Override
-    protected Formula create(final Formula left, final Formula right) {
-        return new Implication(left, right);
+    protected AbstractBinaryFormula<L, R> create(final L left, final R right) {
+        return new Implication<L, R>(left, right);
     }
 
     /*
@@ -80,7 +87,7 @@ public final class Implication extends AbstractBinaryFormula {
      * .mathlogic.base.Formula)
      */
     @Override
-    protected boolean neededBraces(final Formula part) {
+    protected boolean neededBraces(final Formula<?> part) {
         return part.getPriority() <= getPriority();
     }
 

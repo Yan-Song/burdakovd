@@ -29,10 +29,11 @@ public final class Numeric {
      */
     private static final FiniteMatcher EMPTY_MATCHER = new Parser.FiniteMatcher(
             Collections.<String> emptySet());
+
     /**
      * 
      */
-    private final Set<Formula> base;
+    private final Set<Formula<?>> base;
 
     /**
      * 
@@ -54,11 +55,11 @@ public final class Numeric {
 
         );
 
-        base = new HashSet<Formula>();
+        base = new HashSet<Formula<?>>();
         baseConstants = new HashSet<Constant>();
 
         for (final String formula : knowledgeBase) {
-            final Formula parsed = Parser.parseFormula(formula, EMPTY_MATCHER);
+            final Formula<?> parsed = Parser.parseFormula(formula, EMPTY_MATCHER);
             base.add(parsed);
             baseConstants.addAll(parsed.getConstants());
             assertTrue(parsed.getFreeVariables().isEmpty());
@@ -75,12 +76,12 @@ public final class Numeric {
     @SuppressWarnings("unchecked")
     public boolean checkFormula(final String formula) {
 
-        final Formula parsed = Parser.parseFormula(formula, EMPTY_MATCHER);
+        final Formula<?> parsed = Parser.parseFormula(formula, EMPTY_MATCHER);
         assertTrue(parsed.getFreeVariables().isEmpty());
 
         final boolean ans =
                 MathUtil.doTableDeduction(
-                        new SemanticTable(base, MathUtil.unmodifiableSet(parsed)),
+                        new SemanticTable(base, MathUtil.singleElementSet(parsed)),
                         new PrefixedConstantProvider("c", MathUtil.mergeWithMakingUnique(
                                 parsed.getConstants(), baseConstants)));
 

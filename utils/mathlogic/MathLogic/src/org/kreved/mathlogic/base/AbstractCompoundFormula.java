@@ -1,11 +1,12 @@
 package org.kreved.mathlogic.base;
 
-
 /**
+ * @param <T>
+ *            тип результата применения подстановки к этой формуле
  * @author burdakovd
  * 
  */
-public abstract class AbstractCompoundFormula implements Formula {
+public abstract class AbstractCompoundFormula<T extends Formula<?>> implements Formula<T> {
 
     /*
      * (non-Javadoc)

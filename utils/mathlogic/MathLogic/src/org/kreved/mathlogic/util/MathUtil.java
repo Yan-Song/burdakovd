@@ -1,13 +1,13 @@
 package org.kreved.mathlogic.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
@@ -21,48 +21,6 @@ import org.kreved.mathlogic.base.SemanticTable;
  * 
  */
 public final class MathUtil {
-
-    /**
-     * @param tree
-     *            дерево формул
-     * @param root
-     *            корень нужного нам поддерева
-     * @param tables
-     *            таблицы
-     * @param inLefts
-     *            в левой ли части таблицы должна быть соответствующая формула
-     * @param neededFormulas
-     *            формула, одну из которых нужно найти
-     * @return null, все ли ветки заданного дерева рано или поздно содержат
-     *         заданную формулу в нужной стороне, или номер листа, путь к
-     *         которому не содержит
-     */
-    @SuppressWarnings("unused")
-    private static Integer allBranchesHas(final List<List<Integer>> tree, final int root,
-            final List<SemanticTable> tables, final List<Boolean> inLefts,
-            final List<Formula> neededFormulas) {
-
-        for (int i = 0; i < neededFormulas.size(); ++i) {
-            if ((inLefts.get(i) ? tables.get(root).getGamma() : tables.get(root).getDelta())
-                    .contains(neededFormulas.get(i))) {
-                return null;
-            }
-        }
-
-        if (tree.get(root).isEmpty()) {
-            return tables.get(root).isClosed() ? null : root;
-        } else {
-            for (final int child : tree.get(root)) {
-                final Integer childResult =
-                        allBranchesHas(tree, child, tables, inLefts, neededFormulas);
-                if (childResult != null) {
-                    return childResult;
-                }
-            }
-
-            return null;
-        }
-    }
 
     /**
      * @param original
@@ -80,15 +38,15 @@ public final class MathUtil {
     private static Set<SemanticTable> applyRule(final SemanticTable original,
             final Iterator<Constant> constantProvider, final boolean inLeft) {
 
-        final Set<Formula> currentlyHasLeft = new HashSet<Formula>(original.getGamma());
-        final Set<Formula> currentlyHasRight = new HashSet<Formula>(original.getDelta());
+        final Set<Formula<?>> currentlyHasLeft = new HashSet<Formula<?>>(original.getGamma());
+        final Set<Formula<?>> currentlyHasRight = new HashSet<Formula<?>>(original.getDelta());
 
-        final List<Formula> candidates = inLeft ? original.getGamma() : original.getDelta();
+        final List<Formula<?>> candidates = inLeft ? original.getGamma() : original.getDelta();
 
         // последовательно пытаемся применить правила к какой-либо из формул
         for (int i = 0; i < candidates.size(); ++i) {
 
-            final Formula candidate = candidates.get(i);
+            final Formula<?> candidate = candidates.get(i);
 
             if (!candidate.isAtomic()) {
 
@@ -116,27 +74,27 @@ public final class MathUtil {
                 // этот кандидат подходит
 
                 // формулы, к которым не удалось применить правило
-                final List<Formula> junk = candidates.subList(0, i);
+                final List<Formula<?>> junk = candidates.subList(0, i);
 
                 // не рассмотренные формулы
-                final List<Formula> remaining = candidates.subList(i + 1, candidates.size());
+                final List<Formula<?>> remaining = candidates.subList(i + 1, candidates.size());
 
                 final Set<SemanticTable> ans = new HashSet<SemanticTable>();
 
                 for (final SemanticTable table : result) {
                     if (inLeft) {
-                        final List<Formula> newLeft =
+                        final List<Formula<?>> newLeft =
                                 mergeWithMakingUnique(remaining, junk, table.getGamma());
 
-                        final List<Formula> newRight =
+                        final List<Formula<?>> newRight =
                                 mergeWithMakingUnique(original.getDelta(), table.getDelta());
 
                         ans.add(new SemanticTable(newLeft, newRight));
                     } else {
-                        final List<Formula> newLeft =
+                        final List<Formula<?>> newLeft =
                                 mergeWithMakingUnique(original.getGamma(), table.getGamma());
 
-                        final List<Formula> newRight =
+                        final List<Formula<?>> newRight =
                                 mergeWithMakingUnique(remaining, junk, table.getDelta());
 
                         ans.add(new SemanticTable(newLeft, newRight));
@@ -176,7 +134,7 @@ public final class MathUtil {
             if (unPreferredCandidate == null) {
                 // нет правил для применения, возвращаем исходную таблицу
                 System.out.println("Нет правил для применения");
-                return MathUtil.unmodifiableSet(original);
+                return MathUtil.unmodifiableSet(of(original));
             } else {
                 return unPreferredCandidate;
             }
@@ -299,7 +257,7 @@ public final class MathUtil {
      *            второе множество
      * @return принадлежат ли все элементы коллекции множеству
      */
-    private static <T> boolean isSubSet(final Collection<? extends T> first, final Set<T> second) {
+    private static <T> boolean isSubSet(final Iterable<? extends T> first, final Set<T> second) {
 
         for (final T element : first) {
             if (!second.contains(element)) {
@@ -371,17 +329,96 @@ public final class MathUtil {
     /**
      * 
      * @param <T>
+     *            тип элемента
+     * @param element
+     *            элемент
+     * @return {@link List} из одного элемента
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> List<T> of(final T element) {
+        return varargsOf(element);
+    }
+
+    /**
+     * 
+     * @param <T>
+     *            тип элементов
+     * @param e1
+     *            первый элемент
+     * @param e2
+     *            второй элемент
+     * @return {@link List} из переданных элементов
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> List<T> of(final T e1, final T e2) {
+        return varargsOf(e1, e2);
+    }
+
+    /**
+     * 
+     * @param <T>
+     *            тип элементов
+     * @param e1
+     *            первый элемент
+     * @param e2
+     *            второй элемент
+     * @param e3
+     *            третий элемент
+     * @return {@link List} из переданных элементов
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> List<T> of(final T e1, final T e2, final T e3) {
+        return varargsOf(e1, e2, e3);
+    }
+
+    /**
+     * 
+     * @param <T>
+     *            тип элемента множества
+     * @param element
+     *            элементы множества
+     * @return константное множество, состоящее из одного заданного элемента
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Set<T> singleElementSet(final T element) {
+        return unmodifiableSet(Arrays.asList(element));
+    }
+
+    /**
+     * 
+     * @param <T>
      *            тип элементов в множествах
-     * @param sets
-     *            набор множеств
+     * @param first
+     *            первая коллекция
+     * @param second
+     *            вторая коллекция
      * @return их объединение
      */
-    public static <T> Set<T> union(final Collection<? extends T>... sets) {
+    public static <T> Set<T> union(final Collection<? extends T> first,
+            final Collection<? extends T> second) {
 
         final Set<T> ans = new HashSet<T>();
 
-        for (final Collection<? extends T> set : sets) {
-            ans.addAll(set);
+        ans.addAll(first);
+        ans.addAll(second);
+
+        return Collections.unmodifiableSet(ans);
+    }
+
+    /**
+     * 
+     * @param <T>
+     *            тип элементов в коллекциях
+     * @param collections
+     *            набор коллекций
+     * @return объединение коллекций
+     */
+    public static <T> Set<T> union(final Iterable<? extends Collection<? extends T>> collections) {
+
+        final Set<T> ans = new HashSet<T>();
+
+        for (final Collection<? extends T> collection : collections) {
+            ans.addAll(collection);
         }
 
         return Collections.unmodifiableSet(ans);
@@ -395,7 +432,7 @@ public final class MathUtil {
      *            элементы множества
      * @return константное множество, состоящее из заданных элементов
      */
-    public static <T> Set<T> unmodifiableSet(final T... elements) {
+    public static <T> Set<T> unmodifiableSet(final Iterable<? extends T> elements) {
 
         final HashSet<T> set = new HashSet<T>();
 
@@ -407,25 +444,15 @@ public final class MathUtil {
     }
 
     /**
-     * @param tree
-     *            структура дерева
-     * @param root
-     *            корень
-     * @param level
-     *            текущий уровень
-     * @param counts
-     *            мап с количествами
+     * 
+     * @param <T>
+     *            тип элементов
+     * @param elements
+     *            элементы
+     * @return {@link List} из переданных элементов
      */
-    @SuppressWarnings("unused")
-    private static void updateCounts(final List<List<Integer>> tree, final int root,
-            final int level, final Map<Integer, Integer> counts) {
-
-        counts.put(level, counts.containsKey(level) ? counts.get(level) + 1 : 1);
-
-        for (final int child : tree.get(root)) {
-            updateCounts(tree, child, level + 1, counts);
-        }
-
+    private static <T> List<T> varargsOf(final T... elements) {
+        return Collections.unmodifiableList(Arrays.asList(elements));
     }
 
     /**

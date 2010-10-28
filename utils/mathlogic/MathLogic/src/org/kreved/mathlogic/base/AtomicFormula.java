@@ -21,7 +21,7 @@ import org.kreved.mathlogic.util.MathUtil;
  * @author burdakovd
  * 
  */
-public final class AtomicFormula implements Formula {
+public final class AtomicFormula implements Formula<AtomicFormula> {
 
     /**
      * 
@@ -57,7 +57,7 @@ public final class AtomicFormula implements Formula {
      * mathlogic.base.Substitution)
      */
     @Override
-    public Formula applySubstitution(final Substitution substitution) {
+    public AtomicFormula applySubstitution(final Substitution substitution) {
 
         final List<Term> substitutedArguments = new ArrayList<Term>();
 
@@ -71,16 +71,17 @@ public final class AtomicFormula implements Formula {
     @Override
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
-        return MathUtil.unmodifiableSet(new SemanticTable(MathUtil.<Formula> unmodifiableSet(this),
-                Collections.<Formula> emptySet()));
+
+        return MathUtil.singleElementSet(new SemanticTable(MathUtil
+                .<Formula<?>> singleElementSet(this), Collections.<Formula<?>> emptySet()));
     }
 
     @Override
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
             final Iterable<? extends Term> terms) {
 
-        return MathUtil.unmodifiableSet(new SemanticTable(Collections.<Formula> emptySet(),
-                MathUtil.<Formula> unmodifiableSet(this)));
+        return MathUtil.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
+                MathUtil.<Formula<?>> singleElementSet(this)));
     }
 
     @Override
