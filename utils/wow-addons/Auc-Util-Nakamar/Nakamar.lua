@@ -839,11 +839,10 @@ function lib.NeedAnyConfirmation()
 end
 
 function lib.ConfirmPurchase()
-	if lib.NeedPurchaseConfirmation() then
-		AucAdvanced.Buy.Private.Prompt.Yes:Click()
-	end
-    if lib.NeedPostConfirmation() then
+	if lib.NeedPostConfirmation() then
 		AucAdvanced.Post.Private.Prompt.Yes:Click()
+	elseif lib.NeedPurchaseConfirmation() then
+		AucAdvanced.Buy.Private.Prompt.Yes:Click()
 	end
 end
 
