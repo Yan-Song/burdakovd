@@ -38,5 +38,15 @@ end
 require "BeanCounter"
 
 print("# -*- coding: utf8 -*-")
+
 print("data = \\")
 tprint(BeanCounterDB)
+
+print("settings = \\")
+tprint(BeanCounterDBSettings)
+
+print("names = \\")
+tprint(BeanCounterDBNames)
+
+print("account = \\")
+tprint(BeanCounterAccountDB)

@@ -4,22 +4,23 @@
 import sys, os
 sys.path.append(".")
 from BeanCounterDB import data, constant_count
+import BeanCounterDB
 
 import time
 
 
-#### some html helpers
+# some html helpers
 
 htmldir = "html"
-dbversions = ["2.11", "2.12"]
+dbversions = ["3"]
 transactionsperpage = 500
 topprofitlimit = 5000
 onmainpagecountlimit = 200
 
 
 def prn(s):
-    if type(s) is unicode: print s.encode("utf-8")
-    else: print s
+    if type(s) is unicode: print s.encode("cp866")
+    else: print s.decode("utf-8").encode("cp866")
 
 def write(fn, title, body):
     if type(title)==type(u""): title = title.encode("utf8")
@@ -62,7 +63,7 @@ def write(fn, title, body):
     </div>
     </div>
     </div>
-    <div id="footer"><small>Made by Burdakov Daniel, 2009</small></div>
+    <div id="footer"><small>Burdakov Daniel, 2010</small></div>
     </body>
     </html>""".encode("utf8") % (title, body)
     f.write(text)
@@ -135,7 +136,7 @@ def gold(amount):
     else: return """<span class="moneycopper">%s%d</span>""" % (sign, c)
 
 def itemlink(ids):
-    item = data["ItemIDArray"].get(ids, "cffff1010;??")
+    item = BeanCounterDB.names.get(ids, "cffff1010;??")
     color, name = item.split(";")
     itemid = ids.split(":")[0]
     color = color[3:]
@@ -143,13 +144,13 @@ def itemlink(ids):
         (itemid, color, name)
 
 def itemname(ids):
-    item = data["ItemIDArray"].get(ids, "cffff1010;??")
+    item = BeanCounterDB.names.get(ids, "cffff1010;??")
     color, name = item.split(";")
     return name
 
 #########
 
-realms = filter(lambda x: x!="settings" and x!="ItemIDArray", data.keys())
+realms = data.keys()
 
 def get_ids(string):
     s = string.split(":")
@@ -400,18 +401,18 @@ for realm in realms:
     chars = data[realm].keys()
     prn( realm + ": " + ", ".join(chars))
     for char in chars:
-        # general
-        c = data[realm][char]
-        f = c["faction"]
-        
         # check db version
-        cversion = data[realm][char]["version"]
+        cversion = BeanCounterDB.settings[realm][char]["version"]
         if not(cversion in dbversions):
             write(char+"-data", u"История торговли %s" % char, \
                 p(u"""База, полученная от BeanCounter для %s имеет версию "%s", а этот
                 скрипт умеет работать только с базами версии %s.""" % \
-                (char, cversion, ", ".join(dbversions))))
+                (char, cversion, ", ".join(map(str, dbversions)))))
             continue
+        
+        # general
+        c = data[realm][char]
+        f = BeanCounterDB.settings[realm][char]["faction"]
         
         # raw data
         log = getrows(c)
@@ -427,7 +428,7 @@ for realm in realms:
             
             mktable(log, "%s-%s-data" % (realm, char), \
                 u"История торговли %s" % char, h(u"%s, %s" % (faction(f, char), \
-                gold(c["wealth"]))) + \
+                gold(BeanCounterDB.settings[realm][char]["wealth"]))) + \
                 div(u"""%s потратил на покупки %s, на депозиты %s, получил с продаж %s""" % \
                     (
                     char,
@@ -736,12 +737,52 @@ for realm in realms:
             write(iname, "%s - %s: %s" % (realm, fac, itemname(ids)), s)
 
 
-index_data = h(u"Данные от BeanCounter (последнее обновление: %s, %s)" % \
-    (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(max(lasts) if lasts else 0)), constant_count[0])) + \
-    ul(map(lambda realm: "%s: %s" % (realm, ", ".join(map(
-        lambda (char, f): link("%s-%s-data-1.html" % (realm, char), \
-        faction(f, char), "character"), realchars[realm]
-        ))), realchars.keys()))
+index_data = \
+    h(
+        u"Данные от BeanCounter (Данные: %s, генерация: %s, %s)" % \
+            (
+                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(max(lasts) if lasts else 0)),
+                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+                constant_count[0]
+            )
+    ) \
+    + \
+    ul(
+        map(
+            lambda realm:
+                "%s %s" %
+                    (
+                        realm,
+                        ul(
+                            map(
+                                lambda (character, f):
+                                    u"%s, запас %s, данные от %s" % 
+                                        (
+                                            link(
+                                                "%s-%s-data-1.html" % (realm, character),
+                                                faction(f, character),
+                                                "character"
+                                            ),
+                                            gold(BeanCounterDB.settings[realm][character]["wealth"]),
+                                            time.strftime(
+                                                "%Y-%m-%d %H:%M:%S",
+                                                time.localtime(
+                                                    max(
+                                                        map(
+                                                            lambda transaction: int(transaction.time),
+                                                            getrows(data[realm][character])
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        ),
+                                realchars[realm]
+                            )
+                        )
+                    ),
+            realchars.keys()
+        )
+    )
 
 index_summary = h(u"Статистика") + \
     ul(
