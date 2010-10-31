@@ -453,19 +453,12 @@ function private.everySecond()
 			
 		elseif private.state == "POSTING" then
 			local left = AucAdvanced.Post.GetQueueLen()
-
-			if left == 0 then
-				local postable = #lib.batchItems()
-				if postable == 0 then
-					print("весь товар выложен на аукцион")
-					private.doScanning()
-					-- считаем, что нам нечего делать, если весь товар выложен на аукцион
-					-- и до следующего сбора почты больше 10 минут
-					NNothingToDo(private.nextMailTime > private.GameTime + 600)
-				else
-					private.ERROR("часть товара не удалось выложить на аукцион")
-				end
-
+			if (left == 0) and (#lib.batchItems() == 0) then
+				print("весь товар выложен на аукцион")
+				private.doScanning()
+				-- считаем, что нам нечего делать, если весь товар выложен на аукцион
+				-- и до следующего сбора почты больше 10 минут
+				NNothingToDo(private.nextMailTime > private.GameTime + 600)
 			elseif private.GameTime - prevAssetsTime > 300 then
 				prevAssetsTime = private.GameTime
 				local cur = assets()
