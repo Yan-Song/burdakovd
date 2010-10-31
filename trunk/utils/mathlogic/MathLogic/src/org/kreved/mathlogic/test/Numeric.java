@@ -49,13 +49,13 @@ public final class Numeric {
 
         final List<String> knowledgeBase = Arrays.asList(
 
-        "any x exists y next(y, x)",
+        // "any x exists y next(y, x)",
 
-        "any x (1(x) => !(exists y next(x, y)))",
+                "any x (1(x) => !(exists y next(x, y)))"
 
-        "any x (!1(x) => exists y next(x, y))"
+                // "any x (!1(x) => exists y next(x, y))"
 
-        );
+                );
 
         base = new HashSet<Formula<?>>();
         baseConstants = new HashSet<Constant>();
@@ -96,7 +96,7 @@ public final class Numeric {
      */
     @Test
     public void commonTest() {
-        checkFormula("any x (1(x) => !next(x, x))");
+        // assertTrue(checkFormula("any x (1(x) => !next(x, x))"));
 
         System.out.flush();
     }

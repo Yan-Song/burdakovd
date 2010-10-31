@@ -1,13 +1,8 @@
 package org.kreved.mathlogic.base;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import org.kreved.mathlogic.util.CommonUtils;
 import org.kreved.mathlogic.util.Function;
 import org.kreved.mathlogic.util.Functional;
 
@@ -17,62 +12,46 @@ import org.kreved.mathlogic.util.Functional;
  * @author burdakovd
  * 
  */
-public class Conjunction<O extends Formula<? extends O>> extends
-        AbstractPrimitiveOperator<O, Conjunction<O>> {
-
-    /**
-     * 
-     */
-    private static final int PRIORITY = 4;
+public final class Conjunction<O extends Formula<? extends O>> extends
+        AbstractConjunction<O, Conjunction<O>> {
 
     /**
      * @param operands
-     *            операнды конъюнкции
+     *            операнды
      */
     public Conjunction(final Collection<? extends O> operands) {
-        super("&", operands);
+        super(operands);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.AbstractMultiOperandOperatorApplication#create
+     * (java.util.List)
+     */
     @Override
-    public final Set<SemanticTable> applyTableDeductionLeft(
-            final Iterator<Constant> constantProvider, final Iterable<? extends Term> terms) {
-
-        return CommonUtils.singleElementSet(new SemanticTable(getOperands(), Collections
-                .<Formula<?>> emptySet()));
-    }
-
-    @Override
-    public final Set<SemanticTable> applyTableDeductionRight(
-            final Iterator<Constant> constantProvider, final Iterable<? extends Term> terms) {
-
-        return Collections.unmodifiableSet(new HashSet<SemanticTable>(Functional.mapList(
-
-        getOperands(),
-
-        new Function<O, SemanticTable>() {
-
-            @Override
-            public SemanticTable apply(final O operand) {
-                return new SemanticTable(Collections.<Formula<?>> emptySet(), CommonUtils
-                        .singleElementSet(operand));
-            }
-        }
-
-        )));
-    }
-
-    @Override
-    protected final Conjunction<O> create(final List<O> operands) {
+    protected Conjunction<O> create(final List<O> operands) {
         return new Conjunction<O>(operands);
     }
 
     /*
      * (non-Javadoc)
      * 
-     * @see org.kreved.mathlogic.base.Formula#getPriority()
+     * @see
+     * org.kreved.mathlogic.base.AbstractPrimitiveOperator#createPrimitive(java
+     * .util.List)
      */
     @Override
-    public final int getPriority() {
-        return PRIORITY;
+    protected PrimitiveFormula<?> createPrimitive(final List<PrimitiveFormula<?>> operands) {
+        return new ConjunctionOfPrimitives<PrimitiveFormula<?>>(Functional.mapList(getOperands(),
+                new Function<O, PrimitiveFormula<?>>() {
+
+                    @Override
+                    public PrimitiveFormula<?> apply(final O argument) {
+                        return argument.toPrimitive();
+                    }
+                }));
     }
+
 }

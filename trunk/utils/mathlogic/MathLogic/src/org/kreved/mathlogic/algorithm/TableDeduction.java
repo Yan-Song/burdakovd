@@ -14,6 +14,7 @@ import org.kreved.mathlogic.base.Constant;
 import org.kreved.mathlogic.base.Formula;
 import org.kreved.mathlogic.base.SemanticTable;
 import org.kreved.mathlogic.util.CommonUtils;
+import org.kreved.mathlogic.util.Functional;
 import org.kreved.mathlogic.util.Of;
 
 /**
@@ -49,10 +50,14 @@ public final class TableDeduction {
 
             if (!candidate.isAtomic()) {
 
+                final Iterator<Constant> termProvider =
+                        Functional.concat(Of.of(original.getConstants().iterator(),
+                                Functional.take(1, constantProvider)).iterator());
+
                 final Set<SemanticTable> result =
-                        inLeft ? candidate.applyTableDeductionLeft(constantProvider,
-                                original.getConstants()) : candidate.applyTableDeductionRight(
-                                constantProvider, original.getConstants());
+                        inLeft ? candidate.applyTableDeductionLeft(constantProvider, termProvider)
+                                : candidate
+                                        .applyTableDeductionRight(constantProvider, termProvider);
 
                 if (result.size() == 1) {
                     final SemanticTable table = result.iterator().next();
@@ -179,6 +184,10 @@ public final class TableDeduction {
         tree.add(new ArrayList<Integer>());
 
         while (!pending.isEmpty()) {
+
+            // if (popped > 50) {
+            // return false;
+            // }
 
             final SemanticTable current = pending.poll();
             final boolean currentSide = side.poll();

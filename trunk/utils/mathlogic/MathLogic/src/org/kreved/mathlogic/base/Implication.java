@@ -37,7 +37,7 @@ public final class Implication<L extends Formula<? extends L>, R extends Formula
 
     @Override
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
-            final Iterable<? extends Term> terms) {
+            final Iterator<? extends Term> terms) {
 
         return CommonUtils.unmodifiableSet(Of.of(
 
@@ -52,7 +52,7 @@ public final class Implication<L extends Formula<? extends L>, R extends Formula
 
     @Override
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
-            final Iterable<? extends Term> terms) {
+            final Iterator<? extends Term> terms) {
 
         return CommonUtils.singleElementSet(new SemanticTable(CommonUtils
                 .singleElementSet(getLeft()), CommonUtils.singleElementSet(getRight())));
@@ -90,6 +90,17 @@ public final class Implication<L extends Formula<? extends L>, R extends Formula
     @Override
     protected boolean neededBraces(final Formula<?> part) {
         return part.getPriority() <= getPriority();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.Formula#toPrimitive()
+     */
+    @Override
+    public PrimitiveFormula<?> toPrimitive() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

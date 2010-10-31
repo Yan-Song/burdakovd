@@ -37,13 +37,14 @@ public final class ForAny<I extends Formula<? extends I>> extends
      */
     @Override
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
-            final Iterable<? extends Term> terms) {
+            final Iterator<? extends Term> terms) {
 
         final Set<Formula<?>> left = new HashSet<Formula<?>>();
         left.add(this);
 
-        for (final Term term : terms) {
-            left.add(getFormula().applySubstitution(new SingleSubstitution(getVariable(), term)));
+        while (terms.hasNext()) {
+            left.add(getFormula().applySubstitution(
+                    new SingleSubstitution(getVariable(), terms.next())));
         }
 
         return CommonUtils.singleElementSet(new SemanticTable(left, Collections
@@ -59,7 +60,7 @@ public final class ForAny<I extends Formula<? extends I>> extends
      */
     @Override
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
-            final Iterable<? extends Term> terms) {
+            final Iterator<? extends Term> terms) {
 
         final Constant freshConstant = constantProvider.next();
         final Substitution substitution = new SingleSubstitution(getVariable(), freshConstant);
@@ -78,6 +79,17 @@ public final class ForAny<I extends Formula<? extends I>> extends
     @Override
     protected ForAny<I> create(final Variable variable, final I formula) {
         return new ForAny<I>(variable, formula);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.Formula#toPrimitive()
+     */
+    @Override
+    public PrimitiveFormula<?> toPrimitive() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

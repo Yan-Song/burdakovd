@@ -59,7 +59,13 @@ public final class TableDeduction {
 
         "exists x (P(x) || R(x)) -> (exists x P(x) || exists x R(x))",
 
-        "(exists x P(x) || exists x R(x)) -> exists x (P(x) || R(x))"
+        "exists x P(x) || exists x R(x) -> exists x (P(x) || R(x))",
+
+        "exists x any y (P(y) => P(x))",
+
+        "any x (P(x) -> exists y R(x, y)) -> (exists x !P(x) V any x exists z R(x, z))",
+
+        "any x (R(x) V !R(x)) && any x (P(x) V !P(x)) => any x (Q(x) V !Q(x))"
 
         };
 
