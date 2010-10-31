@@ -38,13 +38,14 @@ public final class ExistsSuch<I extends Formula<? extends I>> extends
      */
     @Override
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
-            final Iterable<? extends Term> terms) {
+            final Iterator<? extends Term> terms) {
 
         final Constant freshConstant = constantProvider.next();
         final Substitution substitution = new SingleSubstitution(getVariable(), freshConstant);
 
-        return CommonUtils.singleElementSet(new SemanticTable(CommonUtils.singleElementSet(getFormula()
-                .applySubstitution(substitution)), Collections.<Formula<?>> emptySet()));
+        return CommonUtils.singleElementSet(new SemanticTable(CommonUtils
+                .singleElementSet(getFormula().applySubstitution(substitution)), Collections
+                .<Formula<?>> emptySet()));
     }
 
     /*
@@ -56,13 +57,14 @@ public final class ExistsSuch<I extends Formula<? extends I>> extends
      */
     @Override
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
-            final Iterable<? extends Term> terms) {
+            final Iterator<? extends Term> terms) {
 
         final Set<Formula<?>> right = new HashSet<Formula<?>>();
         right.add(this);
 
-        for (final Term term : terms) {
-            right.add(getFormula().applySubstitution(new SingleSubstitution(getVariable(), term)));
+        while (terms.hasNext()) {
+            right.add(getFormula().applySubstitution(
+                    new SingleSubstitution(getVariable(), terms.next())));
         }
 
         return CommonUtils.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
@@ -79,6 +81,17 @@ public final class ExistsSuch<I extends Formula<? extends I>> extends
     @Override
     protected ExistsSuch<I> create(final Variable variable, final I formula) {
         return new ExistsSuch<I>(variable, formula);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.Formula#toPrimitive()
+     */
+    @Override
+    public PrimitiveFormula<?> toPrimitive() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

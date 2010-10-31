@@ -4,20 +4,19 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @param <O>
- *            тип аргументов дизъюнкции
  * @author burdakovd
  * 
  */
-public final class Disjunction<O extends Formula<? extends O>> extends
-        AbstractDisjunction<O, Disjunction<O>> {
+public final class DisjunctionOfPrimitives<O extends PrimitiveFormula<? extends O>> extends
+        AbstractConjunction<O, DisjunctionOfPrimitives<O>> implements
+        PrimitiveFormula<DisjunctionOfPrimitives<O>> {
 
     /**
      * @param operands
-     *            операнды
      */
-    public Disjunction(final Collection<? extends O> operands) {
+    public DisjunctionOfPrimitives(final Collection<? extends O> operands) {
         super(operands);
+        // TODO Auto-generated constructor stub
     }
 
     /*
@@ -28,8 +27,9 @@ public final class Disjunction<O extends Formula<? extends O>> extends
      * (java.util.List)
      */
     @Override
-    protected Disjunction<O> create(final List<O> operands) {
-        return new Disjunction<O>(operands);
+    protected DisjunctionOfPrimitives<O> create(final List<O> operands) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /*

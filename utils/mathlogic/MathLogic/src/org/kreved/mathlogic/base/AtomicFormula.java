@@ -22,7 +22,7 @@ import org.kreved.mathlogic.util.Function;
  * @author burdakovd
  * 
  */
-public final class AtomicFormula implements Formula<AtomicFormula> {
+public final class AtomicFormula implements PrimitiveFormula<AtomicFormula> {
 
     /**
      * 
@@ -71,7 +71,7 @@ public final class AtomicFormula implements Formula<AtomicFormula> {
 
     @Override
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
-            final Iterable<? extends Term> terms) {
+            final Iterator<? extends Term> terms) {
 
         return CommonUtils.singleElementSet(new SemanticTable(CommonUtils
                 .<Formula<?>> singleElementSet(this), Collections.<Formula<?>> emptySet()));
@@ -79,7 +79,7 @@ public final class AtomicFormula implements Formula<AtomicFormula> {
 
     @Override
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
-            final Iterable<? extends Term> terms) {
+            final Iterator<? extends Term> terms) {
 
         return CommonUtils.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
                 CommonUtils.<Formula<?>> singleElementSet(this)));
@@ -223,6 +223,16 @@ public final class AtomicFormula implements Formula<AtomicFormula> {
     @Override
     public String symbol() {
         return "Atomic";
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.Formula#toPrimitive()
+     */
+    @Override
+    public PrimitiveFormula<?> toPrimitive() {
+        return this;
     }
 
     /*

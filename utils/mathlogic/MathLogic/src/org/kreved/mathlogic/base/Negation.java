@@ -56,14 +56,14 @@ public final class Negation<I extends Formula<? extends I>> extends
 
     @Override
     public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
-            final Iterable<? extends Term> terms) {
+            final Iterator<? extends Term> terms) {
         return CommonUtils.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
                 CommonUtils.singleElementSet(negated)));
     }
 
     @Override
     public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
-            final Iterable<? extends Term> terms) {
+            final Iterator<? extends Term> terms) {
         return CommonUtils.singleElementSet(new SemanticTable(
                 CommonUtils.singleElementSet(negated), Collections.<Formula<?>> emptySet()));
     }
@@ -160,6 +160,17 @@ public final class Negation<I extends Formula<? extends I>> extends
     @Override
     public Negation<I> renameVariables(final Function<Variable, Variable> renamer) {
         return new Negation<I>(negated.renameVariables(renamer));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.Formula#toPrimitive()
+     */
+    @Override
+    public PrimitiveFormula<?> toPrimitive() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /*

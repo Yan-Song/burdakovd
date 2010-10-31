@@ -23,7 +23,7 @@ public interface Formula<T extends Formula<?>> extends Substitutable<T>, HasCons
      *         стоит слева
      */
     Set<SemanticTable> applyTableDeductionLeft(Iterator<Constant> constantProvider,
-            Iterable<? extends Term> terms);
+            Iterator<? extends Term> terms);
 
     /**
      * @param constantProvider
@@ -35,7 +35,7 @@ public interface Formula<T extends Formula<?>> extends Substitutable<T>, HasCons
      *         стоит справа
      */
     Set<SemanticTable> applyTableDeductionRight(Iterator<Constant> constantProvider,
-            Iterable<? extends Term> terms);
+            Iterator<? extends Term> terms);
 
     /**
      * @param object
@@ -126,4 +126,11 @@ public interface Formula<T extends Formula<?>> extends Substitutable<T>, HasCons
      * @return короткую строку, характеризующую класс этой формулы
      */
     String symbol();
+
+    /**
+     * Избавиться от импликации в этой формуле.
+     * 
+     * @return формулу, эквивалентную данной, но без импликации
+     */
+    PrimitiveFormula<?> toPrimitive();
 }
