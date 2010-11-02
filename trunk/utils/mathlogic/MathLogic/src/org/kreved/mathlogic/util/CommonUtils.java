@@ -15,6 +15,29 @@ import java.util.Set;
 public final class CommonUtils {
 
     /**
+     * Склеивает указанные списки в указанном порядке.
+     * 
+     * @param <T>
+     *            тип элементов списков
+     * @param lists
+     *            списки, которые нужно склеить
+     * @return результат склейки переданных списков
+     */
+    public static <T> List<T> concatenate(final Iterable<? extends Collection<? extends T>> lists) {
+
+        final List<T> ans = new ArrayList<T>();
+
+        for (final Collection<? extends T> list : lists) {
+            for (final T element : list) {
+                ans.add(element);
+
+            }
+        }
+
+        return Collections.unmodifiableList(ans);
+    }
+
+    /**
      * @param <T>
      *            тип элементов в множестве
      * @param oldSet
@@ -93,8 +116,8 @@ public final class CommonUtils {
      *            списки, которые нужно склеить
      * @return результат склейки переданных списков
      */
-    public static <T> List<T> mergeWithMakingUnique(
-            final Collection<? extends Collection<? extends T>> lists) {
+    public static <T> List<T> concatenateWithMakingUnique(
+            final Iterable<? extends Collection<? extends T>> lists) {
 
         final Set<T> was = new HashSet<T>();
         final List<T> ans = new ArrayList<T>();

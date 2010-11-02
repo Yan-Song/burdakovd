@@ -86,7 +86,7 @@ public final class Numeric {
         final boolean ans =
                 TableDeduction.doTableDeduction(
                         new SemanticTable(base, CommonUtils.singleElementSet(parsed)),
-                        new PrefixedConstantProvider("c", CommonUtils.mergeWithMakingUnique(Of.of(
+                        new PrefixedConstantProvider("c", CommonUtils.concatenateWithMakingUnique(Of.of(
                                 parsed.getConstants(), baseConstants))), logger);
 
         logger.println(parsed + " == " + ans);

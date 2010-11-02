@@ -1,12 +1,17 @@
 package org.kreved.mathlogic.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.junit.Test;
 import org.kreved.mathlogic.algorithm.BasicRenamer;
 import org.kreved.mathlogic.base.Formula;
+import org.kreved.mathlogic.base.PrimitiveFormula;
+import org.kreved.mathlogic.base.Quantor;
 import org.kreved.mathlogic.base.Variable;
 import org.kreved.mathlogic.util.Function;
 import org.kreved.mathlogic.util.Of;
@@ -19,7 +24,21 @@ import org.kreved.mathlogic.util.Parser;
 public final class ResolutionsMethod {
 
     /**
-     * From {@link Formula#renameVariables(Function)} javadoc.
+     * 
+     */
+    @Test
+    public void convertToPrimitiveRemoveImplications() {
+        final Formula<?> source = Parser.parseFormula("P(x) => Q(x)");
+        final Formula<?> shouldBe = Parser.parseFormula("!P(x) V Q(x)");
+        final Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> entry =
+                source.toPrimitive(false);
+
+        assertTrue(entry.getKey().isEmpty());
+        assertEquals(shouldBe, entry.getValue());
+    }
+
+    /**
+     * From {@link Formula#renameVariables(Function)}'s javadoc.
      */
     @Test
     public void testRenaming() {

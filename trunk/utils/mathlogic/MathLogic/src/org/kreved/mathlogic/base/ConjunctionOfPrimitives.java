@@ -33,16 +33,4 @@ public final class ConjunctionOfPrimitives<O extends PrimitiveFormula<? extends 
         return new ConjunctionOfPrimitives<O>(operands);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.kreved.mathlogic.base.AbstractPrimitiveOperator#createPrimitive(java
-     * .util.List)
-     */
-    @Override
-    protected PrimitiveFormula<?> createPrimitive(final List<PrimitiveFormula<?>> operands) {
-        return this;
-    }
-
 }

@@ -29,14 +29,4 @@ public final class Negation<I extends Formula<? extends I>> extends
     protected Negation<I> create(final I inner) {
         return new Negation<I>(inner);
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.kreved.mathlogic.base.Formula#toPrimitive()
-     */
-    @Override
-    public PrimitiveFormula<?> toPrimitive() {
-        return new NegationOfPrimitive<PrimitiveFormula<?>>(getNegated().toPrimitive());
-    }
 }

@@ -1,10 +1,12 @@
 package org.kreved.mathlogic.base;
 
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
 
-import org.kreved.mathlogic.util.Function;
-import org.kreved.mathlogic.util.Functional;
+import org.kreved.mathlogic.util.CommonUtils;
 
 /**
  * Конъюнкция или дизъюнкция.
@@ -30,6 +32,16 @@ public abstract class AbstractPrimitiveOperator<O extends Formula<? extends O>, 
     }
 
     /**
+     * @param primitiveOperands
+     *            операнды
+     * @return формулу с заданными операндами, и с оператором, который был бы
+     *         получен в результате прохождения оператора текущей формулы через
+     *         отрицание
+     */
+    protected abstract PrimitiveFormula<?> createNegatedPrimitive(
+            List<PrimitiveFormula<?>> primitiveOperands);
+
+    /**
      * @param operands
      *            набор операндов
      * @return формулу с тем же оператором, но с заданными операндами
@@ -38,15 +50,23 @@ public abstract class AbstractPrimitiveOperator<O extends Formula<? extends O>, 
             createPrimitive(final List<PrimitiveFormula<?>> operands);
 
     @Override
-    public final PrimitiveFormula<?> toPrimitive() {
-        return createPrimitive(Functional.mapList(getOperands(),
-                new Function<Formula<?>, PrimitiveFormula<?>>() {
+    public final Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> toPrimitive(
+            final boolean needNegate) {
 
-                    @Override
-                    public PrimitiveFormula<?> apply(final Formula<?> argument) {
-                        return argument.toPrimitive();
-                    }
-                }));
+        final List<PrimitiveFormula<?>> primitiveOperands = new ArrayList<PrimitiveFormula<?>>();
+        final List<Collection<Entry<Quantor, Variable>>> prefixes =
+                new ArrayList<Collection<Entry<Quantor, Variable>>>();
+
+        for (final O operand : getOperands()) {
+            final Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> entry =
+                    operand.toPrimitive(needNegate);
+            primitiveOperands.add(entry.getValue());
+            prefixes.add(entry.getKey());
+        }
+
+        return new SimpleEntry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>>(
+                CommonUtils.concatenate(prefixes),
+                needNegate ? createNegatedPrimitive(primitiveOperands)
+                        : createPrimitive(primitiveOperands));
     }
-
 }

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.kreved.mathlogic.util.CommonUtils;
@@ -58,6 +59,24 @@ public abstract class AbstractDisjunction<O extends Formula<? extends O>, S exte
 
         return CommonUtils.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
                 getOperands()));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.AbstractPrimitiveOperator#createNegatedPrimitive
+     * (java.util.List)
+     */
+    @Override
+    protected final PrimitiveFormula<?> createNegatedPrimitive(
+            final List<PrimitiveFormula<?>> primitiveOperands) {
+        return new ConjunctionOfPrimitives<PrimitiveFormula<?>>(primitiveOperands);
+    }
+
+    @Override
+    protected final PrimitiveFormula<?> createPrimitive(final List<PrimitiveFormula<?>> operands) {
+        return new DisjunctionOfPrimitives<PrimitiveFormula<?>>(operands);
     }
 
     /*

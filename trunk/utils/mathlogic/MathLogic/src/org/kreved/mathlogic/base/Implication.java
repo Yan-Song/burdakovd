@@ -1,7 +1,9 @@
 package org.kreved.mathlogic.base;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.kreved.mathlogic.util.CommonUtils;
@@ -98,12 +100,12 @@ public final class Implication<L extends Formula<? extends L>, R extends Formula
      * @see org.kreved.mathlogic.base.Formula#toPrimitive()
      */
     @Override
-    public PrimitiveFormula<?> toPrimitive() {
+    public Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> toPrimitive(
+            final boolean needNegate) {
         // A => B == !A V B
-        final NegationOfPrimitive<?> first =
-                new NegationOfPrimitive<PrimitiveFormula<?>>(getLeft().toPrimitive());
-        final PrimitiveFormula<?> second = getRight().toPrimitive();
-        return new DisjunctionOfPrimitives<PrimitiveFormula<?>>(Of.of(first, second));
+        final Negation<L> first = new Negation<L>(getLeft());
+        final R second = getRight();
+        return new Disjunction<Formula<?>>(Of.of(first, second)).toPrimitive(needNegate);
     }
 
 }

@@ -19,6 +19,11 @@ public abstract class AbstractExistsSuch<I extends Formula<? extends I>, S exten
         extends AbstractQuantifiedFormula<I, S> {
 
     /**
+     * 
+     */
+    public static final Quantor QUANTOR = new AbstractQuantor("exists");
+
+    /**
      * Создаёт формулу
      * "Существует такое значение variable, для которого верно formula".
      * 
@@ -28,7 +33,7 @@ public abstract class AbstractExistsSuch<I extends Formula<? extends I>, S exten
      *            формула
      */
     public AbstractExistsSuch(final Variable variable, final I formula) {
-        super("exists", variable, formula);
+        super(QUANTOR, variable, formula);
     }
 
     /*
@@ -71,6 +76,17 @@ public abstract class AbstractExistsSuch<I extends Formula<? extends I>, S exten
 
         return CommonUtils.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
                 right));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.AbstractQuantifiedFormula#getNegatedQuantor()
+     */
+    @Override
+    protected final Quantor getNegatedQuantor() {
+        return AbstractForAny.QUANTOR;
     }
 
 }

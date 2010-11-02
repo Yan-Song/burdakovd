@@ -30,14 +30,4 @@ public final class ForAny<I extends Formula<? extends I>> extends AbstractForAny
         return new ForAny<I>(variable, formula);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.kreved.mathlogic.base.Formula#toPrimitive()
-     */
-    @Override
-    public PrimitiveFormula<?> toPrimitive() {
-        return new PrimitiveForAny<PrimitiveFormula<?>>(getVariable(), getFormula().toPrimitive());
-    }
-
 }
