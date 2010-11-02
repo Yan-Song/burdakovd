@@ -100,7 +100,7 @@ public abstract class AbstractMultiOperandOperatorApplication<O extends Formula<
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (!AbstractMultiOperandOperatorApplication.class.isInstance(obj)) {
             return false;
         }
         final AbstractMultiOperandOperatorApplication<?, ?> other =

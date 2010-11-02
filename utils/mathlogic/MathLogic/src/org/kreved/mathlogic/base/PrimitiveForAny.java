@@ -6,16 +6,16 @@ package org.kreved.mathlogic.base;
  * @author burdakovd
  * 
  */
-public final class ExistsSuch<I extends Formula<? extends I>> extends
-        AbstractExistsSuch<I, ExistsSuch<I>> {
+public final class PrimitiveForAny<I extends PrimitiveFormula<? extends I>> extends
+        AbstractForAny<I, PrimitiveForAny<I>> implements PrimitiveFormula<PrimitiveForAny<I>> {
 
     /**
      * @param variable
-     *            переменная, связанная квантором
+     *            связанная квантором переменная
      * @param formula
      *            формула под квантором
      */
-    public ExistsSuch(final Variable variable, final I formula) {
+    public PrimitiveForAny(final Variable variable, final I formula) {
         super(variable, formula);
     }
 
@@ -27,8 +27,8 @@ public final class ExistsSuch<I extends Formula<? extends I>> extends
      * .mathlogic.base.Variable, org.kreved.mathlogic.base.Formula)
      */
     @Override
-    protected ExistsSuch<I> create(final Variable variable, final I formula) {
-        return new ExistsSuch<I>(variable, formula);
+    protected PrimitiveForAny<I> create(final Variable variable, final I formula) {
+        return new PrimitiveForAny<I>(variable, formula);
     }
 
     /*
@@ -38,8 +38,7 @@ public final class ExistsSuch<I extends Formula<? extends I>> extends
      */
     @Override
     public PrimitiveFormula<?> toPrimitive() {
-        return new PrimitiveExistsSuch<PrimitiveFormula<?>>(getVariable(), getFormula()
-                .toPrimitive());
+        return this;
     }
 
 }

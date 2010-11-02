@@ -3,6 +3,7 @@ package org.kreved.mathlogic.runnable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.Collections;
 
 import org.kreved.mathlogic.base.Formula;
@@ -58,7 +59,8 @@ public final class TableDeduction {
 
         final boolean result =
                 org.kreved.mathlogic.algorithm.TableDeduction.doTableDeduction(t0,
-                        new PrefixedConstantProvider("c", formula.getConstants()));
+                        new PrefixedConstantProvider("c", formula.getConstants()), new PrintWriter(
+                                System.out));
 
         System.out.println("Результат табличного вывода: " + result);
         System.out.flush();

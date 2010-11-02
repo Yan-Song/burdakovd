@@ -104,7 +104,7 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (!AbstractQuantifiedFormula.class.isInstance(obj)) {
             return false;
         }
         final AbstractQuantifiedFormula<?, ?> other = (AbstractQuantifiedFormula<?, ?>) obj;

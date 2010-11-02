@@ -1,72 +1,21 @@
 package org.kreved.mathlogic.base;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.kreved.mathlogic.util.CommonUtils;
-
 /**
  * @param <I>
  *            тип формулы под квантором
  * @author burdakovd
  * 
  */
-public final class ForAny<I extends Formula<? extends I>> extends
-        AbstractQuantifiedFormula<I, ForAny<I>> {
+public final class ForAny<I extends Formula<? extends I>> extends AbstractForAny<I, ForAny<I>> {
 
     /**
-     * Создаёт формулу "для любого значения variable верно formula".
-     * 
      * @param variable
-     *            переменная, связываемая квантором
+     *            переменная, связанная квантором
      * @param formula
-     *            формула
+     *            формула под квантором
      */
     public ForAny(final Variable variable, final I formula) {
-        super("any", variable, formula);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.kreved.mathlogic.base.Formula#applyTableDeductionLeft(java.util.Iterator
-     * )
-     */
-    @Override
-    public Set<SemanticTable> applyTableDeductionLeft(final Iterator<Constant> constantProvider,
-            final Iterator<? extends Term> terms) {
-
-        final Set<Formula<?>> left = new HashSet<Formula<?>>();
-        left.add(this);
-
-        while (terms.hasNext()) {
-            left.add(getFormula().applySubstitution(
-                    new SingleSubstitution(getVariable(), terms.next())));
-        }
-
-        return CommonUtils.singleElementSet(new SemanticTable(left, Collections
-                .<Formula<?>> emptySet()));
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.kreved.mathlogic.base.Formula#applyTableDeductionRight(java.util.
-     * Iterator)
-     */
-    @Override
-    public Set<SemanticTable> applyTableDeductionRight(final Iterator<Constant> constantProvider,
-            final Iterator<? extends Term> terms) {
-
-        final Constant freshConstant = constantProvider.next();
-        final Substitution substitution = new SingleSubstitution(getVariable(), freshConstant);
-
-        return CommonUtils.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
-                CommonUtils.singleElementSet(getFormula().applySubstitution(substitution))));
+        super(variable, formula);
     }
 
     /*
@@ -88,8 +37,7 @@ public final class ForAny<I extends Formula<? extends I>> extends
      */
     @Override
     public PrimitiveFormula<?> toPrimitive() {
-        // TODO Auto-generated method stub
-        return null;
+        return new PrimitiveForAny<PrimitiveFormula<?>>(getVariable(), getFormula().toPrimitive());
     }
 
 }

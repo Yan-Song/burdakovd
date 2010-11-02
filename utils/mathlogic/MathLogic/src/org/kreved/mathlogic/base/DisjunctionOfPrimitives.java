@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * @param <O>
+ *            тип аргументов дизъюнкции
  * @author burdakovd
  * 
  */
@@ -13,10 +15,10 @@ public final class DisjunctionOfPrimitives<O extends PrimitiveFormula<? extends 
 
     /**
      * @param operands
+     *            операнды
      */
     public DisjunctionOfPrimitives(final Collection<? extends O> operands) {
         super(operands);
-        // TODO Auto-generated constructor stub
     }
 
     /*
@@ -28,8 +30,7 @@ public final class DisjunctionOfPrimitives<O extends PrimitiveFormula<? extends 
      */
     @Override
     protected DisjunctionOfPrimitives<O> create(final List<O> operands) {
-        // TODO Auto-generated method stub
-        return null;
+        return new DisjunctionOfPrimitives<O>(operands);
     }
 
     /*
@@ -41,8 +42,7 @@ public final class DisjunctionOfPrimitives<O extends PrimitiveFormula<? extends 
      */
     @Override
     protected PrimitiveFormula<?> createPrimitive(final List<PrimitiveFormula<?>> operands) {
-        // TODO Auto-generated method stub
-        return null;
+        return this;
     }
 
 }

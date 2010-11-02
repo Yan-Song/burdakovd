@@ -2,6 +2,7 @@ package org.kreved.mathlogic.test;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -73,9 +74,11 @@ public final class Numeric {
      * 
      * @param formula
      *            формула
+     * @param logger
+     *            вывод
      * @return является ли формула следствием базы знаний
      */
-    public boolean checkFormula(final String formula) {
+    public boolean checkFormula(final String formula, final PrintWriter logger) {
 
         final Formula<?> parsed = Parser.parseFormula(formula, EMPTY_MATCHER);
         assertTrue(parsed.getFreeVariables().isEmpty());
@@ -84,9 +87,9 @@ public final class Numeric {
                 TableDeduction.doTableDeduction(
                         new SemanticTable(base, CommonUtils.singleElementSet(parsed)),
                         new PrefixedConstantProvider("c", CommonUtils.mergeWithMakingUnique(Of.of(
-                                parsed.getConstants(), baseConstants))));
+                                parsed.getConstants(), baseConstants))), logger);
 
-        System.out.println(parsed + " == " + ans);
+        logger.println(parsed + " == " + ans);
 
         return ans;
     }
@@ -98,6 +101,5 @@ public final class Numeric {
     public void commonTest() {
         // assertTrue(checkFormula("any x (1(x) => !next(x, x))"));
 
-        System.out.flush();
     }
 }
