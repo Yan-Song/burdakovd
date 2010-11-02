@@ -10,7 +10,7 @@ import java.util.List;
  * 
  */
 public final class DisjunctionOfPrimitives<O extends PrimitiveFormula<? extends O>> extends
-        AbstractConjunction<O, DisjunctionOfPrimitives<O>> implements
+        AbstractDisjunction<O, DisjunctionOfPrimitives<O>> implements
         PrimitiveFormula<DisjunctionOfPrimitives<O>> {
 
     /**
@@ -31,18 +31,6 @@ public final class DisjunctionOfPrimitives<O extends PrimitiveFormula<? extends 
     @Override
     protected DisjunctionOfPrimitives<O> create(final List<O> operands) {
         return new DisjunctionOfPrimitives<O>(operands);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.kreved.mathlogic.base.AbstractPrimitiveOperator#createPrimitive(java
-     * .util.List)
-     */
-    @Override
-    protected PrimitiveFormula<?> createPrimitive(final List<PrimitiveFormula<?>> operands) {
-        return this;
     }
 
 }

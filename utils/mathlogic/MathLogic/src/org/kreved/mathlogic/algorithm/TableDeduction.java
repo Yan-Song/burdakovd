@@ -92,21 +92,21 @@ public final class TableDeduction {
                 for (final SemanticTable table : result) {
                     if (inLeft) {
                         final List<Formula<?>> newLeft =
-                                CommonUtils.mergeWithMakingUnique(Of.of(remaining, junk,
+                                CommonUtils.concatenateWithMakingUnique(Of.of(remaining, junk,
                                         table.getGamma()));
 
                         final List<Formula<?>> newRight =
-                                CommonUtils.mergeWithMakingUnique(Of.of(original.getDelta(),
+                                CommonUtils.concatenateWithMakingUnique(Of.of(original.getDelta(),
                                         table.getDelta()));
 
                         ans.add(new SemanticTable(newLeft, newRight));
                     } else {
                         final List<Formula<?>> newLeft =
-                                CommonUtils.mergeWithMakingUnique(Of.of(original.getGamma(),
+                                CommonUtils.concatenateWithMakingUnique(Of.of(original.getGamma(),
                                         table.getGamma()));
 
                         final List<Formula<?>> newRight =
-                                CommonUtils.mergeWithMakingUnique(Of.of(remaining, junk,
+                                CommonUtils.concatenateWithMakingUnique(Of.of(remaining, junk,
                                         table.getDelta()));
 
                         ans.add(new SemanticTable(newLeft, newRight));

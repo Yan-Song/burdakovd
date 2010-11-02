@@ -1,5 +1,6 @@
 package org.kreved.mathlogic.base;
 
+
 /**
  * @param <I>
  *            тип формулы под квантором
@@ -29,17 +30,6 @@ public final class ExistsSuch<I extends Formula<? extends I>> extends
     @Override
     protected ExistsSuch<I> create(final Variable variable, final I formula) {
         return new ExistsSuch<I>(variable, formula);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.kreved.mathlogic.base.Formula#toPrimitive()
-     */
-    @Override
-    public PrimitiveFormula<?> toPrimitive() {
-        return new PrimitiveExistsSuch<PrimitiveFormula<?>>(getVariable(), getFormula()
-                .toPrimitive());
     }
 
 }

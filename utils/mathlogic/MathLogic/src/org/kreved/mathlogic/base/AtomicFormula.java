@@ -1,10 +1,13 @@
 package org.kreved.mathlogic.base;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.kreved.mathlogic.util.CommonUtils;
@@ -22,7 +25,7 @@ import org.kreved.mathlogic.util.Function;
  * @author burdakovd
  * 
  */
-public final class AtomicFormula implements PrimitiveFormula<AtomicFormula> {
+public final class AtomicFormula implements Litera<AtomicFormula> {
 
     /**
      * 
@@ -231,8 +234,12 @@ public final class AtomicFormula implements PrimitiveFormula<AtomicFormula> {
      * @see org.kreved.mathlogic.base.Formula#toPrimitive()
      */
     @Override
-    public PrimitiveFormula<?> toPrimitive() {
-        return this;
+    public Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> toPrimitive(
+            final boolean needNegate) {
+
+        return new SimpleEntry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>>(
+                Collections.<Entry<Quantor, Variable>> emptyList(), needNegate ? new NegatedAtom(
+                        this) : this);
     }
 
     /*

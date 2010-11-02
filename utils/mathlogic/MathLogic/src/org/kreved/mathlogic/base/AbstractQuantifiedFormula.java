@@ -1,9 +1,14 @@
 package org.kreved.mathlogic.base;
 
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.kreved.mathlogic.util.CommonUtils;
 import org.kreved.mathlogic.util.Function;
+import org.kreved.mathlogic.util.Of;
 
 /**
  * @param <I>
@@ -15,6 +20,36 @@ import org.kreved.mathlogic.util.Function;
  */
 public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, S extends Formula<?>>
         extends AbstractCompoundFormula<S> {
+
+    /**
+     * 
+     * @author burdakovd
+     * 
+     */
+    protected static class AbstractQuantor implements Quantor {
+        /**
+         * 
+         */
+        private final String representation;
+
+        /**
+         * @param representation
+         *            строковое представление
+         */
+        public AbstractQuantor(final String representation) {
+            this.representation = representation;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see java.lang.Object#toString()
+         */
+        @Override
+        public final String toString() {
+            return representation;
+        }
+    }
 
     /**
      * 
@@ -32,6 +67,11 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
     private final I formula;
 
     /**
+     * 
+     */
+    private final Quantor quantor;
+
+    /**
      * @param quantor
      *            Строковое представление квантора. Используется для hashCode,
      *            equals, toString
@@ -40,9 +80,10 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
      * @param formula
      *            Формула, к которой прменяется квантор.
      */
-    public AbstractQuantifiedFormula(final String quantor, final Variable variable, final I formula) {
+    public AbstractQuantifiedFormula(final Quantor quantor, final Variable variable, final I formula) {
 
-        super(quantor);
+        super(quantor.toString());
+        this.quantor = quantor;
         this.variable = variable;
         this.formula = formula;
     }
@@ -159,6 +200,12 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
         return CommonUtils.excluding(formula.getFreeVariables(), variable);
     }
 
+    /**
+     * @return квантор, полученный прохождением отрицания через квантор этой
+     *         формулы
+     */
+    protected abstract Quantor getNegatedQuantor();
+
     @Override
     public final int getPriority() {
         return PRIORITY;
@@ -167,8 +214,8 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
     /**
      * @return the quantor
      */
-    public final String getQuantor() {
-        return symbol();
+    public final Quantor getQuantor() {
+        return quantor;
     }
 
     /**
@@ -240,6 +287,30 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
         final Substitution renamingSubstitution = new SingleSubstitution(variable, newVariable);
         final I substitutedInnerFormula = formula.applySubstitution(renamingSubstitution);
         return create(newVariable, substitutedInnerFormula.renameVariables(renamer));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.Formula#toPrimitive()
+     */
+    @Override
+    public final Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> toPrimitive(
+            final boolean needNegate) {
+
+        final Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> innerEntry =
+                getFormula().toPrimitive(needNegate);
+        final PrimitiveFormula<?> innerPrimitive = innerEntry.getValue();
+        final Collection<Entry<Quantor, Variable>> innerPrefix = innerEntry.getKey();
+
+        final List<SimpleEntry<Quantor, Variable>> outerPrefix =
+                Of.of(new SimpleEntry<Quantor, Variable>(needNegate ? getNegatedQuantor()
+                        : getQuantor(), getVariable()));
+        final List<Entry<Quantor, Variable>> prefix =
+                CommonUtils.concatenate(Of.of(outerPrefix, innerPrefix));
+
+        return new SimpleEntry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>>(prefix,
+                innerPrimitive);
     }
 
     @Override

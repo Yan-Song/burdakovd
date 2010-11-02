@@ -1,6 +1,8 @@
 package org.kreved.mathlogic.base;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.kreved.mathlogic.util.Function;
@@ -128,9 +130,20 @@ public interface Formula<T extends Formula<?>> extends Substitutable<T>, HasCons
     String symbol();
 
     /**
-     * Избавиться от импликации в этой формуле.
+     * Избавиться от импликации в формуле, протолкнуть отрицания к атомарным
+     * формулам и вынести кванторы.
+     * <p>
+     * Предусловие: перед вызовом этой функции для каждой переменной
+     * <ul>
+     * <li>либо все вхождения связаны одним и тем же квантором</li>
+     * <li>либо все вхождения свободны</li>
+     * </ul>
      * 
-     * @return формулу, эквивалентную данной, но без импликации
+     * @param needNegate
+     *            нужно ли применить отрицание к формуле перед преобразованием
+     * 
+     * @return пару "кванторы, матрица"
      */
-    PrimitiveFormula<?> toPrimitive();
+    Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>>
+            toPrimitive(boolean needNegate);
 }

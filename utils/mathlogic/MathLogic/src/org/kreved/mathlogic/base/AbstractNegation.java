@@ -1,7 +1,9 @@
 package org.kreved.mathlogic.base;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.kreved.mathlogic.util.CommonUtils;
@@ -176,6 +178,18 @@ public abstract class AbstractNegation<I extends Formula<? extends I>, S extends
     @Override
     public final S renameVariables(final Function<Variable, Variable> renamer) {
         return create(negated.renameVariables(renamer));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.Formula#toPrimitive()
+     */
+    @Override
+    public final Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> toPrimitive(
+            final boolean needNegate) {
+
+        return negated.toPrimitive(!needNegate);
     }
 
     /*

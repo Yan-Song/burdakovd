@@ -16,7 +16,7 @@ public interface PNF {
      * 
      * @return бескванторная КНФ
      */
-    Conjunction<Disjunction<Litera>> getMatrix();
+    Conjunction<Disjunction<Litera<?>>> getMatrix();
 
     /**
      * Кванторная приставка.

@@ -19,6 +19,11 @@ public abstract class AbstractForAny<I extends Formula<? extends I>, S extends F
         extends AbstractQuantifiedFormula<I, S> {
 
     /**
+     * 
+     */
+    public static final Quantor QUANTOR = new AbstractQuantor("any");
+
+    /**
      * Создаёт формулу "для любого значения variable верно formula".
      * 
      * @param variable
@@ -27,7 +32,7 @@ public abstract class AbstractForAny<I extends Formula<? extends I>, S extends F
      *            формула
      */
     public AbstractForAny(final Variable variable, final I formula) {
-        super("any", variable, formula);
+        super(QUANTOR, variable, formula);
     }
 
     /*
@@ -69,6 +74,17 @@ public abstract class AbstractForAny<I extends Formula<? extends I>, S extends F
 
         return CommonUtils.singleElementSet(new SemanticTable(Collections.<Formula<?>> emptySet(),
                 CommonUtils.singleElementSet(getFormula().applySubstitution(substitution))));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kreved.mathlogic.base.AbstractQuantifiedFormula#getNegatedQuantor()
+     */
+    @Override
+    protected final Quantor getNegatedQuantor() {
+        return AbstractExistsSuch.QUANTOR;
     }
 
 }
