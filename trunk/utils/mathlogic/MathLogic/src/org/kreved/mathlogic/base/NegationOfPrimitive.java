@@ -7,14 +7,15 @@ package org.kreved.mathlogic.base;
  * @author burdakovd
  * 
  */
-public final class Negation<I extends Formula<? extends I>> extends
-        AbstractNegation<I, Negation<I>> {
+public final class NegationOfPrimitive<I extends PrimitiveFormula<? extends I>> extends
+        AbstractNegation<I, NegationOfPrimitive<I>> implements
+        PrimitiveFormula<NegationOfPrimitive<I>> {
 
     /**
      * @param negated
      *            формула под отрицанием
      */
-    public Negation(final I negated) {
+    public NegationOfPrimitive(final I negated) {
         super(negated);
     }
 
@@ -26,8 +27,8 @@ public final class Negation<I extends Formula<? extends I>> extends
      * .base.Formula)
      */
     @Override
-    protected Negation<I> create(final I inner) {
-        return new Negation<I>(inner);
+    protected NegationOfPrimitive<I> create(final I inner) {
+        return new NegationOfPrimitive<I>(inner);
     }
 
     /*
@@ -37,6 +38,7 @@ public final class Negation<I extends Formula<? extends I>> extends
      */
     @Override
     public PrimitiveFormula<?> toPrimitive() {
-        return new NegationOfPrimitive<PrimitiveFormula<?>>(getNegated().toPrimitive());
+        return this;
     }
+
 }

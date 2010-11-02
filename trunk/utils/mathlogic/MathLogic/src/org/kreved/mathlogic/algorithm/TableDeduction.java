@@ -1,5 +1,6 @@
 package org.kreved.mathlogic.algorithm;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -31,12 +32,15 @@ public final class TableDeduction {
      * @param inLeft
      *            если <code>true</code>, то применяем правило к левой части
      *            таблицы, иначе к правой
+     * @param logger
+     *            вывод
      * @return множество таблиц, полученных применением к первой формуле
      *         левой/правой части таблицы соответствующего правила табличного
      *         вывода. <code>null</code>, если правило применить не к чему
      */
     private static Set<SemanticTable> applyRule(final SemanticTable original,
-            final Iterator<Constant> constantProvider, final boolean inLeft) {
+            final Iterator<Constant> constantProvider, final boolean inLeft,
+            final PrintWriter logger) {
 
         final Set<Formula<?>> currentlyHasLeft = new HashSet<Formula<?>>(original.getGamma());
         final Set<Formula<?>> currentlyHasRight = new HashSet<Formula<?>>(original.getDelta());
@@ -109,7 +113,7 @@ public final class TableDeduction {
                     }
                 }
 
-                System.out.println("Применяем правило вывода " + (inLeft ? "L" : "R") + " "
+                logger.println("Применяем правило вывода " + (inLeft ? "L" : "R") + " "
                         + candidate.symbol());
 
                 return Collections.unmodifiableSet(ans);
@@ -127,21 +131,24 @@ public final class TableDeduction {
      * @param preferLeft
      *            <code>true</code>, если нужно педпочитать использовать левые
      *            правила, <code>false</code> - если правые
+     * @param logger
+     *            вывод
      * @return множество полученных таблиц
      */
     private static Set<SemanticTable> doSingleDeduction(final SemanticTable original,
-            final Iterator<Constant> constantProvider, final boolean preferLeft) {
+            final Iterator<Constant> constantProvider, final boolean preferLeft,
+            final PrintWriter logger) {
 
         final Set<SemanticTable> preferredCandidate =
-                applyRule(original, constantProvider, preferLeft);
+                applyRule(original, constantProvider, preferLeft, logger);
 
         if (preferredCandidate == null) {
             final Set<SemanticTable> unPreferredCandidate =
-                    applyRule(original, constantProvider, !preferLeft);
+                    applyRule(original, constantProvider, !preferLeft, logger);
 
             if (unPreferredCandidate == null) {
                 // нет правил для применения, возвращаем исходную таблицу
-                System.out.println("Нет правил для применения");
+                logger.println("Нет правил для применения");
                 return CommonUtils.unmodifiableSet(Of.of(original));
             } else {
                 return unPreferredCandidate;
@@ -157,10 +164,12 @@ public final class TableDeduction {
      *            семантическая таблица
      * @param constantProvider
      *            множество неиспользованных констант
+     * @param logger
+     *            вывод
      * @return <code>true</code>, если был успешно применён табличный вывод
      */
     public static boolean doTableDeduction(final SemanticTable original,
-            final Iterator<Constant> constantProvider) {
+            final Iterator<Constant> constantProvider, final PrintWriter logger) {
 
         final Random random = new Random(137);
 
@@ -175,7 +184,7 @@ public final class TableDeduction {
         pending.add(original);
         side.add(true);
         ++pushed;
-        System.out.println(String.format("T0 = %s", original));
+        logger.println(String.format("T0 = %s", original));
 
         final List<SemanticTable> tables = new ArrayList<SemanticTable>();
         tables.add(original);
@@ -185,32 +194,28 @@ public final class TableDeduction {
 
         while (!pending.isEmpty()) {
 
-            // if (popped > 50) {
-            // return false;
-            // }
-
             final SemanticTable current = pending.poll();
             final boolean currentSide = side.poll();
             ++popped;
 
             if (current.isClosed()) {
-                System.out.println(String.format("T%d закрыта, обрабатывать её не нужно.", popped));
+                logger.println(String.format("T%d закрыта, обрабатывать её не нужно.", popped));
                 continue;
             } else {
                 if (current.isAtomic()) {
-                    System.out.println(String.format(
+                    logger.println(String.format(
                             "T%d не закрыта и атомарна, значит исходная таблица невыводима.",
                             pushed));
                     return false;
                 }
-                System.out.println(String.format("Рассмотрим таблицу T%d", popped));
+                logger.println(String.format("Рассмотрим таблицу T%d", popped));
             }
 
             final Set<SemanticTable> deduced =
-                    doSingleDeduction(current, constantProvider, currentSide);
+                    doSingleDeduction(current, constantProvider, currentSide, logger);
 
             if (deduced.contains(current)) {
-                System.out.println(String.format(
+                logger.println(String.format(
                         "Таблица T%d = %s вызывает зацикливание, табличный вывод неосуществим.",
                         popped, current));
                 return false;
@@ -224,10 +229,10 @@ public final class TableDeduction {
                 side.add(random.nextBoolean());
                 ++pushed;
                 tree.get(popped).add(pushed);
-                System.out.println(String.format("T%d = %s", pushed, table));
+                logger.println(String.format("T%d = %s", pushed, table));
 
                 if (table.isAtomic() && !table.isClosed()) {
-                    System.out.println(String.format(
+                    logger.println(String.format(
                             "T%d не закрыта и атомарна, значит исходная таблица невыводима.",
                             pushed));
 
@@ -236,8 +241,7 @@ public final class TableDeduction {
             }
         }
 
-        System.out
-                .println("Во всех ветвях получены закрытые таблицы, выполнен успешный табличный вывод.");
+        logger.println("Во всех ветвях получены закрытые таблицы, выполнен успешный табличный вывод.");
 
         return true;
     }

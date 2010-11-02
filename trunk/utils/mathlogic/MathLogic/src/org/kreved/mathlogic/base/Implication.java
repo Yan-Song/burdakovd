@@ -99,8 +99,11 @@ public final class Implication<L extends Formula<? extends L>, R extends Formula
      */
     @Override
     public PrimitiveFormula<?> toPrimitive() {
-        // TODO Auto-generated method stub
-        return null;
+        // A => B == !A V B
+        final NegationOfPrimitive<?> first =
+                new NegationOfPrimitive<PrimitiveFormula<?>>(getLeft().toPrimitive());
+        final PrimitiveFormula<?> second = getRight().toPrimitive();
+        return new DisjunctionOfPrimitives<PrimitiveFormula<?>>(Of.of(first, second));
     }
 
 }

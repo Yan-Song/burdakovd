@@ -2,6 +2,7 @@ package org.kreved.mathlogic.test;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.PrintWriter;
 import java.util.Collections;
 
 import org.junit.Test;
@@ -79,16 +80,18 @@ public final class TableDeduction {
      * 
      * @param formula
      *            формула
+     * @param logger
+     *            вывод
      * @return <code>true</code>, если удалось вывести, <code>false</code>, если
      *         удалось найти контрпример, или прувер зациклился
      */
-    public boolean prove(final Formula<?> formula) {
+    public boolean prove(final Formula<?> formula, final PrintWriter logger) {
 
-        System.out.println("\nПытаемся доказать формулу " + formula);
+        logger.println("\nПытаемся доказать формулу " + formula);
 
         return org.kreved.mathlogic.algorithm.TableDeduction.doTableDeduction(new SemanticTable(
                 Collections.<Formula<?>> emptySet(), CommonUtils.singleElementSet(formula)),
-                new PrefixedConstantProvider("c", formula.getConstants()));
+                new PrefixedConstantProvider("c", formula.getConstants()), logger);
     }
 
     /**
@@ -98,7 +101,7 @@ public final class TableDeduction {
      * @return общезначима ли формула
      */
     public boolean prove(final String text) {
-        return prove(Parser.parseFormula(text, DIGITAL_CONSTANT_MATCHER));
+        return prove(Parser.parseFormula(text, DIGITAL_CONSTANT_MATCHER), new PrintWriter(
+                new NullOutputStream()));
     }
-
 }
