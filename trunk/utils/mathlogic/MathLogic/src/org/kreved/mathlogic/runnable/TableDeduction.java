@@ -33,11 +33,11 @@ public final class TableDeduction {
     public static void main(final String[] args) throws IOException {
 
         final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        final PrintWriter logger = new PrintWriter(System.out);
 
-        System.out
-                .println("Введите формулу, имена констант могут начинаться с одного из символов: "
-                        + CONSTANTS);
-        System.out.flush();
+        logger.println("Введите формулу, имена констант могут начинаться с одного из символов: "
+                + CONSTANTS);
+        logger.flush();
 
         final Formula<?> formula =
                 Parser.parseFormula(reader.readLine().trim(), new ConstantMatcher() {
@@ -59,11 +59,10 @@ public final class TableDeduction {
 
         final boolean result =
                 org.kreved.mathlogic.algorithm.TableDeduction.doTableDeduction(t0,
-                        new PrefixedConstantProvider("c", formula.getConstants()), new PrintWriter(
-                                System.out));
+                        new PrefixedConstantProvider("c", formula.getConstants()), logger);
 
-        System.out.println("Результат табличного вывода: " + result);
-        System.out.flush();
+        logger.println("Результат табличного вывода: " + result);
+        logger.flush();
     }
 
     /**
