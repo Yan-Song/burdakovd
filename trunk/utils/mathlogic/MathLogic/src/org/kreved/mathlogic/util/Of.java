@@ -73,7 +73,7 @@ public final class Of {
      */
     @SuppressWarnings("unchecked")
     public static <T> List<T> of(final T e1, final T e2, final T e3, final T e4) {
-        return varargsOf(e1, e2, e3);
+        return varargsOf(e1, e2, e3, e4);
     }
 
     /**

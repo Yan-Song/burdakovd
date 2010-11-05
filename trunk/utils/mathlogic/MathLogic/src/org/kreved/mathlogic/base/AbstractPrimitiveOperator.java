@@ -50,21 +50,22 @@ public abstract class AbstractPrimitiveOperator<O extends Formula<? extends O>, 
             createPrimitive(final List<PrimitiveFormula<?>> operands);
 
     @Override
-    public final Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> toPrimitive(
-            final boolean needNegate) {
+    public final
+            Entry<? extends List<? extends Entry<Quantor, Variable>>, ? extends PrimitiveFormula<?>>
+            toPrimitive(final boolean needNegate) {
 
         final List<PrimitiveFormula<?>> primitiveOperands = new ArrayList<PrimitiveFormula<?>>();
-        final List<Collection<Entry<Quantor, Variable>>> prefixes =
-                new ArrayList<Collection<Entry<Quantor, Variable>>>();
+        final List<List<? extends Entry<Quantor, Variable>>> prefixes =
+                new ArrayList<List<? extends Entry<Quantor, Variable>>>();
 
         for (final O operand : getOperands()) {
-            final Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> entry =
+            final Entry<? extends List<? extends Entry<Quantor, Variable>>, ? extends PrimitiveFormula<?>> entry =
                     operand.toPrimitive(needNegate);
             primitiveOperands.add(entry.getValue());
             prefixes.add(entry.getKey());
         }
 
-        return new SimpleEntry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>>(
+        return new SimpleEntry<List<? extends Entry<Quantor, Variable>>, PrimitiveFormula<?>>(
                 CommonUtils.concatenate(prefixes),
                 needNegate ? createNegatedPrimitive(primitiveOperands)
                         : createPrimitive(primitiveOperands));

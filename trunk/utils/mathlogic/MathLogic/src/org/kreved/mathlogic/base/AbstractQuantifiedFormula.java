@@ -1,7 +1,6 @@
 package org.kreved.mathlogic.base;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -38,6 +37,46 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
          */
         public AbstractQuantor(final String representation) {
             this.representation = representation;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see java.lang.Object#equals(java.lang.Object)
+         */
+        @Override
+        public final boolean equals(final Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final AbstractQuantor other = (AbstractQuantor) obj;
+            if (representation == null) {
+                if (other.representation != null) {
+                    return false;
+                }
+            } else if (!representation.equals(other.representation)) {
+                return false;
+            }
+            return true;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see java.lang.Object#hashCode()
+         */
+        @Override
+        public final int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + (representation == null ? 0 : representation.hashCode());
+            return result;
         }
 
         /*
@@ -281,7 +320,7 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
      * .util.Function)
      */
     @Override
-    public final S renameVariables(final Function<Variable, Variable> renamer) {
+    public final S renameVariables(final Function<? super Variable, ? extends Variable> renamer) {
 
         final Variable newVariable = renamer.apply(variable);
         final Substitution renamingSubstitution = new SingleSubstitution(variable, newVariable);
@@ -295,13 +334,14 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
      * @see org.kreved.mathlogic.base.Formula#toPrimitive()
      */
     @Override
-    public final Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> toPrimitive(
-            final boolean needNegate) {
+    public final
+            Entry<? extends List<? extends Entry<Quantor, Variable>>, ? extends PrimitiveFormula<?>>
+            toPrimitive(final boolean needNegate) {
 
-        final Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> innerEntry =
+        final Entry<? extends List<? extends Entry<Quantor, Variable>>, ? extends PrimitiveFormula<?>> innerEntry =
                 getFormula().toPrimitive(needNegate);
         final PrimitiveFormula<?> innerPrimitive = innerEntry.getValue();
-        final Collection<Entry<Quantor, Variable>> innerPrefix = innerEntry.getKey();
+        final List<? extends Entry<Quantor, Variable>> innerPrefix = innerEntry.getKey();
 
         final List<SimpleEntry<Quantor, Variable>> outerPrefix =
                 Of.of(new SimpleEntry<Quantor, Variable>(needNegate ? getNegatedQuantor()
@@ -309,8 +349,8 @@ public abstract class AbstractQuantifiedFormula<I extends Formula<? extends I>, 
         final List<Entry<Quantor, Variable>> prefix =
                 CommonUtils.concatenate(Of.of(outerPrefix, innerPrefix));
 
-        return new SimpleEntry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>>(prefix,
-                innerPrimitive);
+        return new SimpleEntry<List<? extends Entry<Quantor, Variable>>, PrimitiveFormula<?>>(
+                prefix, innerPrimitive);
     }
 
     @Override

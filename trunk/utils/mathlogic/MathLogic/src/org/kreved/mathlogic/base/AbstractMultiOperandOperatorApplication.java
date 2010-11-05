@@ -207,7 +207,7 @@ public abstract class AbstractMultiOperandOperatorApplication<O extends Formula<
      * .util.Function)
      */
     @Override
-    public final S renameVariables(final Function<Variable, Variable> renamer) {
+    public final S renameVariables(final Function<? super Variable, ? extends Variable> renamer) {
         return create(Functional.mapList(getOperands(), new Function<O, O>() {
 
             @Override

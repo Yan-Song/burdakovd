@@ -1,8 +1,8 @@
 package org.kreved.mathlogic.base;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -100,7 +100,7 @@ public final class Implication<L extends Formula<? extends L>, R extends Formula
      * @see org.kreved.mathlogic.base.Formula#toPrimitive()
      */
     @Override
-    public Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> toPrimitive(
+    public Entry<? extends List<? extends Entry<Quantor, Variable>>, ? extends PrimitiveFormula<?>> toPrimitive(
             final boolean needNegate) {
         // A => B == !A V B
         final Negation<L> first = new Negation<L>(getLeft());
