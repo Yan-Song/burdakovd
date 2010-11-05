@@ -18,4 +18,13 @@ package org.kreved.mathlogic.base;
  */
 public interface PrimitiveFormula<S extends PrimitiveFormula<?>> extends Formula<S> {
 
+    /**
+     * Построить конъюнктивную нормальную форму для этой функции.
+     * <p>
+     * Конъюнкции и дизъюнкции результирующей формулы не будут содержать
+     * повторяющихся аргументов.
+     * 
+     * @return КНФ этой функции
+     */
+    Conjunction<Disjunction<Litera<?>>> makeCNF();
 }

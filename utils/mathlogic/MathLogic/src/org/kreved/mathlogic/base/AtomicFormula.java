@@ -2,7 +2,6 @@ package org.kreved.mathlogic.base;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,6 +11,7 @@ import java.util.Set;
 
 import org.kreved.mathlogic.util.CommonUtils;
 import org.kreved.mathlogic.util.Function;
+import org.kreved.mathlogic.util.Of;
 
 /**
  * Атомарная формула вида P^{(m)}(t_1, t_2, ..., t_m).
@@ -209,12 +209,24 @@ public final class AtomicFormula implements Litera<AtomicFormula> {
     /*
      * (non-Javadoc)
      * 
+     * @see org.kreved.mathlogic.base.PrimitiveFormula#makeCNF()
+     */
+    @Override
+    public Conjunction<Disjunction<Litera<?>>> makeCNF() {
+        return new Conjunction<Disjunction<Litera<?>>>(
+                Of.of(new Disjunction<Litera<?>>(Of.of(this))));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see
      * org.kreved.mathlogic.base.Formula#renameVariables(org.kreved.mathlogic
      * .util.Function)
      */
     @Override
-    public AtomicFormula renameVariables(final Function<Variable, Variable> renamer) {
+    public AtomicFormula renameVariables(
+            final Function<? super Variable, ? extends Variable> renamer) {
         return this;
     }
 
@@ -234,10 +246,10 @@ public final class AtomicFormula implements Litera<AtomicFormula> {
      * @see org.kreved.mathlogic.base.Formula#toPrimitive()
      */
     @Override
-    public Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>> toPrimitive(
-            final boolean needNegate) {
+    public Entry<? extends List<? extends Entry<Quantor, Variable>>, ? extends PrimitiveFormula<?>>
+            toPrimitive(final boolean needNegate) {
 
-        return new SimpleEntry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>>(
+        return new SimpleEntry<List<Entry<Quantor, Variable>>, PrimitiveFormula<?>>(
                 Collections.<Entry<Quantor, Variable>> emptyList(), needNegate ? new NegatedAtom(
                         this) : this);
     }

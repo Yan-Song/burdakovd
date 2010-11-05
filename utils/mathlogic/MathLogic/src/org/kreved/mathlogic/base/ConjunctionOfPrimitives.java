@@ -1,7 +1,9 @@
 package org.kreved.mathlogic.base;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @param <O>
@@ -31,6 +33,23 @@ public final class ConjunctionOfPrimitives<O extends PrimitiveFormula<? extends 
     @Override
     protected ConjunctionOfPrimitives<O> create(final List<O> operands) {
         return new ConjunctionOfPrimitives<O>(operands);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kreved.mathlogic.base.PrimitiveFormula#makeCNF()
+     */
+    @Override
+    public Conjunction<Disjunction<Litera<?>>> makeCNF() {
+        // попутно устраним повторяющиеся дизъюнкты
+        final Set<Disjunction<Litera<?>>> disjuncts = new HashSet<Disjunction<Litera<?>>>();
+
+        for (final O operand : getOperands()) {
+            disjuncts.addAll(operand.makeCNF().getOperands());
+        }
+
+        return new Conjunction<Disjunction<Litera<?>>>(disjuncts);
     }
 
 }

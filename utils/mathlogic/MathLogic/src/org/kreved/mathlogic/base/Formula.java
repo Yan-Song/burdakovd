@@ -1,7 +1,7 @@
 package org.kreved.mathlogic.base;
 
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -120,7 +120,7 @@ public interface Formula<T extends Formula<?>> extends Substitutable<T>, HasCons
      *            функция переименования
      * @return результат переименования
      */
-    T renameVariables(Function<Variable, Variable> renamer);
+    T renameVariables(Function<? super Variable, ? extends Variable> renamer);
 
     /**
      * Представление для пользователя.
@@ -144,6 +144,6 @@ public interface Formula<T extends Formula<?>> extends Substitutable<T>, HasCons
      * 
      * @return пару "кванторы, матрица"
      */
-    Entry<Collection<Entry<Quantor, Variable>>, PrimitiveFormula<?>>
+    Entry<? extends List<? extends Entry<Quantor, Variable>>, ? extends PrimitiveFormula<?>>
             toPrimitive(boolean needNegate);
 }

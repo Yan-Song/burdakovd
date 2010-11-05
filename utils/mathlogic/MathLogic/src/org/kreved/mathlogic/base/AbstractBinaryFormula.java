@@ -206,7 +206,7 @@ public abstract class AbstractBinaryFormula<L extends Formula<? extends L>, R ex
      * .util.Function)
      */
     @Override
-    public final S renameVariables(final Function<Variable, Variable> renamer) {
+    public final S renameVariables(final Function<? super Variable, ? extends Variable> renamer) {
         return create(getLeft().renameVariables(renamer), getRight().renameVariables(renamer));
     }
 
