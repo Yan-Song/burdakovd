@@ -59,27 +59,39 @@ RTDemoApplication::RTDemoApplication() :
 	container->Add(RT::CompoundObject::SharedObject(new RT::Invisible(light1)));
 	
 	const double R = 300.0;
-	const double PlaneReflection = 0.3;
+	const double PlaneReflection = 0.0;
 
 	RT::Material checkermat;
-	const RT::Material::SharedTexture checkertex(new RT::Texture("Textures/board.bmp"));
-	checkermat.SetTexture(checkertex, Vector2DByCoords(0, 0), Vector2DByCoords(0.01, 0), Vector2DByCoords(0, 0.01));
+	const RT::Material::SharedTexture checkertex(new RT::Texture("Textures/grass.bmp"));
+	checkermat.SetTexture(checkertex, Vector2DByCoords(0, 0), Vector2DByCoords(1, 0), Vector2DByCoords(0, 1));
 	checkermat.SetReflection(PlaneReflection);
 
 	// наполняем контейнер чем-то
 
 	RT::Material RedMaterial(static_cast<RealColor>(Palette::Red));
-	RedMaterial.SetReflection(0.4);
+	RedMaterial.SetReflection(0.3);
 
 	RT::Material GreenMaterial(static_cast<RealColor>(Palette::Green));
-	GreenMaterial.SetReflection(0.6);
+	GreenMaterial.SetReflection(0.5);
 
 	RT::Material BlueMaterial(static_cast<RealColor>(Palette::Blue));
-	BlueMaterial.SetReflection(0.8);
+	BlueMaterial.SetReflection(0.7);
+
+	RT::Material AzerothMaterial;
+	RT::Material::SharedTexture az(new RT::Texture("Textures/azeroth.bmp"));
+	AzerothMaterial.SetTexture(az, Vector2DByCoords(0, 0), Vector2DByCoords(az->GetWidth() / 2.0 / Pi / R, 0), Vector2DByCoords(0, -az->GetHeight() / Pi / R));
+	AzerothMaterial.SetReflection(0.0);
+
+	RT::Material MiracleMaterial(static_cast<RealColor>(Palette::Gray));
+	MiracleMaterial.SetReflection(0.99);
 
 	RT::CompoundObject::SharedObject rs(new RT::Sphere(Vector3DByCoords(-700, R, -200), R, RedMaterial));
 	RT::CompoundObject::SharedObject gs(new RT::Sphere(Vector3DByCoords(0, R, -100), R, GreenMaterial));
-	RT::CompoundObject::SharedObject bs(new RT::Sphere(Vector3DByCoords(650, R, 0), R, BlueMaterial));
+	RT::CompoundObject::SharedObject bs(new RT::Sphere(Vector3DByCoords(700, R, 0), R, BlueMaterial));
+	Vector3D aCenter = Vector3DByCoords(1400, R, 100);
+	RT::CompoundObject::SharedObject as(new RT::Sphere(aCenter, R, AzerothMaterial));
+	as->Rotate(Affine::X, aCenter, Pi / 2);
+	RT::CompoundObject::SharedObject ms(new RT::Sphere(Vector3DByCoords(2100, R, 200), R, MiracleMaterial));
 
 	RT::CompoundObject::SharedObject p(new RT::Plane(Vector000, Vector3DByCoords(1, 0, 0), \
 		Vector3DByCoords(0, 0, 1), checkermat));
@@ -87,13 +99,15 @@ RTDemoApplication::RTDemoApplication() :
 	container->Add(rs);
 	container->Add(gs);
 	container->Add(bs);
+	container->Add(as);
+	container->Add(ms);
 	container->Add(p);
 
 	// добавляем контейнер в сцену
 	scene->Add(container);
 
-	camera->Locate(Vector3DByCoords(200, 400, 2000));
-	camera->PickTarget(Vector000);
+	camera->Locate(Vector3DByCoords(900, 400, 3100));
+	camera->PickTarget(Vector3DByCoords(700, 0, 0));
 }
 
 class Callback : public RT::Scene::ICallback
