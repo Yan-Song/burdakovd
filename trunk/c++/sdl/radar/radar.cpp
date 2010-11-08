@@ -46,10 +46,10 @@ void Radar::Render()
     Lock();
 
     {
-		Segment2D(c, a, Palette::Green).Draw(this, Vector00); //green
+		Segment2D(c, a, Palette::Green).Draw(this, Vector00);
 
         for(int i=0; i<x; ++i)
-            DrawPixel(Rand(Screen->w), Rand(Screen->h), 0x000000); //black
+			DrawPixel(Rand(Screen->w), Rand(Screen->h), Palette::Black);
     }
 
     Unlock();

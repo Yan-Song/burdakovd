@@ -69,7 +69,7 @@ RealColor RT::Material::Trace(const Point3D &point, const Point2D &MaterialPoint
 	const NormalizedVector3D zn = static_cast<Vector3D>(n) * static_cast<Vector3D>(ray.Vector) > 0 ?
 		NormalizedVector3D(-static_cast<Vector3D>(n)) : n;
 
-	const RealColor AmbientColor = PointColor * engine->CalculateLightness(point, zn);
+	const RealColor AmbientColor = (1.0 - Reflection) * PointColor * engine->CalculateLightness(point, zn);
 
 	if(Reflection > 0)
 	{
