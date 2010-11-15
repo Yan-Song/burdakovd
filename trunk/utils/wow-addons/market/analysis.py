@@ -15,7 +15,7 @@ htmldir = "html"
 dbversions = ["3"]
 transactionsperpage = 500
 topprofitlimit = 5000
-onmainpagecountlimit = 200
+onmainpagecountlimit = 1000
 
 def timing(name):
     def impl(f):
