@@ -17,13 +17,21 @@ transactionsperpage = 500
 topprofitlimit = 5000
 onmainpagecountlimit = 1000
 
-def timing(name):
+printoffset = 0
+
+def trace(name):
     def impl(f):
         def timed(*args, **kwargs):
+            global printoffset
+            isSimpleName = (type(name) is str) or (type(name) is unicode)
+            finalName = name if isSimpleName else name(*args, **kwargs)
+            print "%s(\"%s\"" % ("  " * printoffset, finalName)
             start = time.time()
+            printoffset += 1
             result = f(*args, **kwargs)
+            printoffset -= 1
             finish = time.time()
-            print "ran %s, elapsed %.3f seconds" % (name, finish - start)
+            print "%s) -- %.3f seconds" % ("  " * printoffset, finish - start)
             return result
         return timed
     return impl
@@ -34,14 +42,15 @@ def doNothing(f):
     return q
 
 def prn(s):
-    if type(s) is unicode: print s.encode("cp866")
-    else: print s.decode("utf-8").encode("cp866")
+    prefix = "  " * printoffset
+    if type(s) is unicode: print prefix + s.encode("cp866")
+    else: print prefix + s.decode("utf-8").encode("cp866")
 
 def write(fn, title, body):
     if type(title)==type(u""): title = title.encode("utf8")
     if type(body)==type(u""): body = body.encode("utf8")
     fname = os.path.join(htmldir, fn+".html")
-    prn (u"Создаю %s" % fname)
+    #prn (u"Создаю %s" % fname)
     f = file(fname, "w")
     text = u"""<html>
     <head>
@@ -263,7 +272,7 @@ class transaction:
             return -int(self.deposit)
         else: raise ValueError();
 
-@timing("getrows")
+#@trace("getrows")
 def getrows(c):
     return \
         sum( # суммируем по категориям
@@ -311,6 +320,7 @@ lasts = []
 markets = {}
 realchars = {}
 
+#@trace(lambda log, url, title, *args: "mktable: %s" % title)
 def mktable(log, url, title, preambule, realm, faction):
     pages = max((len(log) + transactionsperpage - 1) / transactionsperpage, 1)
     for i in range(pages):
@@ -320,15 +330,21 @@ def mktable(log, url, title, preambule, realm, faction):
         if i<pages-1: pager += link("%s-%d.html" % (url, i+2), u"Раньше >")
         if i<pages-1: pager += link("%s-%d.html" % (url, pages), u"Самые старые >>")
         pager = div(pager, "listview-nav")
+        
         s = preambule.encode("utf8") + \
             table(
                 thead(tr(th(u"Дата")+th(u"Действие")+th(u"Предмет")+\
                 th(u"Стек")+th(u"Стоимость")+th(u"За штуку")+\
                 th(u"fee/deposit")+th(u"Игрок"))).encode("utf8")
-                + "\n".join(map(lambda op: op.tr(realm, faction).encode("utf-8"), \
-                log[i*transactionsperpage:(i+1)*transactionsperpage]))
+                + "\n".join(
+                    map(
+                        lambda op:
+                            op.tr(realm, faction).encode("utf-8"), \
+                        log[i * transactionsperpage: (i + 1) * transactionsperpage]
+                    )
+                )
                 , pager=pager.encode("utf-8"))
-        write("%s-%d" % (url, i+1), title, p(s))
+        write("%s-%d" % (url, i + 1), title, p(s))
 
 def profit(seq):
     return sum(map(lambda z: z.profit(), seq))
@@ -411,350 +427,368 @@ def group_months(market, f):
         jss.append([k, v])
     return repr(list(jss)).replace("None", "null")
 
-
-@timing("main")
-def main():
-
+@trace("processRealms")
+def processRealms():
     for realm in realms:
-        chars = data[realm].keys()
-        prn( realm + ": " + ", ".join(chars))
-        for char in chars:
-            # check db version
-            cversion = BeanCounterDB.settings[realm][char]["version"]
-            if not(cversion in dbversions):
-                write(char+"-data", u"История торговли %s" % char, \
-                    p(u"""База, полученная от BeanCounter для %s имеет версию "%s", а этот
-                    скрипт умеет работать только с базами версии %s.""" % \
-                    (char, cversion, ", ".join(map(str, dbversions)))))
-                continue
-            
-            # general
-            c = data[realm][char]
-            f = BeanCounterDB.settings[realm][char]["faction"]
-            
-            # raw data
-            log = getrows(c)
+        processRealm(realm)
 
-            # process it
-            if log:
-                log.sort(key=lambda x: -x.time)
-                
-                realchars.setdefault(realm, [])
-                realchars[realm].append((char, f))
-                
-                lasts.append(max(map(lambda transaction: int(transaction.time), log)))
-                
-                mktable(log, "%s-%s-data" % (realm, char), \
-                    u"История торговли %s" % char, h(u"%s, %s" % (faction(f, char), \
-                    gold(BeanCounterDB.settings[realm][char]["wealth"]))) + \
-                    div(u"""%s потратил на покупки %s, на депозиты %s, получил с продаж %s""" % \
-                        (
-                        char,
-                        gold(lostbuy(log)),
-                        gold(lostdepo(log)),
-                        gold(gainedsells(log)),
-                        ), "text"),
-                    realm, f
-                )
+@trace(lambda realm, character: "processCharacter: %s/%s" % (realm, character))
+def processCharacter(realm, char):
+    # check db version
+    cversion = BeanCounterDB.settings[realm][char]["version"]
+    if not(cversion in dbversions):
+        write(char+"-data", u"История торговли %s" % char, \
+            p(u"""База, полученная от BeanCounter для %s имеет версию "%s", а этот
+            скрипт умеет работать только с базами версии %s.""" % \
+            (char, cversion, ", ".join(map(str, dbversions)))))
+        return
+    
+    # general
+    c = data[realm][char]
+    f = BeanCounterDB.settings[realm][char]["faction"]
+    
+    # raw data
+    log = getrows(c)
 
-                # gathering statistics
-                markets.setdefault(realm, {})
-                markets[realm].setdefault(f, {})
-                for t in log:
-                    markets[realm][f].setdefault(t.ids, [])
-                    markets[realm][f][t.ids].append(t)
-
-        # do market (not character) specific processing
-        for fac in markets.get(realm, {}).keys():
-            mname = "%s-%s" % (realm, fac)
-            prn( mname)
-            market = markets[realm][fac]
-            # for flot
-            tf = lambda t: \
+    # process it
+    if log:
+        log.sort(key=lambda x: -x.time)
+        
+        realchars.setdefault(realm, [])
+        realchars[realm].append((char, f))
+        
+        lasts.append(max(map(lambda transaction: int(transaction.time), log)))
+        
+        mktable(log, "%s-%s-data" % (realm, char), \
+            u"История торговли %s" % char, h(u"%s, %s" % (faction(f, char), \
+            gold(BeanCounterDB.settings[realm][char]["wealth"]))) + \
+            div(u"""%s потратил на покупки %s, на депозиты %s, получил с продаж %s""" % \
                 (
-                    #0.0001*t.profit(),
-                    0.0001*check_category([t], "completedAuctions"), # сумма продаж
+                char,
+                gold(lostbuy(log)),
+                gold(lostdepo(log)),
+                gold(gainedsells(log)),
+                ), "text"),
+            realm, f
+        )
 
-                    0.0001*(-check_category([t], "completedBidsBuyouts") \
-                    -check_category([t], "failedAuctions")), # сумма покупок и фэйлов
+        # gathering statistics
+        markets.setdefault(realm, {})
+        markets[realm].setdefault(f, {})
+        currentMarket = markets[realm][f]
+        for transaction in log:
+            currentMarket.setdefault(transaction.ids, [])
+            currentMarket[transaction.ids].append(transaction)
 
-                    1 if t.category=="completedAuctions" else 0, # кол-во продаж
-                    
-                    1 if t.category=="completedBidsBuyouts" else 0, # кол-во покупок
+@trace(lambda realm: "processCharacters: %s" % realm)
+def processCharacters(realm):
+    chars = data[realm].keys()
+    
+    for char in chars:
+        processCharacter(realm, char)
 
-                    1, # кол-во всех транзакций
+@trace(lambda realm: "processMarket: %s" % realm)
+def processMarket(realm):
 
-                    0.0001*t.profit(), # общая прибыль
+    # do market (not character) specific processing
+    for fac in markets.get(realm, {}).keys():
+        mname = "%s-%s" % (realm, fac)
+        prn( mname)
+        market = markets[realm][fac]
+        # for flot
+        tf = lambda t: \
+            (
+                #0.0001*t.profit(),
+                0.0001*check_category([t], "completedAuctions"), # сумма продаж
+
+                0.0001*(-check_category([t], "completedBidsBuyouts") \
+                -check_category([t], "failedAuctions")), # сумма покупок и фэйлов
+
+                1 if t.category=="completedAuctions" else 0, # кол-во продаж
+                
+                1 if t.category=="completedBidsBuyouts" else 0, # кол-во покупок
+
+                1, # кол-во всех транзакций
+
+                0.0001*t.profit(), # общая прибыль
+            )
+        jsw = group_weeks(market, tf)
+        jsm = group_months(market, tf)
+        
+        preambule = h("%s - %s" % (realm, fac)) + \
+        div(u"""На этом сервере мы торгуем %d видами товаров,
+        на текущий момент прибыль на аукционе составляет %s<br/>
+        Всего потрачено на покупки %s, на депозиты %s, получено с продаж %s""" % \
+        (len(market),
+            gold(sum(map(lambda i: profit(i), market.values()))),
+            gold(sum(map(lambda i: lostbuy(i), market.values()))),
+            gold(sum(map(lambda i: lostdepo(i), market.values()))),
+            gold(sum(map(lambda i: gainedsells(i), market.values()))),
+            ), "text") + \
+            u"<table><thead><tr><th>По неделям</th><th>По месяцам</th></tr></thead><tbody>" + \
+            tr(
+                td(div(div("", "graph", "placeholderglobalw1"), "gwrapper")) + \
+                td(div(div("", "graph", "placeholderglobalm1"), "gwrapper"))
+            ) + \
+            tr(
+                td(div(div("", "graph", "placeholderglobalw3"), "gwrapper")) + \
+                td(div(div("", "graph", "placeholderglobalm3"), "gwrapper"))
+            ) + \
+            tr(
+                td(div(div("", "graph", "placeholderglobalw"), "gwrapper")) + \
+                td(div(div("", "graph", "placeholderglobalm"), "gwrapper"))
+            ) + \
+            tr(
+                td(div(div("", "graph", "placeholderglobalw2"), "gwrapper")) + \
+                td(div(div("", "graph", "placeholderglobalm2"), "gwrapper"))
+            ) + "</tbody></table>"
+        
+        script = u"""
+            <script type="text/javascript">
+            //<![CDATA[
+            gdata.globalw = %s;
+            gdata.globalm = %s;
+            $(
+            function()
+            {
+                xx = {
+                    mode: "time",
+                    //timeformat: "%%d.%%m.%%y",
+                };
+                yy =  {
+                    tickFormatter: goldformatter,
+                };
+                
+                drawGraph("#placeholderglobalw", [ [0,{label: "Получено с продаж", color: "rgb(0, 200, 0)"}],
+                [1,{label: "Затрачено на покупки и депозиты", color: "rgb(255, 100, 100)"}] ], gdata.globalw,
+                {xaxis: xx, yaxis: yy, lines: {show: true}, points: {show: true}});
+                
+                drawGraph("#placeholderglobalm", [ [0,{label: "Получено с продаж", color: "rgb(0, 200, 0)"}],
+                [1,{label: "Затрачено на покупки и депозиты", color: "rgb(255, 100, 100)"}] ], gdata.globalm,
+                {xaxis: xx, yaxis: yy, lines: {show: true}, points: {show: true}});
+
+
+                drawGraph("#placeholderglobalw1", [ [5,{label: "Прибыль", color: "rgb(0, 200, 0)"}]
+                ], gdata.globalw,
+                {xaxis: xx, yaxis: yy, lines: {show: true}, points: {show: true}});
+                
+                drawGraph("#placeholderglobalm1", [ [5,{label: "Прибыль", color: "rgb(0, 200, 0)"}],
+                 ], gdata.globalm,
+                {xaxis: xx, yaxis: yy, lines: {show: true}, points: {show: true}});
+
+
+                drawGraph("#placeholderglobalw2", [ [2,{label: "Количество продаж", color: "rgb(0, 200, 0)"}],
+                [3,{label: "Количество покупок", color: "rgb(255, 100, 100)"}] ], gdata.globalw,
+                {xaxis: xx, lines: {show: true}, points: {show: true}});
+                
+                drawGraph("#placeholderglobalm2", [ [2,{label: "Количество продаж", color: "rgb(0, 200, 0)"}],
+                [3,{label: "Количество покупок", color: "rgb(255, 100, 100)"}] ], gdata.globalm,
+                {xaxis: xx, lines: {show: true}, points: {show: true}});
+
+
+                drawGraph("#placeholderglobalw3", [ [4,{label: "Активность", color: "rgb(0, 200, 0)"}]
+                ], gdata.globalw,
+                {xaxis: xx, lines: {show: true}, points: {show: true}});
+                
+                drawGraph("#placeholderglobalm3", [ [4,{label: "Активность", color: "rgb(0, 200, 0)"}],
+                 ], gdata.globalm,
+                {xaxis: xx, lines: {show: true}, points: {show: true}});
+
+
+            }
+            );
+            //]]>
+            </script>
+
+            """ % (jsw, jsm)
+
+        head = thead(tr(th(u"Предмет")+th(u"Затрачено на покупку")+\
+            th(u"Затрачено на депозиты")+th(u"Получено с продаж")+th(u"Прибыль")))
+        
+        sorts = map(lambda (item, log): (item, -lostbuy(log)-gainedsells(log)), market.items())
+        sorts.sort(key=lambda q: q[1])
+        sorts = sorts[:topprofitlimit]
+        ssorts = sorts[:onmainpagecountlimit]
+
+        body = tbody(
+        "\n".join(
+                map(
+                    lambda (ids, gained):
+                        tr(
+                        td(
+                            itemlink(ids) + " " + \
+                                link("%s-%s.html" % (mname, htmlize(ids)), img("../static/stat.png"), "more")
+                        ) +
+                        td(
+                            gold(lostbuy(market[ids]))
+                        ) +
+                        td(
+                            gold(lostdepo(market[ids]))
+                        ) +
+                        td(
+                            gold(gainedsells(market[ids]))
+                        ) +
+                        td(
+                            gold(profit(market[ids]))
+                        )
+                        ),
+                    ssorts
                 )
-            jsw = group_weeks(market, tf)
-            jsm = group_months(market, tf)
+            )
+        )
+
+        s = preambule + script + table(head + body)
+        write(mname, "%s - %s" % (realm, fac), s)
+        #print market
+        for (ids, _) in sorts:
+            # item specific pages
+            iname = "%s-%s" % (mname, htmlize(ids))
+            imarket = {ids: market[ids]}
+            #print imarket
+
+            soldcount = sum(map(lambda z: z.stack, \
+                filter(lambda z: z.category=="completedAuctions", market[ids])))
+            gsells = gainedsells(market[ids])
+            boughtcount = sum(map(lambda z: z.stack, \
+                filter(lambda z: z.category=="completedBidsBuyouts", market[ids])))
+            lbuy = lostbuy(market[ids])
+            failedcount = sum(map(lambda z: z.stack, \
+                filter(lambda z: z.category=="failedAuctions", market[ids])))
+            tried = soldcount + failedcount
             
-            preambule = h("%s - %s" % (realm, fac)) + \
-            div(u"""На этом сервере мы торгуем %d видами товаров,
-            на текущий момент прибыль на аукционе составляет %s<br/>
-            Всего потрачено на покупки %s, на депозиты %s, получено с продаж %s""" % \
-            (len(market),
-                gold(sum(map(lambda i: profit(i), market.values()))),
-                gold(sum(map(lambda i: lostbuy(i), market.values()))),
-                gold(sum(map(lambda i: lostdepo(i), market.values()))),
-                gold(sum(map(lambda i: gainedsells(i), market.values()))),
-                ), "text") + \
-                u"<table><thead><tr><th>По неделям</th><th>По месяцам</th></tr></thead><tbody>" + \
+            preambule = h("%s - %s: %s" % (realm, fac, itemlink(ids))) + \
+            div(
+            u"""Всего куплено %s таких предметов (в среднем по %s),
+            продано %s (в среднем по %s)<br/>
+            Шанс продажи: %s%% (%d из %d)
+            """ %
+            (boughtcount,
+            gold(lbuy/boughtcount) if boughtcount else "??",
+            soldcount, gold(gsells/soldcount) if soldcount else "??",
+            int(100.0*soldcount/tried) if tried else "??",
+            soldcount, tried, ),
+            "text")
+
+            head = thead(th(u"По неделям")+th(u"По месяцам"))
+            body = tbody(
                 tr(
-                    td(div(div("", "graph", "placeholderglobalw1"), "gwrapper")) + \
-                    td(div(div("", "graph", "placeholderglobalm1"), "gwrapper"))
-                ) + \
+                    td(div(div("", "graph", "placeholder1w"), "gwrapper")) + \
+                    td(div(div("", "graph", "placeholder1m"), "gwrapper"))
+                )
+                + \
                 tr(
-                    td(div(div("", "graph", "placeholderglobalw3"), "gwrapper")) + \
-                    td(div(div("", "graph", "placeholderglobalm3"), "gwrapper"))
-                ) + \
+                    td(div(div("", "graph", "placeholder2w"), "gwrapper")) + \
+                    td(div(div("", "graph", "placeholder2m"), "gwrapper"))
+                )
+                + \
                 tr(
-                    td(div(div("", "graph", "placeholderglobalw"), "gwrapper")) + \
-                    td(div(div("", "graph", "placeholderglobalm"), "gwrapper"))
-                ) + \
+                    td(div(div("", "graph", "placeholder3w"), "gwrapper")) + \
+                    td(div(div("", "graph", "placeholder3m"), "gwrapper"))
+                )
+                + \
                 tr(
-                    td(div(div("", "graph", "placeholderglobalw2"), "gwrapper")) + \
-                    td(div(div("", "graph", "placeholderglobalm2"), "gwrapper"))
-                ) + "</tbody></table>"
+                    td(div(div("", "graph", "placeholder4w"), "gwrapper")) + \
+                    td(div(div("", "graph", "placeholder4m"), "gwrapper"))
+                )
+            )
+
+            tf = lambda z: \
+                (
+                    int(z.stack) if z.category=="completedAuctions" else 0,
+                    int(z.stack) if z.category=="completedBidsBuyouts" else 0,
+                    0.0001*z.profit() if z.category=="completedAuctions" else 0,
+                    -0.0001*z.profit() if z.category=="completedBidsBuyouts" else 0,
+                    int(z.stack) if z.category=="failedAuctions" else 0,
+                    0.0001*z.profit()
+                )
+            
+            jsw = group_weeks(imarket, tf)
+            jsm = group_months(imarket, tf)
             
             script = u"""
                 <script type="text/javascript">
                 //<![CDATA[
-                gdata.globalw = %s;
-                gdata.globalm = %s;
+                gdata.gw = itemhelper(%s);
+                gdata.gm = itemhelper(%s);
                 $(
                 function()
                 {
-                    xx = {
-                        mode: "time",
-                        //timeformat: "%%d.%%m.%%y",
+                    yg =  {
+                        tickFormatter: goldformatter,
+                        min: 0,
                     };
-                    yy =  {
+
+                    ygs =  {
                         tickFormatter: goldformatter,
                     };
+
+                    yy = {
+                        min: 0,
+                    };
+
+                    ychance = {
+                        min: 0,
+                        max: 100,
+                        tickFormatter: pformatter,
+                    };
                     
-                    drawGraph("#placeholderglobalw", [ [0,{label: "Получено с продаж", color: "rgb(0, 200, 0)"}],
-                    [1,{label: "Затрачено на покупки и депозиты", color: "rgb(255, 100, 100)"}] ], gdata.globalw,
-                    {xaxis: xx, yaxis: yy, lines: {show: true}, points: {show: true}});
+                    xtime = {
+                        mode: "time",
+                    };
                     
-                    drawGraph("#placeholderglobalm", [ [0,{label: "Получено с продаж", color: "rgb(0, 200, 0)"}],
-                    [1,{label: "Затрачено на покупки и депозиты", color: "rgb(255, 100, 100)"}] ], gdata.globalm,
-                    {xaxis: xx, yaxis: yy, lines: {show: true}, points: {show: true}});
-
-
-                    drawGraph("#placeholderglobalw1", [ [5,{label: "Прибыль", color: "rgb(0, 200, 0)"}]
-                    ], gdata.globalw,
-                    {xaxis: xx, yaxis: yy, lines: {show: true}, points: {show: true}});
+                    drawGraph("#placeholder1w", [ [0,{label: "Объём продаж", color: "rgb(0, 200, 0)"}],
+                    [1,{label: "Объём закупок", color: "rgb(255, 100, 100)"}] ], gdata.gw,
+                    {xaxis: xtime, yaxis: yy, lines: {show: true}, points: {show: true}});
                     
-                    drawGraph("#placeholderglobalm1", [ [5,{label: "Прибыль", color: "rgb(0, 200, 0)"}],
-                     ], gdata.globalm,
-                    {xaxis: xx, yaxis: yy, lines: {show: true}, points: {show: true}});
+                    drawGraph("#placeholder1m", [ [0,{label: "Объём продаж", color: "rgb(0, 200, 0)"}],
+                    [1,{label: "Объём закупок", color: "rgb(255, 100, 100)"}] ], gdata.gm,
+                    {xaxis: xtime, yaxis: yy, lines: {show: true}, points: {show: true}});
 
 
-                    drawGraph("#placeholderglobalw2", [ [2,{label: "Количество продаж", color: "rgb(0, 200, 0)"}],
-                    [3,{label: "Количество покупок", color: "rgb(255, 100, 100)"}] ], gdata.globalw,
-                    {xaxis: xx, lines: {show: true}, points: {show: true}});
+                    drawGraph("#placeholder2w", [ [6,{label: "Цена продаж", color: "rgb(0, 200, 0)"}],
+                    [7,{label: "Цена закупок", color: "rgb(255, 100, 100)"}] ], gdata.gw,
+                    {xaxis: xtime, yaxis: yg, lines: {show: true}, points: {show: true}});
                     
-                    drawGraph("#placeholderglobalm2", [ [2,{label: "Количество продаж", color: "rgb(0, 200, 0)"}],
-                    [3,{label: "Количество покупок", color: "rgb(255, 100, 100)"}] ], gdata.globalm,
-                    {xaxis: xx, lines: {show: true}, points: {show: true}});
+                    drawGraph("#placeholder2m", [ [6,{label: "Цена продаж", color: "rgb(0, 200, 0)"}],
+                    [7,{label: "Цена закупок", color: "rgb(255, 100, 100)"}] ], gdata.gm,
+                    {xaxis: xtime, yaxis: yg, lines: {show: true}, points: {show: true}});
 
 
-                    drawGraph("#placeholderglobalw3", [ [4,{label: "Активность", color: "rgb(0, 200, 0)"}]
-                    ], gdata.globalw,
-                    {xaxis: xx, lines: {show: true}, points: {show: true}});
+                    drawGraph("#placeholder3w", [ [8,{label: "Шанс продажи", color: "rgb(50, 50, 220)"}],
+                    ], gdata.gw,
+                    {xaxis: xtime, yaxis: ychance, lines: {show: true}, points: {show: true}});
                     
-                    drawGraph("#placeholderglobalm3", [ [4,{label: "Активность", color: "rgb(0, 200, 0)"}],
-                     ], gdata.globalm,
-                    {xaxis: xx, lines: {show: true}, points: {show: true}});
+                    drawGraph("#placeholder3m", [ [8,{label: "Шанс продажи", color: "rgb(50, 50, 220)"}],
+                    ], gdata.gm,
+                    {xaxis: xtime, yaxis: ychance, lines: {show: true}, points: {show: true}});
 
 
+                    drawGraph("#placeholder4w", [ [5,{label: "Прибыль", color: "rgb(0, 200, 0)"}],
+                    ], gdata.gw,
+                    {xaxis: xtime, yaxis: ygs, lines: {show: true}, points: {show: true}});
+                    
+                    drawGraph("#placeholder4m", [ [5,{label: "Прибыль", color: "rgb(0, 200, 0)"}],
+                    ], gdata.gm,
+                    {xaxis: xtime, yaxis: ygs, lines: {show: true}, points: {show: true}});
                 }
                 );
                 //]]>
                 </script>
-
-                """ % (jsw, jsm)
-
-            head = thead(tr(th(u"Предмет")+th(u"Затрачено на покупку")+\
-                th(u"Затрачено на депозиты")+th(u"Получено с продаж")+th(u"Прибыль")))
+            """ % (jsw, jsm)
             
-            sorts = map(lambda (item, log): (item, -lostbuy(log)-gainedsells(log)), market.items())
-            sorts.sort(key=lambda q: q[1])
-            sorts = sorts[:topprofitlimit]
-            ssorts = sorts[:onmainpagecountlimit]
+            s = preambule + script + "<table>%s%s</table>" % (head, body)
+            
+            write(iname, "%s - %s: %s" % (realm, fac, itemname(ids)), s)
 
-            body = tbody(
-            "\n".join(
-                    map(
-                        lambda (ids, gained):
-                            tr(
-                            td(
-                                itemlink(ids) + " " + \
-                                    link("%s-%s.html" % (mname, htmlize(ids)), img("../static/stat.png"), "more")
-                            ) +
-                            td(
-                                gold(lostbuy(market[ids]))
-                            ) +
-                            td(
-                                gold(lostdepo(market[ids]))
-                            ) +
-                            td(
-                                gold(gainedsells(market[ids]))
-                            ) +
-                            td(
-                                gold(profit(market[ids]))
-                            )
-                            ),
-                        ssorts
-                    )
-                )
-            )
-
-            s = preambule + script + table(head + body)
-            write(mname, "%s - %s" % (realm, fac), s)
-            #print market
-            for (ids, _) in sorts:
-                # item specific pages
-                iname = "%s-%s" % (mname, htmlize(ids))
-                imarket = {ids: market[ids]}
-                #print imarket
-
-                soldcount = sum(map(lambda z: z.stack, \
-                    filter(lambda z: z.category=="completedAuctions", market[ids])))
-                gsells = gainedsells(market[ids])
-                boughtcount = sum(map(lambda z: z.stack, \
-                    filter(lambda z: z.category=="completedBidsBuyouts", market[ids])))
-                lbuy = lostbuy(market[ids])
-                failedcount = sum(map(lambda z: z.stack, \
-                    filter(lambda z: z.category=="failedAuctions", market[ids])))
-                tried = soldcount + failedcount
                 
-                preambule = h("%s - %s: %s" % (realm, fac, itemlink(ids))) + \
-                div(
-                u"""Всего куплено %s таких предметов (в среднем по %s),
-                продано %s (в среднем по %s)<br/>
-                Шанс продажи: %s%% (%d из %d)
-                """ %
-                (boughtcount,
-                gold(lbuy/boughtcount) if boughtcount else "??",
-                soldcount, gold(gsells/soldcount) if soldcount else "??",
-                int(100.0*soldcount/tried) if tried else "??",
-                soldcount, tried, ),
-                "text")
-
-                head = thead(th(u"По неделям")+th(u"По месяцам"))
-                body = tbody(
-                    tr(
-                        td(div(div("", "graph", "placeholder1w"), "gwrapper")) + \
-                        td(div(div("", "graph", "placeholder1m"), "gwrapper"))
-                    )
-                    + \
-                    tr(
-                        td(div(div("", "graph", "placeholder2w"), "gwrapper")) + \
-                        td(div(div("", "graph", "placeholder2m"), "gwrapper"))
-                    )
-                    + \
-                    tr(
-                        td(div(div("", "graph", "placeholder3w"), "gwrapper")) + \
-                        td(div(div("", "graph", "placeholder3m"), "gwrapper"))
-                    )
-                    + \
-                    tr(
-                        td(div(div("", "graph", "placeholder4w"), "gwrapper")) + \
-                        td(div(div("", "graph", "placeholder4m"), "gwrapper"))
-                    )
-                )
-
-                tf = lambda z: \
-                    (
-                        int(z.stack) if z.category=="completedAuctions" else 0,
-                        int(z.stack) if z.category=="completedBidsBuyouts" else 0,
-                        0.0001*z.profit() if z.category=="completedAuctions" else 0,
-                        -0.0001*z.profit() if z.category=="completedBidsBuyouts" else 0,
-                        int(z.stack) if z.category=="failedAuctions" else 0,
-                        0.0001*z.profit()
-                    )
-                
-                jsw = group_weeks(imarket, tf)
-                jsm = group_months(imarket, tf)
-                
-                script = u"""
-                    <script type="text/javascript">
-                    //<![CDATA[
-                    gdata.gw = itemhelper(%s);
-                    gdata.gm = itemhelper(%s);
-                    $(
-                    function()
-                    {
-                        yg =  {
-                            tickFormatter: goldformatter,
-                            min: 0,
-                        };
-
-                        ygs =  {
-                            tickFormatter: goldformatter,
-                        };
-
-                        yy = {
-                            min: 0,
-                        };
-
-                        ychance = {
-                            min: 0,
-                            max: 100,
-                            tickFormatter: pformatter,
-                        };
-                        
-                        xtime = {
-                            mode: "time",
-                        };
-                        
-                        drawGraph("#placeholder1w", [ [0,{label: "Объём продаж", color: "rgb(0, 200, 0)"}],
-                        [1,{label: "Объём закупок", color: "rgb(255, 100, 100)"}] ], gdata.gw,
-                        {xaxis: xtime, yaxis: yy, lines: {show: true}, points: {show: true}});
-                        
-                        drawGraph("#placeholder1m", [ [0,{label: "Объём продаж", color: "rgb(0, 200, 0)"}],
-                        [1,{label: "Объём закупок", color: "rgb(255, 100, 100)"}] ], gdata.gm,
-                        {xaxis: xtime, yaxis: yy, lines: {show: true}, points: {show: true}});
-
-
-                        drawGraph("#placeholder2w", [ [6,{label: "Цена продаж", color: "rgb(0, 200, 0)"}],
-                        [7,{label: "Цена закупок", color: "rgb(255, 100, 100)"}] ], gdata.gw,
-                        {xaxis: xtime, yaxis: yg, lines: {show: true}, points: {show: true}});
-                        
-                        drawGraph("#placeholder2m", [ [6,{label: "Цена продаж", color: "rgb(0, 200, 0)"}],
-                        [7,{label: "Цена закупок", color: "rgb(255, 100, 100)"}] ], gdata.gm,
-                        {xaxis: xtime, yaxis: yg, lines: {show: true}, points: {show: true}});
-
-
-                        drawGraph("#placeholder3w", [ [8,{label: "Шанс продажи", color: "rgb(50, 50, 220)"}],
-                        ], gdata.gw,
-                        {xaxis: xtime, yaxis: ychance, lines: {show: true}, points: {show: true}});
-                        
-                        drawGraph("#placeholder3m", [ [8,{label: "Шанс продажи", color: "rgb(50, 50, 220)"}],
-                        ], gdata.gm,
-                        {xaxis: xtime, yaxis: ychance, lines: {show: true}, points: {show: true}});
-
-
-                        drawGraph("#placeholder4w", [ [5,{label: "Прибыль", color: "rgb(0, 200, 0)"}],
-                        ], gdata.gw,
-                        {xaxis: xtime, yaxis: ygs, lines: {show: true}, points: {show: true}});
-                        
-                        drawGraph("#placeholder4m", [ [5,{label: "Прибыль", color: "rgb(0, 200, 0)"}],
-                        ], gdata.gm,
-                        {xaxis: xtime, yaxis: ygs, lines: {show: true}, points: {show: true}});
-                    }
-                    );
-                    //]]>
-                    </script>
-                """ % (jsw, jsm)
-                
-                s = preambule + script + "<table>%s%s</table>" % (head, body)
-                
-                write(iname, "%s - %s: %s" % (realm, fac, itemname(ids)), s)
-
-
+@trace(lambda realm: "processRealm: %s" % realm)
+def processRealm(realm):
+    processCharacters(realm)
+    processMarket(realm)
+        
+@trace("makeIndex")
+def makeIndex():
+    
     index_data = \
         h(
             u"Данные от BeanCounter (Данные: %s, генерация: %s, %s)" % \
@@ -820,5 +854,10 @@ def main():
     index = p(index_data) + p(index_summary)
 
     write("index", u"Отчёты BeanCounter", index)
-
+                
+@trace("main")
+def main():
+    processRealms()
+    makeIndex()
+    
 main()
