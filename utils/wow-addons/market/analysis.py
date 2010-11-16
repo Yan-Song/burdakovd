@@ -487,8 +487,8 @@ def processCharacters(realm):
     for char in chars:
         processCharacter(realm, char)
 
-@trace(lambda realm: "processMarket: %s" % realm)
-def processMarket(realm):
+@trace(lambda realm: "processMarkets: %s" % realm)
+def processMarkets(realm):
 
     # do market (not character) specific processing
     for fac in markets.get(realm, {}).keys():
@@ -784,7 +784,7 @@ def processMarket(realm):
 @trace(lambda realm: "processRealm: %s" % realm)
 def processRealm(realm):
     processCharacters(realm)
-    processMarket(realm)
+    processMarkets(realm)
         
 @trace("makeIndex")
 def makeIndex():
