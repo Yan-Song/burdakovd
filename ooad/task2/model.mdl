@@ -1238,7 +1238,7 @@
 			    location   	(1888, 717)
 			    anchor_loc 	1
 			    nlines     	2
-			    max_width  	487
+			    max_width  	539
 			    justify    	0
 			    label      	"Администратор")
 			icon       	"Actor"
@@ -1357,7 +1357,7 @@
 			    location   	(2400, 1309)
 			    anchor_loc 	1
 			    nlines     	2
-			    max_width  	487
+			    max_width  	539
 			    justify    	0
 			    label      	"Время")
 			icon       	"Actor"
@@ -1493,7 +1493,7 @@
 			    location   	(1248, 717)
 			    anchor_loc 	1
 			    nlines     	2
-			    max_width  	487
+			    max_width  	539
 			    justify    	0
 			    label      	"Пользователь")
 			icon       	"Actor"
@@ -1696,7 +1696,7 @@
 			    location   	(656, 717)
 			    anchor_loc 	1
 			    nlines     	2
-			    max_width  	487
+			    max_width  	539
 			    justify    	0
 			    label      	"РаботникПроката")
 			icon       	"Actor"
@@ -2548,10 +2548,16 @@
 				logical_models 	(list unit_reference_list
 				    (object Class "ICatalogSystem"
 					quid       	"4D0E5D150077"
+					documentation 	
+|Каталог видеопроката.
+|Содержит информацию о клиентах, сотрудниках и видеоносителях.
+|
+					
 					stereotype 	"Interface"
 					operations 	(list Operations
 					    (object Operation "login"
 						quid       	"4CDFF08100CA"
+						documentation 	"Проверяет логин/пароль сотрудника. Возвращает логическое значение, индицирующее успешность авторизации."
 						parameters 	(list Parameters
 						    (object Parameter "username"
 							quid       	"4D0E13EB009C"
@@ -2559,11 +2565,13 @@
 						    (object Parameter "password"
 							quid       	"4D0E13F901AA"
 							type       	"String"))
+						result     	"Boolean"
 						concurrency 	"Sequential"
 						opExportControl 	"Public"
 						uid        	0)
 					    (object Operation "addVideoMedium"
 						quid       	"4D0DEFEB0028"
+						documentation 	"Добавить видеоноситель в каталог."
 						parameters 	(list Parameters
 						    (object Parameter "medium"
 							quid       	"4D0E147201D9"
@@ -2574,6 +2582,7 @@
 						uid        	0)
 					    (object Operation "hasMovie"
 						quid       	"4D0DF0BE038C"
+						documentation 	"Проверить, есть ли в каталоге видеоносители с заданным фильмом."
 						parameters 	(list Parameters
 						    (object Parameter "name"
 							quid       	"4D0E1590035D"
@@ -2584,6 +2593,7 @@
 						uid        	0)
 					    (object Operation "addRequest"
 						quid       	"4D0DF0CF020E"
+						documentation 	"Добавить предзаказ на фильм, которго ещё нет в каталоге."
 						parameters 	(list Parameters
 						    (object Parameter "request"
 							quid       	"4D0E15DD0050"
@@ -2594,10 +2604,12 @@
 						uid        	0)))
 				    (object Class "IMessageDeliverySystem"
 					quid       	"4D0E5D2300C0"
+					documentation 	"Система доставки сообщений клиентам и поставщиам проката."
 					stereotype 	"Interface"
 					operations 	(list Operations
 					    (object Operation "sendRequestToSupplier"
 						quid       	"4D0DEFA803A6"
+						documentation 	"Отправить сообщение поставщику."
 						parameters 	(list Parameters
 						    (object Parameter "text"
 							quid       	"4D0E12A700CD"
@@ -2607,6 +2619,7 @@
 						uid        	0)
 					    (object Operation "sendNewMovieNotification"
 						quid       	"4D0DF00303E5"
+						documentation 	"Отправить клиенту сообщение о поступлении предварительно заказанного им фильма в прокат."
 						parameters 	(list Parameters
 						    (object Parameter "text"
 							quid       	"4D0E20A200EA"
@@ -2620,6 +2633,7 @@
 						uid        	0)
 					    (object Operation "sendWarningMessage"
 						quid       	"4D0E0B9103C5"
+						documentation 	"Отправить клиенту предупреждение о том, что он задержал диск больше оговоренного срока."
 						parameters 	(list Parameters
 						    (object Parameter "message"
 							quid       	"4D0E213900CD"
@@ -2639,7 +2653,13 @@
 				logical_models 	(list unit_reference_list
 				    (object Class "CatalogSystem"
 					quid       	"4D0E63E40212"
-					stereotype 	"subsystem proxy"))
+					stereotype 	"subsystem proxy")
+				    (object Class_Category "ICatalogSystem"
+					quid       	"4D0E646C0370"
+					stereotype 	"interface realization"
+					exportControl 	"Public"
+					logical_models 	(list unit_reference_list)
+					logical_presentations 	(list unit_reference_list)))
 				logical_presentations 	(list unit_reference_list))
 			    (object Class_Category "MessageDeliverySystem"
 				quid       	"4D0E628301F6"
@@ -3406,7 +3426,7 @@
 							    location   	(208, 608)
 							    anchor_loc 	1
 							    nlines     	2
-							    max_width  	490
+							    max_width  	539
 							    justify    	0
 							    label      	"")
 							icon       	"Actor"
@@ -4896,7 +4916,7 @@
 							    location   	(208, 592)
 							    anchor_loc 	1
 							    nlines     	2
-							    max_width  	490
+							    max_width  	539
 							    justify    	0
 							    label      	"")
 							icon       	"Actor"
@@ -5750,6 +5770,25 @@
 							line_color 	3342489
 							fill_color 	13434879
 							quidu      	"4D0E5D150077"
+							compartment 	(object Compartment
+							    Parent_View 	@212
+							    location   	(1667, 518)
+							    font       	(object Font
+								size       	9
+								face       	"Arial"
+								charSet    	204
+								bold       	FALSE
+								italics    	FALSE
+								underline  	FALSE
+								strike     	FALSE
+								color      	0
+								default_color 	TRUE)
+							    icon_style 	"Label"
+							    fill_color 	13434879
+							    anchor     	2
+							    nlines     	5
+							    max_width  	375
+							    justify    	1)
 							width      	396
 							height     	412
 							annotation 	8
@@ -6460,7 +6499,7 @@
 							    location   	(1152, 320)
 							    anchor_loc 	1
 							    nlines     	2
-							    max_width  	490
+							    max_width  	539
 							    justify    	0
 							    label      	"")
 							icon       	"Actor"
@@ -7377,6 +7416,25 @@
 							line_color 	3342489
 							fill_color 	13434879
 							quidu      	"4D0E5D150077"
+							compartment 	(object Compartment
+							    Parent_View 	@286
+							    location   	(1843, 358)
+							    font       	(object Font
+								size       	9
+								face       	"Arial"
+								charSet    	204
+								bold       	FALSE
+								italics    	FALSE
+								underline  	FALSE
+								strike     	FALSE
+								color      	0
+								default_color 	TRUE)
+							    icon_style 	"Label"
+							    fill_color 	13434879
+							    anchor     	2
+							    nlines     	5
+							    max_width  	375
+							    justify    	1)
 							width      	396
 							height     	410
 							annotation 	8
@@ -9959,7 +10017,7 @@
 							    location   	(144, 416)
 							    anchor_loc 	1
 							    nlines     	2
-							    max_width  	490
+							    max_width  	539
 							    justify    	0
 							    label      	"")
 							icon       	"Actor"
@@ -11863,7 +11921,7 @@
 							    location   	(1120, 336)
 							    anchor_loc 	1
 							    nlines     	2
-							    max_width  	490
+							    max_width  	539
 							    justify    	0
 							    label      	"")
 							icon       	"Actor"
@@ -12155,7 +12213,7 @@
 							    location   	(880, 320)
 							    anchor_loc 	1
 							    nlines     	2
-							    max_width  	490
+							    max_width  	539
 							    justify    	0
 							    label      	"")
 							icon       	"Actor"
@@ -14488,7 +14546,7 @@
 							    location   	(1152, 336)
 							    anchor_loc 	1
 							    nlines     	2
-							    max_width  	490
+							    max_width  	539
 							    justify    	0
 							    label      	"")
 							icon       	"Actor"
@@ -14981,6 +15039,25 @@
 							line_color 	3342489
 							fill_color 	13434879
 							quidu      	"4CDFE86A02C3"
+							compartment 	(object Compartment
+							    Parent_View 	@621
+							    location   	(1001, 998)
+							    font       	(object Font
+								size       	9
+								face       	"Arial"
+								charSet    	204
+								bold       	FALSE
+								italics    	FALSE
+								underline  	FALSE
+								strike     	FALSE
+								color      	0
+								default_color 	TRUE)
+							    icon_style 	"Label"
+							    fill_color 	16777215
+							    anchor     	2
+							    nlines     	2
+							    max_width  	159
+							    justify    	1)
 							width      	320
 							height     	272
 							annotation 	8
@@ -15062,6 +15139,25 @@
 							line_color 	3342489
 							fill_color 	13434879
 							quidu      	"4D0E5D150077"
+							compartment 	(object Compartment
+							    Parent_View 	@625
+							    location   	(963, 1494)
+							    font       	(object Font
+								size       	9
+								face       	"Arial"
+								charSet    	204
+								bold       	FALSE
+								italics    	FALSE
+								underline  	FALSE
+								strike     	FALSE
+								color      	0
+								default_color 	TRUE)
+							    icon_style 	"Label"
+							    fill_color 	13434879
+							    anchor     	2
+							    nlines     	5
+							    max_width  	375
+							    justify    	1)
 							width      	396
 							height     	412
 							annotation 	8
@@ -15197,7 +15293,7 @@
 							line_color 	3342489
 							fill_color 	13434879
 							quidu      	"4CDFEAB30156"
-							width      	120
+							width      	296
 							height     	1114
 							icon_height 	162
 							icon_width 	120
@@ -15336,7 +15432,7 @@
 							line_color 	3342489
 							fill_color 	13434879
 							quidu      	"4CDFEAC10365"
-							width      	157
+							width      	306
 							height     	1114
 							icon_height 	164
 							icon_width 	157
@@ -15388,7 +15484,7 @@
 							line_color 	3342489
 							fill_color 	13434879
 							quidu      	"4CDFEBF900DF"
-							width      	57
+							width      	284
 							height     	1162
 							icon_height 	57
 							icon_width 	57
@@ -15703,7 +15799,7 @@
 							    location   	(208, 464)
 							    anchor_loc 	1
 							    nlines     	2
-							    max_width  	490
+							    max_width  	539
 							    justify    	0
 							    label      	"")
 							icon       	"Actor"
@@ -15733,7 +15829,7 @@
 							    location   	(1839, 652)
 							    anchor_loc 	1
 							    nlines     	2
-							    max_width  	825
+							    max_width  	873
 							    justify    	0
 							    label      	"")
 							icon       	"boundary"
@@ -15765,7 +15861,7 @@
 							    location   	(191, 977)
 							    anchor_loc 	1
 							    nlines     	2
-							    max_width  	561
+							    max_width  	598
 							    justify    	0
 							    label      	"")
 							icon       	"control"
@@ -17222,32 +17318,42 @@
     process_structure 	(object Processes
 	quid       	"34DBB4830144"
 	ProcsNDevs 	(list
-	    (object Processor "<processor name>"
-		quid       	"34DBBD4300B4"
-		documentation 	"This node provides <enter a short description here of the functionality and capability of the node>."
-		connections 	(list connection_list
-		    (object Connection_Relationship
-			quid       	"34DBBD4B008C"
-			supplier   	"<device name>"
-			quidu      	"34DBBD47019A"
-			supplier_is_device 	TRUE))
+	    (object Processor "MessageServer"
+		quid       	"4D0E679300EC"
 		characteristics 	""
 		scheduling 	"Preemptive"
 		processes  	(list processes
-		    (object Process "<process name>"
-			quid       	"35DB411001D6"
-			documentation 	"This process corresponds to the process with the same name in the Logical View::Process Model."
-			stereotype 	"process"
-			priority   	"")
-		    (object Process "<thread name>"
-			quid       	"35DB41720348"
-			documentation 	"This process corresponds to the thread with the same name in the Logical View::Process Model."
-			stereotype 	"thread"
+		    (object Process "MessageDeliverySystem"
+			quid       	"4D0E69D50028"
 			priority   	"")))
-	    (object Device "<device name>"
-		quid       	"34DBBD47019A"
-		documentation 	"This device provides <enter a short description of the capability the device provides> for the system."
-		characteristics 	"")
+	    (object Processor "CatalogServer"
+		quid       	"4D0E691103CE"
+		characteristics 	""
+		scheduling 	"Preemptive"
+		processes  	(list processes
+		    (object Process "CatalogSystem"
+			quid       	"4D0E69BD02D4"
+			priority   	"")))
+	    (object Processor "Terminal"
+		quid       	"4D0E693B01D7"
+		documentation 	"Используеьтся работниками проката"
+		connections 	(list connection_list
+		    (object Connection_Relationship
+			quid       	"4D0E69740076"
+			supplier   	"CatalogServer"
+			quidu      	"4D0E691103CE"
+			supplier_is_device 	FALSE)
+		    (object Connection_Relationship
+			quid       	"4D0E697602FE"
+			supplier   	"MessageServer"
+			quidu      	"4D0E679300EC"
+			supplier_is_device 	FALSE))
+		characteristics 	""
+		scheduling 	"Preemptive"
+		processes  	(list processes
+		    (object Process "VideoRental"
+			quid       	"4D0E6A26006A"
+			priority   	"")))
 	    (object Process_Diagram "Deployment View"
 		quid       	"34DBB4830146"
 		title      	"Deployment View"
@@ -17267,8 +17373,8 @@
 		origin_x   	0
 		origin_y   	0
 		items      	(list diagram_item_list
-		    (object ProcessorView "<processor name>" @738
-			location   	(512, 1056)
+		    (object ProcessorView "MessageServer" @738
+			location   	(1792, 304)
 			font       	(object Font
 			    size       	9
 			    face       	"Arial"
@@ -17281,18 +17387,19 @@
 			    default_color 	TRUE)
 			label      	(object ItemLabel
 			    Parent_View 	@738
-			    location   	(276, 900)
+			    location   	(1603, 186)
 			    nlines     	2
-			    max_width  	400
+			    max_width  	306
 			    justify    	0
-			    label      	"<processor name>")
+			    label      	"MessageServer")
 			icon_style 	"Label"
-			quidu      	"34DBBD4300B4"
-			width      	475
-			height     	381
-			annotation 	3)
-		    (object DeviceView "<device name>" @739
-			location   	(1040, 1056)
+			line_color 	3342489
+			quidu      	"4D0E679300EC"
+			width      	381
+			height     	306
+			annotation 	2)
+		    (object ProcessorView "CatalogServer" @739
+			location   	(768, 304)
 			font       	(object Font
 			    size       	9
 			    face       	"Arial"
@@ -17305,27 +17412,19 @@
 			    default_color 	TRUE)
 			label      	(object ItemLabel
 			    Parent_View 	@739
-			    location   	(867, 950)
+			    location   	(579, 189)
 			    nlines     	2
-			    max_width  	275
+			    max_width  	307
 			    justify    	0
-			    label      	"<device name>")
-			icon_style 	"Icon"
-			quidu      	"34DBBD47019A"
-			width      	350
-			height     	282
-			annotation 	0)
-		    (object ConnectionView "" @740
-			stereotype 	TRUE
-			quidu      	"34DBBD4B008C"
-			client     	@738
-			supplier   	@739
-			vertices   	(list Points
-			    (718, 1056)
-			    (865, 1056))
-			line_style 	0)
-		    (object NoteView @741
-			location   	(816, 304)
+			    label      	"CatalogServer")
+			icon_style 	"Label"
+			line_color 	3342489
+			quidu      	"4D0E691103CE"
+			width      	382
+			height     	300
+			annotation 	2)
+		    (object ProcessorView "Terminal" @740
+			location   	(1056, 1024)
 			font       	(object Font
 			    size       	9
 			    face       	"Arial"
@@ -17337,26 +17436,38 @@
 			    color      	0
 			    default_color 	TRUE)
 			label      	(object ItemLabel
-			    Parent_View 	@741
-			    location   	(38, 29)
-			    fill_color 	13434879
-			    nlines     	11
-			    max_width  	1521
-			    justify    	1
-			    label      	
-|This Diagram defines the typical physical network configurations, including those typically used by end users, as well as special configurations used for development and test.
-|
-|· Allocate processes to the various nodes. Allocation takes into account the capacity of the nodes (in terms of
-|both memory and processing), bandwidth of the communication medium (bus, LANs, WANs), and the
-|availability of the hardware and communication links, rerouting, and so on.
-|
-|See, Rational Unified Process:
-|Activity: Describe Distribution
-			    )
+			    Parent_View 	@740
+			    location   	(901, 934)
+			    nlines     	2
+			    max_width  	238
+			    justify    	0
+			    label      	"Terminal")
+			icon_style 	"Label"
 			line_color 	3342489
-			fill_color 	13434879
-			width      	1581
-			height     	563)))))
+			quidu      	"4D0E693B01D7"
+			width      	313
+			height     	250
+			annotation 	2)
+		    (object ConnectionView "" @741
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"4D0E69740076"
+			client     	@740
+			supplier   	@739
+			vertices   	(list Points
+			    (1056, 914)
+			    (768, 454))
+			line_style 	0)
+		    (object ConnectionView "" @742
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"4D0E697602FE"
+			client     	@740
+			supplier   	@738
+			vertices   	(list Points
+			    (1181, 1024)
+			    (1602, 304))
+			line_style 	0)))))
     properties 	(object Properties
 	attributes 	(list Attribute_Set
 	    (object Attribute
