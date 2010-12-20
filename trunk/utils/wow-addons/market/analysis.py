@@ -25,13 +25,13 @@ def trace(name):
             global printoffset
             isSimpleName = (type(name) is str) or (type(name) is unicode)
             finalName = name if isSimpleName else name(*args, **kwargs)
-            print "%s(\"%s\"" % ("  " * printoffset, finalName)
+            prn(u"(\"%s\"" % finalName)
             start = time.time()
             printoffset += 1
             result = f(*args, **kwargs)
             printoffset -= 1
             finish = time.time()
-            print "%s) -- %.3f seconds" % ("  " * printoffset, finish - start)
+            prn(") -- %.3f seconds" % (finish - start))
             return result
         return timed
     return impl
@@ -41,10 +41,11 @@ def doNothing(f):
         pass
     return q
 
+print_encoding = "cp866"
 def prn(s):
     prefix = "  " * printoffset
-    if type(s) is unicode: print prefix + s.encode("cp866")
-    else: print prefix + s.decode("utf-8").encode("cp866")
+    if type(s) is unicode: print prefix + s.encode(print_encoding)
+    else: print prefix + s.decode("utf-8").encode(print_encoding)
 
 def write(fn, title, body):
     if type(title)==type(u""): title = title.encode("utf8")
@@ -188,8 +189,6 @@ class transaction:
         self.ids = get_ids(itemstring)
         self.itemstring = itemstring
         self.line = line
-        #print line
-        #print category
         if category=="completedAuctions":
             self.stack, self.money, self.deposit, self.fee, self.buyout, \
             self.bid, self.buyer, self.time, self.reason, self.location = \
@@ -271,50 +270,14 @@ class transaction:
         elif self.category=="failedAuctions":
             return -int(self.deposit)
         else: raise ValueError();
-
+        
 #@trace("getrows")
 def getrows(c):
-    return \
-        sum( # суммируем по категориям
-            map(
-                lambda category:
-                    sum( # суммируем по itemid
-                        map(
-                            lambda itemidset:
-                                sum( # суммируем по itemstring
-                                    map(
-                                        lambda itemstring:
-                                            map(
-                                                lambda info:
-                                                    transaction(category, itemstring, info),
-                                                itemidset[itemstring].values()
-                                            ),
-                                        itemidset.keys()
-                                    ),
-                                []),
-                            c[category].values()
-                        ),
-                        []
-                    ),
-                ("completedAuctions", "failedAuctions", "completedBidsBuyouts")
-            ),
-            []
-        )
-
-def sizeof(t):
-  if type(t)==type(""): return len(t)
-  if type(t)==type(u""): return len(t)
-  if type(t)==type([]):
-      ans=0
-      for k in t:
-          ans = ans + sizeof(k)
-      return ans
-  if type(t)==type({}):
-   ans=0
-   for k,v in t.items():
-    ans = ans + sizeof(k) + sizeof(v)
-   return ans
-  return 200
+    for category in ("completedAuctions", "failedAuctions", "completedBidsBuyouts"):
+        for itemidset in c[category].itervalues():
+            for itemstring, itemvalues in itemidset.iteritems():
+                for info in itemvalues.values():
+                    yield transaction(category, itemstring, info)
 
 lasts = []
 markets = {}
@@ -432,7 +395,7 @@ def processRealms():
     for realm in realms:
         processRealm(realm)
 
-@trace(lambda realm, character: "processCharacter: %s/%s" % (realm, character))
+@trace(lambda realm, character: u"processCharacter: %s/%s" % (realm, character))
 def processCharacter(realm, char):
     # check db version
     cversion = BeanCounterDB.settings[realm][char]["version"]
@@ -448,7 +411,7 @@ def processCharacter(realm, char):
     f = BeanCounterDB.settings[realm][char]["faction"]
     
     # raw data
-    log = getrows(c)
+    log = list(getrows(c))
 
     # process it
     if log:
@@ -480,14 +443,14 @@ def processCharacter(realm, char):
             currentMarket.setdefault(transaction.ids, [])
             currentMarket[transaction.ids].append(transaction)
 
-@trace(lambda realm: "processCharacters: %s" % realm)
+@trace(lambda realm: u"processCharacters: %s" % realm)
 def processCharacters(realm):
     chars = data[realm].keys()
     
     for char in chars:
         processCharacter(realm, char)
 
-@trace(lambda realm: "processMarkets: %s" % realm)
+@trace(lambda realm: u"processMarkets: %s" % realm)
 def processMarkets(realm):
 
     # do market (not character) specific processing
@@ -781,7 +744,7 @@ def processMarkets(realm):
             write(iname, "%s - %s: %s" % (realm, fac, itemname(ids)), s)
 
                 
-@trace(lambda realm: "processRealm: %s" % realm)
+@trace(lambda realm: u"processRealm: %s" % realm)
 def processRealm(realm):
     processCharacters(realm)
     processMarkets(realm)
@@ -802,7 +765,7 @@ def makeIndex():
         ul(
             map(
                 lambda realm:
-                    "%s %s" %
+                    u"%s %s" %
                         (
                             realm,
                             ul(
