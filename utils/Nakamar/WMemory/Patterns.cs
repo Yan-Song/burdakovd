@@ -45,20 +45,20 @@ namespace WoWMemoryManager
         /// </summary>
         public static Pattern ClientConnection =
             new Pattern("8B 15 FF FF FF FF 89 82 FF FF FF FF 89 81 08 00 00 " +
-            "00 8B 0D FF FF FF FF 89 88 D8 00 00 00 " +
-            "C7 81 40 19 00 00 FF FF FF FF C7 81 40 39 00 00 FF FF FF FF 8B 88 D8 00 00 00",
+            "00 8B 0D FF FF FF FF 89 88 FF FF FF FF " +
+            "C7 81 FF FF FF FF FF FF FF FF C7 81 FF FF FF FF FF FF FF FF 8B 88 FF FF FF FF",
 
-            "xx????xx????xxxxxxxx????xxxxxxxxxxxx????xxxxxx????xxxxxx", 2);
+            "xx????xx????xxxxxxxx????xx????xx????????xx????????xx????", 2);
 
         /// <summary>
         /// смещение адреса ObjectManager относительно ClientConnection, works for 4.x
         /// </summary>
         public static Pattern ObjectManagerOffset =
             new Pattern("8B 15 FF FF FF FF 89 82 FF FF FF FF 89 81 08 00 00 " +
-            "00 8B 0D FF FF FF FF 89 88 D8 00 00 00 " +
-            "C7 81 40 19 00 00 FF FF FF FF C7 81 40 39 00 00 FF FF FF FF 8B 88 D8 00 00 00",
+            "00 8B 0D FF FF FF FF 89 88 FF FF FF FF " +
+            "C7 81 FF FF FF FF FF FF FF FF C7 81 FF FF FF FF FF FF FF FF 8B 88 FF FF FF FF",
 
-            "xx????xx????xxxxxxxx????xxxxxxxxxxxx????xxxxxx????xxxxxx", 8);
+            "xx????xx????xxxxxxxx????xx????xx????????xx????????xx????", 8);
 
         /// <summary>
         /// Место в коде, где можно найти адрес gameStateId.
