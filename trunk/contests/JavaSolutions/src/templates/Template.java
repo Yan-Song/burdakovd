@@ -1,14 +1,17 @@
 package templates;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.io.StreamTokenizer;
 import java.util.Locale;
-import java.util.Scanner;
 
-public class Template {
+public final class Template {
 
 	static {
 		final Locale us = Locale.US;
@@ -18,15 +21,27 @@ public class Template {
 	}
 
 	static boolean file = false;
+	static boolean isLocal = true;
 
-	static Scanner in;
+	private static int nextInt() throws IOException {
+		in.nextToken();
+		return (int) in.nval;
+	}
+
+	static StreamTokenizer in;
 	static {
 		try {
-			in = new Scanner(file ? new FileInputStream("f:\\var\\tmp\\in.txt")
-					: System.in);
+			// in = new Scanner(file ? new
+			// FileInputStream("f:\\var\\tmp\\in.txt")
+			// : System.in);
+
 			// in = new BufferedReader(new InputStreamReader(
 			// file ? new FileInputStream("f:\\var\\tmp\\in.txt")
 			// : System.in));
+
+			in = new StreamTokenizer(new BufferedReader(new InputStreamReader(
+					file ? new FileInputStream("f:\\var\\tmp\\in.txt")
+							: System.in)));
 		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -43,28 +58,38 @@ public class Template {
 		}
 	}
 
+	static PrintStream err;
+	static {
+		err = System.err;
+	}
+
 	/**
 	 * @param args
+	 * @throws IOException
 	 */
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws IOException {
 		try {
-			final long t = in.nextInt();
+			final long startTime = System.nanoTime();
+			final long t = nextInt();
 			for (long i = 0; i < t; ++i) {
 				solve(i + 1);
 				if (file) {
-					System.out.println(i + 1 + "/" + t);
-					System.out.flush();
+					err.println(i + 1 + "/" + t);
 				}
 				if (!file) {
 					out.flush();
 				}
+			}
+			if (isLocal) {
+				err.println(String.format("Completed after %d ms.",
+						(System.nanoTime() - startTime) / 1000000));
 			}
 		} finally {
 			out.flush();
 		}
 	}
 
-	private static void solve(final long testId) {
+	private static void solve(final long testId) throws IOException {
 
 	}
 }
