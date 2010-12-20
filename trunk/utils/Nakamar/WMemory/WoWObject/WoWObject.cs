@@ -25,10 +25,10 @@ namespace WoWMemoryManager.WoWObject
     {
         protected const uint
             DescriptorFieldsOffset = 0x8,
-            XPositionOffset = 0x880,
-            YPositionOffset = 0x884,
-            ZPositionOffset = 0x888,
-            RotationOffset = 0x890,
+            XPositionOffset = 0x898,
+            YPositionOffset = 0x89c,
+            ZPositionOffset = 0x8a0,
+            RotationOffset = 0x8a8,
             typeOffset = 0x14;
 
         protected const uint // offsets in object descriptor table
