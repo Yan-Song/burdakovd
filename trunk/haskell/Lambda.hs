@@ -1,4 +1,4 @@
-module Lambda (Lambda(Var, App, Lam), free, substitute, bethaRed) where
+п»їmodule Lambda (Lambda(Var, App, Lam), free, substitute, bethaRed) where
 
     import List
     import Maybe
@@ -22,7 +22,7 @@ module Lambda (Lambda(Var, App, Lam), free, substitute, bethaRed) where
                  representation = show term
 
 
-    {-- Имеет ли переменная по меньшей мере одно свободное вхождение в \-выражение? --}
+    {-- РРјРµРµС‚ Р»Рё РїРµСЂРµРјРµРЅРЅР°СЏ РїРѕ РјРµРЅСЊС€РµР№ РјРµСЂРµ РѕРґРЅРѕ СЃРІРѕР±РѕРґРЅРѕРµ РІС…РѕР¶РґРµРЅРёРµ РІ \-РІС‹СЂР°Р¶РµРЅРёРµ? --}
     {-- x <- FV(m) ? --}
     free :: String -> Lambda -> Bool
 
@@ -34,28 +34,28 @@ module Lambda (Lambda(Var, App, Lam), free, substitute, bethaRed) where
     free x (App m n) = free x m || free x n
     
     
-    {-- substitute t x r -- подстановка r в t вместо формального параметра x --}
+    {-- substitute t x r -- РїРѕРґСЃС‚Р°РЅРѕРІРєР° r РІ t РІРјРµСЃС‚Рѕ С„РѕСЂРјР°Р»СЊРЅРѕРіРѕ РїР°СЂР°РјРµС‚СЂР° x --}
     substitute :: Lambda -> String -> Lambda -> Lambda
 
     substitute var@(Var y) x r | y == x = r
-                           | otherwise = var
+                               | otherwise = var
     
     substitute term@(Lam y n) x m | y == x = term
                                   | not (free y m) = Lam y $ substitute n x m
                                   | otherwise = substitute (Lam z $ substitute n y $ Var z) x m
                                     where
                                         z = fromJust $ find (not . (`free` m)) variableNames
-                                        -- бесконечный список имён переменных
+                                        -- Р±РµСЃРєРѕРЅРµС‡РЅС‹Р№ СЃРїРёСЃРѕРє РёРјС‘РЅ РїРµСЂРµРјРµРЅРЅС‹С…
                                         variableNames = map (:[]) alphabet ++ (concat $ map (\i -> map (:show i) alphabet) [1..])
                                         alphabet = ['a'..'z']
     
     substitute (App left right) x m = App (substitute left x m) $ substitute right x m
 
 
-    {-- Бета-редукция ( подстановка в абстракцию ) --}
+    {-- Р‘РµС‚Р°-СЂРµРґСѓРєС†РёСЏ ( РїРѕРґСЃС‚Р°РЅРѕРІРєР° РІ Р°Р±СЃС‚СЂР°РєС†РёСЋ ) --}
     bethaRed :: Lambda -> Lambda -> Lambda
     
-    -- Бета-конверсия
+    -- Р‘РµС‚Р°-РєРѕРЅРІРµСЂСЃРёСЏ
     bethaRed (Lam x n) = substitute n x
     
 
