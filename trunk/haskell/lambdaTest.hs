@@ -1,15 +1,15 @@
-import Lambda
+п»їimport Lambda
 
--- вспомогательные переменные, чтоб не писать везде Var "smth"
+-- РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ, С‡С‚РѕР± РЅРµ РїРёСЃР°С‚СЊ РІРµР·РґРµ Var "smth"
 f = Var "f"
 x = Var "x"
 g = Var "g"
 z = Var "z"
 
--- Y-комбинатор
-y = Lam "f" $ App q q
+-- Y-РєРѕРјР±РёРЅР°С‚РѕСЂ
+y = Lam "f" $ App w w
     where
-        q = Lam "x" $ App f $ App x x
+        w = Lam "x" $ App f $ App x x
 
 checkShow description x = putStrLn $ description ++ ": " ++ show x ++ "\n"
 
