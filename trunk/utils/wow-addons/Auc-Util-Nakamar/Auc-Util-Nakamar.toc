@@ -1,10 +1,10 @@
 ## Title: Auc:Util:Nakamar
 ## Interface: 40000
-## Dependancies: Auc-Advanced, BankMover, Postal, NAddon
+## Dependencies: NAddon, Auc-Advanced, Postal, BankMover
 ##
 ## Version: 3.0.3.1
 ## Author: burdakovd
 ## X-Email: kreved at kreved dot org
 ## SavedVariables: Nakamar
-Nakamar.lua
 
+Nakamar.lua
