@@ -4,4 +4,5 @@
 ## Version: 0.0
 ## Author: burdakovd
 ## X-Email: kreved at kreved dot org
+
 NAddon.lua

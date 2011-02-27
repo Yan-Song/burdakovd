@@ -1,3 +1,4 @@
+
 local data = {}
 
 local i
@@ -6,21 +7,25 @@ for i=1, 100, 1 do
 end
 
 -- signature
+-- некие случайные числа, известные также внешнему модулю
 data[5] = 213674
 data[4] = 139443
 data[3] = 371721
 data[2] = 349667
 data[1] = 901791
 
---data[6] is message
---data[7] is target name
---data[8] is DoNotRestart
---data[9] is needPurchaseConfirmation
---data[10] is CurrentState (string)
---data[11] is NothingToDo (yes/no)
+--data[6] is message - команда внешнему модулю (goto AH, goto mailbox, etc)
+--data[7] is target name - имя текущей цели персонажа
+--data[8] is DoNotRestart - причина паники ("" если всё нормально)
+--data[9] is needPurchaseConfirmation (нужно ли нажать кнопку подтверждения покупки)
+--data[10] is CurrentState (string) - текущее состояние, его внешний модуль может показывать пользователю
+--data[11] is NothingToDo (yes/no) - в ближайшее достаточно долгое время (часы) этому аккаунту нечего делать
 
 local msgcount = 0
 local lastCommandTime = 0
+
+
+-- функции для взаимодействия с внешним модулем
 
 local function NSendMessage(text)
 	msgcount = msgcount + 1
@@ -77,6 +82,8 @@ function NNothingToDo(yes)
     end
 end
 
+-- инициализация
+
 NSendCommand("nop")
 data[7] = ""
 data[8] = ""
@@ -95,6 +102,9 @@ frame:SetScript("OnEvent",
 	)
 
 frame:RegisterEvent("PLAYER_TARGET_CHANGED")
+
+-- расставить макросы
+-- #todo
 
 function NButtons()
     local buttons = {"pause", "Cancel Quit", "reset", "взять всё", 
