@@ -91,11 +91,13 @@ function lib.NeedPostConfirmation()
 end
 
 function lib.NeedAnyConfirmation()
-    return lib.NeedPurchaseConfirmation() or lib.NeedPostConfirmation()
+    return lib.NeedPurchaseConfirmation() or lib.NeedPostConfirmation() or private.currentState.isPaused()
 end
 
 function lib.ConfirmPurchase()
-	if lib.NeedPostConfirmation() then
+	if private.currentState.isPaused() then
+		private.resetState()
+	elseif lib.NeedPostConfirmation() then
 		AucAdvanced.Post.Private.Prompt.Yes:Click()
 	elseif lib.NeedPurchaseConfirmation() then
 		AucAdvanced.Buy.Private.Prompt.Yes:Click()
@@ -131,6 +133,7 @@ end
 -- timer events
 function private.everySecond()
 	NKeepAlive()
+	NNeedAnyConfirmation(lib.NeedAnyConfirmation())
 	--print("Tick! framesSinceStart  = "..tostring(private.framesSinceStart))
 	private.currentState:tick()
 end
@@ -149,7 +152,7 @@ end
 
 function private.changeState(self, newState)
 	private.currentState:leave()
-	print("Смена состояния: '" .. private.currentState:getName() .. "' => '" .. newState:getName() .. "'")
+	--print("Смена состояния: '" .. private.currentState:getName() .. "' => '" .. newState:getName() .. "'")
 	NCurrentState(newState:getName())
 	private.currentState = newState
 	newState.timeEntered = time()
@@ -160,7 +163,8 @@ local dumbState = function(name)
 	return {
 		getName = function() return name end,
 		leave = function() end,
-		tick = function() end
+		tick = function() end,
+		isPaused = function() return false end
 	}
 end
 
@@ -225,6 +229,7 @@ resetState = function()
 	NSendCommand("break")
 	private:changeState(states.chooseState())
 end
+private.resetState = resetState
 
 setPauseState = function()
 	private:changeState(states.pauseState())
@@ -232,7 +237,9 @@ end
 
 pauseState = function()
 	print("pausing")
-	return dumbState("Paused")
+	local w = dumbState("Paused")
+	w.isPaused = function() return true end
+	return w
 end
 states.pauseState = pauseState
 
@@ -356,7 +363,10 @@ local waitingForAHState = function()
 	
 	waiter.tick = function(self)
 		if private.auctionAvailable then
-			if not self.openedTime then self.openedTime = time() end
+			-- важный, хоть и кривой момент.
+			-- тут устанавливается псевдосостояние "Аукцион", чтобы внешний модуль
+			-- смог понять, что его работа по открытию аукциона завершена
+			if not self.openedTime then self.openedTime = time(); NCurrentState("Аукцион") end
 		else
 			if self.openedTime then panic("Неожиданно закрыт аукцион") end
 		end
@@ -514,6 +524,10 @@ local doPosting = function()
 	
 		if AucAdvanced.Post.GetQueueLen() == 0 then
 			print("Всё, что возможно, выложено на аукцион")
+			
+			-- занести всё, что осталось в сумках в черный список
+			
+			
 			CloseAuctionHouse()
 			private:changeState(states.chooseState())
 		end
@@ -548,10 +562,12 @@ function lib.OnLoad()
 	private.frame:Show()
 	
 	-- регистрируем обработчики
-	RegisterEvent("CHAT_MSG_WHISPER", function() panic("Получено приватное сообщение") end)
+	RegisterEvent("CHAT_MSG_WHISPER", function()
+		if not private.currentState.isPaused() then panic("Получено приватное сообщение") end
+		end)
 	
-	-- запускаем начальное состояние
-	private:changeState(initState())
+	-- ставим аддон на паузу, чтоб не мешался
+	setPauseState()
 end
 
 function lib.Processor(callbackType, ...)
@@ -565,3 +581,9 @@ function lib.Processor(callbackType, ...)
 		private.auctionAvailable = false
 	end
 end
+
+-- todo: дефолтные значения настроек (чекаут аукционера из свн)
+-- todo: маршруты
+-- todo: уточнить, какие кейбиндинги нужны, какие из них нестандартные
+-- todo: все возможные биндинги устанавливать аддоном
+-- todo: маны по nakamar.wtf
