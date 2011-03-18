@@ -62,11 +62,13 @@ public final class ResolutionsMethod {
         final Conjunction<?> expectedConjunction =
                 expected instanceof Conjunction ? (Conjunction<?>) expected
                         : new Conjunction<Formula<?>>(Of.of(expected));
+
         final Set<Set<Litera<?>>> setsExpected = new HashSet<Set<Litera<?>>>();
         for (final Formula<?> disjunction : expectedConjunction.getOperands()) {
             final Disjunction<?> expectedDisjunction =
                     disjunction instanceof Disjunction ? (Disjunction<?>) disjunction
                             : new Disjunction<Formula<?>>(Of.of(disjunction));
+
             final Set<Litera<?>> tmp = new HashSet<Litera<?>>();
             for (final Formula<?> operand : expectedDisjunction.getOperands()) {
                 if (operand instanceof AtomicFormula) {
