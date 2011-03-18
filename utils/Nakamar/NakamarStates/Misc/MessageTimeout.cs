@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FiniteStateMachine;
 using WoWMemoryManager;
-using Plugins.Properties;
-using System.Windows.Forms;
 
 namespace Plugins
 {

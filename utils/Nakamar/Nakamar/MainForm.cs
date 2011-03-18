@@ -196,7 +196,6 @@ namespace Nakamar
             if (FSM.DoNotRestart)
             {
                 PlayDoNotRestartSound();
-                
             }
 
             WoW = null;

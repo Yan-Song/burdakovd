@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Collections.Generic;
-using Fasm;
+
 
 namespace Magic
 {
@@ -77,7 +77,7 @@ namespace Magic
 		/// <summary>
 		/// Assembles mnemonics into bytecode and allows for injection and execution.
 		/// </summary>
-		public ManagedFasm Asm { get; set; }
+		
 		#endregion
 
 		#region Constructors
@@ -87,11 +87,7 @@ namespace Magic
 		/// </summary>
 		public BlackMagic()
 		{
-			Asm = new ManagedFasm();
 			m_Data = new List<PatternDataEntry>();
-
-			if (m_bProcessOpen && m_hProcess != IntPtr.Zero)
-				Asm.SetProcessHandle(m_hProcess);
 		}
 
 		/// <summary>
@@ -152,11 +148,6 @@ namespace Magic
 
 				m_Modules = Process.GetProcessById(m_ProcessId).Modules;
 				m_MainModule = m_Modules[0];
-
-				if (Asm == null)
-					Asm = new ManagedFasm(m_hProcess);
-				else
-					Asm.SetProcessHandle(m_hProcess);
 			}
 
 			return m_bProcessOpen;
@@ -246,8 +237,6 @@ namespace Magic
 		/// </summary>
 		public void Close()
 		{
-			Asm.Dispose();
-
 			this.CloseProcess();
 			this.CloseThread();
 		}
@@ -268,8 +257,6 @@ namespace Magic
 			m_Modules = null;
 
 			m_bProcessOpen = false;
-
-			Asm.SetProcessHandle(IntPtr.Zero);
 		}
 
 		/// <summary>

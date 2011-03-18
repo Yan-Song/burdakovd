@@ -1,17 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FiniteStateMachine;
-using Plugins.Properties;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Input;
+using FiniteStateMachine;
 using WoWMemoryManager;
 using WoWMemoryManager.WoWObject;
-using Util;
-using System.Collections;
-using System.Windows.Input;
-using System.Threading;
 
 namespace Plugins
 {
@@ -49,54 +46,8 @@ namespace Plugins
             }
         }
 
-        public override void Configure()
-        {
-            ConfigureWayPointsPath();
-        }
-
-        public void ConfigureWayPointsPath()
-        {
-            SaveFileDialog Dialog = new SaveFileDialog();
-            Dialog.AddExtension = true;
-            Dialog.CheckFileExists = false;
-            Dialog.CheckPathExists = true;
-            Dialog.OverwritePrompt = false;
-            Dialog.DefaultExt = "xml";
-            Dialog.FileName = Settings.Default.WayPointsPath;
-            Dialog.Filter = "Xml files (*.xml)|*.xml";
-            Dialog.Title = "Выберите файл для зарузки и сохранения точек маршрута";
-
-            if (Dialog.ShowDialog() == DialogResult.OK)
-            {
-                if (File.Exists(Dialog.FileName))
-                {
-                    DialogResult result = MessageBox.Show("Выбранный файл уже существует. Загрузить из него точки маршрута? " +
-                        Environment.NewLine +
-                        "В этом случае загруженные точки маршрута заменят текущий набор.",
-                        "Файл уже существует",
-                        MessageBoxButtons.YesNoCancel,
-                        MessageBoxIcon.Question,
-                        MessageBoxDefaultButton.Button1);
-
-                    if (result == DialogResult.Cancel) return;
-
-                    Settings.Default.WayPointsPath = Dialog.FileName;
-
-                    if (result == DialogResult.Yes)
-                        Load();
-                    else
-                        Save();
-                }
-                else
-                {
-                    Settings.Default.WayPointsPath = Dialog.FileName;
-                    Save();
-                }
-            }
-            Settings.Default.Save();
-        }
-
-        public Navigation(object machine, object memory) : base(machine, memory)
+        public Navigation(object machine, object memory)
+            : base(machine, memory)
         {
             Load();
         }
@@ -105,8 +56,8 @@ namespace Plugins
         {
             try
             {
-                Destinations = new WayPointSet(Settings.Default.WayPointsPath);
-                Log("Загружено " + Destinations.Count + " точек и " + Destinations.RoutesCount + " маршрутов из " + Settings.Default.WayPointsPath);
+                Destinations = new WayPointSet(Machine.settings["waypoints"]);
+                Log("Загружено " + Destinations.Count + " точек и " + Destinations.RoutesCount + " маршрутов из " + Machine.settings["waypoints"]);
             }
             catch (FileNotFoundException e)
             {
@@ -119,10 +70,10 @@ namespace Plugins
         {
             try
             {
-                Destinations.Save(Settings.Default.WayPointsPath);
+                Destinations.Save(Machine.settings["waypoints"]);
                 Log("Точки маршрута сохранены");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 LogError("Не удалось сохранить точки маршрута: " + e.Message);
             }
@@ -140,17 +91,21 @@ namespace Plugins
         {
             get
             {
-                if (!Memory.IsWoWForeground())
+                // break
+                if (Memory.GetAddonMessage() != null && Memory.GetAddonMessage().Command == "break" && MovementQueue != null)
                 {
                     StopNavigation();
                     return false;
                 }
+
                 if (MovementQueue != null)
                     return true; // need to move
+
                 if (!Memory.NewAddonMessage())
                     return false; // nothing to process
+
                 string command = Memory.GetAddonMessage().Command;
-                return command == "destination" || command == "goto" || command == "break" || command == "route";
+                return command == "destination" || command == "goto" || command == "route";
             }
         }
 
@@ -164,10 +119,6 @@ namespace Plugins
                 {
                     MakeRoute(m);
                     Memory.ProcessAddonMessage(m.Id);
-                }
-                else if (m.Command == "break" && MovementQueue != null)
-                {
-                    StopNavigation();
                 }
                 else if (m.Command == "destination")
                 {
@@ -279,7 +230,7 @@ namespace Plugins
             creatingRoute.Points.Add(current);
             WayPoint prev = creatingRoute.Points.Count < 2 ?
                 Destinations[creatingRoute.From] :
-                creatingRoute.Points[creatingRoute.Points.Count-2];
+                creatingRoute.Points[creatingRoute.Points.Count - 2];
             Log("В " + creatingRoute.Name + " добавлена точка №" + creatingRoute.Points.Count +
                 " (" + current.X + "; " + current.Y + "; " + current.Z + ")" +
                 ", расстояние от предыдущей точки: " + prev.Distance(current));
@@ -355,7 +306,7 @@ namespace Plugins
         {
             DestinationPoint nearest = null;
             double minDistance = double.MaxValue;
-            foreach(DestinationPoint p in Destinations.Values)
+            foreach (DestinationPoint p in Destinations.Values)
                 if (Me.Distance(p) < minDistance)
                 {
                     nearest = p;
@@ -363,7 +314,7 @@ namespace Plugins
                 }
             if (nearest == null)
                 throw new Exception("there is no points");
-            
+
             return nearest;
         }
 
@@ -498,7 +449,7 @@ namespace Plugins
                 lastDistance = lastDistance10 = Me.Distance(rememberedWaypoint);
             }
 
-            if(!CurrentMovementState)
+            if (!CurrentMovementState)
             {
                 LastTimeChecked = DateTime.Now;
                 lastDistance = Me.Distance(rememberedWaypoint);
@@ -557,7 +508,7 @@ namespace Plugins
                         Thread.Sleep(5000);
 
                         Log("Строим маршрут заново, возможно поблизости есть rescue point");
-                        MakeRoute(destination.Name);   
+                        MakeRoute(destination.Name);
                     }
                 }
             }
@@ -609,7 +560,7 @@ namespace Plugins
 
         private void SetMovementState(bool isMoving)
         {
-            if(isMoving != CurrentMovementState)
+            if (isMoving != CurrentMovementState)
             {
                 CurrentMovementState = isMoving;
                 if (isMoving)
@@ -690,16 +641,18 @@ namespace Plugins
                 zoomInKeys.Add(KeyBindings.CameraZoomIn);
 
             Memory.KeyBoard.PressKeys(zoomInKeys, true); // приблизить камеру на максимум
-            
-            Thread.Sleep(2000);
-            
-            if (!Util.MouseCursor.NearScreenCenter())
-            {
-                Log("Перемещаю указатель мыши к центру экрана");
-                Util.MouseCursor.MoveToScreenCenter();
-                Thread.Sleep(1000);
-            }
 
+            Thread.Sleep(2000);
+
+            if (!Util.MouseCursor.NearWindowCenter(Memory.BM.WindowHandle))
+            {
+                Log("Перемещаю указатель мыши к центру окна WoW");
+
+                Util.MouseCursor.MoveToWindowCenter(Memory.BM.WindowHandle);
+
+                Thread.Sleep(200);
+            }
+            
             Memory.KeyBoard.PressKey(KeyBindings.MouseInteract, true);
             Memory.KeyBoard.PressKey(KeyBindings.CameraNormal, false); // вернуть камеру в нормальное положение
 
@@ -742,7 +695,7 @@ namespace Plugins
         {
             Random rnd = new Random();
 
-            InteractTryInterval = InteractTryInterval ?? TimeSpan.FromSeconds(rnd.Next(8, 12));
+            InteractTryInterval = InteractTryInterval ?? TimeSpan.FromMilliseconds(rnd.Next(4000, 8000));
 
             // делаем всё это пока аддон не скажет что интеракт прошёл успешно
             string state = Memory.GetAddonMessage().CurrentState;
@@ -758,7 +711,9 @@ namespace Plugins
                 InteractResult result = TryInteract(current);
 
                 if (result == InteractResult.Wait)
+                {
                     return;
+                }
 
                 else if (result == InteractResult.SureSuccess) // не нужно ждать проверки со стороны аддона
                 {
@@ -769,8 +724,9 @@ namespace Plugins
                 else if (result == InteractResult.Failed || result == InteractResult.Success) // готовимся к следующей попытке
                 {
                     cleanupInteractTry();
+                    Log("Следующая попытка взаимодействия будет через " + InteractTryInterval.Value.TotalSeconds + " сек.");
                     NextInteractTryTime = DateTime.Now + (TimeSpan)InteractTryInterval;
-                    InteractTryInterval = (TimeSpan)InteractTryInterval + (TimeSpan)InteractTryInterval;
+                    InteractTryInterval = TimeSpan.FromMilliseconds(InteractTryInterval.Value.TotalMilliseconds * (1.2 + 0.5 * rnd.NextDouble()));
                 }
 
                 else
@@ -787,7 +743,7 @@ namespace Plugins
 
         private void StopNavigation()
         {
-            if(MovementQueue != null)
+            if (MovementQueue != null)
                 Log("Навигатор завершает свою работу");
             MovementQueue = null;
             CurrentMovementState = false;
@@ -801,9 +757,9 @@ namespace Plugins
         private void MakeRoute(string query)
         {
             StopNavigation();
-            
+
             Queue<WayPoint> points;
-            
+
             DestinationPoint start = GetNearestDestinationPoint();
             if (!start.InRange(Me))
             {
@@ -844,7 +800,7 @@ namespace Plugins
                 points.Enqueue(Destinations[route.To]);
                 current = next;
             }
-            
+
             MovementQueue = new Queue<WayPoint>(points);
 
             Log("Проложен маршрут от " + start + " до " + destination + ", " + points.Count + " точек");

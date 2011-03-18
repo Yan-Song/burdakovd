@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Util
 {
@@ -12,6 +10,15 @@ namespace Util
     {
         readonly Regex lineEx = new Regex("^SET (?<key>[^ ]+) \\\"(?<value>.*)\\\"");
         string filename;
+
+        public ConfigWTF()
+        {
+        }
+
+        public ConfigWTF(string filename)
+        {
+            Load(filename);
+        }
 
         /// <summary>
         /// читает настройки из файла

@@ -1,24 +1,23 @@
-﻿// 
-// Copyright © ApocDev 2009 <apoc@apocdev.com>
+﻿//
+// burdakovd 2011 <kreved at kreved dot org>
 //
- 
-// modified by burdakovd 2009 <kreved at kreved dot org>
 
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Util;
-using System.Text.RegularExpressions;
-using System.Collections.Specialized;
-using FiniteStateMachine.Properties;
 using WoWMemoryManager;
 
 namespace FiniteStateMachine
 {
     public class Engine
     {
+        public ConfigWTF settings;
+
         /// <summary>
         /// сколько секунд ждать добровольного завершения worker
         /// </summary>
@@ -30,14 +29,10 @@ namespace FiniteStateMachine
         
         private WoWMemoryManager.MemoryManager Memory;
 
-        public Engine(WoWMemoryManager.MemoryManager memory)
+        public Engine(WoWMemoryManager.MemoryManager memory, ConfigWTF settings)
         {
+            this.settings = settings;
             DoNotRestart = false;
-
-            if (Settings.Default.DisabledStates == null)
-                Settings.Default.DisabledStates = new StringCollection();
-
-            DisabledStates = Settings.Default.DisabledStates;
 
             States = new List<State>();
             Memory = memory;
@@ -47,7 +42,6 @@ namespace FiniteStateMachine
         public bool Running { get; set; }
         public bool DoNotRestart { get; set; }
         public ulong FrameCount { get; private set; }
-        public StringCollection DisabledStates;
 
         /// <summary>
         /// Для блокировки FSM. Используется в Pulse() а также при любых обращениях 
@@ -235,12 +229,6 @@ namespace FiniteStateMachine
             }
             // Clear out the thread object.
             _workerThread = null;
-            SaveSettings();
-        }
-
-        public void SaveSettings()
-        {
-            Settings.Default.Save();
         }
 
         public void LoadState(State state)
@@ -257,13 +245,13 @@ namespace FiniteStateMachine
             // Make sure we actually have a path to work with.
             if (string.IsNullOrEmpty(assemblyPath))
             {
-                return;
+                throw new ApplicationException("Не удаётся загрузить состояния, имя файла null или \"\"");
             }
 
             // Make sure the file exists.
             if (!File.Exists(assemblyPath))
             {
-                return;
+                throw new ApplicationException("Не удаётся загрузить состояния из '" + assemblyPath + "': файл не найден");
             }
             try
             {
@@ -277,7 +265,7 @@ namespace FiniteStateMachine
                     try
                     {
                         // Here's some fairly simple stuff.
-                        if (type.IsClass && type.IsSubclassOf(typeof(State)) && !DisabledStates.Contains(type.ToString()))
+                        if (type.IsClass && type.IsSubclassOf(typeof(State)))
                         {
                             // Create the State using the Activator class.
                             var tempState = (State)Activator.CreateInstance(type, new object[] { this, Memory });
@@ -292,10 +280,12 @@ namespace FiniteStateMachine
                     catch (TargetInvocationException t)
                     {
                         Logger.LogError("FSM: " + type.Name, t.InnerException.Message);
+                        Logger.LogError("FSM", type.Name + " не загружен");
                     }
                     catch (Exception ex)
                     {
                         Logger.LogError("FSM: " + type.Name, ex.Message);
+                        Logger.LogError("FSM", type.Name + " не загружен");
                     }
                 }
             }
