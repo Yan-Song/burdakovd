@@ -93,7 +93,7 @@ end
 
 function lib.NeedAnyConfirmation()
 	-- задержка на 100 фреймов, так как биндинги настраиваются только на сотом фрейме
-    return (lib.NeedPurchaseConfirmation() or lib.NeedPostConfirmation() or private.currentState.isPaused()) and (private.framesSinceStart > 100)
+    return (lib.NeedPurchaseConfirmation() or lib.NeedPostConfirmation() or private.currentState.isInitializing()) and (private.framesSinceStart > 100)
 end
 
 function lib.ConfirmPurchase()
@@ -171,7 +171,8 @@ local dumbState = function(name)
 		getName = function() return name end,
 		leave = function() end,
 		tick = function() end,
-		isPaused = function() return false end
+		isPaused = function() return false end,
+		isInitializing = function() return false end
 	}
 end
 
@@ -255,6 +256,18 @@ pauseState = function()
 	return w
 end
 states.pauseState = pauseState
+
+setInitializingState = function()
+	private:changeState(states.initializingState())
+end
+
+initializingState = function()
+	print("Ждём, пока внешний модуль нажмёт F9 чтобы подтвердить запуск")
+	local w = states.pauseState()
+	w.isInitializing = function() return true end
+	return w
+end
+states.initializingState = initializingState
 
 -- основная логика
 local chooseState = function()
@@ -614,7 +627,7 @@ function lib.OnLoad()
 		end)
 	
 	-- ставим аддон на паузу, чтоб не мешался
-	setPauseState()
+	setInitializingState()
 end
 
 function lib.Processor(callbackType, ...)
