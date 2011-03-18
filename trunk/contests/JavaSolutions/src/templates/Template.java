@@ -70,13 +70,13 @@ public final class Template {
 	public static void main(final String[] args) throws IOException {
 		try {
 			final long startTime = System.nanoTime();
-			final long t = nextInt();
-			for (long i = 0; i < t; ++i) {
+			final int t = nextInt();
+			for (int i = 0; i < t; ++i) {
 				solve(i + 1);
-				if (file) {
+				if (isLocal && file) {
 					err.println(i + 1 + "/" + t);
 				}
-				if (!file) {
+				if (isLocal && !file) {
 					out.flush();
 				}
 			}
@@ -89,7 +89,7 @@ public final class Template {
 		}
 	}
 
-	private static void solve(final long testId) throws IOException {
+	private static void solve(final int testId) throws IOException {
 
 	}
 }
