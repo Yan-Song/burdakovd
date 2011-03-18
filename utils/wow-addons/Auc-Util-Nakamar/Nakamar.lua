@@ -23,6 +23,8 @@ local GetFaction = AucAdvanced.GetFaction
 -- constants
 local keepFreeBagSlots = 1
 local circularLogLength = 10000
+local maximumTimesToCheckEmptyMailbox = 5
+
 
 -- utils
 local print = function(s)
@@ -350,14 +352,17 @@ states.waitingForMailboxState = waitingForMailboxState
 
 local waitingForPostal = function()
 	local waiter = dumbState("WAITING_FOR_POSTAL")
-	waiter.previousAssets = -1
+	waiter.previousAssets = assets()
 	waiter.lastSuccess = time()
+	waiter.gatheredSomething = false
 	
 	waiter.tick = function(self)
 		-- проверяем, удалось ли что-то собрать с прошлого раза
 		if assets() ~= self.previousAssets then
 			self.previousAssets = assets()
 			self.lastSuccess = time()
+			self.gatheredSomething = true
+			private.timesEmptyMailboxChecked = 0
 		end
 
 		-- возможные сценарии завершения
@@ -375,6 +380,20 @@ local waitingForPostal = function()
 			local wait = random(7, 11)
 			private.nextMailboxCheck = time() + wait
 			print("Следующая проверка ящика не ранее, чем через " .. wait .. " секунд")
+			
+			if not self.gatheredSomething then
+				private.timesEmptyMailboxChecked = (private.timesEmptyMailboxChecked or 0) + 1
+				print("За эту проверку почтового ящика не удалось собрать ни одного предмета. Это уже " .. tostring(private.timesEmptyMailboxChecked) .. "-й раз подряд.")
+				if private.timesEmptyMailboxChecked < maximumTimesToCheckEmptyMailbox then
+					print("После " .. tostring(maximumTimesToCheckEmptyMailbox) .. " раза работа будет прекращена.")
+				else
+					private.timesEmptyMailboxChecked = 0
+					print("Превышено ограничение на количество неуспешных попыток собрать почту. Работа завершается.")
+					setPauseState()
+					return
+				end
+			end
+			
 			private:changeState(states.chooseState())
 		end
 	end
