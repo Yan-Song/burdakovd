@@ -26,7 +26,7 @@ local circularLogLength = 10000
 
 -- utils
 local print = function(s)
-	local frameIndex = AucAdvanced.Settings.GetSetting("util.nakamar.printwindow") or 1
+	local frameIndex = 1
 	local frameReference = _G["ChatFrame"..tostring(frameIndex)] or DEFAULT_CHAT_FRAME
 	local name, fontSize, r, g, b, a, shown, locked, docked = GetChatWindowInfo(frameIndex)
 	if (name == "") or not(docked or shown) then
@@ -40,6 +40,7 @@ local print = function(s)
 	frameReference:AddMessage(message, 1.0, 1.0, 1.0)
 end
 private.print = print
+NLog = print
 
 function lib.FreeBagSlots()
 	local free = 0
@@ -70,7 +71,7 @@ end
 
 function lib.isAuctionable(link, bag, slot)
 	local sig = AucAdvanced.API.GetSigFromLink(link)
-	return not private.badSigs[sig] and AucAdvanced.Post.IsAuctionable(bag, slot)
+	return --[[not private.badSigs[sig] and --]] AucAdvanced.Post.IsAuctionable(bag, slot)
 end
 
 function lib.auctionableSlots()
@@ -91,7 +92,8 @@ function lib.NeedPostConfirmation()
 end
 
 function lib.NeedAnyConfirmation()
-    return lib.NeedPurchaseConfirmation() or lib.NeedPostConfirmation() or private.currentState.isPaused()
+	-- задержка на 100 фреймов, так как биндинги настраиваются только на сотом фрейме
+    return (lib.NeedPurchaseConfirmation() or lib.NeedPostConfirmation() or private.currentState.isPaused()) and (private.framesSinceStart > 100)
 end
 
 function lib.ConfirmPurchase()
@@ -133,6 +135,7 @@ end
 -- timer events
 function private.everySecond()
 	NKeepAlive()
+	--print(lib.NeedAnyConfirmation())
 	NNeedAnyConfirmation(lib.NeedAnyConfirmation())
 	--print("Tick! framesSinceStart  = "..tostring(private.framesSinceStart))
 	private.currentState:tick()
@@ -140,6 +143,10 @@ end
 
 function private.OnUpdate(me, elapsed)
 	private.framesSinceStart = private.framesSinceStart + 1
+	-- при старте биндинги не очень успешно инициализируются
+	if private.framesSinceStart == 100 then	
+		private.makeBindings()
+	end
     private.elapsedSinceLastTick = private.elapsedSinceLastTick + elapsed
     if (private.elapsedSinceLastTick > 1.0) then
         private:everySecond()
@@ -182,21 +189,26 @@ end
 
 local states = {}
 
+
 local panicState = function(reason)
-	PlaySoundFile("Sound\\Character\\PlayerRoars\\CharacterRoarsDwarfMale.wav")
-	
+	--PlaySoundFile("Sound\\Character\\PlayerRoars\\CharacterRoarsDwarfMale.wav")
+		
 	local text = reason or "причина неизвестна"
-	print("Ошибка: "..text)
-	local timeLeft = random(30, 60)
-	print("Quit через "..tostring(timeLeft).." секунд")
+	print("Ошибка: " .. text)
+	--local timeLeft = random(30, 60)
+	--print("Quit через "..tostring(timeLeft).." секунд")
 	
 	-- даём внешнему модулю знать что всё плохо
-	NDoNotRestart(text)
+	--NDoNotRestart(text)
+	
 	Screenshot()
-	local ans = timeoutable(dumbState("panic"), timeLeft, terminate)
+	
+	--local ans = timeoutable(dumbState("panic"), timeLeft, terminate)
 	-- если паника будет отменена, то сообщить об этом внешнему модулю
-	ans.leave = function(self) NDoNotRestart("") end
-	return ans
+	--ans.leave = function(self) NDoNotRestart("") end
+	--return ans
+	
+	return states.pauseState()
 end
 states.panicState = panicState
 
@@ -237,6 +249,7 @@ end
 
 pauseState = function()
 	print("pausing")
+	NSendCommand("break")
 	local w = dumbState("Paused")
 	w.isPaused = function() return true end
 	return w
@@ -265,7 +278,7 @@ local chooseState = function()
 		-- тут есть опасность выпасть в AFK и получить дисконнект
 		-- чтобы этого не произошло, можно использовать RandomPet
 		-- или внешний модуль будет делать логофф при NNothingToDo(true)
-		return timeoutable(dumbState("sleep"), 60, function() NNothingToDo(false); private:changeState(states.chooseState()) end)
+		return timeoutable(dumbState("sleep 6 seconds"), 6, function() NNothingToDo(false); private:changeState(states.chooseState()) end)
 	end
 end
 states.chooseState = chooseState
@@ -317,8 +330,8 @@ local waitingForMailboxState = function()
 		UnRegisterEvent("MAIL_INBOX_UPDATE", waiter.onInboxLoaded)
 	end
 	
-	-- ставим таймаут в 180 секунд
-	return panicable(waiter, 180, "Добраться до почтового ящика")
+	-- ставим таймаут в 120 секунд
+	return panicable(waiter, 120, "Добраться до почтового ящика")
 end
 states.waitingForMailboxState = waitingForMailboxState
 
@@ -345,8 +358,10 @@ local waitingForPostal = function()
 		elseif (not Postal:IsHooked("InboxFrame_OnClick")) or (time() - self.lastSuccess > 180) then
 			print("За этот сеанс собрать больше нечего, скорее всего ящик пуст")
 			CloseMail()
-			-- предположим также, что в ближайшие 20..40 минут нет смысла проверять почту
-			private.nextMailboxCheck = time() + 60 * random(20, 40)
+			-- предположим также, что в ближайшие 7..11 секунд нет смысла проверять почту
+			local wait = random(7, 11)
+			private.nextMailboxCheck = time() + wait
+			print("Следующая проверка ящика не ранее, чем через " .. wait .. " секунд")
 			private:changeState(states.chooseState())
 		end
 	end
@@ -379,8 +394,8 @@ local waitingForAHState = function()
 		end
 	end
 	
-	-- ставим таймаут в 180 секунд
-	return panicable(waiter, 180, "Добраться до аукциона")
+	-- ставим таймаут в 120 секунд
+	return panicable(waiter, 120, "Добраться до аукциона")
 end
 states.waitingForAHState = waitingForAHState
 
@@ -454,7 +469,7 @@ local doPosting = function()
 		return states.panicState("Appraiser не открыт?")
 	end
 	
-	local slots = lib.auctionableSlots();
+	local slots = lib.auctionableSlots()
 	local stage1 = {}
 	local counts = {}
 	for i, v in ipairs(slots) do
@@ -510,8 +525,8 @@ local doPosting = function()
 		if age < 300 then
 			AucAdvanced.Modules.Util.Appraiser.Private.frame.PostBySig(sig)
 		else
-			print("Не найдена информация о цене " .. AucAdvanced.API.GetLinkFromSig(sig) .. " (age = " .. tostring(age) .. "), заносим его в черный список на этот сеанс")
-			private.badSigs[sig] = true
+			print("Не найдена информация о цене " .. AucAdvanced.API.GetLinkFromSig(sig) .. " (age = " .. tostring(age) .. ")" --[[ .. ", заносим его в черный список на этот сеанс"--]]) 
+			--private.badSigs[sig] = true
 		end
 	end
 	
@@ -526,7 +541,15 @@ local doPosting = function()
 			print("Всё, что возможно, выложено на аукцион")
 			
 			-- занести всё, что осталось в сумках в черный список
-			
+			local slots = lib.auctionableSlots()
+			for i, v in ipairs(slots) do
+				local link, _, _ = unpack(v)
+				local sig = AucAdvanced.API.GetSigFromLink(link)
+				if not private.badSigs[sig] then
+					print("предмет " .. link .. " по неизвестной причине остался в сумке после попытки выставления на аукцион" --[[.. ", заношу его в черный список"--]])
+					--private.badSigs[sig] = true
+				end
+			end
 			
 			CloseAuctionHouse()
 			private:changeState(states.chooseState())
@@ -536,6 +559,28 @@ local doPosting = function()
 	return waiter
 end
 states.doPosting = doPosting
+
+local bindKey = function(key, action)
+	if SetBinding(key, action) then
+		print("Successfully binded " .. action .. " to " .. key)
+	else
+		print("Failed to bind " .. action .. " to " .. key)
+	end
+end
+
+function private.makeBindings()
+	bindKey("W", "MOVEFORWARD")
+	bindKey("A", "TURNLEFT")
+	bindKey("D", "TURNRIGHT")
+	bindKey("SPACE", "JUMP")
+	bindKey("PRINTSCREEN", "SCREENSHOT")
+	bindKey("F1", "TARGETNEARESTFRIEND")
+	bindKey("F2", "INTERACTTARGET")
+	bindKey("F3", "INTERACTMOUSEOVER")
+	bindKey("F6", "CAMERAZOOMIN")
+	bindKey("F8", "SETVIEW3")
+	SetBindingClick("F9", "NakamarButton")
+end
 
 -- initialization
 function lib.OnLoad()
@@ -560,6 +605,8 @@ function lib.OnLoad()
 	private.frame:SetScript("OnEvent", private.OnEvent)
 	private.frame:SetScript("OnUpdate", private.OnUpdate)
 	private.frame:Show()
+	private.button = CreateFrame("Button", "NakamarButton", UIParent)
+	private.button:SetScript("OnClick", ConfirmPurchase)
 	
 	-- регистрируем обработчики
 	RegisterEvent("CHAT_MSG_WHISPER", function()
@@ -581,9 +628,3 @@ function lib.Processor(callbackType, ...)
 		private.auctionAvailable = false
 	end
 end
-
--- todo: дефолтные значения настроек (чекаут аукционера из свн)
--- todo: маршруты
--- todo: уточнить, какие кейбиндинги нужны, какие из них нестандартные
--- todo: все возможные биндинги устанавливать аддоном
--- todo: маны по nakamar.wtf
