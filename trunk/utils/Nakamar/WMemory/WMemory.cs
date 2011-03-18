@@ -7,7 +7,6 @@ using System.Windows.Input;
 using Magic;
 using Util;
 using WoWMemoryManager.WoWObject;
-using WoWMemoryManager.Properties;
 using System.Collections.Generic;
 
 namespace WoWMemoryManager
@@ -59,6 +58,7 @@ namespace WoWMemoryManager
         private static ComparableListOfDouble signature = new ComparableListOfDouble(901791, 349667, 371721, 139443, 213674);
         private AddonMessage LastMessage;
         private int LastProcessedMessage = -1;
+        Dictionary<Pattern, uint> FindPatternCache = new Dictionary<Pattern, uint>();
 
         public ObjectManager ObjectManager
         {
@@ -102,8 +102,6 @@ namespace WoWMemoryManager
             BM = new BlackMagic(id);
             KeyBoard = new KeyBoard(BM.WindowHandle);
             LastMessage = null;
-            foreach (var kvp in Settings.Default.AddonSignatureStatistics)
-                DynamicDoublePatternCache[kvp.Key] = kvp.Value.Last();
         }
 
         #region Pattern Methods
@@ -132,9 +130,9 @@ namespace WoWMemoryManager
 
         private uint FindPattern(Pattern pattern)
         {
-            if (Settings.Default.FindPatternCache.ContainsKey(pattern))
+            if (FindPatternCache.ContainsKey(pattern))
             {
-                uint cached = Settings.Default.FindPatternCache[pattern];
+                uint cached = FindPatternCache[pattern];
                 bool ok = true;
                 try
                 {
@@ -150,20 +148,18 @@ namespace WoWMemoryManager
                 else
                 {
                     Log("кэшированный оффсет FindPattern(" + pattern + ") == 0x" + cached.ToString("X8") + " устарел, ищем заново");
-                    Settings.Default.FindPatternCache.Remove(pattern);
-                    Settings.Default.Save();
+                    FindPatternCache.Remove(pattern);
                 }
             }
+
             uint ans = BM.FindPattern(pattern.PatternString, pattern.Mask);
             if (ans == (uint)BM.MainModule.BaseAddress)
                 throw new ApplicationException("Pattern not found");
 
-            Settings.Default.FindPatternCache[pattern] = ans + pattern.Offset;
-            Log("найден новый оффсет FindPattern(" + pattern + ") == 0x" +
-                Settings.Default.FindPatternCache[pattern].ToString("X8"));
+            FindPatternCache[pattern] = ans + pattern.Offset;
+            Log("найден новый оффсет FindPattern(" + pattern + ") == 0x" + FindPatternCache[pattern].ToString("X8"));
 
-            Settings.Default.Save();
-            return Settings.Default.FindPatternCache[pattern];
+            return FindPatternCache[pattern];
         }
 
         private uint FindPattern(uint pattern)
@@ -302,10 +298,6 @@ namespace WoWMemoryManager
                             Log("Сигнатура аддона найдена по адресу 0x" +
                                 pos.ToString("X8") + " за " + (DateTime.Now-startTime) + " сек.");
                             DynamicDoublePatternCache[pattern] = pos;
-                            if (!Settings.Default.AddonSignatureStatistics.ContainsKey(pattern))
-                                Settings.Default.AddonSignatureStatistics[pattern] = new List<uint>();
-                            Settings.Default.AddonSignatureStatistics[pattern].Add(pos);
-                            Settings.Default.Save();
                             return pos;
                         }
                     }

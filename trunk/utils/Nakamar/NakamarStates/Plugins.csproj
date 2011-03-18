@@ -73,29 +73,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountManager\CountDown.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AccountManager\CountDown.Designer.cs">
-      <DependentUpon>CountDown.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AccountManager\EditProfile.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AccountManager\EditProfile.Designer.cs">
-      <DependentUpon>EditProfile.cs</DependentUpon>
-    </Compile>
     <Compile Include="AccountManager\InGameManager.cs" />
-    <Compile Include="AccountManager\Manager.cs" />
-    <Compile Include="AccountManager\Profile.cs" />
-    <Compile Include="AccountManager\ProfileManagement.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AccountManager\ProfileManagement.Designer.cs">
-      <DependentUpon>ProfileManagement.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AccountManager\Settings.cs" />
-    <Compile Include="AccountManager\WoWStartManager.cs" />
+    <Compile Include="AccountManager\ReLogger.cs" />
     <Compile Include="Misc\DoNotRestart.cs" />
     <Compile Include="Misc\Idle.cs" />
     <Compile Include="Misc\KeyBindings.cs" />
@@ -111,12 +90,6 @@
     <Compile Include="Navigation\WayPoint.cs" />
     <Compile Include="Navigation\WayPointSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="AccountManager\ReLogger.cs" />
     <Compile Include="Misc\TimeOut.cs" />
     <Compile Include="Misc\Watcher.cs" />
     <Compile Include="Misc\StartStopManager.cs" />
@@ -130,10 +103,6 @@
       <Project>{78DF6A81-A7AC-44DF-8F8F-278E0D119903}</Project>
       <Name>FiniteStateMachine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LoaderManager\LoaderManager.csproj">
-      <Project>{49BAC39E-1E89-41DC-8079-6DF67B60A634}</Project>
-      <Name>LoaderManager</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Logger\Util.csproj">
       <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
       <Name>Util</Name>
@@ -142,24 +111,6 @@
       <Project>{6E806492-5FFE-4C3C-BF20-22277FAED955}</Project>
       <Name>WInteraction</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="AccountManager\CountDown.resx">
-      <DependentUpon>CountDown.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AccountManager\EditProfile.resx">
-      <DependentUpon>EditProfile.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AccountManager\ProfileManagement.resx">
-      <DependentUpon>ProfileManagement.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

@@ -9,7 +9,7 @@ namespace Plugins
 {
     public class RandomPet : State
     {
-        DateTime lastRandomPetDecisionTime = DateTime.Now;
+        //DateTime lastRandomPetDecisionTime = DateTime.Now;
 
         public RandomPet(object machine, object memory) : base(machine, memory) { }
 
@@ -22,18 +22,17 @@ namespace Plugins
         {
             get
             {
-                return
-                    (DateTime.Now - lastRandomPetDecisionTime).TotalSeconds > 1
-                    && Memory.CurrentGameState == GameState.World
-                    && Memory.IsWoWForeground();
+                return false;
+                    //(DateTime.Now - lastRandomPetDecisionTime).TotalSeconds > 1
+                    //&& Memory.CurrentGameState == GameState.World;
             }
         }
 
         public override void Run()
         {
-            lastRandomPetDecisionTime = DateTime.Now;
+            /*lastRandomPetDecisionTime = DateTime.Now;
             if ((new Random()).Next(1, 1200) == 1)
-                Memory.KeyBoard.PressKey(KeyBindings.RandomPet, false);
+                Memory.KeyBoard.PressKey(KeyBindings.RandomPet, false);*/
         }
 
     }

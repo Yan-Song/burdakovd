@@ -36,7 +36,8 @@ namespace Plugins
                 }
                 else
                 {
-                    return DateTime.Now - lastActiveTime > limit; // не пора ли попытаться активировать окно WoW?
+                    return false;
+                    //return DateTime.Now - lastActiveTime > limit; // не пора ли попытаться активировать окно WoW?
                 }
             }
         }

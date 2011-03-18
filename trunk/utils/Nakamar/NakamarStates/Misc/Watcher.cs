@@ -13,7 +13,7 @@ namespace Plugins
 {
     public class Watcher : State
     {
-        private const bool Enabled = false;
+        private const bool Enabled = true;
         private Dictionary<string,string> current = new Dictionary<string,string>();
         private delegate string Getter(string key);
 
@@ -24,13 +24,26 @@ namespace Plugins
             get { return 50000; }
         }
 
+        private void Watch(string key, object value)
+        {
+            Logger.Watch("Watcher", key, value);
+        }
+
         public override bool NeedToRun
         {
             get
             {
                 if (Enabled)
                 {
-                    // something
+                    AddonMessage message = Memory.GetAddonMessage();
+                    if (message != null)
+                    {
+                        Watch("addon.command", message.Command);
+                        Watch("addon.needConfirmation", message.NeedPurchaseConfirmation);
+                        Watch("addon.state", message.CurrentState);
+                        Watch("addon.nothingToDo", message.NothingToDo);
+                        Watch("addon.target", message.Target);
+                    }
                 }
                 return false;
             }

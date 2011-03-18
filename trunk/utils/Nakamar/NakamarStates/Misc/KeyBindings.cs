@@ -9,12 +9,14 @@ namespace Plugins
     public static class KeyBindings
     {
         public const Key
+            // стандартные
             MoveForward = Key.W,
             TurnLeft = Key.A,
             TurnRight = Key.D,
             Jump = Key.Space,
             PrintScreen = Key.PrintScreen,
-            RandomPet = Key.F4,
+
+            // нестандартные
             SelectNearestFriend = Key.F1,
             Interact = Key.F2,
             MouseInteract = Key.F3,

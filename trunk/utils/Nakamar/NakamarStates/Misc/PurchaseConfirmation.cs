@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FiniteStateMachine;
 using WoWMemoryManager;
 
@@ -24,7 +21,6 @@ namespace Plugins
             {
                 return
                     DateTime.Now > nextPurchaseConfirmationTime
-                    && Memory.IsWoWForeground()
                     && Memory.CurrentGameState == GameState.World
                     && Memory.GetAddonMessage() != null
                     && Memory.GetAddonMessage().NeedPurchaseConfirmation;
@@ -34,6 +30,7 @@ namespace Plugins
         public override void Run()
         {
             Memory.KeyBoard.PressKey(KeyBindings.ConfirmPurchase, false);
+            Log("Sent confirmation: " + KeyBindings.ConfirmPurchase);
             nextPurchaseConfirmationTime = DateTime.Now + TimeSpan.FromMilliseconds((new Random()).Next(600, 1200));
         }
     }

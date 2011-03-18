@@ -35,12 +35,12 @@ namespace Plugins
         {
             if (!string.IsNullOrEmpty(Memory.GetAddonMessage().DoNotRestart))
             {
-                Log("Аддон попросил не перезапускать WoW (" + Memory.GetAddonMessage().DoNotRestart + ")");
+                Log("Аддон сообщает о проблеме: " + Memory.GetAddonMessage().DoNotRestart);
                 Machine.DoNotRestart = true;
             }
             else
             {
-                Log("аларм отменяется");
+                Log("Аларм отменяется");
                 Machine.DoNotRestart = false;
             }
         }
