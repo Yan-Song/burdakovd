@@ -3,7 +3,7 @@
 --]]
 
 
--- стандартная прелюдия для модулей аукционера
+-- стандартная преамбула для модулей аукционера
 local libType, libName = "Util", "Nakamar"
 local lib, parent, private = AucAdvanced.NewModule(libType, libName)
 if not lib then return end
