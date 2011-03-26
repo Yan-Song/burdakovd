@@ -21,10 +21,12 @@ local GetFaction = AucAdvanced.GetFaction
 
 
 -- constants
-local keepFreeBagSlots = 1
 local circularLogLength = 10000
+local framesBeforeBindings = 100
+local keepFreeBagSlots = 1
 local maximumTimesToCheckEmptyMailbox = 5
-
+local moneyToKeepLocally = 5000000
+local GuildBankCheckFrequency = 3600
 
 -- utils
 local print = function(s)
@@ -94,8 +96,8 @@ function lib.NeedPostConfirmation()
 end
 
 function lib.NeedAnyConfirmation()
-	-- задержка на 100 фреймов, так как биндинги настраиваются только на сотом фрейме
-    return (lib.NeedPurchaseConfirmation() or lib.NeedPostConfirmation() or private.currentState.isInitializing()) and (private.framesSinceStart > 100)
+	-- задержка на framesBeforeBindings фреймов, так как биндинги настраиваются только на framesBeforeBindings фрейме
+    return (lib.NeedPurchaseConfirmation() or lib.NeedPostConfirmation() or private.currentState.isInitializing()) and (private.framesSinceStart > framesBeforeBindings)
 end
 
 function lib.ConfirmPurchase()
@@ -146,7 +148,7 @@ end
 function private.OnUpdate(me, elapsed)
 	private.framesSinceStart = private.framesSinceStart + 1
 	-- при старте биндинги не очень успешно инициализируются
-	if private.framesSinceStart == 100 then	
+	if private.framesSinceStart == framesBeforeBindings then	
 		private.makeBindings()
 	end
     private.elapsedSinceLastTick = private.elapsedSinceLastTick + elapsed
@@ -167,7 +169,7 @@ function private.changeState(self, newState)
 	newState.timeEntered = time()
 end
 
--- шаблон для всех сотояний
+-- шаблон для всех состояний
 local dumbState = function(name)
 	return {
 		getName = function() return name end,
@@ -224,17 +226,6 @@ local panicable = function(original, limit, description)
 	return timeoutable(original, limit, function() panic(reason) end)
 end
 
--- первые 100 фреймов ничего не делать
--- некоторая защита от лагов
-local initState = function()
-	local ans = dumbState("инициализация")
-	ans.tick = function(self) if private.framesSinceStart > 100
-	                          then resetState()
-							  end
-			   end
-	return panicable(ans, 60, "обработать 100 кадров")
-end
-states.initState = initState
 
 resetState = function()
 	CloseAuctionHouse()
@@ -275,6 +266,8 @@ states.initializingState = initializingState
 local chooseState = function()
 	local haveFreeBagSlots = lib.FreeBagSlots() > keepFreeBagSlots
 	local possiblyHaveMail = time() >= private.nextMailboxCheck
+	local haveMoneyForGuildBank = IsInGuild() and GetMoney() > moneyToKeepLocally
+	local shouldCheckGuildBank = IsInGuild() and time() >= private.nextGuildBankCheck
 	local haveGoodsToPost = #lib.auctionableSlots() > 0
 	
 	--print("[debug] freeBagSlots = " .. tostring(lib.FreeBagSlots()) .. 
@@ -284,11 +277,17 @@ local chooseState = function()
 	if haveFreeBagSlots and possiblyHaveMail then
 		print("Надо проверить почтовый ящик")
 		return states.waitingForMailboxState()
+	elseif haveMoneyForGuildBank then
+		print("Надо отнести излишки голда в гильдбанк")
+		return states.waitingForGuildBankState()
+	elseif shouldCheckGuildBank then
+		print("Надо проверить баланс гильдбанка")
+		return states.waitingForGuildBankState()
 	elseif haveGoodsToPost then
 		print("Надо идти на аукцион")
 		return states.waitingForAHState()
 	else
-		print("Нет возможности ни проверить почту (ящик пуст либо недостаточно места в сумке) ни выложить товар на аукцион (нечего выкладывать)")
+		print("Нет возможности ни проверить почту (ящик пуст либо недостаточно места в сумке) ни выложить товар на аукцион (нечего выкладывать), ни сделать что-то другое полезное")
 		NNothingToDo(true)
 		-- тут есть опасность выпасть в AFK и получить дисконнект
 		-- чтобы этого не произошло, можно использовать RandomPet
@@ -298,15 +297,96 @@ local chooseState = function()
 end
 states.chooseState = chooseState
 
-function private.GoToAuction()
-	CloseAuctionHouse()
-	NGoTo("Аукцион")
+function private.GoToGuildBank()
+	CloseGuildBankFrame()
+	NGoTo("ГБ")
 end
 
 function private.GoToMail()
 	CloseMail()
 	NGoTo("Почта")
 end
+
+function private.GoToAuction()
+	CloseAuctionHouse()
+	NGoTo("Аукцион")
+end
+
+local updateGuildBankInfo = function()
+	if GuildBankFrame and GuildBankFrame:IsVisible() then
+		-- обновить данные о балансе
+		local balance = GetGuildBankMoney()
+		NGuildBalance(balance)
+		
+		local wait = random(GuildBankCheckFrequency * 0.9, GuildBankCheckFrequency * 1.1)
+		print("На счету гильдбанка " .. GetCoinTextureString(balance) .. ". Следующая проверка ГБ через " .. tostring(wait) .. " секунд")
+		private.nextGuildBankCheck = time() + wait
+	end
+end
+
+local waitingForGuildBankState = function()
+	-- даём команду внешнему модулю
+	private.GoToGuildBank()
+	
+	local waiter = dumbState("WAITING_FOR_GUILDBANK")
+	
+	-- обработчики
+	
+	-- тут устанавливается псевдосостояние "ГБ", чтобы внешний модуль
+	-- смог понять, что его работа по открытию гильдбанка завершена
+	waiter.onGuildBankOpened = function() waiter.openedTime = time(); NCurrentState("ГБ") end
+	
+	waiter.tick = function(self)
+		-- считаем, что гильдбанк доступен, если:
+		--  1) фрейм гильдбанка существует и виден
+		--  2) с момента открытия прошло не менее 5 секунд
+		--  (эта задержка даст время внешнему модулю, см. NCurrentState("ГБ"))
+		if GuildBankFrame and GuildBankFrame:IsVisible() and time() - (self.openedTime or time()) > 5 then
+			-- положить излишек в гильдбанк
+			if GetMoney() > moneyToKeepLocally then
+				local old = GetGuildBankMoney()
+				-- положить
+				local amount = GetMoney() - moneyToKeepLocally
+				DepositGuildBankMoney(amount)
+				print("Положил " .. GetCoinTextureString(amount) .. " в гильдбанк, ожидаю подтверждения со стороны сервера")
+				-- ждать пока деньги не положатся
+				private:changeState(states.waitForMoneyTransfer(old))
+			else
+				updateGuildBankInfo()
+				CloseGuildBankFrame()
+				private:changeState(states.chooseState())
+			end
+		end
+	end
+	
+	-- регистрируем обработчики
+	RegisterEvent("GUILDBANKFRAME_OPENED", waiter.onGuildBankOpened)
+	
+	-- удаляем обработчики по завершении
+	waiter.leave = function()
+		UnRegisterEvent("GUILDBANKFRAME_OPENED", waiter.onGuildBankOpened)
+	end
+	
+	-- ставим таймаут в 120 секунд
+	return panicable(waiter, 120, "Добраться до гильдбанка")
+end
+states.waitingForGuildBankState = waitingForGuildBankState
+
+local waitForMoneyTransfer = function(old)
+	local waiter = dumbState("WAITING_FOR_TRANSFER")
+	
+	waiter.tick = function(self)
+		if GetMoney() == moneyToKeepLocally and GetGuildBankMoney() > old then
+			updateGuildBankInfo()
+			CloseGuildBankFrame()
+			private:changeState(states.chooseState())
+		end
+	end
+	
+	-- ставим таймаут в 10 секунд
+	return panicable(waiter, 10, "Положить деньги в гильдбанк")
+end
+states.waitForMoneyTransfer = waitForMoneyTransfer
 
 local waitingForMailboxState = function()
 	-- даём команду внешнему модулю
@@ -625,6 +705,7 @@ function lib.OnLoad()
 	private.framesSinceStart = 0
 	private.elapsedSinceLastTick = 0.0
 	private.nextMailboxCheck = 0
+	private.nextGuildBankCheck = 0
 	private.currentState = dumbState("dumb")
 	private.badSigs = {}
 	
