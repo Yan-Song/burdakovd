@@ -331,8 +331,8 @@ namespace Plugins
                 DestinationPoint point;
                 if (type == WayPointType.Simple)
                     point = NewSimpleDestination(m.Argument(2), m.Argument(3)); // name, tag
-                else if (type == WayPointType.Mailbox)
-                    point = NewMailboxDestination(m.Argument(2), m.Argument(3)); // name, tag
+                else if (type == WayPointType.GameObject)
+                    point = NewGameObjectDestination(m.Argument(2), m.Argument(3)); // name, tag
                 else if (type == WayPointType.NPC)
                     point = NewNPCDestination(m.Argument(2)); // tag
                 else
@@ -367,15 +367,15 @@ namespace Plugins
             }
         }
 
-        private DestinationPoint NewMailboxDestination(string name, string tag)
+        private DestinationPoint NewGameObjectDestination(string name, string tag)
         {
-            IEnumerable<GameObject> mailboxes = Memory.ObjectManager.GameObjects.Where(g => g.Name == name);
+            IEnumerable<GameObject> gameObjects = Memory.ObjectManager.GameObjects.Where(g => g.Name == name);
 
-            GameObject nearestMailbox =
-                mailboxes.OrderBy(g => Me.Distance(g.XPosition, g.YPosition, g.ZPosition)).First();
+            GameObject nearestObject =
+                gameObjects.OrderBy(g => Me.Distance(g.XPosition, g.YPosition, g.ZPosition)).First();
 
-            return new DestinationPoint(name, WayPointType.Mailbox, tag ?? "",
-                nearestMailbox.XPosition, nearestMailbox.YPosition, nearestMailbox.ZPosition);
+            return new DestinationPoint(name, WayPointType.GameObject, tag ?? "",
+                nearestObject.XPosition, nearestObject.YPosition, nearestObject.ZPosition);
         }
 
         private DestinationPoint NewSimpleDestination(string name, string tag)
@@ -624,13 +624,13 @@ namespace Plugins
             return InteractResult.Wait;
         }
 
-        private InteractResult InteractWithMailbox(DestinationPoint mailbox)
+        private InteractResult InteractWithGameObject(DestinationPoint gameObject)
         {
             var player = Memory.ObjectManager.LocalPlayer;
-            // повернуться к Mailbox, чтоб он был посреди экрана +- 5 градусов
+            // повернуться к GameObject, чтоб он был посреди экрана +- 5 градусов
 
             double required = Math.PI / 36;
-            double now = Me.RelativeAngle(player.Rotation, mailbox);
+            double now = Me.RelativeAngle(player.Rotation, gameObject);
             SetTurningState(now, required);
 
             if (Math.Abs(now) > required)
@@ -677,8 +677,8 @@ namespace Plugins
                 return InteractWithXYZ(current);
             else if (current.PointType == WayPointType.NPC)
                 return InteractWithNPC(current);
-            else if (current.PointType == WayPointType.Mailbox)
-                return InteractWithMailbox(current);
+            else if (current.PointType == WayPointType.GameObject)
+                return InteractWithGameObject(current);
             else if (current.PointType == WayPointType.Rescue)
                 return InteractWithRescue(current);
             else

@@ -10,7 +10,7 @@ namespace Plugins
     {
         Simple,
         NPC,
-        Mailbox,
+        GameObject,
         Rescue
     }
 
@@ -18,7 +18,7 @@ namespace Plugins
     {
         private const double
             NPCRange = 5,
-            MailboxRange = 2,
+            GameObjectRange = 2,
             XYZRange = 3,
             RescueRange = 10;
 
@@ -30,8 +30,8 @@ namespace Plugins
         {
             get
             {
-                if (PointType == WayPointType.Mailbox)
-                    return MailboxRange;
+                if (PointType == WayPointType.GameObject)
+                    return GameObjectRange;
                 if (PointType == WayPointType.NPC)
                     return NPCRange;
                 if (PointType == WayPointType.Simple)

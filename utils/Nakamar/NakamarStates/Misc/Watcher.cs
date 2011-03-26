@@ -15,7 +15,6 @@ namespace Plugins
     {
         private const bool Enabled = true;
         private Dictionary<string,string> current = new Dictionary<string,string>();
-        private delegate string Getter(string key);
 
         public Watcher(object machine, object memory) : base(machine, memory) { }
 
@@ -43,6 +42,12 @@ namespace Plugins
                         Watch("addon.state", message.CurrentState);
                         Watch("addon.nothingToDo", message.NothingToDo);
                         Watch("addon.target", message.Target);
+                        Watch("addon.guildInfo",
+                            String.Format("\"{0}\" / \"{1}\" / {2} / {3} coppers",
+                            message.lastGuildBankCheckServer,
+                            message.lastGuildBankCheckFaction,
+                            new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(message.lastGuildBankCheckTime).ToLocalTime(),
+                            message.guildBalance));
                     }
                 }
                 return false;
