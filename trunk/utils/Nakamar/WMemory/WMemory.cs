@@ -23,6 +23,10 @@ namespace WoWMemoryManager
         public bool NeedPurchaseConfirmation;
         public string CurrentState;
         public bool NothingToDo;
+        public string lastGuildBankCheckServer;
+        public string lastGuildBankCheckFaction;
+        public long lastGuildBankCheckTime;
+        public long guildBalance;
 
         public override string ToString()
         {
@@ -385,6 +389,8 @@ namespace WoWMemoryManager
                 uint pNeedPurchaseConfirmation = BM.ReadUInt(p + 16 * ((uint)signature.Count + 3));
                 uint pCurrentState = BM.ReadUInt(p + 16 * ((uint)signature.Count + 4));
                 uint pNothingToDo = BM.ReadUInt(p + 16 * ((uint)signature.Count + 5));
+                uint pGuildStats = BM.ReadUInt(p + 16 * ((uint)signature.Count + 6));
+
                 // http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html#post717199
                 string text = BM.ReadUTF8String(pMessage + 0x14, BM.ReadUInt(pMessage + 0x10));
                 string target = BM.ReadUTF8String(pTarget + 0x14, BM.ReadUInt(pTarget + 0x10));
@@ -393,7 +399,8 @@ namespace WoWMemoryManager
                     BM.ReadUTF8String(pNeedPurchaseConfirmation + 0x14, BM.ReadUInt(pNeedPurchaseConfirmation + 0x10));
                 string CurrentState = BM.ReadUTF8String(pCurrentState + 0x14, BM.ReadUInt(pCurrentState + 0x10));
                 string NothingToDo = BM.ReadUTF8String(pNothingToDo + 0x14, BM.ReadUInt(pNothingToDo + 0x10));
-                return new string[] { text, target, DoNotRestart, NeedPurchaseConfirmation, CurrentState, NothingToDo };
+                string GuildStats = BM.ReadUTF8String(pGuildStats + 0x14, BM.ReadUInt(pGuildStats + 0x10));
+                return new string[] { text, target, DoNotRestart, NeedPurchaseConfirmation, CurrentState, NothingToDo, GuildStats };
             }
             catch (Exception ex)
             {
@@ -432,6 +439,23 @@ namespace WoWMemoryManager
             result.NeedPurchaseConfirmation = raw[3] != "";
             result.CurrentState = raw[4];
             result.NothingToDo = raw[5] == "yes";
+
+            if (raw[6] == "")
+            {
+                result.lastGuildBankCheckServer = "";
+                result.lastGuildBankCheckFaction = "";
+                result.lastGuildBankCheckTime = 0;
+                result.guildBalance = 0;
+            }
+            else
+            {
+                string[] args = raw[6].Split(':');
+                result.lastGuildBankCheckServer = args[0];
+                result.lastGuildBankCheckFaction = args[1];
+                result.lastGuildBankCheckTime = long.Parse(args[2]);
+                result.guildBalance = long.Parse(args[3]);
+            }
+
             return LastMessage = result;
         }
 
