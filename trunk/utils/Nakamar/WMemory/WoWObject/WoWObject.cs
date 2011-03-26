@@ -147,7 +147,7 @@ namespace WoWMemoryManager.WoWObject
     {
         protected const uint
             NameOffset1 = 0x1cc,
-            NameOffset2 = 0x94;
+            NameOffset2 = 0xb4;
 
         new protected const uint
             XPositionOffset = 0x110;
