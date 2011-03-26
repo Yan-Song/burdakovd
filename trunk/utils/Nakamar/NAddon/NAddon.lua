@@ -20,6 +20,7 @@ data[1] = 901791
 --data[9] is needPurchaseConfirmation (нужно ли нажать кнопку подтверждения покупки)
 --data[10] is CurrentState (string) - текущее состояние, его внешний модуль может показывать пользователю
 --data[11] is NothingToDo (yes/no) - в ближайшее достаточно долгое время (часы) этому аккаунту нечего делать
+--data[12] is time():guild balance - количество денег в гильдбанке, и время последней проверки
 
 local msgcount = 0
 local lastCommandTime = 0
@@ -82,6 +83,11 @@ function NNothingToDo(yes)
     end
 end
 
+function NGuildBalance(balance)
+	local faction = UnitFactionGroup("player")
+	data[12] = GetRealmName() .. ":" .. faction .. ":" .. tostring(time()) .. ":"	.. tostring(balance)
+end
+
 -- инициализация
 
 NSendCommand("nop")
@@ -90,6 +96,7 @@ data[8] = ""
 data[9] = ""
 data[10] = "init"
 data[11] = "no"
+data[12] = ""
 
 ----------------------
 local frame = CreateFrame("Frame")
@@ -102,21 +109,3 @@ frame:SetScript("OnEvent",
 	)
 
 frame:RegisterEvent("PLAYER_TARGET_CHANGED")
-
--- расставить макросы
--- #todo
-
-function NButtons()
-    local buttons = {"pause", "Cancel Quit", "reset", "взять всё", 
-        "положить всё", "уникальные взять", "банк (посмотреть", 
-        "Проверить почту", "профы", "Confirm Purchase", "", "питомец (random)"}
-    
-    local offset = (GetBonusBarOffset() == 0) and 0 or (NUM_ACTIONBAR_PAGES + GetBonusBarOffset() - 1) * NUM_ACTIONBAR_BUTTONS
-    
-    for i, button in ipairs(buttons) do
-        if button ~= "" then
-            PickupMacro(button)
-            PlaceAction(offset + i)
-        end
-    end
-end
