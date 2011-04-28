@@ -297,18 +297,25 @@ local chooseState = function()
 end
 states.chooseState = chooseState
 
-function private.GoToGuildBank()
+function private.CloseWindows()
+	print("Закрываю все окна (аукцион, ГБ, почта)")
 	CloseGuildBankFrame()
+	CloseMail()
+	CloseAuctionHouse()
+end
+
+function private.GoToGuildBank()
+	private.CloseWindows()
 	NGoTo("ГБ")
 end
 
 function private.GoToMail()
-	CloseMail()
+	private.CloseWindows()
 	NGoTo("Почта")
 end
 
 function private.GoToAuction()
-	CloseAuctionHouse()
+	private.CloseWindows()
 	NGoTo("Аукцион")
 end
 
@@ -530,7 +537,7 @@ local updateStats = function()
 
 	AuctionFrameTab5:Click()
 	if not AucAdvanced.Modules.Util.Appraiser.Private.frame:IsVisible() then
-		return states.panicState("Appraiser оказался не в том табе?")
+		return states.panicState("Фрейм Appraiser не виден. Он оказался не в том табе?")
 	end
 
 	AucAdvanced.Modules.Util.Appraiser.Private.frame.RefreshAll()
@@ -736,8 +743,14 @@ function lib.Processor(callbackType, ...)
     elseif (callbackType == "auctionui") then
         --private.HookAH()
 	elseif callbackType == "auctionopen" then
+		if not private.auctionAvailable then
+			print("Зафиксировано открытие окна аукциона")
+		end
 		private.auctionAvailable = true
 	elseif callbackType == "auctionclose" then
+		if private.auctionAvailable then
+			print("Зафиксировано закрытие окна аукциона")
+		end
 		private.auctionAvailable = false
 	end
 end
