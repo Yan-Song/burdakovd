@@ -18,10 +18,10 @@ namespace WoWMemoryManager.WoWObject
     {
         protected const uint
             DescriptorFieldsOffset = 0x8,
-            XPositionOffset = 0x898,
-            YPositionOffset = 0x89c,
-            ZPositionOffset = 0x8a0,
-            RotationOffset = 0x8a8,
+            XPositionOffset = 0x790,
+            YPositionOffset = 0x794,
+            ZPositionOffset = 0x798,
+            RotationOffset = 0x7a0,
             typeOffset = 0x14;
 
         protected const uint // offsets in object descriptor table
@@ -107,7 +107,7 @@ namespace WoWMemoryManager.WoWObject
         { }
 
         protected const uint
-            NameOffset1 = 0xa0c,
+            NameOffset1 = 0x91c,
             NameOffset2 = 0x60;
 
         public virtual string Name
