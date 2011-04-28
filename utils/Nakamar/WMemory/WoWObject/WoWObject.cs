@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Magic;
-
-// most of code from here: http://www.mmowned.com/forums/wow-memory-editing/208754-guide-kind-how-i-handle-objects.html
-// name offsets http://www.mmowned.com/forums/wow-memory-editing/231374-3-1-1-reading-unit-names.html
-// some offsets there: http://www.mmowned.com/forums/wow-memory-editing/237345-3-1-3-info-dump.html
 
 namespace WoWMemoryManager.WoWObject
 {
