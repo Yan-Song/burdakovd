@@ -26,7 +26,7 @@ namespace Plugins
 
         public override void Run()
         {
-            LogError("CurrentGameState != GameState.World. Дисконнект? Персонаж не залогинен?");
+            LogError("CurrentGameState == " + Memory.CurrentGameState + " != World. Дисконнект? Персонаж не залогинен?");
             LogError("Для работы персонаж должен быть залогинен и находиться в игровом мире");
             Machine.DoNotRestart = true;
             Machine.StopEngineByWorker();
