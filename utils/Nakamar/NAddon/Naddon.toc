@@ -1,5 +1,5 @@
 ## Title: NAddon
-## Interface: 40000
+## Interface: 40100
 ##
 ## Version: 0.0
 ## Author: burdakovd
