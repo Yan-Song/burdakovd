@@ -20,7 +20,7 @@ data[1] = 901791
 --data[9] is needPurchaseConfirmation (нужно ли нажать кнопку подтверждения покупки)
 --data[10] is CurrentState (string) - текущее состояние, его внешний модуль может показывать пользователю
 --data[11] is NothingToDo (yes/no) - в ближайшее достаточно долгое время (часы) этому аккаунту нечего делать
---data[12] is time():guild balance - количество денег в гильдбанке, и время последней проверки
+--data[12] is ':'-separated values - время и результат последнего взаимодействия с гильдбанком
 
 local msgcount = 0
 local lastCommandTime = 0
@@ -83,9 +83,10 @@ function NNothingToDo(yes)
     end
 end
 
-function NGuildBalance(balance)
+function NGuildBalance(balance, delta)
 	local faction = UnitFactionGroup("player")
-	data[12] = GetRealmName() .. ":" .. faction .. ":" .. tostring(time()) .. ":"	.. tostring(balance)
+	local player = UnitName("player")
+	data[12] = GetRealmName() .. ":" .. faction .. ":" .. player .. ":" .. tostring(time()) .. ":" .. tostring(balance) .. ":" .. tostring(delta)
 end
 
 -- инициализация
