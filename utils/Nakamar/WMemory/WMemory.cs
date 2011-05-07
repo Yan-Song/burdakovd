@@ -13,6 +13,21 @@ namespace WoWMemoryManager
 {
     public enum GameState { None, Login, RealmWizard, Character, World };
 
+    public class GuildBankInfo
+    {
+        public string server;
+        public string faction;
+        public string playerName;
+        public long checkTime;
+        public long balance;
+        public long delta;
+
+        public override string ToString()
+        {
+            return "{ GuidBankInfo: " + server + " / " + faction + " / " + playerName + ": time=" + checkTime + ", balance=" + balance + ", delta=" + delta + " }";
+        }
+    }
+
     public class AddonMessage
     {
         public int Id;
@@ -23,10 +38,7 @@ namespace WoWMemoryManager
         public bool NeedPurchaseConfirmation;
         public string CurrentState;
         public bool NothingToDo;
-        public string lastGuildBankCheckServer;
-        public string lastGuildBankCheckFaction;
-        public long lastGuildBankCheckTime;
-        public long guildBalance;
+        public GuildBankInfo guildBank;
 
         public override string ToString()
         {
@@ -442,18 +454,19 @@ namespace WoWMemoryManager
 
             if (raw[6] == "")
             {
-                result.lastGuildBankCheckServer = "";
-                result.lastGuildBankCheckFaction = "";
-                result.lastGuildBankCheckTime = 0;
-                result.guildBalance = 0;
+                result.guildBank = null;
             }
             else
             {
-                string[] args = raw[6].Split(':');
-                result.lastGuildBankCheckServer = args[0];
-                result.lastGuildBankCheckFaction = args[1];
-                result.lastGuildBankCheckTime = long.Parse(args[2]);
-                result.guildBalance = long.Parse(args[3]);
+                result.guildBank = new GuildBankInfo();
+                string[] values = raw[6].Split(':');
+
+                result.guildBank.server = values[0];
+                result.guildBank.faction = values[1];
+                result.guildBank.playerName = values[2];
+                result.guildBank.checkTime = long.Parse(values[3]);
+                result.guildBank.balance = long.Parse(values[4]);
+                result.guildBank.delta = long.Parse(values[5]);
             }
 
             return LastMessage = result;
