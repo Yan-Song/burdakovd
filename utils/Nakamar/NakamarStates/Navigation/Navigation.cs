@@ -410,8 +410,6 @@ namespace Plugins
                 if (MovementQueue == null)
                     return;
 
-                RandomJump();
-
                 double relativeAngle = Me.RelativeAngle(player.Rotation, current);
                 SetMovementState(Math.Abs(relativeAngle) < MoveMaxAngle);
                 SetTurningState(relativeAngle);
@@ -419,19 +417,6 @@ namespace Plugins
         }
 
         DateTime lastRandomJumpDecisionTime = DateTime.Now;
-
-        private void RandomJump()
-        {
-            if (!CurrentMovementState)
-                return;
-            if ((DateTime.Now - lastRandomJumpDecisionTime).TotalSeconds < 1)
-                return;
-
-            lastRandomJumpDecisionTime = DateTime.Now;
-
-            if ((new Random()).Next(1, 10) == 1)
-                Jump();
-        }
 
         DateTime LastJumped = new DateTime(0),
             LastTimeChecked = new DateTime(0),
@@ -455,19 +440,19 @@ namespace Plugins
                 lastDistance = Me.Distance(rememberedWaypoint);
             }
 
-            // за последние 0.5 секунды
-            if ((DateTime.Now - LastTimeChecked).TotalSeconds > 0.5)
+            // за последние 2 секунды
+            if ((DateTime.Now - LastTimeChecked).TotalSeconds > 2)
             {
-                if (lastDistance - Me.Distance(rememberedWaypoint) > 1) // за последние полсекунды прошли более 1, сбрасываем
+                if (lastDistance - Me.Distance(rememberedWaypoint) > 1) // за последние две секунды прошли более 1 единицы расстояния, сбрасываем
                 {
                     lastDistance = Me.Distance(rememberedWaypoint);
                     LastTimeChecked = DateTime.Now;
                 }
                 else // возможно застрял
                 {
-                    if ((DateTime.Now - LastJumped).TotalSeconds > 0.5) // за последние полсекунды не прыгали
+                    if ((DateTime.Now - LastJumped).TotalSeconds > 3) // за последние три секунды не прыгали
                     {
-                        //Log("застрял? попробую попрыгать");
+                        Log("Застрял? Попробую перепрыгнуть препятствие.");
                         Jump();
                         LastJumped = DateTime.Now;
                     }
