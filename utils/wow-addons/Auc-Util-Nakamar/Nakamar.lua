@@ -681,7 +681,7 @@ states.doPosting = doPosting
 
 local bindKey = function(key, action)
 	if SetBinding(key, action) then
-		print("Successfully binded " .. action .. " to " .. key)
+		print("Successfully bound " .. action .. " to " .. key)
 	else
 		print("Failed to bind " .. action .. " to " .. key)
 	end
