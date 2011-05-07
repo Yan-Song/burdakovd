@@ -319,11 +319,11 @@ function private.GoToAuction()
 	NGoTo("Аукцион")
 end
 
-local updateGuildBankInfo = function()
+local updateGuildBankInfo = function(delta)
 	if GuildBankFrame and GuildBankFrame:IsVisible() then
 		-- обновить данные о балансе
 		local balance = GetGuildBankMoney()
-		NGuildBalance(balance)
+		NGuildBalance(balance, delta)
 		
 		local wait = random(GuildBankCheckFrequency * 0.9, GuildBankCheckFrequency * 1.1)
 		print("На счету гильдбанка " .. GetCoinTextureString(balance) .. ". Следующая проверка ГБ через " .. tostring(wait) .. " секунд")
@@ -357,9 +357,9 @@ local waitingForGuildBankState = function()
 				DepositGuildBankMoney(amount)
 				print("Положил " .. GetCoinTextureString(amount) .. " в гильдбанк, ожидаю подтверждения со стороны сервера")
 				-- ждать пока деньги не положатся
-				private:changeState(states.waitForMoneyTransfer(old))
+				private:changeState(states.waitForMoneyTransfer(old, amount))
 			else
-				updateGuildBankInfo()
+				updateGuildBankInfo(0)
 				CloseGuildBankFrame()
 				private:changeState(states.chooseState())
 			end
@@ -379,12 +379,12 @@ local waitingForGuildBankState = function()
 end
 states.waitingForGuildBankState = waitingForGuildBankState
 
-local waitForMoneyTransfer = function(old)
+local waitForMoneyTransfer = function(old, delta)
 	local waiter = dumbState("WAITING_FOR_TRANSFER")
 	
 	waiter.tick = function(self)
 		if GetMoney() == moneyToKeepLocally and GetGuildBankMoney() > old then
-			updateGuildBankInfo()
+			updateGuildBankInfo(delta)
 			CloseGuildBankFrame()
 			private:changeState(states.chooseState())
 		end
