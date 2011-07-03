@@ -36,7 +36,7 @@ end
 function NSendCommand(...)
 	local ans = ""
 	for n, x in ipairs({...}) do
-		if n>1 then
+		if n > 1 then
 			ans = ans .. ";"
 		end
 		ans = ans .. x
