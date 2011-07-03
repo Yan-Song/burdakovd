@@ -1,0 +1,17 @@
+en
+conf t
+
+in vlan 1
+
+ip address 192.168.128.102 255.255.255.248
+no sh
+
+exit
+
+ip default-gateway 192.168.128.98
+
+exit
+
+copy r s
+
+exit
