@@ -25,7 +25,7 @@ public class C {
 	static Scanner in;
 	static {
 		try {
-			in = new Scanner(file ? new FileInputStream("f:\\var\\tmp\\in.txt")
+			in = new Scanner(file ? new FileInputStream("c:\\var\\tmp\\in.txt")
 					: System.in);
 		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
@@ -36,7 +36,7 @@ public class C {
 	static {
 		try {
 			out = file ? new PrintWriter(
-					new FileWriter("f:\\var\\tmp\\out.txt")) : new PrintWriter(
+					new FileWriter("c:\\var\\tmp\\out.txt")) : new PrintWriter(
 					System.out);
 		} catch (final IOException e) {
 			e.printStackTrace();
@@ -119,6 +119,7 @@ public class C {
 
 		Arrays.sort(boxes, new Comparator<Box>() {
 
+			@Override
 			public int compare(final Box arg0, final Box arg1) {
 				return (int) Math.signum(-arg0.getApples() * 1.0
 						/ (ta == 0 ? 1.0 : ta) + arg1.getOranges() * 1.0

@@ -1,4 +1,5 @@
 package codechef._2010.July.CookOff;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,7 +16,7 @@ public class Ripple_Carry_Adder {
 	static {
 		try {
 			in = new BufferedReader(new InputStreamReader(
-					file ? new FileInputStream("f:\\var\\tmp\\in.txt")
+					file ? new FileInputStream("c:\\var\\tmp\\in.txt")
 							: System.in));
 		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
@@ -26,7 +27,7 @@ public class Ripple_Carry_Adder {
 	static {
 		try {
 			out = file ? new PrintWriter(
-					new FileWriter("f:\\var\\tmp\\out.txt")) : new PrintWriter(
+					new FileWriter("c:\\var\\tmp\\out.txt")) : new PrintWriter(
 					System.out);
 		} catch (final IOException e) {
 			e.printStackTrace();

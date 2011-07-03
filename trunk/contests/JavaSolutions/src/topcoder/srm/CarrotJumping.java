@@ -1,4 +1,5 @@
 package topcoder.srm;
+
 public class CarrotJumping {
 
 	// Begin cut here

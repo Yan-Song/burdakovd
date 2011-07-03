@@ -12,8 +12,8 @@ namespace problemB
         static void Main(string[] args)
         {
             //using(var reader = new StreamReader(System.Console.OpenStandardInput()))
-            using (var reader = new StreamReader(File.OpenRead("f:\\var\\tmp\\input.txt")))
-            using (var fwriter = File.CreateText("f:\\var\\tmp\\output.txt"))
+            using (var reader = new StreamReader(File.OpenRead("c:\\var\\tmp\\input.txt")))
+            using (var fwriter = File.CreateText("c:\\var\\tmp\\output.txt"))
             using (var stdout = new StreamWriter(System.Console.OpenStandardOutput()))
             {
                 List<StreamWriter> writers = new List<StreamWriter> { fwriter,  stdout };
