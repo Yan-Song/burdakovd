@@ -28,19 +28,24 @@ public final class Template {
 		return (int) in.nval;
 	}
 
+	private static String nextWord() throws IOException {
+		in.nextToken();
+		return in.sval;
+	}
+
 	static StreamTokenizer in;
 	static {
 		try {
 			// in = new Scanner(file ? new
-			// FileInputStream("f:\\var\\tmp\\in.txt")
+			// FileInputStream("c:\\var\\tmp\\in.txt")
 			// : System.in);
 
 			// in = new BufferedReader(new InputStreamReader(
-			// file ? new FileInputStream("f:\\var\\tmp\\in.txt")
+			// file ? new FileInputStream("c:\\var\\tmp\\in.txt")
 			// : System.in));
 
 			in = new StreamTokenizer(new BufferedReader(new InputStreamReader(
-					file ? new FileInputStream("f:\\var\\tmp\\in.txt")
+					file ? new FileInputStream("c:\\var\\tmp\\in.txt")
 							: System.in)));
 		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
@@ -51,7 +56,7 @@ public final class Template {
 	static {
 		try {
 			out = file ? new PrintWriter(
-					new FileWriter("f:\\var\\tmp\\out.txt")) : new PrintWriter(
+					new FileWriter("c:\\var\\tmp\\out.txt")) : new PrintWriter(
 					System.out);
 		} catch (final IOException e) {
 			e.printStackTrace();
@@ -68,25 +73,30 @@ public final class Template {
 	 * @throws IOException
 	 */
 	public static void main(final String[] args) throws IOException {
-		try {
-			final long startTime = System.nanoTime();
-			final int t = nextInt();
-			for (int i = 0; i < t; ++i) {
-				solve(i + 1);
-				if (isLocal && file) {
-					err.println(i + 1 + "/" + t);
-				}
-				if (isLocal && !file) {
-					out.flush();
-				}
+
+		final long startTime = System.nanoTime();
+		final int t = 1;// nextInt();
+
+		for (int i = 0; i < t; ++i) {
+			solve(i + 1);
+			if (isLocal && file) {
+				err.println(i + 1 + "/" + t);
 			}
-			if (isLocal) {
-				err.println(String.format("Completed after %d ms.",
-						(System.nanoTime() - startTime) / 1000000));
+			if (isLocal && !file) {
+				out.flush();
 			}
-		} finally {
-			out.flush();
 		}
+
+		if (isLocal) {
+			err.println(String.format("Completed after %d ms.",
+					(System.nanoTime() - startTime) / 1000000));
+		}
+
+		out.flush();
+		if (file) {
+			out.close();
+		}
+
 	}
 
 	private static void solve(final int testId) throws IOException {

@@ -25,10 +25,10 @@ public class OptimizingProductionAndSales {
 	static {
 		try {
 			// in = new Scanner(file ? new
-			// FileInputStream("f:\\var\\tmp\\in.txt")
+			// FileInputStream("c:\\var\\tmp\\in.txt")
 			// : System.in);
 			in = new BufferedReader(new InputStreamReader(
-					file ? new FileInputStream("f:\\var\\tmp\\in.txt")
+					file ? new FileInputStream("c:\\var\\tmp\\in.txt")
 							: System.in));
 		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
@@ -39,7 +39,7 @@ public class OptimizingProductionAndSales {
 	static {
 		try {
 			out = file ? new PrintWriter(
-					new FileWriter("f:\\var\\tmp\\out.txt")) : new PrintWriter(
+					new FileWriter("c:\\var\\tmp\\out.txt")) : new PrintWriter(
 					System.out);
 		} catch (final IOException e) {
 			e.printStackTrace();

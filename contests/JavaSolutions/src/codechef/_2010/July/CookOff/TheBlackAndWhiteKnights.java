@@ -1,4 +1,5 @@
 package codechef._2010.July.CookOff;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -14,10 +15,10 @@ public class TheBlackAndWhiteKnights {
 	static Scanner in;
 	static {
 		try {
-			in = new Scanner(file ? new FileInputStream("f:\\var\\tmp\\in.txt")
+			in = new Scanner(file ? new FileInputStream("c:\\var\\tmp\\in.txt")
 					: System.in);
 			// in = new BufferedReader(new InputStreamReader(
-			// file ? new FileInputStream("f:\\var\\tmp\\in.txt")
+			// file ? new FileInputStream("c:\\var\\tmp\\in.txt")
 			// : System.in));
 		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
@@ -28,7 +29,7 @@ public class TheBlackAndWhiteKnights {
 	static {
 		try {
 			out = file ? new PrintWriter(
-					new FileWriter("f:\\var\\tmp\\out.txt")) : new PrintWriter(
+					new FileWriter("c:\\var\\tmp\\out.txt")) : new PrintWriter(
 					System.out);
 		} catch (final IOException e) {
 			e.printStackTrace();

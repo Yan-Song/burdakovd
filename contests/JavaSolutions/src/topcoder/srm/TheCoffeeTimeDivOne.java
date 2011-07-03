@@ -1,4 +1,5 @@
 package topcoder.srm;
+
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
