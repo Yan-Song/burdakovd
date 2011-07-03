@@ -1,0 +1,30 @@
+en
+conf t
+vlan 2
+no name
+exit
+vlan 3
+name cs-students
+exit
+vlan 4
+name cs-admins
+exit
+vlan 5
+name bio-students
+exit
+vlan 6
+name bio-admins
+exit
+vlan 7
+name bio-lab1
+exit
+vlan 8
+name bio-lab2
+exit
+vlan 9
+name bio-lab3
+exit
+exit
+copy running-config startup-config
+
+exit

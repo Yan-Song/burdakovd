@@ -1,0 +1,21 @@
+en
+conf t
+
+in fa0/24
+switchport mode trunk
+exit
+
+in fa0/10
+switchport mode access
+switchport access vlan 6
+exit
+
+in fa0/20
+switchport mode access
+switchport access vlan 5
+exit
+
+exit
+copy r s
+
+exit

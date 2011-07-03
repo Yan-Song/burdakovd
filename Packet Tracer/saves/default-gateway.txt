@@ -1,0 +1,9 @@
+en
+conf t
+
+ip default-gateway 10.0.4.22
+
+exit
+copy r s
+
+exit

@@ -1,0 +1,31 @@
+en
+conf t
+
+in se0/0/0
+ip address 192.168.128.110 255.255.255.252
+clock rate 64000
+no sh
+exit
+
+in fa0/1
+no ip address
+no sh
+exit
+
+
+in fa0/1.110
+encapsulation dot1Q 110
+ip address 192.168.128.174 255.255.255.240
+no sh
+exit
+
+in fa0/1.130
+encapsulation dot1Q 130
+ip address 192.168.128.158 255.255.255.224
+no sh
+exit
+
+exit
+copy r s
+
+exit

@@ -1,0 +1,15 @@
+en
+conf t
+
+in range fa0/1-24
+switchport mode trunk
+exit
+
+in range gi1/1-2
+switchport mode trunk
+exit
+
+exit
+copy r s
+
+exit

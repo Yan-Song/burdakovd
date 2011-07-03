@@ -1,0 +1,20 @@
+en
+conf t
+
+router ospf 100
+network 10.0.0.8 0.0.0.3 area 0
+redistribute rip metric 5 subnets
+exit
+
+router rip
+version 2
+network 10.0.0.0
+passive fa0/0
+redistribute ospf 100 metric 5 internal external 1 external 2
+exit
+
+exit
+
+copy r s
+
+exit

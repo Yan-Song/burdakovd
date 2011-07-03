@@ -1,0 +1,11 @@
+en
+conf t
+
+
+
+
+exit
+
+copy r s
+
+exit
