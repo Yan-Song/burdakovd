@@ -1,4 +1,4 @@
-## Interface: 40100
+## Interface: 40200
 
 ## Title: Bank Mover
 ## Notes: Moves ALL your items bags2bank or bank2bags or bags2guildbank...
