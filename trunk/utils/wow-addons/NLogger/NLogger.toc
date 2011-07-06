@@ -1,4 +1,4 @@
-## Title: NLogger
+## Title: Logging Library
 ## Interface: 40200
 ## Version: 1.0.0
 ## Author: burdakovd
