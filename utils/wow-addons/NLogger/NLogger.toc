@@ -1,0 +1,7 @@
+## Title: NLogger
+## Interface: 40200
+## Version: 1.0.0
+## Author: burdakovd
+## SavedVariables: DefaultLog
+
+NLogger.lua
