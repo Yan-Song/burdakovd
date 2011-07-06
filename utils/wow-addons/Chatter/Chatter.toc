@@ -1,0 +1,8 @@
+## Title: Chat tool
+## Interface: 40200
+##
+## Version: 1
+## Author: burdakovd
+## X-Email: icqkill at gmail
+
+main.lua
