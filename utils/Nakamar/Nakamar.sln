@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugins", "NakamarStates\Pl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakamarConsole", "NakamarConsole\NakamarConsole.csproj", "{D1ACF179-3D71-4944-A047-5C4F6520A3CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WLibrary", "WLibrary\WLibrary.csproj", "{018580AA-10F3-4167-89DF-D9E699BB4136}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -87,6 +89,16 @@ Global
 		{D1ACF179-3D71-4944-A047-5C4F6520A3CF}.Release|Mixed Platforms.Build.0 = Release|x86
 		{D1ACF179-3D71-4944-A047-5C4F6520A3CF}.Release|x86.ActiveCfg = Release|x86
 		{D1ACF179-3D71-4944-A047-5C4F6520A3CF}.Release|x86.Build.0 = Release|x86
+		{018580AA-10F3-4167-89DF-D9E699BB4136}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{018580AA-10F3-4167-89DF-D9E699BB4136}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{018580AA-10F3-4167-89DF-D9E699BB4136}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{018580AA-10F3-4167-89DF-D9E699BB4136}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{018580AA-10F3-4167-89DF-D9E699BB4136}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{018580AA-10F3-4167-89DF-D9E699BB4136}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{018580AA-10F3-4167-89DF-D9E699BB4136}.Release|Any CPU.Build.0 = Release|Any CPU
+		{018580AA-10F3-4167-89DF-D9E699BB4136}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{018580AA-10F3-4167-89DF-D9E699BB4136}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{018580AA-10F3-4167-89DF-D9E699BB4136}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

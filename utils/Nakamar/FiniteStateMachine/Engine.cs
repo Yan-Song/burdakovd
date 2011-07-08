@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Util;
 using WoWMemoryManager;
+using WLibrary;
 
 namespace FiniteStateMachine
 {

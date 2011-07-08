@@ -5,7 +5,7 @@ using System.Text;
 using FiniteStateMachine;
 using WoWMemoryManager;
 using Util;
-using WoWMemoryManager.WoWObject;
+using WLibrary;
 using System.Collections;
 
 

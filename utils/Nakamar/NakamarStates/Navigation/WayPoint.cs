@@ -4,34 +4,35 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Globalization;
 using System.Windows;
+using WLibrary;
 
 namespace Plugins
 {
     /// <summary>
     /// http://www.mmowned.com/forums/c/237023-bot-developers-simple-waypoint-navigation-system-including-loading-saving.html
     /// </summary>
-    public class WayPoint : Util.Point
+    public class WayPoint : WLibrary.Point
     {
         private const double WayPointRange = 2.0;
 
         public virtual double Range { get { return WayPointRange; } }
 
-        public bool InRange(double range, Util.Point other)
+        public bool InRange(double range, WLibrary.Point other)
         {
             return Distance(other) < range;
         }
 
-        public virtual bool InRange(Util.Point other)
+        public virtual bool InRange(WLibrary.Point other)
         {
             return InRange(Range, other);
         }
 
-        public virtual bool InRange2D(Util.Point other)
+        public virtual bool InRange2D(WLibrary.Point other)
         {
             return InRange2D(Range, other);
         }
 
-        private bool InRange2D(double range, Util.Point other)
+        private bool InRange2D(double range, WLibrary.Point other)
         {
             return Distance2D(other) < range;
         }
