@@ -1,8 +1,10 @@
-## Title: Chat tool
+## Title: Chat Tool
 ## Interface: 40200
-##
-## Version: 1
+## Dependencies: NLogger
+## Version: 1.0.0
 ## Author: burdakovd
-## X-Email: icqkill at gmail
 
+tableutils.lua
+event.lua
+io.lua
 main.lua
