@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows.Forms;
 using System.Windows.Input;
 using FiniteStateMachine;
+using WLibrary;
 using WoWMemoryManager;
-using WoWMemoryManager.WoWObject;
 
 namespace Plugins
 {
@@ -629,11 +628,11 @@ namespace Plugins
 
             Thread.Sleep(2000);
 
-            if (!Util.MouseCursor.NearWindowCenter(Memory.BM.WindowHandle))
+            if (!Util.MouseCursor.NearWindowCenter(Memory.WoWWindowHandle))
             {
                 Log("Перемещаю указатель мыши к центру окна WoW");
 
-                Util.MouseCursor.MoveToWindowCenter(Memory.BM.WindowHandle);
+                Util.MouseCursor.MoveToWindowCenter(Memory.WoWWindowHandle);
 
                 Thread.Sleep(200);
             }

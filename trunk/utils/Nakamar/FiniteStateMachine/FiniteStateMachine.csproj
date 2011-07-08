@@ -76,6 +76,10 @@
       <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
       <Name>Util</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WLibrary\WLibrary.csproj">
+      <Project>{018580AA-10F3-4167-89DF-D9E699BB4136}</Project>
+      <Name>WLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WMemory\WInteraction.csproj">
       <Project>{6E806492-5FFE-4C3C-BF20-22277FAED955}</Project>
       <Name>WInteraction</Name>

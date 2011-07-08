@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using FiniteStateMachine;
 using WoWMemoryManager;
+using WLibrary;
 
 namespace Plugins
 {

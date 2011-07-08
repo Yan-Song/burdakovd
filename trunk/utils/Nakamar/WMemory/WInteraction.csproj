@@ -73,14 +73,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="KeyBoard.cs" />
-    <Compile Include="Patterns.cs" />
+    <Compile Include="AddonMessage.cs" />
+    <Compile Include="BlackMagicAdapter.cs" />
+    <Compile Include="GuildBankInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Extern.cs" />
-    <Compile Include="ReadUTF8String.cs" />
     <Compile Include="WMemory.cs" />
-    <Compile Include="WoWObject\ObjectManager.cs" />
-    <Compile Include="WoWObject\WoWObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BlackMagic\BlackMagic.csproj">
@@ -90,6 +87,10 @@
     <ProjectReference Include="..\Logger\Util.csproj">
       <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
       <Name>Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WLibrary\WLibrary.csproj">
+      <Project>{018580AA-10F3-4167-89DF-D9E699BB4136}</Project>
+      <Name>WLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -26,7 +26,7 @@ namespace Plugins
         {
             get
             {
-                return !wasLoaded || Memory.pClientConnection == 0; 
+                return !wasLoaded || Memory.gameMonitor.pClientConnection == 0; 
             }
 
         }
@@ -41,7 +41,7 @@ namespace Plugins
                 Log("WoW полностью загрузился, можно приступать к работе");
             }
 
-            else if (Memory.pClientConnection == 0)
+            else if (Memory.gameMonitor.pClientConnection == 0)
             {
                 Log("pClientConnection обнулён, похоже WoW закрывается, отключаю бота");
                 Memory.StopWoW();

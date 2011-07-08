@@ -1,6 +1,7 @@
 ﻿using System;
 using FiniteStateMachine;
 using WoWMemoryManager;
+using WLibrary;
 
 namespace Plugins
 {
@@ -24,7 +25,7 @@ namespace Plugins
         {
             get
             {
-                return DateTime.Now > nextScan && Memory.CurrentGameState==GameState.World &&
+                return DateTime.Now > nextScan && Memory.CurrentGameState == GameState.World &&
                     Memory.GetAddonMessage(false) == null;
             }
         }

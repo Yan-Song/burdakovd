@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace Plugins
 {
-    public class PlayerPoint : Util.Point
+    public class PlayerPoint : WLibrary.Point
     {
         static readonly Vector OX = new Vector(1, 0);
 
@@ -23,7 +23,7 @@ namespace Plugins
         /// </summary>
         /// <param name="p"></param>
         /// <returns>0..2*Math.PI</returns>
-        public double Angle(Util.Point p)
+        public double Angle(WLibrary.Point p)
         {
             Vector v = new Vector(p.X - this.X, p.Y - this.Y);
             double angle = Vector.AngleBetween(OX, v);

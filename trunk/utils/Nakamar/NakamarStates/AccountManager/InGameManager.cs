@@ -1,6 +1,7 @@
 ﻿using System;
 using FiniteStateMachine;
 using WoWMemoryManager;
+using WLibrary;
 
 namespace Plugins.AccountManager
 {
