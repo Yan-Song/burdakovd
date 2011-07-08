@@ -29,9 +29,13 @@ NLog = function(s)
     end
     local prefix = date("[N] [%H:%M:%S] ")
     local message = prefix .. tostring(s)
-    local position = private.destination[0] or 1
-    private.destination[position] = message
-    private.destination[0] = position % circularLogLength + 1
+    if private.destination then
+        local position = private.destination[0] or 1
+        private.destination[position] = message
+        private.destination[0] = position % circularLogLength + 1
+    else
+        message = "[Display only] " .. message
+    end
     frameReference:AddMessage(message, 1.0, 1.0, 1.0)
 end
 
