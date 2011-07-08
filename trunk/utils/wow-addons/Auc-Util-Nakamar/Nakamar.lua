@@ -99,7 +99,6 @@ ConfirmPurchase = lib.ConfirmPurchase
 -- events
 local eventHandlers = {}
 local RegisterEvent = function(event, f)
-    
     if eventHandlers[event] == nil then
         eventHandlers[event] = {}
         private.frame:RegisterEvent(event)
@@ -114,7 +113,11 @@ local UnRegisterEvent = function(event, f)
 end
 
 function private.OnEvent(self, event, ...)
+    local handlers = {}
     for handler, _ in pairs(eventHandlers[event]) do
+        table.insert(handlers, handler)
+    end
+    for _, handler in pairs(handlers) do
         --print("Calling handler " .. tostring(handler) .. " to process " .. event)
         handler(...)
     end
