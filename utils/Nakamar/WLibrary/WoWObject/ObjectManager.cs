@@ -3,68 +3,66 @@ using System.Collections.Generic;
 
 namespace WLibrary
 {
-
-    class ObjectList<T> : IEnumerable<T> where T: WoWObject
-    {
-        private const uint
-            firstObjectOffset = 0xB4,          // offset from the object manager to the first object
-            nextObjectOffset = 0x3C;           // offset from one object to the next 
-        private uint BaseAddress;
-        private RawMemoryReader Reader;
-
-        public ObjectList(RawMemoryReader reader, uint objectManagerBaseAddress)
-        {
-            BaseAddress = objectManagerBaseAddress;
-            Reader = reader;
-        }
-
-        #region Члены IEnumerable
-
-        public IEnumerator GetEnumerator()
-        {
-            uint CurrentObjectAddress = Reader.ReadUInt(BaseAddress + firstObjectOffset);
-            
-
-            while (CurrentObjectAddress != 0 && CurrentObjectAddress % 2 == 0)
-            {
-                WoWObject CurrentObject = new WoWObject(Reader, CurrentObjectAddress);
-
-                ObjectType type = CurrentObject.Type;
-                if (type == ObjectType.NPC)
-                    CurrentObject = new NpcObject(Reader, CurrentObjectAddress);
-                else if (type == ObjectType.Player)
-                    CurrentObject = new PlayerObject(Reader, CurrentObjectAddress);
-                else if (type == ObjectType.GameObject)
-                    CurrentObject = new GameObject(Reader, CurrentObjectAddress);
-                yield return CurrentObject;
-
-                CurrentObjectAddress = Reader.ReadUInt(CurrentObjectAddress + nextObjectOffset);
-            }
-
-            yield break;
-        }
-
-        #endregion
-
-
-        #region Члены IEnumerable<T>
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            {
-                foreach (WoWObject w in this)
-                    if (w is T)
-                        yield return (T)w;
-                yield break;
-            }
-        }
-
-        #endregion
-    }
-
-
     public class ObjectManager
     {
+        private class ObjectList<T> : IEnumerable<T> where T : WoWObject
+        {
+            private const uint
+                firstObjectOffset = 0xB4,          // offset from the object manager to the first object
+                nextObjectOffset = 0x3C;           // offset from one object to the next 
+            private uint BaseAddress;
+            private RawMemoryReader Reader;
+
+            public ObjectList(RawMemoryReader reader, uint objectManagerBaseAddress)
+            {
+                BaseAddress = objectManagerBaseAddress;
+                Reader = reader;
+            }
+
+            #region Члены IEnumerable
+
+            public IEnumerator GetEnumerator()
+            {
+                uint CurrentObjectAddress = Reader.ReadUInt(BaseAddress + firstObjectOffset);
+
+
+                while (CurrentObjectAddress != 0 && CurrentObjectAddress % 2 == 0)
+                {
+                    WoWObject CurrentObject = new WoWObject(Reader, CurrentObjectAddress);
+
+                    ObjectType type = CurrentObject.Type;
+                    if (type == ObjectType.NPC)
+                        CurrentObject = new NpcObject(Reader, CurrentObjectAddress);
+                    else if (type == ObjectType.Player)
+                        CurrentObject = new PlayerObject(Reader, CurrentObjectAddress);
+                    else if (type == ObjectType.GameObject)
+                        CurrentObject = new GameObject(Reader, CurrentObjectAddress);
+                    yield return CurrentObject;
+
+                    CurrentObjectAddress = Reader.ReadUInt(CurrentObjectAddress + nextObjectOffset);
+                }
+
+                yield break;
+            }
+
+            #endregion
+
+
+            #region Члены IEnumerable<T>
+
+            IEnumerator<T> IEnumerable<T>.GetEnumerator()
+            {
+                {
+                    foreach (WoWObject w in this)
+                        if (w is T)
+                            yield return (T)w;
+                    yield break;
+                }
+            }
+
+            #endregion
+        }
+
         private const uint
             PlayerBaseOffset1 = 0x38,
             PlayerBaseOffset2 = 0x24;
