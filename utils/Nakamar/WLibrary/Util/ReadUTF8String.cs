@@ -5,11 +5,11 @@ using System.Text;
 
 namespace WLibrary
 {
-    public static class MemoryWorkerExtension
+    public static class RawMemoryReaderExtensionReadUTF8String
     {
-        public static string ReadUTF8String(this RawMemoryReader MW, uint address, uint maxLength)
+        public static string ReadUTF8String(this RawMemoryReader reader, uint address, uint maxLength)
         {
-            byte[] bytes = MW.ReadBytes(address, (int)maxLength).TakeWhile(c => c != 0).ToArray(); // удаляем лишнее после \0
+            byte[] bytes = reader.ReadBytes(address, (int)maxLength).TakeWhile(c => c != 0).ToArray(); // удаляем лишнее после \0
             return System.Text.Encoding.UTF8.GetString(bytes);
         }
     }
