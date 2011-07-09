@@ -5,7 +5,7 @@ namespace WLibrary
     /// <summary>
     /// здесь хранятся данные о смещениях WoW, которые могут измениться со следующим патчем
     /// </summary>
-    static class Patterns
+    public static class Patterns
     {
         /// <summary>
         /// место в коде, где можно прочитать адрес указателя на структуру ClientConnection
@@ -149,5 +149,92 @@ namespace WLibrary
                 "x",
                 
                 26);
+
+        /// <summary>
+        /// место в коде, где можно прочитать адрес начала массива имён игроков, возвращённых из последнего запроса /who
+        /// В случае проблем это место кода можно найти по строке "Usage: GetWhoInfo(index)"
+        /// </summary>
+        public static Pattern LastWhoResultNamesBase =
+            new Pattern(
+                "d9 7d fe " +
+                "0f b7 45 fe " +
+                "0d FF FF 00 00 " +
+                "89 45 f8 " +
+                "83 c4 08 " +
+                "d9 6d f8 " +
+                "df 7d f4 " +
+                "8b 75 f4 " +
+                "4e " +
+                "d9 6d fe " +
+                "3b 35 FF FF FF FF " +
+                "0f 83 FF FF 00 00 " +
+                "69 f6 FF FF 00 00 " +
+                "8d 86 FF FF FF FF " +
+                "50 " +
+                "57 " +
+                "e8 FF FF FF FF",
+
+                "xxx" +
+                "xxxx" +
+                "x??xx" +
+                "xxx" +
+                "xxx" +
+                "xxx" +
+                "xxx" +
+                "xxx" +
+                "x" +
+                "xxx" +
+                "xx????" +
+                "xx??xx" +
+                "xx??xx" +
+                "xx????" +
+                "x" +
+                "x" +
+                "x????",
+
+                51);
+
+        /// <summary>
+        /// место в коде, где можно прочитать количество байт, выделяемых для каждого имени игрока в массиве /who
+        /// </summary>
+        public static Pattern WhoResultNameLength =
+            new Pattern(
+                "d9 7d fe " +
+                "0f b7 45 fe " +
+                "0d FF FF 00 00 " +
+                "89 45 f8 " +
+                "83 c4 08 " +
+                "d9 6d f8 " +
+                "df 7d f4 " +
+                "8b 75 f4 " +
+                "4e " +
+                "d9 6d fe " +
+                "3b 35 FF FF FF FF " +
+                "0f 83 FF FF 00 00 " +
+                "69 f6 FF FF 00 00 " +
+                "8d 86 FF FF FF FF " +
+                "50 " +
+                "57 " +
+                "e8 FF FF FF FF",
+
+                "xxx" +
+                "xxxx" +
+                "x??xx" +
+                "xxx" +
+                "xxx" +
+                "xxx" +
+                "xxx" +
+                "xxx" +
+                "x" +
+                "xxx" +
+                "xx????" +
+                "xx??xx" +
+                "xx??xx" +
+                "xx????" +
+                "x" +
+                "x" +
+                "x????",
+
+                45);
     }
 }
