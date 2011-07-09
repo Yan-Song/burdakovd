@@ -31,7 +31,7 @@ namespace WLibrary
             return code;
         }
 
-        #region const
+        #region Constants
 
         private const int WM_KEYDOWN = 0x100;
         private const int WM_KEYUP = 0x101;
@@ -123,8 +123,10 @@ namespace WLibrary
         public void KeyUpAll()
         {
             List<int> p = new List<int>(PressedKeys);
-            foreach(int key in p)
+            foreach (int key in p)
+            {
                 KeyUp(key, false);
+            }
         }
 
         public void PressKeys(IEnumerable<Key> keys, bool wait)

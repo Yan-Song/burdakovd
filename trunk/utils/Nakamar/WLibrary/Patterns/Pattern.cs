@@ -6,7 +6,7 @@ using System.Text;
 namespace WLibrary
 {
     /// <summary>
-    /// структура хранения паттерна, которым можно будет пользоваться в SearchPattern
+    /// структура хранения паттерна, которым можно будет пользоваться в PatternFinder
     /// </summary>
     [Serializable]
     public struct Pattern

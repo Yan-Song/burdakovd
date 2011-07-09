@@ -4,6 +4,6 @@ namespace WLibrary
 {
     public interface PatternFinder
     {
-        uint FindPattern(WLibrary.Pattern pattern);
+        uint FindPattern(Pattern pattern);
     }
 }
