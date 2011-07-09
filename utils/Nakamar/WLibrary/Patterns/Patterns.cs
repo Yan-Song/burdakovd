@@ -236,5 +236,122 @@ namespace WLibrary
                 "x????",
 
                 45);
+
+        /// <summary>
+        /// место в коде, где можно прочитать адрес начала буфера чата
+        /// </summary>
+        public static Pattern ChatBufferBase =
+            new Pattern(
+                "cc " +
+                "55 " +
+                "8b ec " +
+                "8b 0d FF FF FF FF " +
+                "8b 45 08 " +
+                "03 c1 " +
+                "99 " +
+                "b9 FF 00 00 00 " +
+                "f7 f9 " +
+                "8b c2 " +
+                "69 c0 FF FF 00 00 " +
+                "05 FF FF FF FF " +
+                "5d " +
+                "c3 " +
+                "cc",
+
+                "x" +
+                "x" +
+                "xx" +
+                "xx????" +
+                "xxx" +
+                "xx" +
+                "x" +
+                "x?xxx" +
+                "xx" +
+                "xx" +
+                "xx??xx" +
+                "x????" +
+                "x" +
+                "x" +
+                "x",
+
+                32);
+
+        /// <summary>
+        /// место в коде, где можно прочитать размер одной записи в буфере чата
+        /// </summary>
+        public static Pattern ChatBufferRecordSize =
+            new Pattern(
+                "cc " +
+                "55 " +
+                "8b ec " +
+                "8b 0d FF FF FF FF " +
+                "8b 45 08 " +
+                "03 c1 " +
+                "99 " +
+                "b9 FF 00 00 00 " +
+                "f7 f9 " +
+                "8b c2 " +
+                "69 c0 FF FF 00 00 " +
+                "05 FF FF FF FF " +
+                "5d " +
+                "c3 " +
+                "cc",
+
+                "x" +
+                "x" +
+                "xx" +
+                "xx????" +
+                "xxx" +
+                "xx" +
+                "x" +
+                "x?xxx" +
+                "xx" +
+                "xx" +
+                "xx??xx" +
+                "x????" +
+                "x" +
+                "x" +
+                "x",
+
+                27);
+
+        /// <summary>
+        /// место в коде, где можно прочитать смещение текста относительно начала записи в буфере чата
+        /// </summary>
+        public static Pattern ChatBufferRecordTextOffset =
+            new Pattern(
+                "cc " +
+                "55 " +
+                "8b ec " +
+                "8b 0d FF FF FF FF " +
+                "8b 45 08 " +
+                "03 c1 " +
+                "99 " +
+                "b9 FF 00 00 00 " +
+                "f7 f9 " +
+                "8b c2 " +
+                "69 c0 FF FF 00 00 " +
+                "05 FF FF FF FF " +
+                "5d " +
+                "c3 " +
+                "cc",
+
+                "x" +
+                "x" +
+                "xx" +
+                "xx????" +
+                "xxx" +
+                "xx" +
+                "x" +
+                "x?xxx" +
+                "xx" +
+                "xx" +
+                "xx??xx" +
+                "x????" +
+                "x" +
+                "x" +
+                "x",
+
+                17);
     }
 }
