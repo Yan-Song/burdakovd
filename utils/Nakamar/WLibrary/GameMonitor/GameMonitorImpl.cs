@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace WLibrary
 {
@@ -20,28 +17,35 @@ namespace WLibrary
         {
             get
             {
-                uint gameStateIdPtr = reader.ReadUInt(finder.FindPattern(Patterns.GameStateId));
-                uint gameStateId = reader.ReadUInt(gameStateIdPtr);
-                uint gameStateStringRepresentationsBase = reader.ReadUInt(finder.FindPattern(Patterns.GameStateStringRepresentationBase));
-                string state = reader.ReadASCIIString(reader.ReadUInt(gameStateStringRepresentationsBase + 4 * gameStateId), 100);
+                try
+                {
+                    uint gameStateIdPtr = reader.ReadUInt(finder.FindPattern(Patterns.GameStateId));
+                    uint gameStateId = reader.ReadUInt(gameStateIdPtr);
+                    uint gameStateStringRepresentationsBase = reader.ReadUInt(finder.FindPattern(Patterns.GameStateStringRepresentationBase));
+                    string state = reader.ReadASCIIString(reader.ReadUInt(gameStateStringRepresentationsBase + 4 * gameStateId), 100);
 
-                if (state == "login")
-                    return GameState.Login;
+                    if (state == "login")
+                        return GameState.Login;
 
-                else if (state == "realmwizard")
-                    return GameState.RealmWizard;
+                    else if (state == "realmwizard")
+                        return GameState.RealmWizard;
 
-                else if (state == "charselect")
-                    if (pObjectManager == 0)
-                        return GameState.Character;
+                    else if (state == "charselect")
+                        if (pObjectManager == 0)
+                            return GameState.Character;
+                        else
+                            return GameState.World;
+
+                    else if (state == "")
+                        return GameState.None;
+
                     else
-                        return GameState.World;
-
-                else if (state == "")
+                        throw new Exception("Unknown GameState: " + state);
+                }
+                catch (Exception)
+                {
                     return GameState.None;
-
-                else
-                    throw new Exception("Unknown GameState: " + state);
+                }
             }
         }
 

@@ -23,7 +23,9 @@ namespace WLibrary
         public Pattern(string pattern, string mask, uint offset)
         {
             if (pattern.Length != mask.Length * 3 - 1)
+            {
                 throw new System.ArgumentException("Несовпадение длин паттерна и маски");
+            }
 
             PatternString = pattern;
             Mask = mask;
