@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -55,7 +54,7 @@ namespace WLibrary
 
         #endregion
 
-        private List<int> PressedKeys = new List<int>();
+        private ISet<int> PressedKeys = new HashSet<int>();
         private Random rnd = new Random();
         private IntPtr window;
 

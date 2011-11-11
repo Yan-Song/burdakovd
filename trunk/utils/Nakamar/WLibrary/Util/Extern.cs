@@ -135,6 +135,33 @@ namespace WLibrary
         ForceMinimized = 11
     }
 
+    public enum SizingPositioningFlags : uint
+    {
+        NOSIZE = 0x0001,
+        NOMOVE = 0x0002,
+        NOZORDER = 0x0004,
+        NOREDRAW = 0x0008,
+        NOACTIVATE = 0x0010,
+        DRAWFRAME = 0x0020,
+        FRAMECHANGED = 0x0020,
+        SHOWWINDOW = 0x0040,
+        HIDEWINDOW = 0x0080,
+        NOCOPYBITS = 0x0100,
+        NOOWNERZORDER = 0x0200,
+        NOREPOSITION = 0x0200,
+        NOSENDCHANGING = 0x0400,
+        DEFERERASE = 0x2000,
+        ASYNCWINDOWPOS = 0x4000
+    }
+
+    public enum SpecialHWNDValues : uint
+    {
+        HWND_TOP = 0,
+        HWND_BOTTOM = 1,
+        //HWND_TOPMOST = (uint)-1,
+        //HWND_NOTOPMOST = (uint)-2
+    }
+
     #endregion
 
     /// <summary>
@@ -237,6 +264,21 @@ namespace WLibrary
         /// </summary>
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
+
+        /// <summary>
+        /// Changes the size, position, and Z order of a child, pop-up, or top-level window. These windows are ordered according to their appearance on the screen. The topmost window receives the highest rank and is the first window in the Z order.
+        /// </summary>
+        /// <param name="hWnd">A handle to the window.</param>
+        /// <param name="hWndInsertAfter">A handle to the window to precede the positioned window in the Z order. This parameter must be a window handle or one of SpecialHWNDValues.</param>
+        /// <param name="x">The new position of the left side of the window, in client coordinates.</param>
+        /// <param name="y">The new position of the top of the window, in client coordinates.</param>
+        /// <param name="cx">The new width of the window, in pixels.</param>
+        /// <param name="cy">The new height of the window, in pixels.</param>
+        /// <param name="uFlags">The window sizing and positioning flags. This parameter can be a combination of SizingPositioningFlags.</param>
+        /// <returns>If the function succeeds, the return value is nonzero.</returns>
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
 
         #endregion
 

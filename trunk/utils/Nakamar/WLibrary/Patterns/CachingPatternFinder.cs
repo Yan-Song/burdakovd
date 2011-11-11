@@ -31,18 +31,27 @@ namespace WLibrary
             byte[] bPattern = new byte[saPattern.Length];
 
             for (int i = 0; i < bPattern.Length; i++)
+            {
                 bPattern[i] = Convert.ToByte(saPattern[i], 0x10);
+            }
 
             try
             {
-                // вообще говоря если данные верны то паттерн будет находиться по адресу
-                // cached - pattern.Offset, но при ошибке WoW.FindPattern() вернёт dwStart
-                // так что делать dwStart == cached - pattern.Offset нельзя, уменьшаем на 1
-                uint answer = manager.FindPattern(cached - pattern.Offset - 1, pattern.PatternString.Length + 1, bPattern, pattern.Mask);
-                return cached == answer + pattern.Offset;
+                byte[] actual = manager.ReadBytes(cached - pattern.Offset, bPattern.Length);
+
+                for (int i = 0; i < bPattern.Length; ++i)
+                {
+                    if (!pattern.Mask[i].Equals('?') && !bPattern[i].Equals(actual[i]))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Log("Ошибка при проверке паттерна: " + exception.Message);
                 return false;
             }
         }
@@ -52,14 +61,14 @@ namespace WLibrary
             if (FindPatternCache.ContainsKey(pattern))
             {
                 uint cached = FindPatternCache[pattern];
-                bool ok = true;
+                bool ok;
                 try
                 {
-                    if (!CheckPattern(pattern, cached))
-                        ok = false;
+                    ok = CheckPattern(pattern, cached);
                 }
-                catch
+                catch(Exception exception)
                 {
+                    Log("Ошибка при проверке паттерна: " + exception.Message);
                     ok = false;
                 }
                 if (ok)
@@ -71,11 +80,13 @@ namespace WLibrary
                 }
             }
 
-            uint ans = manager.FindPattern(pattern.PatternString, pattern.Mask);
-            if (ans == (uint)manager.MainModule.BaseAddress)
+            uint ans = manager.FindPattern(pattern.PatternString, pattern.Mask) + pattern.Offset;
+            if (!CheckPattern(pattern, ans))
+            {
                 throw new ApplicationException("Pattern not found");
+            }
 
-            FindPatternCache[pattern] = ans + pattern.Offset;
+            FindPatternCache[pattern] = ans;
             Log("найден новый оффсет FindPattern(" + pattern + ") == 0x" + FindPatternCache[pattern].ToString("X8"));
 
             return FindPatternCache[pattern];
