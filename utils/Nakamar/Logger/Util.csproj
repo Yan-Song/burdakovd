@@ -70,7 +70,7 @@
   <ItemGroup>
     <Compile Include="ConfigWTF.cs" />
     <Compile Include="Serialization.cs" />
-    <Compile Include="ComparableListOfDouble.cs" />
+    <Compile Include="EquatableList.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Mouse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
