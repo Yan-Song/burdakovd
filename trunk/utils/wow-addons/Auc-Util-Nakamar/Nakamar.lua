@@ -523,7 +523,7 @@ local updateStats = function()
         return states.panicState("Неожиданно закрыто окно аукциона")
     end
 
-    AuctionFrameTab5:Click()
+    AuctionFrameTab4:Click()
     if not AucAdvanced.Modules.Util.Appraiser.Private.frame:IsVisible() then
         return states.panicState("Фрейм Appraiser не виден. Он оказался не в том табе?")
     end
