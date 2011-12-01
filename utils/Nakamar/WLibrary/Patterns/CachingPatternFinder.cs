@@ -61,23 +61,21 @@ namespace WLibrary
             if (FindPatternCache.ContainsKey(pattern))
             {
                 uint cached = FindPatternCache[pattern];
-                bool ok;
+
                 try
                 {
-                    ok = CheckPattern(pattern, cached);
+                    if (CheckPattern(pattern, cached))
+                    {
+                        return cached;
+                    }
                 }
                 catch(Exception exception)
                 {
                     Log("Ошибка при проверке паттерна: " + exception.Message);
-                    ok = false;
                 }
-                if (ok)
-                    return cached;
-                else
-                {
-                    Log("кэшированный оффсет FindPattern(" + pattern + ") == 0x" + cached.ToString("X8") + " устарел, ищем заново");
-                    FindPatternCache.Remove(pattern);
-                }
+
+                Log("кэшированный оффсет FindPattern(" + pattern + ") == 0x" + cached.ToString("X8") + " устарел, ищем заново");
+                FindPatternCache.Remove(pattern);
             }
 
             uint ans = manager.FindPattern(pattern.PatternString, pattern.Mask) + pattern.Offset;

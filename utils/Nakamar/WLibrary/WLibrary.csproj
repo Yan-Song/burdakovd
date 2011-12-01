@@ -43,9 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interface\GameMonitor.cs" />
-    <Compile Include="GameMonitor\GameMonitorImpl.cs" />
+    <Compile Include="Implementation\GameMonitorImpl.cs" />
     <Compile Include="Interface\GameState.cs" />
-    <Compile Include="Interface\IAddonSignatureManager.cs" />
+    <Compile Include="Interface\GameStateMonitor.cs" />
+    <Compile Include="Interface\AddonSignatureManager.cs" />
     <Compile Include="Interface\RawMemoryManager.cs" />
     <Compile Include="Interface\RawMemoryReader.cs" />
     <Compile Include="Patterns\CachingPatternFinder.cs" />
@@ -54,11 +55,11 @@
     <Compile Include="Interface\PatternFinder.cs" />
     <Compile Include="Patterns\Patterns.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\AddonSignatureManager.cs" />
-    <Compile Include="Util\Extern.cs" />
-    <Compile Include="Util\KeyBoard.cs" />
-    <Compile Include="Util\Point.cs" />
-    <Compile Include="Util\ReadUTF8String.cs" />
+    <Compile Include="Implementation\AddonSignatureManagerImpl.cs" />
+    <Compile Include="Implementation\Extern.cs" />
+    <Compile Include="Implementation\KeyBoard.cs" />
+    <Compile Include="Implementation\Point.cs" />
+    <Compile Include="Implementation\ReadUTF8String.cs" />
     <Compile Include="WoWObject\ObjectManager.cs" />
     <Compile Include="WoWObject\WoWObject.cs" />
   </ItemGroup>

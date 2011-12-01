@@ -8,45 +8,53 @@ namespace WLibrary
     public static class Patterns
     {
         /// <summary>
-        /// место в коде, где можно прочитать адрес указателя на структуру ClientConnection
+        /// Место в коде, где можно прочитать адрес указателя на структуру ClientConnection.
+        /// В случае проблем этот фрагмент кода искать по: ".\ObjectMgrClient.cpp".
+        /// Also: ищем на форумах "CurMgrPointer", добавляем к нему WoW PE Header Start Address,
+        /// затем ищем получившийся адрес в памяти запущенного процесса WoW (не забываем про Little Endian).
         /// </summary>
         public static Pattern ClientConnection =
             new Pattern(
                 "8B 15 FF FF FF FF " + 
                 "89 82 FF FF 00 00 " +
                 "8B 15 FF FF FF FF " +
-                "89 90 FF 00 00 00 " +
-                "89 81 FF 00 00 00",
+                "89 81 FF 00 00 00 " +
+                "8B 0D FF FF FF FF " +
+                "89 88 FF 00 00 00",
 
                 "xx????" +
                 "xx??xx" +
                 "xx????" +
                 "xx?xxx" +
+                "xx????" +
                 "xx?xxx",
 
                 2);
 
         /// <summary>
-        /// место в коде, где можно прочитать смещение указателя на ObjectManager относительно начала структуры ClientConnection
+        /// Место в коде, где можно прочитать смещение указателя на ObjectManager относительно начала структуры ClientConnection.
+        /// Как искать - смотри ClientConnection, они в коде рядом.
         /// </summary>
         public static Pattern ObjectManagerOffset =
             new Pattern(
                 "8B 15 FF FF FF FF " +
                 "89 82 FF FF 00 00 " +
                 "8B 15 FF FF FF FF " +
-                "89 90 FF 00 00 00 " +
-                "89 81 FF 00 00 00",
+                "89 81 FF 00 00 00 " +
+                "8B 0D FF FF FF FF " +
+                "89 88 FF 00 00 00",
 
                 "xx????" +
                 "xx??xx" +
                 "xx????" +
                 "xx?xxx" +
+                "xx????" +
                 "xx?xxx",
 
                 8);
 
         /// <summary>
-        /// место в коде, где можно прочитать адрес gameStateId
+        /// Место в коде, где можно прочитать адрес gameStateId.
         /// </summary>
         public static Pattern GameStateId =
             new Pattern(
@@ -75,7 +83,7 @@ namespace WLibrary
                 3);
 
         /// <summary>
-        /// место в коде, где можно прочитать адрес начала массива указателей на строковые представления gameState
+        /// Место в коде, где можно прочитать адрес начала массива указателей на строковые представления gameState.
         /// </summary>
         public static Pattern GameStateStringRepresentationBase =
             new Pattern(
@@ -110,7 +118,7 @@ namespace WLibrary
                 10);
 
         /// <summary>
-        /// место в коде, где можно прочитать адрес PlayerBase
+        /// Место в коде, где можно прочитать адрес PlayerBase.
         /// </summary>
         public static Pattern PlayerBase =
             new Pattern(
@@ -151,8 +159,8 @@ namespace WLibrary
                 26);
 
         /// <summary>
-        /// место в коде, где можно прочитать адрес начала массива имён игроков, возвращённых из последнего запроса /who
-        /// В случае проблем это место кода можно найти по строке "Usage: GetWhoInfo(index)"
+        /// Место в коде, где можно прочитать адрес начала массива имён игроков, возвращённых из последнего запроса /who.
+        /// В случае проблем это место кода можно найти по строке "Usage: GetWhoInfo(index)".
         /// </summary>
         public static Pattern LastWhoResultNamesBase =
             new Pattern(
@@ -195,7 +203,7 @@ namespace WLibrary
                 51);
 
         /// <summary>
-        /// место в коде, где можно прочитать количество байт, выделяемых для каждого имени игрока в массиве /who
+        /// Место в коде, где можно прочитать количество байт, выделяемых для каждого имени игрока в массиве /who.
         /// </summary>
         public static Pattern WhoResultNameLength =
             new Pattern(
@@ -238,7 +246,7 @@ namespace WLibrary
                 45);
 
         /// <summary>
-        /// место в коде, где можно прочитать адрес начала буфера чата
+        /// Место в коде, где можно прочитать адрес начала буфера чата.
         /// </summary>
         public static Pattern ChatBufferBase =
             new Pattern(
@@ -277,7 +285,7 @@ namespace WLibrary
                 32);
 
         /// <summary>
-        /// место в коде, где можно прочитать размер одной записи в буфере чата
+        /// Место в коде, где можно прочитать размер одной записи в буфере чата.
         /// </summary>
         public static Pattern ChatBufferRecordSize =
             new Pattern(
@@ -316,7 +324,7 @@ namespace WLibrary
                 27);
 
         /// <summary>
-        /// место в коде, где можно прочитать смещение текста относительно начала записи в буфере чата
+        /// Место в коде, где можно прочитать смещение текста относительно начала записи в буфере чата.
         /// </summary>
         public static Pattern ChatBufferRecordTextOffset =
             new Pattern(
