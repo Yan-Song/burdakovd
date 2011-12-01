@@ -6,3 +6,4 @@
 ## X-Email: kreved at kreved dot org
 
 NAddon.lua
+WorldDetector.lua
