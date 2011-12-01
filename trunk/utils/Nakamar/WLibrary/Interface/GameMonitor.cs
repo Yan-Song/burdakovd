@@ -1,10 +1,8 @@
 ﻿
 namespace WLibrary
 {
-    public interface GameMonitor
+    public interface GameMonitor : GameStateMonitor
     {
-        GameState CurrentGameState { get; }
-
         uint pClientConnection { get; }
 
         uint pObjectManager { get; }
