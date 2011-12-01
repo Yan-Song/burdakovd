@@ -1,5 +1,5 @@
 ## Title: NLogger - Logging Library
-## Interface: 40200
+## Interface: 40300
 ## Version: 1.0.0
 ## Author: burdakovd
 ## SavedVariables: DefaultLog
