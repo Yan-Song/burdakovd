@@ -81,6 +81,7 @@ namespace NakamarConsole
 
             Logger.LogError("chooseAnyWoW", "не найдено ни одного процесса WoW");
             Environment.Exit(1);
+
             return -1;
         }
 
@@ -100,7 +101,7 @@ namespace NakamarConsole
 
             Engine FSM = new Engine(memoryManager, settings);
 
-            string pluginsPath = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + Path.DirectorySeparatorChar + "Plugins.dll";
+            string pluginsPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "Plugins.dll");
             Logger.Log("startBot", "Загружаю плагины из " + pluginsPath);
             FSM.LoadStates(pluginsPath);
             FSM.States.Sort();

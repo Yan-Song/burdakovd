@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WoWMemoryManager</RootNamespace>
     <AssemblyName>WInteraction</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -31,6 +31,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -74,12 +75,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddonMessage.cs" />
-    <Compile Include="BlackMagicAdapter.cs" />
     <Compile Include="GuildBankInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WMemory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BlackMagicAdapter\BlackMagicAdapter.csproj">
+      <Project>{323E66D7-C727-43E0-B0D1-ABEE70A2596F}</Project>
+      <Name>BlackMagicAdapter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BlackMagic\BlackMagic.csproj">
       <Project>{79FD54B0-DEAB-459F-83B9-F1CED68D288B}</Project>
       <Name>BlackMagic</Name>

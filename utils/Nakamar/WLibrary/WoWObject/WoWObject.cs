@@ -16,7 +16,7 @@ namespace WLibrary
     public class WoWObject
     {
         protected const uint
-            DescriptorFieldsOffset = 0x8,
+            DescriptorFieldsOffset = 0xC,
             XPositionOffset = 0x790,
             YPositionOffset = 0x794,
             ZPositionOffset = 0x798,
@@ -25,8 +25,7 @@ namespace WLibrary
 
         protected const uint // offsets in object descriptor table
             descObjectFieldGuid = 0x0;
-            
-            
+
         protected RawMemoryReader Reader;
 
         public override string ToString()
