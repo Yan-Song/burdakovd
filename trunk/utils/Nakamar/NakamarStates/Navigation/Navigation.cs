@@ -767,11 +767,17 @@ namespace Plugins
             {
                 List<DestinationPoint> candidates = new List<DestinationPoint>();
                 foreach (DestinationPoint d in Destinations.Values)
+                {
                     if (d.Tag == query && Reachable(start, d))
+                    {
                         candidates.Add(d);
+                    }
+                }
                 if (candidates.Count == 0)
+                {
                     throw new Exception("destination not found");
-                destination = candidates[(new Random()).Next(0, candidates.Count)];
+                }
+                destination = candidates[new Random().Next(0, candidates.Count)];
             }
 
             IEnumerable<DestinationPoint> metaRoute = BFS(start, destination);

@@ -8,7 +8,7 @@ namespace WLibrary
         private class ObjectList<T> : IEnumerable<T> where T : WoWObject
         {
             private const uint
-                firstObjectOffset = 0xB4,          // offset from the object manager to the first object
+                firstObjectOffset = 0xC0,          // offset from the object manager to the first object
                 nextObjectOffset = 0x3C;           // offset from one object to the next 
             private uint BaseAddress;
             private RawMemoryReader Reader;
@@ -110,7 +110,9 @@ namespace WLibrary
             foreach(NpcObject npc in NpcObjects)
             {
                 if (npc.Name.Equals(name))
+                {
                     return npc;
+                }
             }
 
             throw new KeyNotFoundException();
