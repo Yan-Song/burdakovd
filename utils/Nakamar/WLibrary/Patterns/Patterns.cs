@@ -15,21 +15,25 @@ namespace WLibrary
         /// </summary>
         public static Pattern ClientConnection =
             new Pattern(
-                "8B 15 FF FF FF FF " + 
-                "89 82 FF FF 00 00 " +
-                "8B 15 FF FF FF FF " +
-                "89 81 FF 00 00 00 " +
+                "8B 34 8A " + 
                 "8B 0D FF FF FF FF " +
-                "89 88 FF 00 00 00",
+                "89 81 FF FF 00 00 " +
+                "8B 15 FF FF FF FF " +
+                "8B 0D FF FF FF FF " +
+                "89 90 FF 00 00 00 " +
+                "8B 15 FF FF FF FF " +
+                "51",
 
+                "xxx" +
                 "xx????" +
                 "xx??xx" +
                 "xx????" +
+                "xx????" +
                 "xx?xxx" +
                 "xx????" +
-                "xx?xxx",
+                "x",
 
-                2);
+                5);
 
         /// <summary>
         /// Место в коде, где можно прочитать смещение указателя на ObjectManager относительно начала структуры ClientConnection.
@@ -37,37 +41,42 @@ namespace WLibrary
         /// </summary>
         public static Pattern ObjectManagerOffset =
             new Pattern(
-                "8B 15 FF FF FF FF " +
-                "89 82 FF FF 00 00 " +
-                "8B 15 FF FF FF FF " +
-                "89 81 FF 00 00 00 " +
+                "8B 34 8A " +
                 "8B 0D FF FF FF FF " +
-                "89 88 FF 00 00 00",
+                "89 81 FF FF 00 00 " +
+                "8B 15 FF FF FF FF " +
+                "8B 0D FF FF FF FF " +
+                "89 90 FF 00 00 00 " +
+                "8B 15 FF FF FF FF " +
+                "51",
 
+                "xxx" +
                 "xx????" +
                 "xx??xx" +
                 "xx????" +
+                "xx????" +
                 "xx?xxx" +
                 "xx????" +
-                "xx?xxx",
+                "x",
 
-                8);
+                11);
 
         /// <summary>
         /// Место в коде, где можно прочитать адрес gameStateId.
+        /// Cheat-o-matic ftw.
         /// </summary>
         public static Pattern GameStateId =
             new Pattern(
                 "cc " +
-                "83 3d FF FF FF FF 00 " +
+                "83 3D FF FF FF FF 00 " +
                 "75 11 " +
-                "e8 FF FF FF FF " +
-                "8b 10 " +
-                "8b c8 " +
-                "8b 82 FF 00 00 00 " +
-                "ff e0 " +
-                "c3 " +
-                "cc",
+                "E8 FF FF FF FF " +
+                "8B 10 " +
+                "8B C8 " +
+                "8B 82 FF 00 00 00 " +
+                "FF E0 " +
+                "C3 " +
+                "CC",
             
                 "x" +
                 "xx????x" +
@@ -157,211 +166,5 @@ namespace WLibrary
                 "x",
                 
                 26);
-
-        // оффсеты ниже не были проверены на совместимость с WoW 4.3
-
-        /// <summary>
-        /// Место в коде, где можно прочитать адрес начала массива имён игроков, возвращённых из последнего запроса /who.
-        /// В случае проблем это место кода можно найти по строке "Usage: GetWhoInfo(index)".
-        /// </summary>
-        public static Pattern LastWhoResultNamesBase =
-            new Pattern(
-                "d9 7d fe " +
-                "0f b7 45 fe " +
-                "0d FF FF 00 00 " +
-                "89 45 f8 " +
-                "83 c4 08 " +
-                "d9 6d f8 " +
-                "df 7d f4 " +
-                "8b 75 f4 " +
-                "4e " +
-                "d9 6d fe " +
-                "3b 35 FF FF FF FF " +
-                "0f 83 FF FF 00 00 " +
-                "69 f6 FF FF 00 00 " +
-                "8d 86 FF FF FF FF " +
-                "50 " +
-                "57 " +
-                "e8 FF FF FF FF",
-
-                "xxx" +
-                "xxxx" +
-                "x??xx" +
-                "xxx" +
-                "xxx" +
-                "xxx" +
-                "xxx" +
-                "xxx" +
-                "x" +
-                "xxx" +
-                "xx????" +
-                "xx??xx" +
-                "xx??xx" +
-                "xx????" +
-                "x" +
-                "x" +
-                "x????",
-
-                51);
-
-        /// <summary>
-        /// Место в коде, где можно прочитать количество байт, выделяемых для каждого имени игрока в массиве /who.
-        /// </summary>
-        public static Pattern WhoResultNameLength =
-            new Pattern(
-                "d9 7d fe " +
-                "0f b7 45 fe " +
-                "0d FF FF 00 00 " +
-                "89 45 f8 " +
-                "83 c4 08 " +
-                "d9 6d f8 " +
-                "df 7d f4 " +
-                "8b 75 f4 " +
-                "4e " +
-                "d9 6d fe " +
-                "3b 35 FF FF FF FF " +
-                "0f 83 FF FF 00 00 " +
-                "69 f6 FF FF 00 00 " +
-                "8d 86 FF FF FF FF " +
-                "50 " +
-                "57 " +
-                "e8 FF FF FF FF",
-
-                "xxx" +
-                "xxxx" +
-                "x??xx" +
-                "xxx" +
-                "xxx" +
-                "xxx" +
-                "xxx" +
-                "xxx" +
-                "x" +
-                "xxx" +
-                "xx????" +
-                "xx??xx" +
-                "xx??xx" +
-                "xx????" +
-                "x" +
-                "x" +
-                "x????",
-
-                45);
-
-        /// <summary>
-        /// Место в коде, где можно прочитать адрес начала буфера чата.
-        /// </summary>
-        public static Pattern ChatBufferBase =
-            new Pattern(
-                "cc " +
-                "55 " +
-                "8b ec " +
-                "8b 0d FF FF FF FF " +
-                "8b 45 08 " +
-                "03 c1 " +
-                "99 " +
-                "b9 FF 00 00 00 " +
-                "f7 f9 " +
-                "8b c2 " +
-                "69 c0 FF FF 00 00 " +
-                "05 FF FF FF FF " +
-                "5d " +
-                "c3 " +
-                "cc",
-
-                "x" +
-                "x" +
-                "xx" +
-                "xx????" +
-                "xxx" +
-                "xx" +
-                "x" +
-                "x?xxx" +
-                "xx" +
-                "xx" +
-                "xx??xx" +
-                "x????" +
-                "x" +
-                "x" +
-                "x",
-
-                32);
-
-        /// <summary>
-        /// Место в коде, где можно прочитать размер одной записи в буфере чата.
-        /// </summary>
-        public static Pattern ChatBufferRecordSize =
-            new Pattern(
-                "cc " +
-                "55 " +
-                "8b ec " +
-                "8b 0d FF FF FF FF " +
-                "8b 45 08 " +
-                "03 c1 " +
-                "99 " +
-                "b9 FF 00 00 00 " +
-                "f7 f9 " +
-                "8b c2 " +
-                "69 c0 FF FF 00 00 " +
-                "05 FF FF FF FF " +
-                "5d " +
-                "c3 " +
-                "cc",
-
-                "x" +
-                "x" +
-                "xx" +
-                "xx????" +
-                "xxx" +
-                "xx" +
-                "x" +
-                "x?xxx" +
-                "xx" +
-                "xx" +
-                "xx??xx" +
-                "x????" +
-                "x" +
-                "x" +
-                "x",
-
-                27);
-
-        /// <summary>
-        /// Место в коде, где можно прочитать смещение текста относительно начала записи в буфере чата.
-        /// </summary>
-        public static Pattern ChatBufferRecordTextOffset =
-            new Pattern(
-                "cc " +
-                "55 " +
-                "8b ec " +
-                "8b 0d FF FF FF FF " +
-                "8b 45 08 " +
-                "03 c1 " +
-                "99 " +
-                "b9 FF 00 00 00 " +
-                "f7 f9 " +
-                "8b c2 " +
-                "69 c0 FF FF 00 00 " +
-                "05 FF FF FF FF " +
-                "5d " +
-                "c3 " +
-                "cc",
-
-                "x" +
-                "x" +
-                "xx" +
-                "xx????" +
-                "xxx" +
-                "xx" +
-                "x" +
-                "x?xxx" +
-                "xx" +
-                "xx" +
-                "xx??xx" +
-                "x????" +
-                "x" +
-                "x" +
-                "x",
-
-                17);
     }
 }
