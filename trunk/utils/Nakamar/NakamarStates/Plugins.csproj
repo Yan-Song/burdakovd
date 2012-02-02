@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="AccountManager\InGameManager.cs" />
     <Compile Include="AccountManager\ReLogger.cs" />
+    <Compile Include="Misc\DoneEverythingWatcher.cs" />
     <Compile Include="Misc\DoNotRestart.cs" />
     <Compile Include="Misc\GoldReporter.cs" />
     <Compile Include="Misc\Idle.cs" />

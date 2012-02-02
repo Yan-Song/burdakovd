@@ -16,6 +16,7 @@ namespace WoWMemoryManager
         public string CurrentState;
         public bool NothingToDo;
         public GuildBankInfo guildBank;
+        public bool doneEverything;
 
         public override string ToString()
         {
