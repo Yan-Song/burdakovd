@@ -465,6 +465,7 @@ local waitingForPostal = function()
                     private.timesEmptyMailboxChecked = 0
                     print("Превышено ограничение на количество неуспешных попыток собрать почту. Работа завершается.")
                     setPauseState()
+                    NDone()
                     return
                 end
             end
