@@ -115,6 +115,7 @@ namespace WoWMemoryManager
                 uint pCurrentState = memoryManager.ReadUInt(p + 16 * ((uint)signature.Count + 4));
                 uint pNothingToDo = memoryManager.ReadUInt(p + 16 * ((uint)signature.Count + 5));
                 uint pGuildStats = memoryManager.ReadUInt(p + 16 * ((uint)signature.Count + 6));
+                uint pDoneEverything = memoryManager.ReadUInt(p + 16 * ((uint)signature.Count + 7));
 
                 // http://www.mmowned.com/forums/wow-memory-editing/108898-memory-reading-chat-w-help-add.html#post717199
                 const uint limit = 1000000;
@@ -126,6 +127,7 @@ namespace WoWMemoryManager
                 string CurrentState = memoryManager.ReadUTF8String(pCurrentState + 0x14, Math.Min(limit, memoryManager.ReadUInt(pCurrentState + 0x10)));
                 string NothingToDo = memoryManager.ReadUTF8String(pNothingToDo + 0x14, Math.Min(limit, memoryManager.ReadUInt(pNothingToDo + 0x10)));
                 string GuildStats = memoryManager.ReadUTF8String(pGuildStats + 0x14, Math.Min(limit, memoryManager.ReadUInt(pGuildStats + 0x10)));
+                string DoneEverything = memoryManager.ReadUTF8String(pDoneEverything + 0x14, Math.Min(limit, memoryManager.ReadUInt(pDoneEverything + 0x10)));
 
                 // если будут частые чтения неконсистентных данных
                 // (ведь синхронизации с WoW никакой нет, а запись строки со стороны аддона не атомарна)
@@ -136,7 +138,7 @@ namespace WoWMemoryManager
                 // то мы можем напороться на устаревшую копию массива -
                 // этому можно противодействовать введением времени в сигнатуру
 
-                return new string[] { text, target, DoNotRestart, NeedPurchaseConfirmation, CurrentState, NothingToDo, GuildStats };
+                return new string[] { text, target, DoNotRestart, NeedPurchaseConfirmation, CurrentState, NothingToDo, GuildStats, DoneEverything };
             }
             catch (Exception ex)
             {
@@ -178,6 +180,8 @@ namespace WoWMemoryManager
             result.NothingToDo = raw[5] == "yes";
 
             result.guildBank = String.IsNullOrEmpty(raw[6]) ? null : new GuildBankInfo(raw[6]);
+
+            result.doneEverything = !String.IsNullOrEmpty(raw[7]);
 
             return LastMessage = result;
         }
