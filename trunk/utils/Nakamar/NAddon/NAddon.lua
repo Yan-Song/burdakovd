@@ -21,10 +21,10 @@ data[1] = 901791
 --data[10] is CurrentState (string) - текущее состояние, его внешний модуль может показывать пользователю
 --data[11] is NothingToDo (yes/no) - в ближайшее достаточно долгое время (часы) этому аккаунту нечего делать
 --data[12] is ':'-separated values - время и результат последнего взаимодействия с гильдбанком
+--data[13] is non-empty string if addon has done everything related to auctioning and has paused
 
 local msgcount = 0
 local lastCommandTime = 0
-
 
 -- функции для взаимодействия с внешним модулем
 
@@ -89,6 +89,10 @@ function NGuildBalance(balance, delta)
 	data[12] = GetRealmName() .. ":" .. faction .. ":" .. player .. ":" .. tostring(time()) .. ":" .. tostring(balance) .. ":" .. tostring(delta)
 end
 
+function NDone()
+  data[13] = "done"
+end
+
 -- инициализация
 
 NSendCommand("nop")
@@ -98,6 +102,7 @@ data[9] = ""
 data[10] = "init"
 data[11] = "no"
 data[12] = ""
+data[13] = ""
 
 ----------------------
 local frame = CreateFrame("Frame")
