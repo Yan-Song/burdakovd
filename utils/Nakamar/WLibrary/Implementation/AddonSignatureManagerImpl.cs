@@ -122,6 +122,7 @@ namespace WLibrary
                             }
                         }
                 }
+                logger("Попытка найти сигнатуру аддона оказалась неуспешной. Поиск занял " + (DateTime.Now - startTime) + " сек.");
             }
             catch (Exception exception)
             {
