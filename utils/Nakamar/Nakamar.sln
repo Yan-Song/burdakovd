@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakamarConsole", "NakamarCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WLibrary", "WLibrary\WLibrary.csproj", "{018580AA-10F3-4167-89DF-D9E699BB4136}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackMagicAdapter", "BlackMagicAdapter\BlackMagicAdapter.csproj", "{323E66D7-C727-43E0-B0D1-ABEE70A2596F}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -99,6 +101,16 @@ Global
 		{018580AA-10F3-4167-89DF-D9E699BB4136}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{018580AA-10F3-4167-89DF-D9E699BB4136}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{018580AA-10F3-4167-89DF-D9E699BB4136}.Release|x86.ActiveCfg = Release|Any CPU
+		{323E66D7-C727-43E0-B0D1-ABEE70A2596F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{323E66D7-C727-43E0-B0D1-ABEE70A2596F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{323E66D7-C727-43E0-B0D1-ABEE70A2596F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{323E66D7-C727-43E0-B0D1-ABEE70A2596F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{323E66D7-C727-43E0-B0D1-ABEE70A2596F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{323E66D7-C727-43E0-B0D1-ABEE70A2596F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{323E66D7-C727-43E0-B0D1-ABEE70A2596F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{323E66D7-C727-43E0-B0D1-ABEE70A2596F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{323E66D7-C727-43E0-B0D1-ABEE70A2596F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{323E66D7-C727-43E0-B0D1-ABEE70A2596F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
