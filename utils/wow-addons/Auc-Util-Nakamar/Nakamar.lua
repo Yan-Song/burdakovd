@@ -185,7 +185,7 @@ local states = {}
 
 local panicState = function(reason)
     --PlaySoundFile("Sound\\Character\\PlayerRoars\\CharacterRoarsDwarfMale.wav")
-        
+
     local text = reason or "причина неизвестна"
     print("Ошибка: " .. text)
     --local timeLeft = random(30, 60)
