@@ -24,6 +24,17 @@ namespace Plugins
 
         public WayPointType PointType { get; private set; }
         public string Name { get; set; }
+
+        public HashSet<string> Names
+        {
+            get
+            {
+                return string.IsNullOrEmpty(Name) ?
+                    new HashSet<string>() :
+                    new HashSet<string>(Name.Split(new char[] {';'}).AsEnumerable());
+            }
+        }
+
         public string Tag { get; set; }
 
         public override double Range

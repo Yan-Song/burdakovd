@@ -592,7 +592,7 @@ namespace Plugins
                     target = "";
                 }
 
-                if (target == npc.Name)
+                if (npc.Names.Contains(target))
                 {
                     Memory.KeyBoard.PressKey(KeyBindings.Interact, true);
                     return InteractResult.Success;
