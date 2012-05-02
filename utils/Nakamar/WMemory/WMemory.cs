@@ -143,6 +143,7 @@ namespace WoWMemoryManager
             catch (Exception ex)
             {
                 Log(string.Format("Не удалось прочитать сообщение от аддона ({0}). Очищаю кэш", ex.Message));
+                Log(ex.ToString());
                 addonSignatureManager.ClearCache();
                 return null;
             }
