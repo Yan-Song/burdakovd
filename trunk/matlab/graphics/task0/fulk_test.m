@@ -1,0 +1,3 @@
+fulk_setup();
+
+runeverything;

@@ -1,0 +1,31 @@
+% setup VOC
+addpath('VOCdevkit/VOCcode/');
+VOCinit();
+
+
+% setup vlfeat
+run('vlfeat-0.9.9/toolbox/vl_setup');
+
+
+% setup random forest
+addpath('randomforest-matlab/RF_Class_C/');
+addpath('randomforest-matlab/RF_Reg_C/');
+
+
+% self setup
+options.maxClass = 20; % VOC convention
+options.neededClasses = [0 15]; % [0 2 7 12 15 19];
+
+options.descriptorsForDictionary = 100000;
+options.dictionarySize = 200;
+options.sift.binSize = 12;
+options.classifierTreeCount = 20;
+options.precedentsPerCategory = 250;
+
+options.classesPath = [VOCopts.datadir '/VOC2007/SegmentationClass/%s.png'];
+options.imagesPath = VOCopts.imgpath;
+
+options.cachingPolicy.use = true;
+options.cachingPolicy.path = 'F:/var/tmp/matlabCache/';
+
+addpath('util/');

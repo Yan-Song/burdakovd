@@ -1,0 +1,193 @@
+function bk = block_vismulti(bk, varargin)
+% BLOCK_VISMULTI Visualize multi-class segmentation problems
+%   Visualize multi-class localization (such as Pascal-07).
+%
+%   BK = BLOCK_VISMULTI() Initializes the block with the default
+%   options.
+%
+%   BK = BLOCK_VISMULTI(BK) Executes the block with options and inputs
+%   BK.
+%
+%   Required input:
+%
+%   db::
+%     The database.
+%
+%   prediction::
+%     The output of the localization classifier.
+%
+%   Fetchable attributes:
+%
+%   report::
+%     A structure containing a report on the results which has fields:
+%     pixelscorrect:  The total percent of pixels which are correct.
+%     accuracies:     The pixel accuracies for each category.
+%     accuracies_int: The intersection-union for each category.
+%     avgacc:         The average of the class accuracies.
+%     avgacc_int:     The average of the intersection-union
+%                     accuracies.
+%     conf:           The full confusion matrix.
+%     cat_names:      Category names used.
+
+% AUTORIGHTS
+% Copyright (c) 2009 Brian Fulkerson and Andrea Vedaldi
+% Blocks is distributed under the terms of the modified BSD license.
+% The full license may be found in LICENSE.
+
+global wrd ;
+
+if nargin == 0
+  bk = bkinit('vismulti', 'db', 'prediction') ;
+  bk.fetch = @fetch__ ;
+  return ;
+end
+
+% --------------------------------------------------------------------
+%                                                    Check/load inputs
+% --------------------------------------------------------------------
+
+[bk, dirty] = bkbegin(bk) ;
+if ~ dirty, return ; end
+
+db = bkfetch(bk.db.tag, 'db') ;
+bkpred = bkfetch(bk.prediction.tag);
+testsel = find([db.segs.flag] == db.TEST);
+
+
+ncats = length(db.cat_names);
+confcounts = zeros(ncats);
+%offset = 1 - min(db.class_ids); % account for 0 bg category if it exists
+
+VOCmap = VOClabelcolormap(256);
+
+outdir = ['f:/var/reports' '/' bk.prediction.tag '/'];
+reportDir = [outdir 'reports/'];
+resultDir = [outdir 'results/'];
+testselFileName = [outdir 'testsel.txt'];
+classesFileName = [outdir 'classes.txt'];
+testselFileNameTmp = [testselFileName '.tmp'];
+if ~exist(reportDir, 'dir')
+    mkdir(reportDir);
+end
+if ~exist(resultDir, 'dir')
+    mkdir(resultDir);
+end
+if exist(testselFileName, 'file')
+    delete(testselFileName);
+end
+reportPath = [reportDir '/%s.png'];
+resultPath = [resultDir '/%s.png'];
+
+idC = fopen(classesFileName, 'w');
+for classId = db.class_ids
+    fprintf(idC, '%d\n', classId);
+end
+fclose(idC);
+
+idsF = fopen(testselFileNameTmp, 'w');
+
+for i = 1:length(testsel)
+  seg_id = db.segs(testsel(i)).seg;
+  seg = db.segs(testsel(i));
+  fprintf(idsF, '%s\n', seg.id);
+  [class confidence] = bkfetch(bkpred, 'test', seg_id);
+  
+  target = 15;
+  original = bkfetch(bk.db.tag, 'image', testsel(i));  
+  etalon = im2uint8(ind2rgb(smartClassReader(seg), VOCmap));
+  predicted_idx = uint8(db.class_ids(class));
+  predicted = im2uint8(ind2rgb(predicted_idx, VOCmap));
+  chances = im2uint8(ind2rgb(uint8(floor(addLegend(confidence(:, :, db.class_ids == target) ./ sum(confidence, 3)) * 10.99)), redbluecmap(11)));
+  
+  h = max([size(original, 1), size(etalon, 1), size(predicted, 1), size(chances, 1)]) + 10;
+  w = max([size(original, 2), size(etalon, 2), size(predicted, 2), size(chances, 2)]) + 10;
+  report = [addBorder(original, h, w) addBorder(etalon, h, w); addBorder(predicted, h, w) addBorder(chances, h, w)];
+  
+  imwrite(predicted_idx, VOCmap, sprintf(resultPath, db.segs(seg_id).id));
+  imwrite(report, sprintf(reportPath, db.segs(seg_id).id));
+  
+  % TODO: Thresh is broken for crf case
+  if isfield(bk, 'thresh')
+    error('unimplemented');
+    %bgid = 21;
+    %mconf = max(confidence,[],3);
+    %ind = find(mconf < bk.thresh);
+    %class(ind) = bgid;
+  end
+
+  gtim = double(makeIndexes(smartClassReader(seg), db.class_ids));
+  resim = class;
+
+  locs = gtim < 255; %exclude border / void regions
+  ind = find(locs);
+  %sumim = offset + gtim + (resim-(1-offset))*ncats;
+  sumim = gtim + (resim - 1) * ncats;
+  confcounts(:) = vl_binsum(confcounts(:), ones(size(ind)), sumim(ind));
+  fprintf('block_vismulti: %d/%d\r', i, length(testsel));
+
+end
+
+fclose(idsF);
+movefile(testselFileNameTmp, testselFileName);
+
+
+conf = zeros(ncats);
+rawcounts = confcounts;
+overall_acc = 100*sum(diag(confcounts)) / sum(confcounts(:));
+
+accuracies = zeros(ncats,1);
+accuracies_int = zeros(ncats,1);
+for j = 1:ncats
+  rowsum = sum(confcounts(j,:));
+  if rowsum > 0, conf(j, :) = 100*confcounts(j,:)/rowsum; end;
+  accuracies(j) = conf(j,j);
+
+  gtj=sum(confcounts(j,:));
+  resj=sum(confcounts(:,j));
+  gtjresj=confcounts(j,j);
+  % The accuracy is: true positive / (true positive + false positive + false negative) 
+  % which is equivalent to the following percentage:
+  accuracies_int(j)=100*gtjresj/(gtj+resj-gtjresj);   
+end
+
+report = struct();
+report.pixelscorrect = overall_acc;
+report.accuracies = accuracies;
+report.accuracies_int = accuracies_int;
+report.avgacc = mean(accuracies);
+report.avgacc_int = mean(accuracies_int);
+report.conf = conf;
+%[sorted ind] = sort(db.class_ids); 
+% reorder the class names to match the confusion
+report.cat_names = db.cat_names;
+
+fprintf('block_vismulti: *********************************\n');
+fprintf('block_vismulti: %% pixels labeled correctly %4.2f%%\n', overall_acc);
+fprintf('Accuracy: ');
+fprintf('%.2f ', accuracies);
+fprintf('\nAverage: %.2f\n', report.avgacc);
+fprintf('Accuracy (Intersection/Union): ');
+fprintf('%.2f ', accuracies_int);
+fprintf('\nAverage (Intersection/Union): %.2f\n', report.avgacc_int);
+fprintf('block_vismulti: *********************************\n');
+save(fullfile(wrd.prefix, bk.tag, 'report.mat'), ...
+     '-STRUCT', 'report', '-MAT') ;
+
+bk = bkend(bk) ;
+
+% --------------------------------------------------------------------
+function varargout = fetch__(bk, what, varargin)
+% --------------------------------------------------------------------
+
+global wrd ;
+
+switch lower(what)
+  case 'report'
+    report = load(fullfile(wrd.prefix, bk.tag, 'report.mat'));
+    varargout{1} = report;
+
+  otherwise
+    error(sprintf('Unknown ''%s''.', what)) ;
+end
+
+

@@ -1,0 +1,1878 @@
+p07:
+21 класс
+Используется 213 под TEST (val.txt)
+209 под TRAIN (из них 100 под VALIDATION для CRF) (train.txt)
+
+----------------------------------------------------------
+
+p07s: train.txt
+21 класс
+Используется 100 под TEST (101..200)
+100 под TRAIN (1..100) (из них 50 под VALIDATION для CRF)
+
+---------------------------------------------------
+
+p07s6: train.txt
+6 классов
+Используется 100 под TEST (101..200)
+100 под TRAIN (1..100) (из них 50 под VALIDATION для CRF)
+
+---------------------------------------------------
+
+p07ss2: train.txt
+2 класса
+Используется 10 под TEST (11..20)
+10 под TRAIN (1..10)
+
+---------------------------------------------------
+
+p07s2: train.txt
+2 класса
+Используется 100 под TEST (101..200)
+100 под TRAIN (1..100)
+
+---------------------------------------------------
+
+---------------------------------------------------
+
+Report: testcrf@p07_p07dsift3_m_0_250_svm_gridsearch
+
+  Pixel accuracy:   17
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   8 |   8 |  11 |  16 |   6 |   7 |  10 |  20 |  11 |   5 |  10 |  30 |  11 |   7 |   5 |   6 |   3 |  23 |  10 |  21 |  20 |   12 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   2 |   1 |   3 |   1 |   1 |   3 |   2 |   5 |   2 |   1 |   3 |   3 |   2 |   4 |   4 |   1 |   2 |   2 |   4 |   1 |  19 |    3 
+
+
+---------------------------------------------------
+
+Report: testseg@p07_p07dsift3_m_0_250_svm
+
+  Pixel accuracy:   16
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   8 |   8 |   9 |  16 |   6 |   7 |  11 |  21 |  11 |   5 |  10 |  30 |  11 |   7 |   5 |   6 |   3 |  23 |  10 |  21 |  18 |   12 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   2 |   1 |   3 |   1 |   1 |   3 |   2 |   5 |   2 |   1 |   3 |   3 |   2 |   4 |   4 |   1 |   2 |   1 |   4 |   1 |  17 |    3 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07_p07dsift3_m_2_250_svm_gridsearch
+
+  Pixel accuracy:   65
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   0 |   6 |  14 |   0 |  19 |  15 |  39 |   2 |   6 |   0 |  19 |  48 |  15 |  20 |  69 |   2 |   0 |  16 |  15 |  16 |  78 |   19 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   0 |   1 |   6 |   0 |  11 |   9 |   9 |   2 |   5 |   0 |  11 |  13 |   8 |  14 |  24 |   1 |   0 |   6 |   9 |   6 |  71 |   10 
+
+
+---------------------------------------------------
+
+Report: testseg@p07_p07dsift3_m_2_250_svm
+
+  Pixel accuracy:   51
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   4 |  10 |  14 |   7 |  12 |  18 |  39 |  12 |   8 |   1 |  15 |  44 |  20 |  20 |  57 |   4 |   0 |  18 |  15 |  23 |  61 |   19 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   3 |   1 |   4 |   4 |   4 |   8 |   7 |   7 |   3 |   0 |   6 |  11 |   5 |  12 |  19 |   1 |   0 |   4 |   8 |   4 |  57 |    8 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07_p07dsift3ikm200_m_0_250_svm_gridsearch
+
+  Pixel accuracy:   13
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   7 |   5 |   9 |  16 |   9 |   8 |  10 |  33 |   9 |   3 |   8 |  29 |  12 |   9 |   6 |   6 |   5 |  21 |  10 |  31 |  14 |   12 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   2 |   1 |   2 |   1 |   1 |   3 |   2 |   7 |   2 |   1 |   2 |   3 |   3 |   5 |   4 |   1 |   3 |   1 |   4 |   2 |  14 |    3 
+
+
+---------------------------------------------------
+
+Report: testseg@p07_p07dsift3ikm200_m_0_250_svm
+
+  Pixel accuracy:   12
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   9 |   5 |  10 |  16 |   9 |   8 |  11 |  22 |   9 |   3 |   8 |  29 |  12 |   9 |   6 |   6 |   5 |  21 |  10 |  31 |  12 |   12 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   2 |   1 |   2 |   1 |   1 |   3 |   2 |   5 |   1 |   1 |   2 |   3 |   3 |   5 |   4 |   1 |   3 |   1 |   4 |   2 |  12 |    3 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07_p07dsift3ikm200_m_2_250_svm_gridsearch
+
+  Pixel accuracy:   61
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   3 |   5 |  15 |   4 |  17 |  20 |  43 |   8 |   7 |   0 |  13 |  45 |  20 |  21 |  61 |   3 |   0 |  15 |  17 |  18 |  73 |   20 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   2 |   1 |   4 |   3 |   9 |  11 |   8 |   6 |   3 |   0 |   7 |  16 |   8 |  14 |  22 |   2 |   0 |   5 |  10 |   5 |  67 |   10 
+
+
+---------------------------------------------------
+
+Report: testseg@p07_p07dsift3ikm200_m_2_250_svm
+
+  Pixel accuracy:   48
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   5 |   7 |  15 |  12 |  13 |  19 |  44 |  11 |  10 |   1 |  14 |  41 |  20 |  21 |  52 |   5 |   0 |  18 |  15 |  29 |  57 |   19 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   3 |   1 |   4 |   5 |   5 |   8 |   7 |   6 |   3 |   0 |   6 |  11 |   5 |  12 |  18 |   1 |   0 |   3 |   8 |   4 |  53 |    8 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07off_p07offdsift3_m_0_250_svm_gridsearch
+
+  Pixel accuracy:   13
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  12 |   8 |   5 |  10 |   7 |   3 |   8 |  28 |  12 |  14 |  18 |  17 |   6 |  18 |   4 |  12 |   8 |  28 |  12 |  20 |  14 |   13 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   3 |   2 |   2 |   1 |   2 |   2 |   3 |   5 |   1 |   2 |   3 |   3 |   2 |   8 |   3 |   1 |   2 |   2 |   5 |   2 |  14 |    3 
+
+
+---------------------------------------------------
+
+Report: testseg@p07off_p07offdsift3_m_0_250_svm
+
+  Pixel accuracy:   13
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  11 |   8 |   5 |  13 |   7 |   4 |   8 |  29 |  12 |  14 |  18 |  17 |   6 |  18 |   4 |  12 |   8 |  25 |  12 |  19 |  13 |   13 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   2 |   2 |   2 |   2 |   1 |   2 |   3 |   5 |   1 |   2 |   3 |   3 |   2 |   8 |   4 |   1 |   2 |   2 |   5 |   2 |  13 |    3 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07off_p07offdsift3_m_2_250_svm_gridsearch
+
+  Pixel accuracy:   54
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  20 |  31 |   8 |   7 |   5 |  15 |  16 |  40 |  15 |   6 |  18 |  43 |  20 |  47 |  54 |   4 |   0 |  16 |  34 |  22 |  64 |   23 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   6 |   8 |   4 |   4 |   2 |   7 |   7 |  13 |   3 |   3 |   9 |  14 |   8 |  25 |  24 |   2 |   0 |   5 |  14 |   6 |  60 |   11 
+
+
+---------------------------------------------------
+
+Report: testseg@p07off_p07offdsift3_m_2_250_svm
+
+  Pixel accuracy:   42
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  20 |  27 |  13 |   5 |  12 |  14 |  17 |  38 |  15 |  10 |  18 |  38 |  20 |  42 |  47 |   6 |   0 |  17 |  30 |  24 |  48 |   22 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   5 |   6 |   5 |   2 |   3 |   5 |   7 |  11 |   2 |   4 |   7 |  12 |   6 |  20 |  20 |   1 |   0 |   4 |  11 |   5 |  46 |    9 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07off_p07offdsift3ikm200_m_0_250_svm_gridsearch
+
+  Pixel accuracy:   13
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   7 |   8 |   7 |  20 |   7 |   4 |   9 |  28 |   9 |  10 |  12 |  15 |   6 |  13 |   4 |  14 |   9 |  21 |  13 |  17 |  14 |   12 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   1 |   3 |   3 |   2 |   1 |   2 |   3 |   4 |   1 |   2 |   2 |   3 |   2 |   6 |   3 |   1 |   2 |   2 |   5 |   2 |  13 |    3 
+
+
+---------------------------------------------------
+
+Report: testseg@p07off_p07offdsift3ikm200_m_0_250_svm
+
+  Pixel accuracy:   12
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  12 |   8 |   7 |  12 |   7 |   4 |   9 |  30 |   9 |  10 |  13 |  15 |   6 |  13 |   4 |  14 |   9 |  22 |  13 |  17 |  13 |   12 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   2 |   3 |   2 |   1 |   1 |   2 |   3 |   5 |   1 |   2 |   3 |   3 |   2 |   6 |   3 |   1 |   2 |   2 |   5 |   2 |  13 |    3 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07off_p07offdsift3ikm200_m_2_250_svm_gridsearch
+
+  Pixel accuracy:   54
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  12 |  39 |  12 |   6 |   6 |  15 |  19 |  45 |  20 |   4 |  22 |  48 |  15 |  52 |  50 |   8 |   0 |   6 |  32 |  35 |  65 |   24 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   3 |  12 |   6 |   3 |   2 |   6 |   9 |  14 |   4 |   2 |  11 |  16 |   5 |  27 |  24 |   3 |   0 |   2 |  13 |   9 |  61 |   11 
+
+
+---------------------------------------------------
+
+Report: testseg@p07off_p07offdsift3ikm200_m_2_250_svm
+
+  Pixel accuracy:   40
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  21 |  31 |  15 |   8 |  10 |  15 |  20 |  33 |  14 |  11 |  17 |  39 |  18 |  45 |  42 |   9 |   0 |  17 |  25 |  30 |  46 |   22 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   5 |   7 |   6 |   2 |   3 |   5 |   8 |  10 |   2 |   4 |   6 |  12 |   4 |  21 |  20 |   2 |   0 |   4 |   9 |   6 |  44 |    8 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees20
+
+  Pixel accuracy:   90
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   1 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  90 |   1 |   45 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees20_nowt
+
+  Pixel accuracy:   90
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   1 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  90 |   1 |   45 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees40
+
+  Pixel accuracy:   90
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  90 |   0 |   45 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees40_nowt
+
+  Pixel accuracy:   90
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  90 |   0 |   45 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200
+
+  Pixel accuracy:   62
+
+  Class accuracy:
+     backg perso   mean
+    |  60 |  74 |   67 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  59 |  17 |   38 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200_nowt
+
+  Pixel accuracy:   62
+
+  Class accuracy:
+     backg perso   mean
+    |  60 |  74 |   67 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  59 |  17 |   38 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20
+
+  Pixel accuracy:   61
+
+  Class accuracy:
+     backg perso   mean
+    |  60 |  72 |   66 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  58 |  16 |   37 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20_nowt
+
+  Pixel accuracy:   61
+
+  Class accuracy:
+     backg perso   mean
+    |  60 |  72 |   66 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  58 |  16 |   37 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees20
+
+  Pixel accuracy:   89
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   1 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  89 |   1 |   45 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees20_nowt
+
+  Pixel accuracy:   90
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   1 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  90 |   1 |   45 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees40
+
+  Pixel accuracy:   90
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   1 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  90 |   1 |   45 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees40_nowt
+
+  Pixel accuracy:   90
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  90 |   0 |   45 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200
+
+  Pixel accuracy:   63
+
+  Class accuracy:
+     backg perso   mean
+    |  61 |  74 |   68 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  60 |  17 |   38 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200_nowt
+
+  Pixel accuracy:   63
+
+  Class accuracy:
+     backg perso   mean
+    |  61 |  74 |   68 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  60 |  17 |   38 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20
+
+  Pixel accuracy:   62
+
+  Class accuracy:
+     backg perso   mean
+    |  60 |  72 |   66 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  58 |  16 |   37 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20_nowt
+
+  Pixel accuracy:   62
+
+  Class accuracy:
+     backg perso   mean
+    |  60 |  72 |   66 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  58 |  16 |   37 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees20
+
+  Pixel accuracy:   89
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   1 |   51 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  89 |   1 |   45 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees20_nowt
+
+  Pixel accuracy:   89
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   1 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  89 |   1 |   45 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees40
+
+  Pixel accuracy:   90
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   1 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  90 |   1 |   45 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees40_nowt
+
+  Pixel accuracy:   90
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  90 |   0 |   45 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200
+
+  Pixel accuracy:   67
+
+  Class accuracy:
+     backg perso   mean
+    |  66 |  72 |   69 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  64 |  18 |   41 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200_nowt
+
+  Pixel accuracy:   67
+
+  Class accuracy:
+     backg perso   mean
+    |  66 |  72 |   69 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  64 |  18 |   41 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20
+
+  Pixel accuracy:   64
+
+  Class accuracy:
+     backg perso   mean
+    |  63 |  69 |   66 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  61 |  17 |   39 
+
+
+---------------------------------------------------
+
+Report: my@p07s2_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20_nowt
+
+  Pixel accuracy:   64
+
+  Class accuracy:
+     backg perso   mean
+    |  63 |  69 |   66 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  61 |  17 |   39 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees20
+
+  Pixel accuracy:   85
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    | 100 |   0 |   0 |   0 |   0 |   0 |   17 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  85 |   0 |   0 |   0 |   0 |   0 |   14 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees20_nowt
+
+  Pixel accuracy:   85
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    | 100 |   0 |   0 |   0 |   0 |   0 |   17 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  85 |   0 |   0 |   0 |   0 |   0 |   14 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees40
+
+  Pixel accuracy:   85
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    | 100 |   0 |   0 |   0 |   0 |   0 |   17 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  85 |   0 |   0 |   0 |   0 |   0 |   14 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees40_nowt
+
+  Pixel accuracy:   85
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    | 100 |   0 |   0 |   0 |   0 |   0 |   17 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  85 |   0 |   0 |   0 |   0 |   0 |   14 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200
+
+  Pixel accuracy:   27
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  27 |   6 |  35 |  72 |  19 |  49 |   35 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  27 |   1 |   4 |   3 |  10 |   4 |    8 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200_nowt
+
+  Pixel accuracy:   28
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  28 |   7 |  32 |  70 |  18 |  50 |   34 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  27 |   1 |   3 |   3 |  10 |   4 |    8 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20
+
+  Pixel accuracy:   28
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  28 |   7 |  28 |  58 |  23 |  40 |   30 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  27 |   1 |   3 |   3 |  11 |   3 |    8 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20_nowt
+
+  Pixel accuracy:   27
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  26 |   8 |  27 |  59 |  23 |  42 |   31 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  26 |   1 |   3 |   3 |  11 |   3 |    8 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees20
+
+  Pixel accuracy:   85
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    | 100 |   0 |   0 |   0 |   0 |   0 |   17 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  85 |   0 |   0 |   0 |   0 |   0 |   14 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees20_nowt
+
+  Pixel accuracy:   85
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    | 100 |   0 |   0 |   0 |   0 |   0 |   17 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  85 |   0 |   0 |   0 |   0 |   0 |   14 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees40
+
+  Pixel accuracy:   85
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    | 100 |   0 |   0 |   0 |   0 |   0 |   17 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  85 |   0 |   0 |   0 |   0 |   0 |   14 
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200
+
+  Pixel accuracy:   29
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  29 |   7 |  36 |  73 |  17 |  48 |   35 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  29 |   1 |   4 |   3 |  10 |   4 |    8 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200_nowt
+
+  Pixel accuracy:   29
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  30 |   7 |  35 |  72 |  17 |  48 |   35 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  29 |   1 |   4 |   3 |  10 |   4 |    8 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20
+
+  Pixel accuracy:   28
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  28 |   8 |  29 |  62 |  21 |  41 |   31 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  27 |   1 |   3 |   3 |  10 |   3 |    8 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20_nowt
+
+  Pixel accuracy:   28
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  29 |   9 |  28 |  59 |  21 |  41 |   31 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  28 |   1 |   3 |   3 |  10 |   3 |    8 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees20
+
+  Pixel accuracy:   85
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    | 100 |   0 |   0 |   0 |   0 |   0 |   17 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  85 |   0 |   0 |   0 |   0 |   0 |   14 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees20_nowt
+
+  Pixel accuracy:   85
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    | 100 |   0 |   0 |   0 |   0 |   0 |   17 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  85 |   0 |   0 |   0 |   0 |   0 |   14 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees40
+
+  Pixel accuracy:   85
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    | 100 |   0 |   0 |   0 |   0 |   0 |   17 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  85 |   0 |   0 |   0 |   0 |   0 |   14 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees40_nowt
+
+  Pixel accuracy:   85
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    | 100 |   0 |   0 |   0 |   0 |   0 |   17 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  85 |   0 |   0 |   0 |   0 |   0 |   14 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200
+
+  Pixel accuracy:   29
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  30 |   7 |  36 |  76 |  14 |  46 |   35 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  30 |   1 |   4 |   3 |   9 |   4 |    8 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200_nowt
+
+  Pixel accuracy:   30
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  30 |   7 |  39 |  76 |  15 |  46 |   36 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  30 |   1 |   4 |   3 |   9 |   4 |    9 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20
+
+  Pixel accuracy:   29
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  29 |   8 |  27 |  61 |  20 |  40 |   31 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  28 |   1 |   3 |   3 |  10 |   3 |    8 
+
+
+---------------------------------------------------
+
+Report: my@p07s6_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20_nowt
+
+  Pixel accuracy:   29
+
+  Class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  29 |   8 |  30 |  60 |  22 |  39 |   31 
+
+  Intersection/union class accuracy:
+     backg bicyc   car   dog perso train   mean
+    |  28 |   1 |   3 |   3 |  11 |   3 |    8 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07s6_p07s6dsift3_m_0_250_svm_gridsearch
+
+  Pixel accuracy:   42
+
+  Class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |  12 |   0 |  56 |  34 |  52 |  43 |   33 
+
+  Intersection/union class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |   1 |   0 |   4 |  15 |   4 |  42 |   11 
+
+
+---------------------------------------------------
+
+Report: testseg@p07s6_p07s6dsift3_m_0_250_svm
+
+  Pixel accuracy:   40
+
+  Class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |  12 |   0 |  55 |  34 |  52 |  42 |   32 
+
+  Intersection/union class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |   1 |   0 |   3 |  15 |   4 |  40 |   11 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07s6_p07s6dsift3_m_2_250_svm_gridsearch
+
+  Pixel accuracy:   77
+
+  Class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |   0 |   0 |  30 |  60 |  22 |  82 |   32 
+
+  Intersection/union class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |   0 |   0 |  10 |  28 |  11 |  76 |   21 
+
+
+---------------------------------------------------
+
+Report: testseg@p07s6_p07s6dsift3_m_2_250_svm
+
+  Pixel accuracy:   76
+
+  Class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |   0 |   0 |  30 |  61 |  21 |  81 |   32 
+
+  Intersection/union class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |   0 |   0 |  10 |  27 |  10 |  75 |   20 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07s6_p07s6dsift3ikm200_m_0_250_svm_gridsearch
+
+  Pixel accuracy:   41
+
+  Class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |  10 |   0 |  59 |  23 |  52 |  43 |   31 
+
+  Intersection/union class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |   1 |   0 |   3 |  13 |   4 |  42 |   10 
+
+
+---------------------------------------------------
+
+Report: testseg@p07s6_p07s6dsift3ikm200_m_0_250_svm
+
+  Pixel accuracy:   40
+
+  Class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |  10 |   0 |  64 |  23 |  52 |  42 |   32 
+
+  Intersection/union class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |   1 |   0 |   4 |  12 |   4 |  41 |   10 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07s6_p07s6dsift3ikm200_m_2_250_svm_gridsearch
+
+  Pixel accuracy:   77
+
+  Class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |   0 |   0 |  24 |  56 |  28 |  83 |   32 
+
+  Intersection/union class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |   0 |   0 |  10 |  26 |  14 |  76 |   21 
+
+
+---------------------------------------------------
+
+Report: testseg@p07s6_p07s6dsift3ikm200_m_2_250_svm
+
+  Pixel accuracy:   74
+
+  Class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |   0 |   0 |  33 |  58 |  33 |  78 |   34 
+
+  Intersection/union class accuracy:
+     bicyc   car   dog perso train backg   mean
+    |   0 |   0 |  10 |  24 |  14 |  73 |   20 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees20
+
+  Pixel accuracy:   70
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  98 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   1 |   0 |   0 |   0 |   0 |   0 |    5 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  70 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   1 |   0 |   0 |   0 |   0 |   0 |    3 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees20_nowt
+
+  Pixel accuracy:   70
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  98 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   1 |   0 |   0 |   0 |   0 |   0 |    5 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  70 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   1 |   0 |   0 |   0 |   0 |   0 |    3 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200
+
+  Pixel accuracy:   16
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  19 |  24 |   3 |   0 |   2 |   5 |   6 |   5 |  26 |   3 |  14 |   6 |  32 |  10 |  14 |   4 |   8 |   0 |   4 |  15 |   4 |   10 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  18 |   0 |   1 |   0 |   1 |   1 |   3 |   2 |   2 |   1 |   1 |   2 |   3 |   2 |   3 |   3 |   0 |   0 |   1 |   4 |   1 |    2 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200_nowt
+
+  Pixel accuracy:   16
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  19 |  20 |   3 |   0 |   3 |   8 |   5 |   8 |  29 |   2 |  12 |   5 |  36 |  11 |  12 |   4 |   8 |   1 |   5 |  19 |   5 |   10 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  18 |   0 |   1 |   0 |   1 |   1 |   2 |   3 |   2 |   1 |   1 |   1 |   3 |   2 |   2 |   4 |   0 |   0 |   2 |   4 |   2 |    3 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20
+
+  Pixel accuracy:   12
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  14 |  11 |   4 |   1 |   1 |   6 |   5 |   6 |  18 |   4 |  10 |   7 |  23 |  11 |  12 |   8 |   8 |   7 |   6 |  14 |   4 |    8 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  14 |   0 |   1 |   0 |   0 |   1 |   2 |   2 |   2 |   1 |   1 |   2 |   3 |   2 |   2 |   5 |   0 |   1 |   2 |   2 |   1 |    2 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20_nowt
+
+  Pixel accuracy:   13
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  14 |  16 |   3 |   1 |   3 |   1 |   6 |   7 |  18 |   4 |  12 |   7 |  27 |  12 |  15 |   8 |   8 |   7 |   8 |  14 |   5 |    9 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  14 |   0 |   1 |   1 |   1 |   0 |   3 |   2 |   2 |   1 |   1 |   2 |   3 |   2 |   2 |   5 |   0 |   1 |   2 |   3 |   1 |    2 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees20
+
+  Pixel accuracy:   70
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  98 |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   1 |   1 |   0 |   0 |   0 |   0 |   0 |    5 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  70 |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   1 |   1 |   0 |   0 |   0 |   0 |   0 |    3 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees20_nowt
+
+  Pixel accuracy:   70
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  98 |   0 |   0 |   0 |   0 |   0 |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   1 |   2 |   0 |   0 |   0 |   0 |   0 |    5 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  70 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   1 |   1 |   0 |   0 |   0 |   0 |   0 |    3 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees40
+
+  Pixel accuracy:   70
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  98 |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |    5 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  70 |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |    3 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees40_nowt
+
+  Pixel accuracy:   70
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  98 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |    5 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  70 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |    3 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200
+
+  Pixel accuracy:   16
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  20 |  28 |   3 |   1 |   2 |   4 |   6 |   6 |  24 |   1 |  14 |   5 |  34 |  11 |  16 |   4 |   9 |   1 |   5 |  14 |   4 |   10 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  19 |   0 |   1 |   0 |   1 |   1 |   3 |   3 |   2 |   0 |   1 |   1 |   3 |   3 |   3 |   3 |   1 |   0 |   1 |   4 |   1 |    2 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200_nowt
+
+  Pixel accuracy:   16
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  19 |  25 |   3 |   0 |   2 |   3 |   6 |   8 |  29 |   1 |  12 |   6 |  34 |  12 |  16 |   4 |   8 |   0 |   3 |  16 |   4 |   10 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  19 |   0 |   1 |   0 |   1 |   1 |   3 |   3 |   2 |   0 |   1 |   2 |   3 |   3 |   3 |   3 |   0 |   0 |   1 |   4 |   1 |    2 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20
+
+  Pixel accuracy:   12
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  14 |  20 |   3 |   1 |   3 |   3 |   4 |   7 |  17 |   3 |  12 |   6 |  19 |  12 |   9 |   8 |   5 |   2 |   6 |  13 |   5 |    8 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  14 |   1 |   1 |   1 |   1 |   0 |   2 |   2 |   2 |   1 |   1 |   1 |   2 |   2 |   1 |   6 |   0 |   0 |   1 |   2 |   1 |    2 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20_nowt
+
+  Pixel accuracy:   13
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  14 |  15 |   3 |   1 |   2 |   2 |   6 |   9 |  19 |   2 |  10 |   8 |  22 |  11 |  11 |   9 |   9 |   1 |   8 |  13 |   6 |    9 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  14 |   0 |   1 |   1 |   1 |   0 |   2 |   3 |   2 |   1 |   1 |   2 |   3 |   2 |   2 |   6 |   0 |   0 |   2 |   2 |   1 |    2 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees20
+
+  Pixel accuracy:   69
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  97 |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   1 |   1 |   0 |   0 |   0 |   0 |   0 |    5 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  70 |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   1 |   1 |   0 |   0 |   0 |   0 |   0 |    4 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees20_nowt
+
+  Pixel accuracy:   69
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  97 |   0 |   0 |   0 |   0 |   0 |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   1 |   1 |   0 |   0 |   0 |   0 |   0 |    5 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  70 |   0 |   0 |   0 |   0 |   0 |   1 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   1 |   1 |   0 |   0 |   0 |   0 |   0 |    3 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200
+
+  Pixel accuracy:   17
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  21 |  23 |   4 |   1 |   2 |   4 |   5 |   5 |  29 |   1 |  11 |   6 |  33 |  12 |  14 |   3 |  10 |   0 |   4 |  15 |   3 |   10 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  20 |   0 |   1 |   0 |   1 |   0 |   2 |   2 |   2 |   0 |   1 |   2 |   3 |   3 |   3 |   3 |   1 |   0 |   1 |   4 |   1 |    2 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200_nowt
+
+  Pixel accuracy:   17
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  21 |  24 |   4 |   0 |   1 |   4 |   5 |   7 |  27 |   3 |  11 |   7 |  34 |  12 |  12 |   3 |   8 |   0 |   4 |  19 |   4 |   10 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  20 |   0 |   1 |   0 |   0 |   1 |   2 |   3 |   2 |   1 |   1 |   2 |   3 |   3 |   3 |   3 |   0 |   0 |   1 |   4 |   1 |    3 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20
+
+  Pixel accuracy:   12
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  14 |  16 |   4 |   1 |   4 |   3 |   6 |   6 |  18 |   3 |   9 |   7 |  24 |  11 |  11 |   8 |   5 |   0 |   6 |  14 |   4 |    8 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  13 |   0 |   1 |   1 |   1 |   0 |   3 |   2 |   2 |   1 |   1 |   2 |   3 |   2 |   1 |   5 |   0 |   0 |   1 |   3 |   1 |    2 
+
+
+---------------------------------------------------
+
+Report: my@p07s_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20_nowt
+
+  Pixel accuracy:   14
+
+  Class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  15 |  16 |   3 |   1 |   2 |   3 |   8 |   8 |  17 |   5 |  11 |   5 |  24 |  12 |  14 |   8 |   8 |   0 |   7 |  14 |   7 |    9 
+
+  Intersection/union class accuracy:
+     backg aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon   mean
+    |  15 |   0 |   1 |   1 |   1 |   0 |   3 |   2 |   2 |   1 |   1 |   1 |   3 |   2 |   2 |   6 |   0 |   0 |   2 |   2 |   2 |    2 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07s_p07sdsift3_m_0_250_svm_gridsearch
+
+  Pixel accuracy:   19
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  23 |   3 |   2 |   6 |  15 |   8 |   0 |  22 |   7 |  12 |   5 |  19 |   8 |  21 |   5 |   8 |   3 |  13 |  22 |   5 |  24 |   11 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   0 |   1 |   1 |   1 |   2 |   2 |   0 |   2 |   2 |   2 |   1 |   3 |   2 |   3 |   4 |   0 |   1 |   2 |   4 |   2 |  23 |    3 
+
+
+---------------------------------------------------
+
+Report: testseg@p07s_p07sdsift3_m_0_250_svm
+
+  Pixel accuracy:   19
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  23 |   3 |   2 |   6 |  15 |   8 |   0 |  31 |   7 |  12 |   5 |  21 |   8 |  21 |   5 |   8 |   3 |  15 |  22 |   5 |  23 |   12 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   1 |   1 |   1 |   1 |   2 |   3 |   0 |   3 |   2 |   2 |   1 |   3 |   2 |   3 |   4 |   0 |   1 |   3 |   4 |   2 |  22 |    3 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07s_p07sdsift3_m_2_250_svm_gridsearch
+
+  Pixel accuracy:   60
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  37 |   0 |   0 |   9 |   1 |  25 |   0 |  20 |   3 |   2 |   2 |  19 |   3 |  47 |  56 |   0 |   0 |   0 |  18 |   0 |  73 |   15 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   2 |   0 |   0 |   4 |   1 |   7 |   0 |   5 |   2 |   1 |   2 |   7 |   2 |   9 |  28 |   0 |   0 |   0 |  13 |   0 |  64 |    7 
+
+
+---------------------------------------------------
+
+Report: testseg@p07s_p07sdsift3_m_2_250_svm
+
+  Pixel accuracy:   59
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  39 |   0 |   0 |   9 |   1 |  25 |   0 |  21 |   2 |   2 |   2 |  21 |   3 |  47 |  55 |   0 |   0 |   0 |  18 |   0 |  73 |   15 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   2 |   0 |   0 |   4 |   1 |   7 |   0 |   5 |   1 |   1 |   2 |   7 |   2 |   9 |  28 |   0 |   0 |   0 |  13 |   0 |  63 |    7 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07s_p07sdsift3ikm200_m_0_250_svm_gridsearch
+
+  Pixel accuracy:   22
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  21 |   4 |   2 |   8 |  19 |   8 |   0 |  19 |   8 |  13 |   4 |  15 |  11 |  21 |   4 |   8 |   2 |   9 |  24 |   3 |  28 |   11 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   0 |   1 |   1 |   1 |   2 |   3 |   0 |   2 |   2 |   2 |   1 |   3 |   2 |   2 |   4 |   0 |   0 |   2 |   5 |   1 |  26 |    3 
+
+
+---------------------------------------------------
+
+Report: testseg@p07s_p07sdsift3ikm200_m_0_250_svm
+
+  Pixel accuracy:   20
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  21 |   4 |   2 |  11 |  19 |   8 |   0 |  22 |   8 |  13 |   4 |  16 |  11 |  21 |   4 |   8 |   2 |  10 |  24 |   3 |  24 |   11 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   0 |   1 |   1 |   1 |   2 |   3 |   0 |   2 |   2 |   2 |   1 |   3 |   2 |   2 |   4 |   0 |   0 |   2 |   5 |   1 |  23 |    3 
+
+
+---------------------------------------------------
+
+Report: testcrf@p07s_p07sdsift3ikm200_m_2_250_svm_gridsearch
+
+  Pixel accuracy:   61
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  34 |   0 |   0 |   9 |   2 |  33 |   0 |  14 |   1 |   1 |   0 |  22 |   4 |  61 |  52 |   0 |   0 |   0 |  18 |   0 |  75 |   16 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   3 |   0 |   0 |   3 |   2 |   8 |   0 |   4 |   0 |   1 |   0 |   9 |   2 |   9 |  28 |   0 |   0 |   0 |  14 |   0 |  65 |    7 
+
+
+---------------------------------------------------
+
+Report: testseg@p07s_p07sdsift3ikm200_m_2_250_svm
+
+  Pixel accuracy:   56
+
+  Class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |  39 |   0 |   0 |   9 |   2 |  30 |   0 |  16 |  10 |   3 |   1 |  20 |   5 |  56 |  51 |   3 |   0 |   0 |  21 |   0 |  68 |   16 
+
+  Intersection/union class accuracy:
+     aerop bicyc  bird  boat bottl   bus   car   cat chair   cow dinin   dog horse motor perso potte sheep  sofa train tvmon backg   mean
+    |   2 |   0 |   0 |   3 |   1 |   7 |   0 |   4 |   5 |   2 |   0 |   7 |   2 |   7 |  26 |   1 |   0 |   0 |  14 |   0 |  60 |    7 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees20
+
+  Pixel accuracy:   91
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  91 |   0 |   46 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees20_nowt
+
+  Pixel accuracy:   91
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  91 |   0 |   46 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees40
+
+  Pixel accuracy:   92
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  92 |   0 |   46 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK100_dsift_binSize3_histSoft4_nTrees40_nowt
+
+  Pixel accuracy:   92
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  92 |   0 |   46 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200
+
+  Pixel accuracy:   76
+
+  Class accuracy:
+     backg perso   mean
+    |  82 |  12 |   47 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  76 |   4 |   40 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200_nowt
+
+  Pixel accuracy:   76
+
+  Class accuracy:
+     backg perso   mean
+    |  82 |  12 |   47 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  76 |   4 |   40 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20
+
+  Pixel accuracy:   75
+
+  Class accuracy:
+     backg perso   mean
+    |  80 |  18 |   49 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  74 |   6 |   40 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK100_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20_nowt
+
+  Pixel accuracy:   75
+
+  Class accuracy:
+     backg perso   mean
+    |  80 |  18 |   49 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  74 |   6 |   40 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees20
+
+  Pixel accuracy:   91
+
+  Class accuracy:
+     backg perso   mean
+    |  99 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  91 |   0 |   46 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees20_nowt
+
+  Pixel accuracy:   91
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  91 |   0 |   46 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees40
+
+  Pixel accuracy:   91
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  91 |   0 |   46 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK200_dsift_binSize3_histSoft4_nTrees40_nowt
+
+  Pixel accuracy:   91
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  91 |   0 |   46 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200
+
+  Pixel accuracy:   79
+
+  Class accuracy:
+     backg perso   mean
+    |  85 |  11 |   48 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  79 |   4 |   41 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200_nowt
+
+  Pixel accuracy:   79
+
+  Class accuracy:
+     backg perso   mean
+    |  85 |  11 |   48 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  79 |   4 |   41 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20
+
+  Pixel accuracy:   76
+
+  Class accuracy:
+     backg perso   mean
+    |  82 |  15 |   48 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  76 |   5 |   40 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK200_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20_nowt
+
+  Pixel accuracy:   76
+
+  Class accuracy:
+     backg perso   mean
+    |  82 |  15 |   48 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  76 |   5 |   40 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees20
+
+  Pixel accuracy:   91
+
+  Class accuracy:
+     backg perso   mean
+    |  99 |   1 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  91 |   1 |   46 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees20_nowt
+
+  Pixel accuracy:   91
+
+  Class accuracy:
+     backg perso   mean
+    |  99 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  91 |   0 |   46 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees40
+
+  Pixel accuracy:   91
+
+  Class accuracy:
+     backg perso   mean
+    |  99 |   1 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  91 |   1 |   46 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK400_dsift_binSize3_histSoft4_nTrees40_nowt
+
+  Pixel accuracy:   91
+
+  Class accuracy:
+     backg perso   mean
+    | 100 |   0 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  91 |   0 |   46 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200
+
+  Pixel accuracy:   80
+
+  Class accuracy:
+     backg perso   mean
+    |  87 |  12 |   49 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  80 |   5 |   42 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees200_nowt
+
+  Pixel accuracy:   80
+
+  Class accuracy:
+     backg perso   mean
+    |  87 |  12 |   49 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  80 |   5 |   42 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20
+
+  Pixel accuracy:   79
+
+  Class accuracy:
+     backg perso   mean
+    |  84 |  16 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  78 |   6 |   42 
+
+
+---------------------------------------------------
+
+Report: my@p07ss2_dictF100000_dictK400_dsift_binSize3_histSoft4_precPerClassLimit1000_nTrees20_nowt
+
+  Pixel accuracy:   79
+
+  Class accuracy:
+     backg perso   mean
+    |  84 |  16 |   50 
+
+  Intersection/union class accuracy:
+     backg perso   mean
+    |  78 |   6 |   42 
+
