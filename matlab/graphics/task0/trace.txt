@@ -1,0 +1,554 @@
+svmkernellearn: probability     1
+svmkernellearn: # labels      21
+svmkernellearn: labels prop:  4.82 4.59 4.80 4.80 4.80 4.80 4.80 4.80 4.80 4.82 4.80 4.80 4.80 4.80 4.80 4.82 4.11 4.82 4.82 4.80 4.82 
+svmkernellearn: balance:      0
+svmkernellearn: RBF transformation.
+svmkernellearn: automatically setting RBF gamma!
+svmkernellearn: RBF custom kernel
+svmkernelleran: entering 10-fold cross validation ...
+svmkernellearn: setting C to 1e-005
+svmkernellearn: svm opts ' -t 4 -s 0 -v 10 -c 1e-005'
+
+------------------------------------------------------------------------
+       Segmentation violation detected at Thu Mar 24 19:05:37 2011
+------------------------------------------------------------------------
+
+Configuration:
+  MATLAB Version:   7.11.0.584 (R2010b)
+  MATLAB License:   161051
+  Operating System: Microsoft Windows 7
+  Window System:    Version 6.1 (Build 7601: Service Pack 1)
+  Processor ID:     x86 Family 6 Model 7 Stepping 10, GenuineIntel
+  Virtual Machine:  Java 1.6.0_17-b04 with Sun Microsystems Inc. Java HotSpot(TM) Client VM mixed mode
+  Default Encoding:  windows-1251
+
+Fault Count: 1
+
+
+
+Abnormal termination:
+
+
+Register State (from fault):
+  EAX = 00000001  EBX = 00000000
+  ECX = 00000000  EDX = 00000002
+  ESP = 00c29ff8  EBP = 00c2a02c
+  ESI = 00000000  EDI = 4d530030
+ 
+  EIP = 748a1862  EFL = 00210202
+ 
+   CS = 0000001b   DS = 00000023   SS = 00000023
+   ES = 00000023   FS = 0000003b   GS = 00000000
+
+
+Stack Trace (from fault):
+[  0] 0x748a1862 f:/data/private/progr/burdakovd/matlab/graphics/task0/libsvm-mat-3.0-1/svmtrain.mexw32+00006242 ???+000000
+[  1] 0x748a1e7b f:/data/private/progr/burdakovd/matlab/graphics/task0/libsvm-mat-3.0-1/svmtrain.mexw32+00007803 ( mexFunction+000299 )
+[  2] 0x7b833394 C:/Program Files/MATLAB/R2010b/bin/win32/libmex.dll+00013204 ( mexRunMexFile+000132 )
+[  3] 0x7b832199 C:/Program Files/MATLAB/R2010b/bin/win32/libmex.dll+00008601 ( inSwapMexfileReader+000201 )
+[  4] 0x7b832391 C:/Program Files/MATLAB/R2010b/bin/win32/libmex.dll+00009105 ( inSwapMexfileReader+000705 )
+[  5] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[  6] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[  7] 0x7aa42881 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00534657 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+384993 )
+[  8] 0x7aa2fc9a C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00457882 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+308218 )
+[  9] 0x7aa24bc9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00412617 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+262953 )
+[ 10] 0x7ace7eda C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+03309274 ( TabContext::FindCompletion+003382 )
+[ 11] 0x7aa18b10 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00363280 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+213616 )
+[ 12] 0x7aa1b7f1 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00374769 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+225105 )
+[ 13] 0x7aa1e17e C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00385406 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+235742 )
+[ 14] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 15] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 16] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 17] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 18] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 19] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 20] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 21] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 22] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 23] 0x7aa1e369 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00385897 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+236233 )
+[ 24] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 25] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 26] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 27] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 28] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 29] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 30] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 31] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 32] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 33] 0x7a9cbef6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00048886 ( MStackWatermark::MStackWatermark+028486 )
+[ 34] 0x7aa1f721 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00390945 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+241281 )
+[ 35] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 36] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 37] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 38] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 39] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 40] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 41] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 42] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 43] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 44] 0x7a9cbef6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00048886 ( MStackWatermark::MStackWatermark+028486 )
+[ 45] 0x7aa1f721 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00390945 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+241281 )
+[ 46] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 47] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 48] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 49] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 50] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 51] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 52] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 53] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 54] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 55] 0x7a9cbef6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00048886 ( MStackWatermark::MStackWatermark+028486 )
+[ 56] 0x7aa1f721 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00390945 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+241281 )
+[ 57] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 58] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 59] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 60] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 61] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 62] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 63] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 64] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 65] 0x7aa42881 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00534657 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+384993 )
+[ 66] 0x7aa2fc9a C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00457882 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+308218 )
+[ 67] 0x7aa24bc9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00412617 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+262953 )
+[ 68] 0x7ace7eda C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+03309274 ( TabContext::FindCompletion+003382 )
+[ 69] 0x7aa18b10 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00363280 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+213616 )
+[ 70] 0x7aa1b7f1 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00374769 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+225105 )
+[ 71] 0x7aa2542e C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00414766 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265102 )
+[ 72] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 73] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 74] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 75] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 76] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 77] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 78] 0x7a9cbef6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00048886 ( MStackWatermark::MStackWatermark+028486 )
+[ 79] 0x7aa1f721 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00390945 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+241281 )
+[ 80] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 81] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 82] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 83] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 84] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 85] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 86] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 87] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 88] 0x7aa8f0d6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00848086 ( inAnonymousFunction+001158 )
+[ 89] 0x7aa8fc46 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00851014 ( inMainLoopIdle+000662 )
+[ 90] 0x7a9d68d5 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00092373 ( inFullFevalFcn+003445 )
+[ 91] 0x7aa9010f C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00852239 ( inMainLoopIdle+001887 )
+[ 92] 0x7aa90159 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00852313 ( inMainLoopIdle+001961 )
+[ 93] 0x7aa9017e C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00852350 ( inEvalCmdWithLocalReturn+000030 )
+[ 94] 0x78346cd3 C:/Program Files/MATLAB/R2010b/bin/win32/libmwbridge.dll+00027859 ( mnInitializeParser+000179 )
+[ 95] 0x7834ab3f C:/Program Files/MATLAB/R2010b/bin/win32/libmwbridge.dll+00043839 ( mnParser+000495 )
+[ 96] 0x7a3eb423   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00177187 ( mcrInstance::mnParser_on_interpreter_thread+000051 )
+[ 97] 0x7a3d44c2   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00083138 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+034226 )
+[ 98] 0x7a3d4595   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00083349 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+034437 )
+[ 99] 0x7a3d2148   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00074056 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+025144 )
+[100] 0x7b558e81   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00298625 ( UIW_IsUserMessage+000129 )
+[101] 0x7b55942f   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00300079 ( ws_ProcessPendingEventsWaitForWindows+000303 )
+[102] 0x76976d80                     C:/Windows/system32/USER32.dll+00224640 ( SetWindowsHookExA+000116 )
+[103] 0x7694e1a9                     C:/Windows/system32/USER32.dll+00057769 ( SystemParametersInfoW+000271 )
+[104] 0x7695248f                     C:/Windows/system32/USER32.dll+00074895 ( PtInRect+000253 )
+[105] 0x77636fee                      C:/Windows/SYSTEM32/ntdll.dll+00290798 ( KiUserCallbackDispatcher+000046 )
+[106] 0x7b52e684   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00124548 ( UIW_SetCurrentDialog+000564 )
+[107] 0x7b52e6df   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00124639 ( UIW_SetCurrentDialog+000655 )
+[108] 0x7b55a545   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00304453 ( ws_FreeSystemFont+000485 )
+[109] 0x7a0a1b07 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00137991 ( sysq::ws_ppeHook::~ws_ppeHook+006887 )
+[110] 0x7a0a21da C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00139738 ( sysq::ws_ppeHook::~ws_ppeHook+008634 )
+[111] 0x7a0a3183 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00143747 ( svWS_CommitDatabaseUpdates+002051 )
+[112] 0x7a0a3a43 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00145987 ( svWS_CommitDatabaseUpdates+004291 )
+[113] 0x7a0a3c36 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00146486 ( svWS_CommitDatabaseUpdates+004790 )
+[114] 0x7a0a3d24 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00146724 ( svWS_CommitDatabaseUpdates+005028 )
+[115] 0x7a0a3ea2 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00147106 ( UIJ_WS_ProcessPendingEvents+000018 )
+[116] 0x7a3d4e3a   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00085562 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+036650 )
+[117] 0x7a3d506d   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00086125 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+037213 )
+[118] 0x7a3d531c   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00086812 ( mcr_invoke_on_interpreter_thread+000220 )
+[119] 0x7a3d5a4c   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00088652 ( mcr_invoke_on_interpreter_thread+002060 )
+[120] 0x00406202 C:/Program Files/MATLAB/R2010b/bin/win32/MATLAB.exe+00025090 ( ???+000000 )
+[121] 0x004062c5 C:/Program Files/MATLAB/R2010b/bin/win32/MATLAB.exe+00025285 ( ???+000000 )
+[122] 0x0040638d C:/Program Files/MATLAB/R2010b/bin/win32/MATLAB.exe+00025485 ( ???+000000 )
+[123] 0x00406834 C:/Program Files/MATLAB/R2010b/bin/win32/MATLAB.exe+00026676 ( ???+000000 )
+[124] 0x77423c45                   C:/Windows/system32/kernel32.dll+00343109 ( BaseThreadInitThunk+000018 )
+[125] 0x776537f5                      C:/Windows/SYSTEM32/ntdll.dll+00407541 ( RtlInitializeExceptionChain+000239 )
+[126] 0x776537c8                      C:/Windows/SYSTEM32/ntdll.dll+00407496 ( RtlInitializeExceptionChain+000194 )
+
+
+
+This error was detected while a MEX-file was running. If the MEX-file
+is not an official MathWorks function, please examine its source code
+for errors. Please consult the External Interfaces Guide for information
+on debugging MEX-files.
+
+If this problem is reproducible, please submit a Service Request via:
+    http://www.mathworks.com/support/contact_us/
+
+A technical support engineer might contact you with further information.
+
+Thank you for your help. MATLAB may attempt to recover, but even if recovery appears successful,
+we recommend that you save your workspace and restart MATLAB as soon as possible.
+
+Caught MathWorks::System::FatalException
+
+
+
+
+svmkernellearn: setting C to 1e-005
+svmkernellearn: svm opts ' -t 4 -s 0 -v 10 -c 1e-005'
+
+------------------------------------------------------------------------
+       Segmentation violation detected at Thu Mar 24 23:56:18 2011
+------------------------------------------------------------------------
+
+Configuration:
+  MATLAB Version:   7.11.0.584 (R2010b)
+  MATLAB License:   161051
+  Operating System: Microsoft Windows 7
+  Window System:    Version 6.1 (Build 7601: Service Pack 1)
+  Processor ID:     x86 Family 6 Model 7 Stepping 10, GenuineIntel
+  Virtual Machine:  Java 1.6.0_17-b04 with Sun Microsystems Inc. Java HotSpot(TM) Client VM mixed mode
+  Default Encoding:  windows-1251
+
+Fault Count: 1
+
+
+
+Abnormal termination:
+
+
+Register State (from fault):
+  EAX = 00000001  EBX = 00000000
+  ECX = 00000000  EDX = 00000002
+  ESP = 00c29ff8  EBP = 00c2a02c
+  ESI = 00000000  EDI = 248d0030
+ 
+  EIP = 74ab1862  EFL = 00210202
+ 
+   CS = 0000001b   DS = 00000023   SS = 00000023
+   ES = 00000023   FS = 0000003b   GS = 00000000
+
+
+Stack Trace (from fault):
+[  0] 0x74ab1862 f:/data/private/progr/burdakovd/matlab/graphics/task0/libsvm-mat-3.0-1/svmtrain.mexw32+00006242 ???+000000
+[  1] 0x74ab1e7b f:/data/private/progr/burdakovd/matlab/graphics/task0/libsvm-mat-3.0-1/svmtrain.mexw32+00007803 ( mexFunction+000299 )
+[  2] 0x7b833394 C:/Program Files/MATLAB/R2010b/bin/win32/libmex.dll+00013204 ( mexRunMexFile+000132 )
+[  3] 0x7b832199 C:/Program Files/MATLAB/R2010b/bin/win32/libmex.dll+00008601 ( inSwapMexfileReader+000201 )
+[  4] 0x7b832391 C:/Program Files/MATLAB/R2010b/bin/win32/libmex.dll+00009105 ( inSwapMexfileReader+000705 )
+[  5] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[  6] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[  7] 0x7aa42881 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00534657 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+384993 )
+[  8] 0x7aa2fc9a C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00457882 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+308218 )
+[  9] 0x7aa24bc9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00412617 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+262953 )
+[ 10] 0x7ace7eda C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+03309274 ( TabContext::FindCompletion+003382 )
+[ 11] 0x7aa18b10 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00363280 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+213616 )
+[ 12] 0x7aa1b7f1 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00374769 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+225105 )
+[ 13] 0x7aa1e17e C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00385406 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+235742 )
+[ 14] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 15] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 16] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 17] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 18] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 19] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 20] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 21] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 22] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 23] 0x7aa1e369 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00385897 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+236233 )
+[ 24] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 25] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 26] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 27] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 28] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 29] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 30] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 31] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 32] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 33] 0x7a9cbef6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00048886 ( MStackWatermark::MStackWatermark+028486 )
+[ 34] 0x7aa1f721 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00390945 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+241281 )
+[ 35] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 36] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 37] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 38] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 39] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 40] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 41] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 42] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 43] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 44] 0x7a9cbef6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00048886 ( MStackWatermark::MStackWatermark+028486 )
+[ 45] 0x7aa1f721 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00390945 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+241281 )
+[ 46] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 47] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 48] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 49] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 50] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 51] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 52] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 53] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 54] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 55] 0x7a9cbef6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00048886 ( MStackWatermark::MStackWatermark+028486 )
+[ 56] 0x7aa1f721 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00390945 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+241281 )
+[ 57] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 58] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 59] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 60] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 61] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 62] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 63] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 64] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 65] 0x7aa42881 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00534657 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+384993 )
+[ 66] 0x7aa2fc9a C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00457882 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+308218 )
+[ 67] 0x7aa24bc9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00412617 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+262953 )
+[ 68] 0x7ace7eda C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+03309274 ( TabContext::FindCompletion+003382 )
+[ 69] 0x7aa18b10 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00363280 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+213616 )
+[ 70] 0x7aa1b7f1 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00374769 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+225105 )
+[ 71] 0x7aa2542e C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00414766 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265102 )
+[ 72] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 73] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 74] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 75] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 76] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 77] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 78] 0x7a9cbef6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00048886 ( MStackWatermark::MStackWatermark+028486 )
+[ 79] 0x7aa1f721 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00390945 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+241281 )
+[ 80] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 81] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 82] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 83] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 84] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 85] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 86] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 87] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 88] 0x7aa8f0d6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00848086 ( inAnonymousFunction+001158 )
+[ 89] 0x7aa8fc46 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00851014 ( inMainLoopIdle+000662 )
+[ 90] 0x7a9d68d5 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00092373 ( inFullFevalFcn+003445 )
+[ 91] 0x7aa9010f C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00852239 ( inMainLoopIdle+001887 )
+[ 92] 0x7aa90159 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00852313 ( inMainLoopIdle+001961 )
+[ 93] 0x7aa9017e C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00852350 ( inEvalCmdWithLocalReturn+000030 )
+[ 94] 0x78346cd3 C:/Program Files/MATLAB/R2010b/bin/win32/libmwbridge.dll+00027859 ( mnInitializeParser+000179 )
+[ 95] 0x7834ab3f C:/Program Files/MATLAB/R2010b/bin/win32/libmwbridge.dll+00043839 ( mnParser+000495 )
+[ 96] 0x7a3eb423   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00177187 ( mcrInstance::mnParser_on_interpreter_thread+000051 )
+[ 97] 0x7a3d44c2   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00083138 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+034226 )
+[ 98] 0x7a3d4595   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00083349 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+034437 )
+[ 99] 0x7a3d2148   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00074056 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+025144 )
+[100] 0x7b558e81   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00298625 ( UIW_IsUserMessage+000129 )
+[101] 0x7b55942f   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00300079 ( ws_ProcessPendingEventsWaitForWindows+000303 )
+[102] 0x76976d80                     C:/Windows/system32/USER32.dll+00224640 ( SetWindowsHookExA+000116 )
+[103] 0x7694e1a9                     C:/Windows/system32/USER32.dll+00057769 ( SystemParametersInfoW+000271 )
+[104] 0x7695248f                     C:/Windows/system32/USER32.dll+00074895 ( PtInRect+000253 )
+[105] 0x77636fee                      C:/Windows/SYSTEM32/ntdll.dll+00290798 ( KiUserCallbackDispatcher+000046 )
+[106] 0x7b52e684   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00124548 ( UIW_SetCurrentDialog+000564 )
+[107] 0x7b52e6df   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00124639 ( UIW_SetCurrentDialog+000655 )
+[108] 0x7b55a545   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00304453 ( ws_FreeSystemFont+000485 )
+[109] 0x7a0a1b07 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00137991 ( sysq::ws_ppeHook::~ws_ppeHook+006887 )
+[110] 0x7a0a21da C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00139738 ( sysq::ws_ppeHook::~ws_ppeHook+008634 )
+[111] 0x7a0a3183 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00143747 ( svWS_CommitDatabaseUpdates+002051 )
+[112] 0x7a0a3a43 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00145987 ( svWS_CommitDatabaseUpdates+004291 )
+[113] 0x7a0a3c36 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00146486 ( svWS_CommitDatabaseUpdates+004790 )
+[114] 0x7a0a3d24 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00146724 ( svWS_CommitDatabaseUpdates+005028 )
+[115] 0x7a0a3ea2 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00147106 ( UIJ_WS_ProcessPendingEvents+000018 )
+[116] 0x7a3d4e3a   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00085562 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+036650 )
+[117] 0x7a3d506d   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00086125 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+037213 )
+[118] 0x7a3d531c   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00086812 ( mcr_invoke_on_interpreter_thread+000220 )
+[119] 0x7a3d5a4c   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00088652 ( mcr_invoke_on_interpreter_thread+002060 )
+[120] 0x00406202 C:/Program Files/MATLAB/R2010b/bin/win32/MATLAB.exe+00025090 ( ???+000000 )
+[121] 0x004062c5 C:/Program Files/MATLAB/R2010b/bin/win32/MATLAB.exe+00025285 ( ???+000000 )
+[122] 0x0040638d C:/Program Files/MATLAB/R2010b/bin/win32/MATLAB.exe+00025485 ( ???+000000 )
+[123] 0x00406834 C:/Program Files/MATLAB/R2010b/bin/win32/MATLAB.exe+00026676 ( ???+000000 )
+[124] 0x77423c45                   C:/Windows/system32/kernel32.dll+00343109 ( BaseThreadInitThunk+000018 )
+[125] 0x776537f5                      C:/Windows/SYSTEM32/ntdll.dll+00407541 ( RtlInitializeExceptionChain+000239 )
+[126] 0x776537c8                      C:/Windows/SYSTEM32/ntdll.dll+00407496 ( RtlInitializeExceptionChain+000194 )
+
+
+
+This error was detected while a MEX-file was running. If the MEX-file
+is not an official MathWorks function, please examine its source code
+for errors. Please consult the External Interfaces Guide for information
+on debugging MEX-files.
+
+If this problem is reproducible, please submit a Service Request via:
+    http://www.mathworks.com/support/contact_us/
+
+A technical support engineer might contact you with further information.
+
+Thank you for your help. MATLAB may attempt to recover, but even if recovery appears successful,
+we recommend that you save your workspace and restart MATLAB as soon as possible.
+
+Caught MathWorks::System::FatalException
+[Please exit and restart MATLAB]>> 
+
+svmkernellearn: svm opts ' -t 4 -s 0 -v 10 -c 1e-005'
+
+------------------------------------------------------------------------
+       Segmentation violation detected at Fri Mar 25 04:52:03 2011
+------------------------------------------------------------------------
+
+Configuration:
+  MATLAB Version:   7.11.0.584 (R2010b)
+  MATLAB License:   161051
+  Operating System: Microsoft Windows 7
+  Window System:    Version 6.1 (Build 7601: Service Pack 1)
+  Processor ID:     x86 Family 6 Model 7 Stepping 10, GenuineIntel
+  Virtual Machine:  Java 1.6.0_17-b04 with Sun Microsystems Inc. Java HotSpot(TM) Client VM mixed mode
+  Default Encoding:  windows-1251
+
+Fault Count: 1
+
+
+
+Abnormal termination:
+
+
+Register State (from fault):
+  EAX = 00000001  EBX = 00000000
+  ECX = 00000000  EDX = 00000002
+  ESP = 00c29ff8  EBP = 00c2a02c
+  ESI = 00000000  EDI = 25070030
+ 
+  EIP = 748a1862  EFL = 00210202
+ 
+   CS = 0000001b   DS = 00000023   SS = 00000023
+   ES = 00000023   FS = 0000003b   GS = 00000000
+
+
+Stack Trace (from fault):
+[  0] 0x748a1862 f:/data/private/progr/burdakovd/matlab/graphics/task0/libsvm-mat-3.0-1/svmtrain.mexw32+00006242 ???+000000
+[  1] 0x748a1e7b f:/data/private/progr/burdakovd/matlab/graphics/task0/libsvm-mat-3.0-1/svmtrain.mexw32+00007803 ( mexFunction+000299 )
+[  2] 0x7b833394 C:/Program Files/MATLAB/R2010b/bin/win32/libmex.dll+00013204 ( mexRunMexFile+000132 )
+[  3] 0x7b832199 C:/Program Files/MATLAB/R2010b/bin/win32/libmex.dll+00008601 ( inSwapMexfileReader+000201 )
+[  4] 0x7b832391 C:/Program Files/MATLAB/R2010b/bin/win32/libmex.dll+00009105 ( inSwapMexfileReader+000705 )
+[  5] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[  6] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[  7] 0x7aa42881 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00534657 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+384993 )
+[  8] 0x7aa2fc9a C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00457882 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+308218 )
+[  9] 0x7aa24bc9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00412617 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+262953 )
+[ 10] 0x7ace7eda C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+03309274 ( TabContext::FindCompletion+003382 )
+[ 11] 0x7aa18b10 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00363280 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+213616 )
+[ 12] 0x7aa1b7f1 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00374769 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+225105 )
+[ 13] 0x7aa1e17e C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00385406 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+235742 )
+[ 14] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 15] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 16] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 17] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 18] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 19] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 20] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 21] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 22] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 23] 0x7aa1e369 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00385897 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+236233 )
+[ 24] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 25] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 26] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 27] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 28] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 29] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 30] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 31] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 32] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 33] 0x7a9cbef6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00048886 ( MStackWatermark::MStackWatermark+028486 )
+[ 34] 0x7aa1f721 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00390945 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+241281 )
+[ 35] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 36] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 37] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 38] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 39] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 40] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 41] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 42] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 43] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 44] 0x7a9cbef6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00048886 ( MStackWatermark::MStackWatermark+028486 )
+[ 45] 0x7aa1f721 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00390945 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+241281 )
+[ 46] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 47] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 48] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 49] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 50] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 51] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 52] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 53] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 54] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 55] 0x7a9cbef6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00048886 ( MStackWatermark::MStackWatermark+028486 )
+[ 56] 0x7aa1f721 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00390945 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+241281 )
+[ 57] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 58] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 59] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 60] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 61] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 62] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 63] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 64] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 65] 0x7aa42881 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00534657 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+384993 )
+[ 66] 0x7aa2fc9a C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00457882 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+308218 )
+[ 67] 0x7aa24bc9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00412617 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+262953 )
+[ 68] 0x7ace7eda C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+03309274 ( TabContext::FindCompletion+003382 )
+[ 69] 0x7aa18b10 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00363280 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+213616 )
+[ 70] 0x7aa1b7f1 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00374769 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+225105 )
+[ 71] 0x7aa2542e C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00414766 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265102 )
+[ 72] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 73] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 74] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 75] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 76] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 77] 0x7aa206c2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00394946 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+245282 )
+[ 78] 0x7a9cbef6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00048886 ( MStackWatermark::MStackWatermark+028486 )
+[ 79] 0x7aa1f721 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00390945 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+241281 )
+[ 80] 0x7aa343c7 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476103 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326439 )
+[ 81] 0x7aa344eb C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00476395 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+326731 )
+[ 82] 0x7aa2556c C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00415084 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+265420 )
+[ 83] 0x7aa243f2 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00410610 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+260946 )
+[ 84] 0x7aa2f747 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456519 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306855 )
+[ 85] 0x7aa2f7c9 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00456649 ( MathWorks::MException::MExceptionEnvelope::MExceptionEnvelope+306985 )
+[ 86] 0x7a29b0f9 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045305 ( Mfh_file::dispatch_fh+000249 )
+[ 87] 0x7a29b384 C:/Program Files/MATLAB/R2010b/bin/win32/m_dispatcher.dll+00045956 ( Mfunction_handle::dispatch+000420 )
+[ 88] 0x7aa8f0d6 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00848086 ( inAnonymousFunction+001158 )
+[ 89] 0x7aa8fc46 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00851014 ( inMainLoopIdle+000662 )
+[ 90] 0x7a9d68d5 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00092373 ( inFullFevalFcn+003445 )
+[ 91] 0x7aa9010f C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00852239 ( inMainLoopIdle+001887 )
+[ 92] 0x7aa90159 C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00852313 ( inMainLoopIdle+001961 )
+[ 93] 0x7aa9017e C:/Program Files/MATLAB/R2010b/bin/win32/m_interpreter.dll+00852350 ( inEvalCmdWithLocalReturn+000030 )
+[ 94] 0x78346cd3 C:/Program Files/MATLAB/R2010b/bin/win32/libmwbridge.dll+00027859 ( mnInitializeParser+000179 )
+[ 95] 0x7834ab3f C:/Program Files/MATLAB/R2010b/bin/win32/libmwbridge.dll+00043839 ( mnParser+000495 )
+[ 96] 0x7a3eb423   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00177187 ( mcrInstance::mnParser_on_interpreter_thread+000051 )
+[ 97] 0x7a3d44c2   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00083138 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+034226 )
+[ 98] 0x7a3d4595   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00083349 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+034437 )
+[ 99] 0x7a3d2148   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00074056 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+025144 )
+[100] 0x7b558e81   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00298625 ( UIW_IsUserMessage+000129 )
+[101] 0x7b55942f   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00300079 ( ws_ProcessPendingEventsWaitForWindows+000303 )
+[102] 0x76976d80                     C:/Windows/system32/USER32.dll+00224640 ( SetWindowsHookExA+000116 )
+[103] 0x7694e1a9                     C:/Windows/system32/USER32.dll+00057769 ( SystemParametersInfoW+000271 )
+[104] 0x7695248f                     C:/Windows/system32/USER32.dll+00074895 ( PtInRect+000253 )
+[105] 0x77636fee                      C:/Windows/SYSTEM32/ntdll.dll+00290798 ( KiUserCallbackDispatcher+000046 )
+[106] 0x7b52e684   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00124548 ( UIW_SetCurrentDialog+000564 )
+[107] 0x7b52e6df   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00124639 ( UIW_SetCurrentDialog+000655 )
+[108] 0x7b55a545   C:/Program Files/MATLAB/R2010b/bin/win32/uiw.dll+00304453 ( ws_FreeSystemFont+000485 )
+[109] 0x7a0a1b07 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00137991 ( sysq::ws_ppeHook::~ws_ppeHook+006887 )
+[110] 0x7a0a21da C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00139738 ( sysq::ws_ppeHook::~ws_ppeHook+008634 )
+[111] 0x7a0a3183 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00143747 ( svWS_CommitDatabaseUpdates+002051 )
+[112] 0x7a0a3a43 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00145987 ( svWS_CommitDatabaseUpdates+004291 )
+[113] 0x7a0a3c36 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00146486 ( svWS_CommitDatabaseUpdates+004790 )
+[114] 0x7a0a3d24 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00146724 ( svWS_CommitDatabaseUpdates+005028 )
+[115] 0x7a0a3ea2 C:/Program Files/MATLAB/R2010b/bin/win32/libuij.dll+00147106 ( UIJ_WS_ProcessPendingEvents+000018 )
+[116] 0x7a3d4e3a   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00085562 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+036650 )
+[117] 0x7a3d506d   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00086125 ( mvm::detail::RecursiveScopedMcrLock::~RecursiveScopedMcrLock+037213 )
+[118] 0x7a3d531c   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00086812 ( mcr_invoke_on_interpreter_thread+000220 )
+[119] 0x7a3d5a4c   C:/Program Files/MATLAB/R2010b/bin/win32/mcr.dll+00088652 ( mcr_invoke_on_interpreter_thread+002060 )
+[120] 0x00406202 C:/Program Files/MATLAB/R2010b/bin/win32/MATLAB.exe+00025090 ( ???+000000 )
+[121] 0x004062c5 C:/Program Files/MATLAB/R2010b/bin/win32/MATLAB.exe+00025285 ( ???+000000 )
+[122] 0x0040638d C:/Program Files/MATLAB/R2010b/bin/win32/MATLAB.exe+00025485 ( ???+000000 )
+[123] 0x00406834 C:/Program Files/MATLAB/R2010b/bin/win32/MATLAB.exe+00026676 ( ???+000000 )
+[124] 0x77423c45                   C:/Windows/system32/kernel32.dll+00343109 ( BaseThreadInitThunk+000018 )
+[125] 0x776537f5                      C:/Windows/SYSTEM32/ntdll.dll+00407541 ( RtlInitializeExceptionChain+000239 )
+[126] 0x776537c8                      C:/Windows/SYSTEM32/ntdll.dll+00407496 ( RtlInitializeExceptionChain+000194 )
+
+
+
+This error was detected while a MEX-file was running. If the MEX-file
+is not an official MathWorks function, please examine its source code
+for errors. Please consult the External Interfaces Guide for information
+on debugging MEX-files.
+
+If this problem is reproducible, please submit a Service Request via:
+    http://www.mathworks.com/support/contact_us/
+
+A technical support engineer might contact you with further information.
+
+Thank you for your help. MATLAB may attempt to recover, but even if recovery appears successful,
+we recommend that you save your workspace and restart MATLAB as soon as possible.
+
+Caught MathWorks::System::FatalException
+[Please exit and restart MATLAB]>> 

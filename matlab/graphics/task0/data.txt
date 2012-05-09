@@ -1,0 +1,8 @@
+Result for 6.144e-006: (84.4, 80.7)%, mean: 82.6%
+Result for 3.355e-004: (84.4, 80.7)%, mean: 82.6%
+Result for 1.832e-002: (84.8, 80.8)%, mean: 82.8%
+Result for 1.000e+000: (84.2, 74.4)%, mean: 79.3%
+Result for 5.460e+001: (80.8, 44.8)%, mean: 62.8%
+Result for 2.981e+003: (80.8, 44.8)%, mean: 62.8%
+Result for 1.628e+005: (84.5, 77.4)%, mean: 80.9%
+Result for 8.886e+006: (84.2, 80.8)%, mean: 82.5%

@@ -1,0 +1,36 @@
+Без взвешивания:
+[total/background] actual: 1127490px, found: 1527678px, correct: 986974px. Missed: 12.462727%, false positives: 35.393846%.
+[total/person] actual: 297840px, found: 251345px, correct: 81442px. Missed: 72.655788%, false positives: 67.597525%.
+[total(random)/background] actual: 1127490px, found: 1127490px, correct: 737802px. Missed: 34.562429%, false positives: 34.562429%.
+[total(random)/person] actual: 297840px, found: 297840px, correct: 51485px. Missed: 82.713881%, false positives: 82.713881%.
+
+[total/background] actual: 4573883px, found: 6870963px, correct: 4274633px. Missed: 6.542581%, false positives: 37.786989%.
+[total/person] actual: 1554474px, found: 545864px, correct: 212904px. Missed: 86.303792%, false positives: 60.996878%.
+[total(random)/background] actual: 4573883px, found: 4573883px, correct: 2963747px. Missed: 35.202833%, false positives: 35.202833%.
+[total(random)/person] actual: 1554474px, found: 1554474px, correct: 342324px. Missed: 77.978118%, false positives: 77.978118%.
+
+С взвешиванием:
+[total/background] actual: 1127490px, found: 1528219px, correct: 980241px. Missed: 13.059894%, false positives: 35.857295%.
+[total/person] actual: 297840px, found: 250804px, correct: 75093px. Missed: 74.787470%, false positives: 70.059090%.
+[total(random)/background] actual: 1127490px, found: 1127490px, correct: 737802px. Missed: 34.562429%, false positives: 34.562429%.
+[total(random)/person] actual: 297840px, found: 297840px, correct: 51485px. Missed: 82.713881%, false positives: 82.713881%.
+
+[total/background] actual: 4573883px, found: 6906471px, correct: 4278794px. Missed: 6.451608%, false positives: 38.046594%.
+[total/person] actual: 1554474px, found: 510356px, correct: 192872px. Missed: 87.592459%, false positives: 62.208341%.
+[total(random)/background] actual: 4573883px, found: 4573883px, correct: 2963747px. Missed: 35.202833%, false positives: 35.202833%.
+[total(random)/person] actual: 1554474px, found: 1554474px, correct: 342324px. Missed: 77.978118%, false positives: 77.978118%.
+
+[total/background] actual: 4573883px, found: 6796459px, correct: 4110447px. Missed: 10.132222%, false positives: 39.520756%.
+[total/person] actual: 1554474px, found: 357466px, correct: 121864px. Missed: 92.160435%, false positives: 65.908926%.
+[total(random)/background] actual: 4573883px, found: 4573883px, correct: 2963747px. Missed: 35.202833%, false positives: 35.202833%.
+[total(random)/person] actual: 1554474px, found: 1554474px, correct: 342324px. Missed: 77.978118%, false positives: 77.978118%.
+
+[total/background] actual: 4573883px, found: 6635961px, correct: 4034810px. Missed: 11.785894%, false positives: 39.197804%.
+[total/person] actual: 1554474px, found: 517964px, correct: 166004px. Missed: 89.320889%, false positives: 67.950668%.
+[total(random)/background] actual: 4573883px, found: 4573883px, correct: 2963747px. Missed: 35.202833%, false positives: 35.202833%.
+[total(random)/person] actual: 1554474px, found: 1554474px, correct: 342324px. Missed: 77.978118%, false positives: 77.978118%.
+
+[total/background] actual: 4573883px, found: 3357138px, correct: 2243328px. Missed: 50.953533%, false positives: 33.177367%.
+[total/person] actual: 1554474px, found: 3796787px, correct: 1018084px. Missed: 34.506206%, false positives: 73.185644%.
+[total(random)/background] actual: 4573883px, found: 4573883px, correct: 2963747px. Missed: 35.202833%, false positives: 35.202833%.
+[total(random)/person] actual: 1554474px, found: 1554474px, correct: 342324px. Missed: 77.978118%, false positives: 77.978118%.
