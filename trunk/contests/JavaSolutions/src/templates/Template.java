@@ -21,7 +21,7 @@ public final class Template {
 	}
 
 	static boolean file = false;
-	static boolean isLocal = true;
+	static boolean isLocal = false;
 
 	private static int nextInt() throws IOException {
 		in.nextToken();
@@ -97,6 +97,12 @@ public final class Template {
 			out.close();
 		}
 
+	}
+
+	private static void Assert(final boolean x) {
+		if (!x) {
+			System.err.println("Assertion failed");
+		}
 	}
 
 	private static void solve(final int testId) throws IOException {
