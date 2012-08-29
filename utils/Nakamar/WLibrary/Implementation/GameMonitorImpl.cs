@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WLibrary
 {
@@ -7,10 +8,14 @@ namespace WLibrary
         private RawMemoryReader reader;
         private PatternFinder finder;
 
-        public GameMonitorImpl(RawMemoryReader reader_, PatternFinder finder_)
+        private HashSet<string> reportedErrors = new HashSet<string>();
+        private Action<string> LogError;
+
+        public GameMonitorImpl(RawMemoryReader reader_, PatternFinder finder_, Action<string> errorLogger_)
         {
             reader = reader_;
             finder = finder_;
+            LogError = errorLogger_;
         }
 
         public GameState CurrentGameState
@@ -37,13 +42,22 @@ namespace WLibrary
                             return GameState.World;
 
                     else if (state == "")
-                        return GameState.None;
+                        throw new Exception("Unknown GameState: <empty string>");
 
                     else
                         throw new Exception("Unknown GameState: " + state);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    string message = ex.ToString();
+
+                    if (!reportedErrors.Contains(message))
+                    {
+                        LogError("Failed to get game state, returning GameState.None. Description below (each failure is reported only once)" 
+                            + Environment.NewLine + message);
+                        reportedErrors.Add(message);
+                    }
+
                     return GameState.None;
                 }
             }
