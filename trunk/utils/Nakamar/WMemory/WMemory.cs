@@ -50,7 +50,7 @@ namespace WoWMemoryManager
             memoryManager = new BlackMagicAdapter(BM);
             KeyBoard = new KeyBoard(BM.WindowHandle);
             patternFinder = new CachingPatternFinder(memoryManager, message => Logger.Log(typeof(CachingPatternFinder).Name, message));
-            gameMonitor = new GameMonitorImpl(memoryManager, patternFinder);
+            gameMonitor = new GameMonitorImpl(memoryManager, patternFinder, message => Logger.LogError(typeof(GameMonitorImpl).Name, message));
             addonSignatureManager = new AddonSignatureManagerImpl(memoryManager, message => Logger.Log(typeof(AddonSignatureManagerImpl).Name, message));
             LastMessage = null;
         }
