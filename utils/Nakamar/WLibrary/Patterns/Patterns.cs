@@ -9,14 +9,17 @@ namespace WLibrary
     {
         /// <summary>
         /// Место в коде, где можно прочитать адрес указателя на структуру ClientConnection.
-        /// В случае проблем этот фрагмент кода искать по: ".\ObjectMgrClient.cpp".
-        /// Also: ищем на форумах "CurMgrPointer", добавляем к нему WoW PE Header Start Address,
+        /// 
+        /// Ищем на форумах "CurMgrPointer", добавляем к нему WoW PE Header Start Address,
         /// затем ищем получившийся адрес в памяти запущенного процесса WoW (не забываем про Little Endian).
+        /// Ещё там неподалеку в коде встречается указатель на строку "ObjectMgrClient.cpp"
+        /// 
+        /// 5.0.4
         /// </summary>
         public static Pattern ClientConnection =
             new Pattern(
-                "8B 34 8A " + 
                 "8B 0D FF FF FF FF " +
+                "D9 EE " +
                 "89 81 FF FF 00 00 " +
                 "8B 15 FF FF FF FF " +
                 "8B 0D FF FF FF FF " +
@@ -24,8 +27,8 @@ namespace WLibrary
                 "8B 15 FF FF FF FF " +
                 "51",
 
-                "xxx" +
                 "xx????" +
+                "xx" +
                 "xx??xx" +
                 "xx????" +
                 "xx????" +
@@ -33,16 +36,18 @@ namespace WLibrary
                 "xx????" +
                 "x",
 
-                5);
+                2);
 
         /// <summary>
         /// Место в коде, где можно прочитать смещение указателя на ObjectManager относительно начала структуры ClientConnection.
         /// Как искать - смотри ClientConnection, они в коде рядом.
+        /// 
+        /// 5.0.4
         /// </summary>
         public static Pattern ObjectManagerOffset =
             new Pattern(
-                "8B 34 8A " +
                 "8B 0D FF FF FF FF " +
+                "D9 EE " +
                 "89 81 FF FF 00 00 " +
                 "8B 15 FF FF FF FF " +
                 "8B 0D FF FF FF FF " +
@@ -50,8 +55,8 @@ namespace WLibrary
                 "8B 15 FF FF FF FF " +
                 "51",
 
-                "xxx" +
                 "xx????" +
+                "xx" +
                 "xx??xx" +
                 "xx????" +
                 "xx????" +
@@ -59,11 +64,13 @@ namespace WLibrary
                 "xx????" +
                 "x",
 
-                11);
+                10);
 
         /// <summary>
         /// Место в коде, где можно прочитать адрес gameStateId.
         /// Cheat-o-matic ftw.
+        /// 
+        /// 5.0.4
         /// </summary>
         public static Pattern GameStateId =
             new Pattern(
@@ -93,6 +100,8 @@ namespace WLibrary
 
         /// <summary>
         /// Место в коде, где можно прочитать адрес начала массива указателей на строковые представления gameState.
+        /// 
+        /// 5.0.4
         /// </summary>
         public static Pattern GameStateStringRepresentationBase =
             new Pattern(
