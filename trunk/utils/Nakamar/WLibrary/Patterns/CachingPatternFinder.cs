@@ -81,7 +81,7 @@ namespace WLibrary
             uint ans = manager.FindPattern(pattern.PatternString, pattern.Mask) + pattern.Offset;
             if (!CheckPattern(pattern, ans))
             {
-                throw new ApplicationException("Pattern not found");
+                throw new ApplicationException("Pattern not found: " + pattern);
             }
 
             FindPatternCache[pattern] = ans;
