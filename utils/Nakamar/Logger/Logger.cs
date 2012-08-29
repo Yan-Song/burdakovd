@@ -13,7 +13,7 @@ namespace Util
 
         private static void Log(string tag, string type, string message)
         {
-            string prefix = string.Format("[{0}] [{1}] [{2}] ",
+            string prefix = string.Format("[{0}][{1}][{2}]",
                                           DateTime.Now.ToLongTimeString(),
                                           type,
                                           tag);
