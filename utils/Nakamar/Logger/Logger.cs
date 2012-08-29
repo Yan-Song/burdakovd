@@ -11,14 +11,34 @@ namespace Util
 
         public static LogFunction RawLog = new LogFunction(System.Console.WriteLine);
 
-        public static void Log(string prefix, string message)
+        private static void Log(string tag, string type, string message)
         {
-            RawLog("[" + DateTime.Now.ToLongTimeString() + "] [" + prefix + "] " + message);
+            string prefix = string.Format("[{0}] [{1}] [{2}] ",
+                                          DateTime.Now.ToLongTimeString(),
+                                          type,
+                                          tag);
+            string[] lines = message.Split(new string[] { Environment.NewLine },
+                                           StringSplitOptions.None);
+            bool prefixWritten = false;
+            foreach(string line in lines)
+            {
+                RawLog(string.Format("{0} {1}",
+                                     prefixWritten ?
+                                        new string(' ', prefix.Length) :
+                                        prefix,
+                                     line));
+                prefixWritten = true;
+            }
         }
 
-        public static void LogError(string prefix, string message)
+        public static void Log(string tag, string message)
         {
-            Log(prefix, "Ошибка: " + message);
+            Log(tag, "I", message);
+        }
+
+        public static void LogError(string tag, string message)
+        {
+            Log(tag, "E", message);
         }
 
         /// <summary>
@@ -27,7 +47,7 @@ namespace Util
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static void Watch(string prefix, string key, object ovalue)
+        public static void Watch(string tag, string key, object ovalue)
         {
             string value = ovalue == null ? "null" : ovalue.ToString();
 
@@ -36,7 +56,7 @@ namespace Util
                 if (!CurrentValues.ContainsKey(key) || CurrentValues[key] != value)
                 {
                     CurrentValues[key] = value;
-                    Log(prefix, key + " = " + value);
+                    Log(tag, key + " = " + value);
                 }
             }
         }
