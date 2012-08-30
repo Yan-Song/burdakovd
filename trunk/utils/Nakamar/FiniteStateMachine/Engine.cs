@@ -122,9 +122,7 @@ namespace FiniteStateMachine
             }
             catch (Exception e)
             {
-                Logger.LogError("FSM-worker", "Необработанное исключение в рабочем потоке");
-                foreach(string line in Regex.Split(e.ToString(), Environment.NewLine))
-                    Logger.Log("FSM-worker", " "+line);
+                Logger.LogError("FSM-worker", "Необработанное исключение в рабочем потоке" + Environment.NewLine + e);
 
                 try
                 {
