@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -19,8 +20,11 @@ namespace NakamarConsole
         {
             if (args.Length == 0)
             {
-                Console.WriteLine(String.Format("usage:\n  {0} <config_file> [<wow_process_id>]\n" + 
-                    "  Если wow_process_id=-1 или отсутствует, то будет выбран произвольный процесс WoW.", System.AppDomain.CurrentDomain.FriendlyName));
+                Console.WriteLine(
+                    String.Format(
+                        "usage:\n  {0} <config_file> [<wow_process_id>]\n" + 
+                            "  Если wow_process_id=-1 или отсутствует, то процесс WoW будет найден автоматически.",
+                        System.AppDomain.CurrentDomain.FriendlyName));
                 Environment.Exit(1);
             }
 
@@ -29,8 +33,7 @@ namespace NakamarConsole
                 doMain(args);
             }
             catch(Exception ex) {
-                Console.WriteLine("Failure!");
-                Console.WriteLine(ex);
+                Console.WriteLine("Failure!" + Environment.NewLine + ex);
                 Environment.Exit(-1);
             }
         }
@@ -73,16 +76,25 @@ namespace NakamarConsole
             Environment.Exit(exitCode);
         }
 
-        private static int chooseAnyWoW()
-        {            
-            foreach (Process p in Process.GetProcessesByName("wow"))
-                if (p.MainWindowTitle == "World of Warcraft")
-                    return p.Id;
+        private static int findWoWProcess()
+        {
+            var wows = from process in Process.GetProcessesByName("wow")
+                       where process.MainWindowTitle == "World of Warcraft"
+                       select process.Id;
 
-            Logger.LogError("chooseAnyWoW", "не найдено ни одного процесса WoW");
-            Environment.Exit(1);
-
-            return -1;
+            if (wows.Count() == 1)
+            {
+                return wows.Single();
+            }
+            else
+            {
+                Logger.LogError("findWoWProcess",
+                                string.Format(
+                                    "Должен быть запущен ровно один процесс WoW. Кандидаты: [{0}].",
+                                    string.Join(", ", wows)));
+                Environment.Exit(1);
+                return -1;
+            }
         }
 
         /// <summary>
@@ -95,7 +107,7 @@ namespace NakamarConsole
         {
             // подготовка
 
-            int WoWPid = pid == -1 ? chooseAnyWoW() : pid;
+            int WoWPid = pid == -1 ? findWoWProcess() : pid;
 
             MemoryManager memoryManager = new MemoryManager(WoWPid);
 
@@ -129,7 +141,7 @@ namespace NakamarConsole
             }
 
             // проверка результата
-            Logger.Log("startBot", String.Format("Бот остановлен: аварийно = {0}", FSM.DoNotRestart));
+            Logger.Log("startBot", String.Format("Бот остановлен: перезапуск бесполезен = {0}", FSM.DoNotRestart));
             return FSM.DoNotRestart ? 1 : 0;
         }
     }
