@@ -137,43 +137,35 @@ namespace WLibrary
 
         /// <summary>
         /// Место в коде, где можно прочитать адрес PlayerBase.
+        /// 
+        /// 5.0.4
         /// </summary>
         public static Pattern PlayerBase =
             new Pattern(
-                "cc " +
-                "55 " +
-                "8b ec " +
-                "8b 45 08 " +
-                "81 ec FF 00 00 00 " +
-                "53 " +
-                "8b 5d 10 " +
-                "57 " +
-                "8b 7d 0c " +
-                "8b cf " +
-                "0b cb " +
-                "a3 FF FF FF FF " +
-                "0f 84 FF FF 00 00 " +
-                "8b 15 FF FF FF FF " +
-                "0b 15 FF FF FF FF " +
-                "56",
+                "8b 1d FF FF FF FF " +
+                "f6 c3 01 " +
+                "75 04 " +
+                "3b df " +
+                "75 02 " +
+                "33 db " +
+                "f6 c3 01 " +
+                "75 FF " +
+                "3b df " +
+                "74 FF " +
+                "f6 43 FF 01",
             
-                "x" +
-                "x" +
-                "xx" +
-                "xxx" +
-                "xx?xxx" +
-                "x" +
-                "xxx" +
-                "x" +
-                "xxx" +
-                "xx" +
-                "xx" +
-                "x????" +
-                "xx??xx" +
                 "xx????" +
-                "xx????" +
-                "x",
+                "xxx" +
+                "xx" +
+                "xx" +
+                "xx" +
+                "xx" +
+                "xxx" +
+                "x?" +
+                "xx" +
+                "x?" +
+                "xx?x",
                 
-                26);
+                2);
     }
 }

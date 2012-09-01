@@ -2,80 +2,37 @@
 
 namespace WLibrary
 {
-    public enum ObjectType : uint
-    {
-        Item = 1, 
-        Container = 2,
-        NPC = 3,
-        Player = 4,
-        GameObject = 5,
-        DynamicObject = 6,
-        Corpse = 7
-    }
-
     public class WoWObject
     {
-        protected const uint
-            DescriptorFieldsOffset = 0xC,
-            XPositionOffset = 0x790,
-            YPositionOffset = 0x794,
-            ZPositionOffset = 0x798,
-            RotationOffset = 0x7a0,
-            typeOffset = 0x14;
+        // 5.0.4
+        private const uint
+            XPositionOffset = 0x7e0,
+            YPositionOffset = 0x7e4,
+            ZPositionOffset = 0x7e8,
+            RotationOffset = 0x7f0;
 
-        protected const uint // offsets in object descriptor table
-            descObjectFieldGuid = 0x0;
+        private Func<uint> BaseAddress;
+        private RawMemoryReader Reader;
 
-        protected RawMemoryReader Reader;
-
-        public override string ToString()
-        {
-            return "WoW Object with type: " + Type.ToString() + ", GUID: 0x" + Guid.ToString("X16") +
-                " XYZ(" +
-                XPosition + ", " + YPosition + ", " + ZPosition +
-                ")";
-        }
-
-        public WoWObject(RawMemoryReader reader, uint baseAddress)
+        public WoWObject(RawMemoryReader reader, Func<uint> baseAddress)
         {
             this.BaseAddress = baseAddress;
             this.Reader = reader;
         }
 
-        public uint BaseAddress
+        public float XPosition
         {
-            get;
-            set;
+            get { return Reader.ReadFloat(BaseAddress() + XPositionOffset); }
         }
 
-        protected uint DescriptorFields
+        public float YPosition
         {
-            get { return Reader.ReadUInt(BaseAddress + DescriptorFieldsOffset); }
+            get { return Reader.ReadFloat(BaseAddress() + YPositionOffset); }
         }
 
-        public ObjectType Type
+        public float ZPosition
         {
-            get { return (ObjectType)Reader.ReadUInt(BaseAddress+typeOffset); }
-        }
-
-        public virtual ulong Guid
-        {
-            get { return Reader.ReadUInt64(DescriptorFields + descObjectFieldGuid); }
-        }
-
-        public virtual float XPosition
-        {
-            get { return Reader.ReadFloat(BaseAddress + XPositionOffset); }
-        }
-
-        public virtual float YPosition
-        {
-            get { return Reader.ReadFloat(BaseAddress + YPositionOffset); }
-        }
-
-        public virtual float ZPosition
-        {
-            get { return Reader.ReadFloat(BaseAddress + ZPositionOffset); }
+            get { return Reader.ReadFloat(BaseAddress() + ZPositionOffset); }
         }
 
         public Point Location
@@ -85,101 +42,49 @@ namespace WLibrary
 
         public float Rotation
         {
-            get { return Reader.ReadFloat(BaseAddress + RotationOffset); }
+            get { return Reader.ReadFloat(BaseAddress() + RotationOffset); }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("WoW Object with X = {0}, Y = {1}, Z = {2}",
+                                 XPosition,
+                                 YPosition,
+                                 ZPosition);
         }
     }
 
-
-    public abstract class CreatureObject : WoWObject
+    public class LocalPlayer : WoWObject
     {
-        public CreatureObject(RawMemoryReader reader, uint baseAddress)
-            : base(reader, baseAddress)
-        { }
-    }
+        // 5.0.4
+        private const uint
+            PlayerBaseOffset1 = 0x48,
+            PlayerBaseOffset2 = 0x24; 
 
-
-    public class NpcObject : CreatureObject
-    {
-        public NpcObject(RawMemoryReader reader, uint baseAddress)
-            : base(reader, baseAddress)
-        { }
-
-        protected const uint
-            NameOffset1 = 0x91c,
-            NameOffset2 = 0x60;
-
-        public virtual string Name
+        private static uint getPlayerBase(RawMemoryReader reader, PatternFinder patternFinder)
         {
-            get
-            {
-                try
-                {
-                    return Reader.ReadUTF8String(Reader.ReadUInt(Reader.ReadUInt(BaseAddress + NameOffset1) + NameOffset2), 1000);
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-        }
-    }
-
-
-    public class PlayerObject : CreatureObject
-    {
-        public PlayerObject(RawMemoryReader reader, uint baseAddress)
-            : base(reader, baseAddress)
-        { }
-
-    }
-
-
-    public class GameObject : WoWObject
-    {
-        protected const uint
-            NameOffset1 = 0x1cc,
-            NameOffset2 = 0xb4;
-
-        new protected const uint
-            XPositionOffset = 0x110;
-        new protected const uint
-            YPositionOffset = 0x114;
-        new protected const uint
-            ZPositionOffset = 0x118;
-
-        public GameObject(RawMemoryReader reader, uint baseAddress)
-            : base(reader, baseAddress)
-        { }
-
-        public string Name
-        {
-            get
-            {
-                try
-                {
-                    return Reader.ReadUTF8String(Reader.ReadUInt(Reader.ReadUInt(BaseAddress + NameOffset1) + NameOffset2), 1000);
-                }
-                catch
-                {
-                    return null;
-                }
-            }
+            uint p = reader.ReadUInt(reader.ReadUInt(patternFinder.FindPattern(Patterns.PlayerBase)));
+            p = reader.ReadUInt(p + PlayerBaseOffset1);
+            p = reader.ReadUInt(p + PlayerBaseOffset2);
+            return p;
         }
 
-        public override float XPosition
+        private static uint getPlayerBase(RawMemoryReader reader, uint baseAddressPtr)
         {
-            get { return Reader.ReadFloat(BaseAddress + XPositionOffset); }
+            uint p0 = reader.ReadUInt(baseAddressPtr);
+            uint p1 = reader.ReadUInt(p0 + PlayerBaseOffset1);
+            uint p2 = reader.ReadUInt(p1 + PlayerBaseOffset2);
+            return p2;
         }
 
-        public override float YPosition
+        public LocalPlayer(RawMemoryReader reader, PatternFinder patternFinder)
+            : base(reader, () => getPlayerBase(reader, patternFinder))
         {
-            get { return Reader.ReadFloat(BaseAddress + YPositionOffset); }
         }
 
-        public override float ZPosition
+        public LocalPlayer(RawMemoryReader reader, uint baseAddressPtr)
+            : base(reader, () => getPlayerBase(reader, baseAddressPtr))
         {
-            get { return Reader.ReadFloat(BaseAddress + ZPositionOffset); }
         }
-
     }
 }
