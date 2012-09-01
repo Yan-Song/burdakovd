@@ -1,9 +1,9 @@
 ## Title: NAddon
-## Interface: 40300
+## Interface: 50001
 ##
-## Version: 0.0
+## Version: 1.0
 ## Author: burdakovd
-## X-Email: kreved at kreved dot org
+## X-Email: icqkill@gmail.com
 
 NAddon.lua
 WorldDetector.lua
