@@ -60,7 +60,6 @@
     <Compile Include="Implementation\KeyBoard.cs" />
     <Compile Include="Implementation\Point.cs" />
     <Compile Include="Implementation\ReadUTF8String.cs" />
-    <Compile Include="WoWObject\ObjectManager.cs" />
     <Compile Include="WoWObject\WoWObject.cs" />
   </ItemGroup>
   <ItemGroup>

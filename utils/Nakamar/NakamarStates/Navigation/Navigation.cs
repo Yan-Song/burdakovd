@@ -40,7 +40,7 @@ namespace Plugins
         {
             get
             {
-                var player = Memory.ObjectManager.LocalPlayer;
+                var player = Memory.LocalPlayer;
                 return new PlayerPoint(player.XPosition, player.YPosition, player.ZPosition);
             }
         }
@@ -224,7 +224,7 @@ namespace Plugins
 
         private void AddPointInRoute()
         {
-            var player = Memory.ObjectManager.LocalPlayer;
+            var player = Memory.LocalPlayer;
             WayPoint current = new WayPoint(player.XPosition, player.YPosition, player.ZPosition);
             creatingRoute.Points.Add(current);
             WayPoint prev = creatingRoute.Points.Count < 2 ?
@@ -258,9 +258,7 @@ namespace Plugins
         {
             string command = m.Argument(0);
             if (command == null)
-                LogError("нужно указать субкоманду add|info");
-            else if (command == "add")
-                AddDestination(m);
+                LogError("нужно указать субкоманду info");
             else if (command == "info")
                 ShowInfo(m);
             else
@@ -298,7 +296,7 @@ namespace Plugins
         {
             Log("  " + p.Name + "(x = " + p.X + "; y = " + p.Y + "; z = " + p.Z +
                 "; distance = " + Me.Distance(p) + "; angle = " + Me.Angle(p) +
-                "; relativeAngle = " + Me.RelativeAngle(Memory.ObjectManager.LocalPlayer.Rotation, p));
+                "; relativeAngle = " + Me.RelativeAngle(Memory.LocalPlayer.Rotation, p));
         }
 
         private DestinationPoint GetNearestDestinationPoint()
@@ -317,77 +315,10 @@ namespace Plugins
             return nearest;
         }
 
-        /// <summary>
-        /// destination;add;Type[;Name[;Tag]]
-        /// </summary>
-        /// <param name="m"></param>
-        private void AddDestination(AddonMessage m)
-        {
-            WayPointType type = (WayPointType)Enum.Parse(typeof(WayPointType), m.Argument(1, "Simple"), true);
-
-            try
-            {
-                DestinationPoint point;
-                if (type == WayPointType.Simple)
-                    point = NewSimpleDestination(m.Argument(2), m.Argument(3)); // name, tag
-                else if (type == WayPointType.GameObject)
-                    point = NewGameObjectDestination(m.Argument(2), m.Argument(3)); // name, tag
-                else if (type == WayPointType.NPC)
-                    point = NewNPCDestination(m.Argument(2)); // tag
-                else
-                    throw new NotImplementedException(type.ToString());
-
-                Destinations.Add(point);
-                Log("Добавлена  " + point.ToString() + ", расстояние до неё: " + Me.Distance(point));
-                Save();
-
-            }
-            catch (Exception e)
-            {
-                LogError("Не удалось добавить точку маршрута: " + e);
-            }
-        }
-
-        private DestinationPoint NewNPCDestination(string tag)
-        {
-            try
-            {
-                NpcObject target = Memory.ObjectManager.ByName(Memory.TargetName);
-                return new DestinationPoint(Memory.GetAddonMessage().Target, WayPointType.NPC, tag ?? "",
-                    target.XPosition, target.YPosition, target.ZPosition);
-            }
-            catch (KeyNotFoundException)
-            {
-                throw new Exception("Необходимо выбрать NPC");
-            }
-            catch (InvalidCastException)
-            {
-                throw new Exception("Необходимо выбрать именно NPC");
-            }
-        }
-
-        private DestinationPoint NewGameObjectDestination(string name, string tag)
-        {
-            IEnumerable<GameObject> gameObjects = Memory.ObjectManager.GameObjects.Where(g => g.Name == name);
-
-            GameObject nearestObject =
-                gameObjects.OrderBy(g => Me.Distance(g.XPosition, g.YPosition, g.ZPosition)).First();
-
-            return new DestinationPoint(name, WayPointType.GameObject, tag ?? "",
-                nearestObject.XPosition, nearestObject.YPosition, nearestObject.ZPosition);
-        }
-
-        private DestinationPoint NewSimpleDestination(string name, string tag)
-        {
-            var player = Memory.ObjectManager.LocalPlayer;
-            return new DestinationPoint(name ?? Destinations.NewName("XYZ"), WayPointType.Simple, tag ?? "",
-                player.XPosition, player.YPosition, player.ZPosition);
-        }
-
         private void Navigate()
         {
             WayPoint current = MovementQueue.Peek();
-            PlayerObject player = Memory.ObjectManager.LocalPlayer;
+            LocalPlayer player = Memory.LocalPlayer;
 
             if (current.InRange2D(Me)) // подошли к некоторой точке маршрута
                 if (MovementQueue.Count == 1)
@@ -573,7 +504,7 @@ namespace Plugins
         DateTime nextNPCInteractTry = DateTime.Now;
         private InteractResult InteractWithNPC(DestinationPoint npc)
         {
-            var player = Memory.ObjectManager.LocalPlayer;
+            var player = Memory.LocalPlayer;
             double required = Math.PI / 3, now = Me.RelativeAngle(player.Rotation, npc);
             SetTurningState(now, required); // повернуться к NPC лицом
 
@@ -610,7 +541,7 @@ namespace Plugins
 
         private InteractResult InteractWithGameObject(DestinationPoint gameObject)
         {
-            var player = Memory.ObjectManager.LocalPlayer;
+            var player = Memory.LocalPlayer;
             // повернуться к GameObject, чтоб он был посреди экрана +- 5 градусов
 
             double required = Math.PI / 36;

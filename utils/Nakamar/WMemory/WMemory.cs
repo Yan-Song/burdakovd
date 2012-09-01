@@ -21,11 +21,11 @@ namespace WoWMemoryManager
         private AddonMessage LastMessage;
         private int LastProcessedMessage = -1;
 
-        public ObjectManager ObjectManager
+        public LocalPlayer LocalPlayer
         {
             get
             {
-                return new ObjectManager(memoryManager, patternFinder, gameMonitor.pObjectManager);
+                return new LocalPlayer(memoryManager, patternFinder);
             }
         }
 
