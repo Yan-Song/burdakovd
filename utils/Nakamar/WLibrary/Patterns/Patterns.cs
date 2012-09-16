@@ -14,7 +14,7 @@ namespace WLibrary
         /// затем ищем получившийся адрес в памяти запущенного процесса WoW (не забываем про Little Endian).
         /// Ещё там неподалеку в коде встречается указатель на строку "ObjectMgrClient.cpp"
         /// 
-        /// 5.0.4
+        /// 5.0.5
         /// </summary>
         public static Pattern ClientConnection =
             new Pattern(
@@ -42,7 +42,7 @@ namespace WLibrary
         /// Место в коде, где можно прочитать смещение указателя на ObjectManager относительно начала структуры ClientConnection.
         /// Как искать - смотри ClientConnection, они в коде рядом.
         /// 
-        /// 5.0.4
+        /// 5.0.5
         /// </summary>
         public static Pattern ObjectManagerOffset =
             new Pattern(
@@ -70,7 +70,7 @@ namespace WLibrary
         /// Место в коде, где можно прочитать адрес gameStateId.
         /// Cheat-o-matic ftw.
         /// 
-        /// 5.0.4
+        /// 5.0.5
         /// </summary>
         public static Pattern GameStateId =
             new Pattern(
@@ -101,7 +101,7 @@ namespace WLibrary
         /// <summary>
         /// Место в коде, где можно прочитать адрес начала массива указателей на строковые представления gameState.
         /// 
-        /// 5.0.4
+        /// 5.0.5
         /// </summary>
         public static Pattern GameStateStringRepresentationBase =
             new Pattern(
@@ -138,7 +138,7 @@ namespace WLibrary
         /// <summary>
         /// Место в коде, где можно прочитать адрес PlayerBase.
         /// 
-        /// 5.0.4
+        /// 5.0.5
         /// </summary>
         public static Pattern PlayerBase =
             new Pattern(

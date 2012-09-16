@@ -4,7 +4,7 @@ namespace WLibrary
 {
     public class WoWObject
     {
-        // 5.0.4
+        // 5.0.5
         private const uint
             XPositionOffset = 0x7e0,
             YPositionOffset = 0x7e4,
@@ -56,7 +56,7 @@ namespace WLibrary
 
     public class LocalPlayer : WoWObject
     {
-        // 5.0.4
+        // 5.0.5
         private const uint
             PlayerBaseOffset1 = 0x48,
             PlayerBaseOffset2 = 0x24; 
