@@ -81,13 +81,13 @@
     <Content Include="warcraft_230.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BotLauncher\Logger\Util.csproj">
+      <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
+      <Name>Util</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FiniteStateMachine\FiniteStateMachine.csproj">
       <Project>{78DF6A81-A7AC-44DF-8F8F-278E0D119903}</Project>
       <Name>FiniteStateMachine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Logger\Util.csproj">
-      <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
-      <Name>Util</Name>
     </ProjectReference>
     <ProjectReference Include="..\NakamarStates\Plugins.csproj">
       <Project>{4A688F33-BA30-477B-A651-5918C1603D2F}</Project>

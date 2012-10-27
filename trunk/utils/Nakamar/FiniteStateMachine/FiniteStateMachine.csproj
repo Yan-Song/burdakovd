@@ -73,11 +73,11 @@
     <Compile Include="State.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Logger\Util.csproj">
+    <ProjectReference Include="..\..\..\..\BotLauncher\Logger\Util.csproj">
       <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
       <Name>Util</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WLibrary\WLibrary.csproj">
+    <ProjectReference Include="..\..\..\..\BotLauncher\WLibrary\WLibrary.csproj">
       <Project>{018580AA-10F3-4167-89DF-D9E699BB4136}</Project>
       <Name>WLibrary</Name>
     </ProjectReference>
