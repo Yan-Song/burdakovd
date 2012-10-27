@@ -80,24 +80,6 @@
     <Compile Include="WMemory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BlackMagicAdapter\BlackMagicAdapter.csproj">
-      <Project>{323E66D7-C727-43E0-B0D1-ABEE70A2596F}</Project>
-      <Name>BlackMagicAdapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BlackMagic\BlackMagic.csproj">
-      <Project>{79FD54B0-DEAB-459F-83B9-F1CED68D288B}</Project>
-      <Name>BlackMagic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Logger\Util.csproj">
-      <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
-      <Name>Util</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WLibrary\WLibrary.csproj">
-      <Project>{018580AA-10F3-4167-89DF-D9E699BB4136}</Project>
-      <Name>WLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -113,6 +95,24 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BotLauncher\BlackMagicAdapter\BlackMagicAdapter.csproj">
+      <Project>{323E66D7-C727-43E0-B0D1-ABEE70A2596F}</Project>
+      <Name>BlackMagicAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\BotLauncher\BlackMagic\BlackMagic.csproj">
+      <Project>{79FD54B0-DEAB-459F-83B9-F1CED68D288B}</Project>
+      <Name>BlackMagic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\BotLauncher\Logger\Util.csproj">
+      <Project>{E32AF2D3-E685-4C46-B0FA-84EA7E0F819A}</Project>
+      <Name>Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\BotLauncher\WLibrary\WLibrary.csproj">
+      <Project>{018580AA-10F3-4167-89DF-D9E699BB4136}</Project>
+      <Name>WLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
