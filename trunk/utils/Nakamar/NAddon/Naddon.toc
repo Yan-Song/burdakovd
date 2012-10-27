@@ -1,9 +1,0 @@
-## Title: NAddon
-## Interface: 50001
-##
-## Version: 1.0
-## Author: burdakovd
-## X-Email: icqkill@gmail.com
-
-NAddon.lua
-WorldDetector.lua
