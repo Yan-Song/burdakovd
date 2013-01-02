@@ -138,14 +138,14 @@ function private.OnUpdate(me, elapsed)
     private.framesSinceStart = private.framesSinceStart + 1
     -- при старте биндинги не очень успешно инициализируются
     if private.framesSinceStart >= framesBeforeBindings and not bindingsHasBeenSet then
-		if InCombatLockdown() then
-			if private.framesSinceStart % framesBeforeBindings == 0 then
-				print("Waiting for combat to finish before setting up key bindings...")
-			end
-		else
-			bindingsHasBeenSet = true;
-			private.makeBindings()
-		end
+        if InCombatLockdown() then
+            if private.framesSinceStart % framesBeforeBindings == 0 then
+                print("Waiting for combat to finish before setting up key bindings...")
+            end
+        else
+            bindingsHasBeenSet = true;
+            private.makeBindings()
+        end
     end
     private.elapsedSinceLastTick = private.elapsedSinceLastTick + elapsed
     if (private.elapsedSinceLastTick > 1.0) then
